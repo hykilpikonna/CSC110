@@ -11,7 +11,7 @@ def get_course_info(id: str):
     hours: str = re.findall(r'(?<=<div class="field__item"><p>).*(?=<)', html)[0]
     hours = '/'.join([str(int(it[:-1]) / 12) + it[-1] for it in hours.split('/')])
     return {'id': id, 'name': name, 'link': link, 'hours': hours,
-            'full': f'`{id}` - [{hours}] {name} ({link})'}
+            'full': f'`{id}` - [{hours}] [{name}]({link})'}
 
 
 if __name__ == '__main__':
