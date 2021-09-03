@@ -8,3 +8,5 @@ python-ta
 # Graphics and data visualization
 plotly
 pygame
+
+requests~=2.25.1
