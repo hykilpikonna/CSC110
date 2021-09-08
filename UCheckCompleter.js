@@ -32,7 +32,11 @@ function report()
         // Array.from(document.querySelectorAll('.sc-qbELi.eWIawQ')).filter(it => it.querySelector('span').innerHTML === 'No').forEach(it => it.click())
         // New method: select by content and filter by color (white means unselected)
         $('span:contains(No)').parent().filter((i, it) => $(it).css('background-color') === 'rgb(255, 255, 255)').click()
-    }, 10)
+
+        // Scroll to bottom
+        window.scrollTo(0, document.body.scrollHeight);
+
+    }, 100)
 }
 report()
 
