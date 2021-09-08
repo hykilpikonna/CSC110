@@ -38,6 +38,28 @@ function report()
 
     }, 100)
 }
-report()
+
+// On the right site
+if (window.location.hostname === 'ucheck.utoronto.ca')
+{
+    // On home page
+    if (window.location.pathname.replace('/', '') === '')
+    {
+        // Only run if not already green
+        if (!$('p:contains(you do not report symptoms)'))
+        {
+            // Enter into the report screen
+            $('.MuiButton-label').click()
+        }
+    }
+
+    // Report screen
+    if (window.location.pathname === '/questionnaire')
+    {
+        report()
+    }
+}
+
+
 
 
