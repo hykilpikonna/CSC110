@@ -21,4 +21,4 @@ def get_course_info(id: str):
 if __name__ == '__main__':
     sep = input('Please enter the separator (Eg. a comma): ')
     l = input(f'Please enter course codes separated by "{sep}": ')
-    [print(get_course_info(it.strip())['full'] + '  ') for it in l.split(sep)]
+    [print(get_course_info(it.strip().strip('​ '))['full'] + '  ') for it in l.split(sep)]
