@@ -1,4 +1,13 @@
-// This is to complete ucheck.utoronto.ca
+// ==UserScript==
+// @name         UCheck Completer
+// @namespace    http://tampermonkey.net/
+// @version      0.1
+// @description  Automatically complete ucheck.utoronto.ca
+// @author       UTSG Computer Science Department
+// @include      https://ucheck.utoronto.ca/*
+// @icon         https://www.google.com/s2/favicons?domain=utoronto.ca
+// @grant        none
+// ==/UserScript==
 
 // Load JQuery
 function loadJS(url)
@@ -59,7 +68,3 @@ if (window.location.hostname === 'ucheck.utoronto.ca')
         report()
     }
 }
-
-
-
-
