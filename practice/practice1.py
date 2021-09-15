@@ -5,7 +5,7 @@ Instructions (READ THIS FIRST!)
 
 Complete the functions in this module according to their docstring.
 
-We have marked each place you need to write code with the word "TODO".
+We have marked each place you need to write code with the word
 As you complete your work in this file, delete each TO-DO comment---this is a
 good habit to get into early! To check your work, you should run this file in
 the Python console and then call each function manually.
