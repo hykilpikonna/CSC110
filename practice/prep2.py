@@ -14,7 +14,7 @@ In some function descriptions, we have written "You may ASSUME..." This means th
 when you are writing each function body, you only have to consider possible values
 for the parameters that satisfy these assumptions.
 
-We have marked each place you need to write a doctest/code with the word 
+We have marked each place you need to write a doctest/code with the word
 As you complete your work in this file, delete each TO-DO comment---this is a
 good habit to get into early! To check your work, you should run this file in
 the Python console and then call each function manually (you can also copy-and-paste)
