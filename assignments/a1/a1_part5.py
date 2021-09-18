@@ -143,6 +143,9 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
+    # run_median_filter_example('images/horses.png', 'images/filtered-horses.png')
+    # run_median_filter_example('images/noisy-horses.png', 'images/filtered-noisy-horses.png')
+
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     import python_ta
