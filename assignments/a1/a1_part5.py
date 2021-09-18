@@ -87,6 +87,9 @@ def separate_colour_channels(rgb_pixels: list) -> dict:
     'b': [128, 65, 68, 43, 42, 45, 82, 92, 23, 23, 19, 29, 128, 128, 82, 34]}
     True
     """
+    return {'r': [p[0] for p in rgb_pixels],
+            'g': [p[1] for p in rgb_pixels],
+            'b': [p[2] for p in rgb_pixels]}
 
 
 def calculate_median_colour(colour_channels: dict) -> tuple:
@@ -102,6 +105,7 @@ def calculate_median_colour(colour_channels: dict) -> tuple:
     >>> calculate_median_colour(separated_colour_channels)
     (38, 71, 55)
     """
+    return tuple([int(median(colour_channels[key])) for key in 'rgb'])
 
 
 def apply_median_filter(pixel_data: list, image_width: int, image_height: int) -> list:
