@@ -25,20 +25,26 @@ def maximize_channels(old_pixel: tuple, value: int) -> tuple:
     """Return a new pixel that has colour channels set to the larger of value or the corresponding
     colour channel in old_pixel.
 
+    * Assumed that value is positive
+
     >>> example_pixel = (100, 12, 155)
     >>> maximize_channels(example_pixel, 128)
     (128, 128, 155)
     """
+    return tuple([max(chan, value) for chan in old_pixel])
 
 
 def divide_channels(old_pixel: tuple, denominator: int) -> tuple:
     """Return a new pixel that has colour channels set to the quotient from dividing the
     corresponding colour channel in old_pixel by denominator.
 
+    * Assumed that denominators are positive integers.
+
     >>> example_pixel = (100, 12, 155)
     >>> divide_channels(example_pixel, 2)
     (50, 6, 77)
     """
+    return tuple([chan // denominator for chan in old_pixel])
 
 
 def add_pepper(pixel_data: list, k: int) -> list:
