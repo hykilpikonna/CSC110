@@ -3,96 +3,106 @@
 \usepackage[margin=0.75in]{geometry}
 
 \title{CSC110 Fall 2021 Assignment 1: Written Questions}
-\author{TODO: FILL IN YOUR NAME HERE}
+\author{Azalea (Yijie Gui)}
 \date{\today}
 
 \begin{document}
-\maketitle
+    \maketitle
 
-\section*{Part 1: Data and Comprehensions}
+    \section*{Part 1: Data and Comprehensions}
 
-\begin{enumerate}
-\item[1.] \textbf{Imagine this scenario...}
-\begin{enumerate}
-\item[(a)]
-TODO: Write your answer here.
+    \begin{enumerate}
+        \item[1.] \textbf{Imagine this scenario...}
+        \begin{enumerate}
+            \item[(a)]
+            Your team-mate's to-do notes can be represented using a \texttt{List[str]} because it needs to be ordered by priority, and since lists are ordered, they're perfect for that.
 
-\item[(b)]
-TODO: Write your answer here.
+            \item[(b)]
+            The number of points played in the table tennis game can be represented using a \texttt{List[int]}. When "you" score, add 1 to \texttt{list[0]}, and when the other player scores, add 1 to \texttt{list[1]}.
 
-\item[(c)]
-TODO: Write your answer here.
+            \item[(c)]
+            The unique types of fruits can be represented with a \texttt{Set[str]}, since it doesn't need to be ordered while it needs to be unique.
 
-\item[(d)]
-TODO: Write your answer here.
+            \item[(d)]
+            Whether or not you won the game can be represented using a \texttt{bool}, because it's either True and you won the game, or False that you didn't win the game.
 
-\item[(e)]
-TODO: Write your answer here.
-\end{enumerate}
+            \item[(e)]
+            A record of who won each point in the game can be represented using a \texttt{List[bool]} since there are only two sides. When "you" score, add a True to the list, and when the other side scores, add a False. Since lists are ordered, the order of each player's scoring is also stored.
 
-\item[2.] \textbf{Exploring comprehensions.}
+        \end{enumerate}
 
-\begin{enumerate}
-\item[(a)]
-\begin{enumerate}
-    \item[i.] TODO: Write your answer here.
-    \item[ii.] TODO: Write your answer here.
-\end{enumerate}
-\item[(b)]
-\begin{enumerate}
-    \item[i.] TODO: Write your answer here.
-    \item[ii.] TODO: Write your answer here.
-    \item[iii.] TODO: Write your answer here.
-\end{enumerate}
-\item[(c)]
-TODO: Write your answer here.
-\item[(d)]
-TODO: Write your answer here.
-\end{enumerate}
-\end{enumerate}
+        \item[2.] \textbf{Exploring comprehensions.}
 
-\section*{Part 2: Programming Exercises}
+        \begin{enumerate}
+            \item[(a)]
+            \begin{enumerate}
+                \item[i.] \texttt{[c for c in 'Hello David']} evaluates to a list of every character in 'Hello David'.
 
-Complete this part in the provided \texttt{a1\_part2.py} starter file.
-Do \textbf{not} include your solution in this file.
+                (\texttt{['H', 'e', 'l', 'l', 'o', ' ', 'D', 'a', 'v', 'i', 'd']})
+                \item[ii.] The result's data type is \texttt{List[str]}
+            \end{enumerate}
+            \item[(b)]
+            \begin{enumerate}
+                \item[i.] \texttt{\{c for c in 'Hello David'\}} evaluates to a set of every unique character in 'Hello David'.
 
-\section*{Part 3: Pytest Debugging Exercise}
+                (\texttt{\{' ', 'D', 'H', 'a', 'd', 'e', 'i', 'l', 'o', 'v'\}})
+                \item[ii.] The value's data type is \texttt{Set[str]}
+                \item[iii.] This set has a smaller size than the list in part (a) because it automatically removed duplicates. It also doesn't preserve the order of the characters.
+            \end{enumerate}
+            \item[(c)]
+            The result of \texttt{[(c in vowels) for c in 'Hello world']} represents a list of bools, and each bool tells you whether or not the character in 'Hello world' at that index is a vowel.
+            \item[(d)]
+            The first \texttt{in} is an operator that produces a bool value of whether a collection contains a specific value. The second \texttt{in} is a part of the comprehension, representing the collection that \texttt{c} will iterate through.
+        \end{enumerate}
+    \end{enumerate}
+
+    \section*{Part 2: Programming Exercises}
+
+    Complete this part in the provided \texttt{a1\_part2.py} starter file.
+    Do \textbf{not} include your solution in this file.
+
+    \section*{Part 3: Pytest Debugging Exercise}
 
 % TIP: In LaTeX, the underscore (_) is a special character, so if you want to use it
 % in normal text, you have to put a backslash in front of it. E.g., a1\_part2.py,
 % not a1_part2.py.
 
-\begin{enumerate}
-\item[1.]
-TODO: Write your answer here.
+    \begin{enumerate}
+        \item[1.]
+        \texttt{test\_section\_average\_all\_grades\_equal} passed.
 
-\item[2.]
-TODO: Write your answer here.
+        \texttt{test\_class\_average\_no\_grades\_equal} and \texttt{test\_class\_average\_many\_students} failed.
 
-\item[3.]
-TODO: Write your answer here.
-\end{enumerate}
+        \item[2.]
+        \begin{enumerate}
+            \item[i.] For \texttt{test\_class\_average\_no\_grades\_equal}, \texttt{sorted\_grades} is actually a list of strings and not floats. So it throws an error when string values are multiplied by a float.
+            \item[ii.] For \texttt{test\_class\_average\_many\_students}, the calculation in \texttt{student\_average} is incorrect: the \texttt{sorted()} function sorts in ascending order, but the weights are in the descending order.
+        \end{enumerate}
 
-\section*{Part 4: Adding Noise to an Image}
+        \item[3.]
+        \texttt{test\_section\_average\_all\_grades\_equal} passed because it tests a scenario where every student has three equal grades, which means that the order of the sort function is irrelevant.
+    \end{enumerate}
 
-Complete this part in the provided \texttt{a1\_part4.py} starter file.
-Do \textbf{not} include your solution in this file.
+    \section*{Part 4: Adding Noise to an Image}
 
-\newpage
+    Complete this part in the provided \texttt{a1\_part4.py} starter file.
+    Do \textbf{not} include your solution in this file.
 
-\section*{Part 5: Removing Noise From an Image}
+    \newpage
 
-\subsection*{Implementation}
+    \section*{Part 5: Removing Noise From an Image}
 
-Complete this part in the provided \texttt{a1\_part5.py} starter file.
-Do \textbf{not} include your solution in this file.
+    \subsection*{Implementation}
 
-\subsection*{Exploration}
+    Complete this part in the provided \texttt{a1\_part5.py} starter file.
+    Do \textbf{not} include your solution in this file.
 
-\begin{enumerate}
-\item[1.] TODO: Write your answer here.
-\item[2.] TODO: Write your answer here.
-\item[3.] TODO: Write your answer here.
-\end{enumerate}
+    \subsection*{Exploration}
+
+    \begin{enumerate}
+        \item[1.] Yes, the median filter does affect images that are not noisy. The resulting image looks blurred compared to the original, and a lot of details are lost.
+        \item[2.] Since the probability that some pixel will be salt/pepper is $\frac{1}{k+1}$, the image becomes increasingly unrecognizable as k decrease. When k is 0, the median filter can do nothing to restore the image, because the image is already overwritten with salt/pepper, and running a median filter would still produce an all-white or all-black image.
+        \item[3.] The mean filter would be worse at eliminating noise because the averaged color pixel isn't a real pixel in the image, and it most likely wouldn't connect to any of its neighbors. Also, it would be especially worse at eliminating white/black noise because there might be neighbors that are white/black, and these are extreme values (0 or 255) that are considered outliers in a list of neighboring real color values, and the existence of outliers affect averages much more than medians.
+    \end{enumerate}
 
 \end{document}
