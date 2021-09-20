@@ -64,9 +64,7 @@ def add_pepper(pixel_data: list, k: int) -> list:
 
     Because of the randomness, we can't specify an exact doctest.
     """
-
-    # I don't know why I have to use divide_channels here. I can just use (0,0,0)
-    return [random.choice([pixel] * k + [divide_channels(pixel, 256)]) for pixel in pixel_data]
+    return [divide_channels(random.choice([1] * k + [256]) for pixel in pixel_data]
 
 
 def add_salt(pixel_data: list, k: int) -> list:
@@ -86,9 +84,7 @@ def add_salt(pixel_data: list, k: int) -> list:
 
     Because of the randomness, we can't specify an exact doctest.
     """
-
-    # I don't know why I have to use maximize_channels here. I can just use (255,255,255)
-    return [random.choice([pixel] * k + [maximize_channels(pixel, 255)]) for pixel in pixel_data]
+    return [maximize_channels(random.choice([0] * k + [255]) for pixel in pixel_data]
 
 
 def add_salt_and_pepper(pixel_data: list, k: int) -> list:
@@ -121,7 +117,7 @@ if __name__ == '__main__':
     import doctest
     doctest.testmod()
 
-    # run_salt_and_pepper_example('images/horses.png', 'images/noisy-horses.png', 16)
+    run_salt_and_pepper_example('images/horses.png', 'images/noisy-horses.png', 16)
 
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
