@@ -64,7 +64,7 @@ def add_pepper(pixel_data: list, k: int) -> list:
 
     Because of the randomness, we can't specify an exact doctest.
     """
-    return [divide_channels(random.choice([1] * k + [256]) for pixel in pixel_data]
+    return [divide_channels(pixel, random.choice([1] * k + [256])) for pixel in pixel_data]
 
 
 def add_salt(pixel_data: list, k: int) -> list:
@@ -84,7 +84,7 @@ def add_salt(pixel_data: list, k: int) -> list:
 
     Because of the randomness, we can't specify an exact doctest.
     """
-    return [maximize_channels(random.choice([0] * k + [255]) for pixel in pixel_data]
+    return [maximize_channels(pixel, random.choice([0] * k + [255])) for pixel in pixel_data]
 
 
 def add_salt_and_pepper(pixel_data: list, k: int) -> list:
