@@ -48,7 +48,7 @@ def greet_person(person: Person) -> str:
     >>> greet_person(david)
     'Hello, David Liu!'
     """
-    # TODO: complete this function body
+    return f'Hello, {person.given_name} {person.family_name}!'
 
 
 def older_name(p1: Person, p2: Person) -> str:
@@ -61,7 +61,7 @@ def older_name(p1: Person, p2: Person) -> str:
     >>> older_name(david, mario)
     'Mario'
     """
-    # TODO: complete this function body
+    return {p1.age: p1, p2.age: p2}[max(p1.age, p2.age)].given_name
 
 
 def average_age(people: list[Person]) -> float:
@@ -76,7 +76,7 @@ def average_age(people: list[Person]) -> float:
     >>> average_age(example_people)
     110.5
     """
-    # TODO: complete this function body
+    return sum([p.age for p in people]) / len(people)
 
 
 @dataclass
@@ -100,7 +100,7 @@ def member_names(group: Group) -> list[str]:
     >>> member_names(cool_profs)
     ['David', 'Mario']
     """
-    # TODO: complete this function body
+    return [m.given_name for m in group.members]
 
 
 if __name__ == '__main__':
