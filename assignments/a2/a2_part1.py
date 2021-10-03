@@ -85,11 +85,13 @@ def test_statements_different() -> None:
 def example_p(x: int) -> bool:
     """An example predicate for "my_p" that can be used in test_statements_different.
     """
+    return 1 < x < 8
 
 
 def example_q(x: int) -> bool:
     """An example predicate for "my_q" that can be used in test_statements_different.
     """
+    return x < 8
 
 
 if __name__ == '__main__':
@@ -100,8 +102,8 @@ if __name__ == '__main__':
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
     # Leave this code uncommented when you submit your files.
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'R1729']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'max-line-length': 100,
+        'disable': ['R1705', 'R1729']
+    })
