@@ -117,6 +117,12 @@ def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
     Preconditions:
         - s1 and s2 match the format for a section described by the assignment handout.
     """
+    code1, term1, times1 = s1
+    code2, term2, times2 = s2
+
+    # Cannot conflict if they aren't in overlapping term
+    # Conflicts when at least one meeting times conflict
+    return (term1 == term2 or term1 == 'Y' or term2 == 'Y') and any([times_conflict(m1, m2) for m1 in times1 for m2 in times2])
 
 
 def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
