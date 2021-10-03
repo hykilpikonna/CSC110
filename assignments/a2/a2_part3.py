@@ -100,11 +100,13 @@ def times_conflict(m1: tuple[str, datetime.time, datetime.time],
     day2, start2, end2 = m2
 
     # They cannot conflict if they aren't on the same day
-    # Case 1: The start times are equal, they conflict assuming each course has at least one hour of duration
+    # Case 1: The start times are equal, they conflict
+    #   assuming each course has at least one hour of duration
     # Case 2: 1 starts earlier than 2 and 1 ends later than the start of 2, conflict
     # Case 3: 2 starts earlier than 1 and 2 ends later than the start of 1, conflict
     # TODO: Can we assume that end1 > start1 and end2 > start2?
-    return day1 == day2 and (start1 == start2 or (start1 < start2 < end1) or (start2 < start1 < end2))
+    return day1 == day2 and \
+        (start1 == start2 or (start1 < start2 < end1) or (start2 < start1 < end2))
 
 
 def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
@@ -117,12 +119,13 @@ def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
     Preconditions:
         - s1 and s2 match the format for a section described by the assignment handout.
     """
-    code1, term1, times1 = s1
-    code2, term2, times2 = s2
+    _, term1, times1 = s1
+    _, term2, times2 = s2
 
     # Cannot conflict if they aren't in overlapping term
     # Conflicts when at least one meeting times conflict
-    return (term1 == term2 or term1 == 'Y' or term2 == 'Y') and any([times_conflict(m1, m2) for m1 in times1 for m2 in times2])
+    return (term1 == term2 or term1 == 'Y' or term2 == 'Y') and \
+        any([times_conflict(m1, m2) for m1 in times1 for m2 in times2])
 
 
 def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
@@ -201,7 +204,8 @@ def possible_five_course_schedules(c1: tuple[str, str, set],
     HINT: you'll want a comprehension with 5 different variables. You can split up each
     "for ... in ..." across multiple lines to help make your code more readable.
     """
-    return [{c1[0]: a, c2[0]: b, c3[0]: c, c4[0]: d, c5[0]: e} for a in c1[2] for b in c2[2] for c in c3[2] for d in
+    return [{c1[0]: a, c2[0]: b, c3[0]: c, c4[0]: d, c5[0]: e}
+            for a in c1[2] for b in c2[2] for c in c3[2] for d in
             c4[2] for e in c5[2]]
 
 
@@ -280,10 +284,12 @@ def compatible_sections(schedule: dict[str, tuple[str, str, tuple]],
 if __name__ == '__main__':
     import python_ta
     import python_ta.contracts
+
     python_ta.contracts.DEBUG_CONTRACTS = False
     python_ta.contracts.check_all_contracts()
 
     import doctest
+
     doctest.testmod()
 
     # When you are ready to check your work with python_ta, uncomment the following lines.
