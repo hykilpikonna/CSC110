@@ -116,4 +116,11 @@ dmypy.json
 
 .idea
 *.iml
-.DS_Store
+*.DS_Store
+
+
+# Latex
+*.aux
+*.fdb_latexmk
+*.fls
+*.synctex.gz
