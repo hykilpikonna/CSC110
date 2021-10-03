@@ -59,6 +59,8 @@ CON333_LEC2001 = ('LEC2001', 'F', (MON_9_TO_11,))
 
 STA130_LEC0101 = ('LEC0101', 'F', (THU_3_TO_4,))
 
+TMP000_LEC0000 = ('LEC0000', 'Y', (MON_9_TO_11,))
+
 ###################################################################################################
 # Sample Courses
 ###################################################################################################
@@ -72,6 +74,8 @@ MAT137 = ('MAT137', 'Calculus!', {MAT137_LEC0101, MAT137_LEC0201})
 
 STA130 = ('STA130', 'Introduction to Statistical Reasoning',
           {STA130_LEC0101})
+
+TMP000 = ('TMP000', 'Introduction to time travel', {TMP000_LEC0000})
 
 ###################################################################################################
 # Sample Schedule
@@ -218,24 +222,17 @@ def test_possible_five_course_schedules() -> None:
     """
     Test possible_five_course_schedules with five possible course schedules
     """
-    c1 = CSC110
-    c2 = CSC111
-    c3 = CON123
-    c4 = CON333
-    c5 = MAT137
-    expected = 8
-    actual = a2_courses.possible_five_course_schedules(c1, c2, c3, c4, c5)
-    assert len(actual) == expected
+    assert len(a2_courses.possible_five_course_schedules(
+        CSC110, CSC111, CON123, CON333, MAT137)) == 8
 
 
 def test_invalid_five_course_schedules() -> None:
     """
     Test valid_five_course_schedules with invalid five course schedule
     """
-    # TODO: Create a test
+    assert not len(a2_courses.possible_five_course_schedules(
+        CSC110, CSC111, CON123, CON333, TMP000)) == 0
 
-
-# TODO: Create more tests
 
 ###################################################################################################
 # Part 3 Question 3
