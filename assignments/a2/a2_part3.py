@@ -104,7 +104,6 @@ def times_conflict(m1: tuple[str, datetime.time, datetime.time],
     #   assuming each course has at least one hour of duration
     # Case 2: 1 starts earlier than 2 and 1 ends later than the start of 2, conflict
     # Case 3: 2 starts earlier than 1 and 2 ends later than the start of 1, conflict
-    # TODO: Can we assume that end1 > start1 and end2 > start2?
     return day1 == day2 and \
         (start1 == start2 or (start1 < start2 < end1) or (start2 < start1 < end2))
 
@@ -138,7 +137,7 @@ def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
         - schedule matches the format for a schedule described by the assignment handout.
     """
     sections = schedule.values()
-    return all(not sections_conflict(s1, s2) or (s1 == s2) for s1 in sections for s2 in sections)
+    return all(not sections_conflict(s1, s2) for s1 in sections for s2 in sections if s1 != s2)
 
 
 def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
