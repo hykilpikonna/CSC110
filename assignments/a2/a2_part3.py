@@ -156,6 +156,7 @@ def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
         """
         return [{c1[0]: section1, c2[0]: section2} for section1 in c1[2] for section2 in c2[2]]
 
+
 def valid_schedules(c1: tuple[str, str, set],
                     c2: tuple[str, str, set]) \
         -> list[dict[str, tuple[str, str, tuple]]]:
@@ -176,6 +177,7 @@ def valid_schedules(c1: tuple[str, str, set],
     """
     schedules = possible_schedules(c1, c2)
     return [x for x in schedules if is_valid(x)]
+
 
 def possible_five_course_schedules(c1: tuple[str, str, set],
                                    c2: tuple[str, str, set],
@@ -201,6 +203,7 @@ def possible_five_course_schedules(c1: tuple[str, str, set],
     """
     return [{c1[0]: a, c2[0]: b, c3[0]: c, c4[0]: d, c5[0]: e} for a in c1[2] for b in c2[2] for c in c3[2] for d in
             c4[2] for e in c5[2]]
+
 
 def valid_five_course_schedules(c1: tuple[str, str, set],
                                 c2: tuple[str, str, set],
