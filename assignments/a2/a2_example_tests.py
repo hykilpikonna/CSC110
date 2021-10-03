@@ -190,36 +190,28 @@ def test_2_possible_schedule_combinations() -> None:
     """
     Test possible_schedule_combinations with 2 possible combinations
     """
-    c1 = MAT137
-    c2 = CSC111
-    expected = 2
-    actual = a2_courses.possible_schedules(c1, c2)
-    assert len(actual) == expected
+    assert len(a2_courses.possible_schedules(MAT137, CSC111)) == 2
 
 
 def test_4_possible_schedule_combinations() -> None:
     """
     Test possible_schedule_combinations with 4 possible combinations
     """
-    # TODO: Create a test
+    assert len(a2_courses.possible_schedules(MAT137, CON333)) == 4
 
 
 def test_1_valid_schedule_combinations() -> None:
     """
     Test valid_schedule_combinations with valid schedule combination, bounds of 1
     """
-    c1 = MAT137
-    c2 = CSC111
-    expected = 1
-    actual = a2_courses.valid_schedules(c1, c2)
-    assert len(actual) == expected
+    assert len(a2_courses.valid_schedules(MAT137, CSC111)) == 1
 
 
 def test_4_valid_schedule_combinations() -> None:
     """
     Test valid_schedule_combinations with 4 valid schedule combinations
     """
-    # TODO: Create a test
+    assert len(a2_courses.valid_schedules(CON123, CON333)) == 4
 
 
 def test_possible_five_course_schedules() -> None:
