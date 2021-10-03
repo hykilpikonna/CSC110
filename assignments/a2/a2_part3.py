@@ -34,6 +34,7 @@ def num_sections(course: tuple[str, str, set]) -> int:
     Preconditions:
         - The input matches the format for a course described by the assignment handout.
     """
+    return len(course[2])
 
 
 def num_lecture_hours(section: tuple[str, str, tuple]) -> int:
@@ -44,6 +45,7 @@ def num_lecture_hours(section: tuple[str, str, tuple]) -> int:
 
     Hint: you can use ".hour" to access the hour attribute of a datetime.time value.
     """
+    return sum([t[2].hour - t[1].hour for t in section[2]])
 
 
 def sections_in_semester(schedule: dict[str, tuple[str, str, tuple]], semester: str) \
@@ -56,6 +58,7 @@ def sections_in_semester(schedule: dict[str, tuple[str, str, tuple]], semester: 
         - The input matches the format for a schedule described by the assignment handout.
         - semester in {'F', 'S'}
     """
+    return {section for section in schedule.values() if section[1] == semester}
 
 
 ###################################################################################################
