@@ -140,21 +140,21 @@ def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
 
 def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
             -> list[dict[str, tuple[str, str, tuple]]]:
-        """Return a list of all possible schedules of courses c1 and c2.
+    """Return a list of all possible schedules of courses c1 and c2.
 
-        Each returned schedule should contain exactly two key-value pairs, one with the course
-        code and a section of c1, and the other with the course code and a section of c2.
+    Each returned schedule should contain exactly two key-value pairs, one with the course
+    code and a section of c1, and the other with the course code and a section of c2.
 
-        Invalid schedules are returned in this list.
+    Invalid schedules are returned in this list.
 
-        If a given course has no sections, then return an empty list.
-        (This will happen "automatically" if you use a comprehension with an empty collection!)
+    If a given course has no sections, then return an empty list.
+    (This will happen "automatically" if you use a comprehension with an empty collection!)
 
-        Preconditions:
-            - c1 and c2 match the format for a course described by the assignment handout.
-            - c1 != c2
-        """
-        return [{c1[0]: section1, c2[0]: section2} for section1 in c1[2] for section2 in c2[2]]
+    Preconditions:
+        - c1 and c2 match the format for a course described by the assignment handout.
+        - c1 != c2
+    """
+    return [{c1[0]: section1, c2[0]: section2} for section1 in c1[2] for section2 in c2[2]]
 
 
 def valid_schedules(c1: tuple[str, str, set],
