@@ -124,7 +124,9 @@ def get_valid_schedules(course_data: dict[str, tuple[str, str, set]],
         2. You'll need to process each course to filter to keep only the sections
            that appear in the given term. See the function we've started for you below.
     """
-    # TODO
+    valid_courses = [course_data[code] for code in course_data if code in courses]
+    a, b, c, d, e = [filter_by_term(course, term) for course in valid_courses]
+    return a2_part3.valid_five_course_schedules(a, b, c, d, e)
 
 
 def filter_by_term(course: tuple[str, str, set], term: str) -> tuple[str, str, set]:

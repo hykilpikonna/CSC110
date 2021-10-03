@@ -248,6 +248,7 @@ def is_section_compatible(schedule: dict[str, tuple[str, str, tuple]],
         - section matches the format for a section described by the assignment handout.
         - schedule matches the format for a schedule described by the assignment handout.
     """
+    return [not sections_conflict(section, s) for s in schedule.values]
 
 
 def is_course_compatible(schedule: dict[str, tuple[str, str, tuple]],
