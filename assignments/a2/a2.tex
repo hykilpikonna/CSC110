@@ -122,7 +122,7 @@ MeetingTimesConflict(m_1, m_2) : m_1[0] == m_2[0] \land m_1[2] > m_2[1] \land m_
 % Use the MeetingTimesConflict predicate in your response.
 
 \begin{align*}
-SectionsConflict(s_1, s_2) : ('Y' \in \{s_1[1], s_2[1]\} \lor s_1[1] = s_2[1]) \Rightarrow \\
+SectionsConflict(s_1, s_2) : ('Y' \in \{s_1[1], s_2[1]\} \lor s_1[1] = s_2[1]) \land \\
 \exists m_1 \in s_1[2], \text{ s.t. } \exists m_2 \in s_2[2], \text { s.t. } MeetingTimesConflict(m_1, m_2)
 \qquad \text{where $s_1, s_2 \in S$}
 \end{align*}
