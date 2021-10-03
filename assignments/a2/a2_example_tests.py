@@ -158,36 +158,32 @@ def test_sections_conflict() -> None:
     """
     Test sections_conflict with conflicting sections
     """
-    s1 = CON333_LEC2001
-    s2 = MAT137_LEC0101
-    expected = True
-    actual = a2_courses.sections_conflict(s1, s2)
-    assert actual == expected
+    assert a2_courses.sections_conflict(CON333_LEC2001, MAT137_LEC0101)
+    assert a2_courses.sections_conflict(CON123_LEC0321, CSC111_LEC0301)
 
 
 def test_sections_no_conflict() -> None:
     """
     Test sections_conflict with non-conflicting sections
     """
-    s1 = CON123_LEC0123
-    s2 = CON123_LEC0321
-    expected = False
-    actual = a2_courses.sections_conflict(s1, s2)
-    assert actual == expected
+    assert not a2_courses.sections_conflict(CON123_LEC0123, CON123_LEC0321)
+    assert not a2_courses.sections_conflict(CON123_LEC0123, CSC111_LEC0301)
 
 
 def test_is_valid() -> None:
     """
     Test is_valid with valid schedule
     """
-    # TODO: Create a test
+    assert a2_courses.is_valid(SCHEDULE_1)
+    assert a2_courses.is_valid(SCHEDULE_2)
+    assert a2_courses.is_valid(SCHEDULE_4)
 
 
 def test_not_valid() -> None:
     """
     Test is_valid with invalid schedule
     """
-    # TODO: Create a test
+    assert not a2_courses.is_valid(SCHEDULE_3)
 
 
 def test_2_possible_schedule_combinations() -> None:
