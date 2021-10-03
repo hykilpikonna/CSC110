@@ -47,13 +47,29 @@ def statement3(my_set: set[int],
         - my_p can be called on every element from my_set
         - my_q can be called on every element from my_set
     """
+    return all([my_p(x) and my_q(x) for x in my_set])
 
 
 def statement4(my_set: set[int],
                my_p: Callable[[int], bool],
                my_q: Callable[[int], bool]) -> bool:
     """Implementation of Statement 4 from Part 1, Question 2.
+
+    This statement is represented as a function that takes three arguments:
+        - a set my_set (corresponds to "S" from the statement)
+        - a predicate my_p (corresponds to the predicate "P" from the statement);
+          its domain is my_set
+        - a predicate my_q (corresponds to the predicate "Q" from the statement);
+          its domain is my_set
+
+    Note that my_p is a *function* and can be called inside the body below, e.g. my_p(...).
+    Similarly, my_q is also a function and can be called using my_q(...).
+
+    Preconditions:
+        - my_p can be called on every element from my_set
+        - my_q can be called on every element from my_set
     """
+    return all([not my_p(x) or my_q(x) for x in my_set])
 
 
 ###############################################################################
