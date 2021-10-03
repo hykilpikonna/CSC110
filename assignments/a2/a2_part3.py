@@ -134,6 +134,8 @@ def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
     Preconditions:
         - schedule matches the format for a schedule described by the assignment handout.
     """
+    sections = schedule.values()
+    return all(not sections_conflict(s1, s2) or (s1 == s2) for s1 in sections for s2 in sections)
 
 
 def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
