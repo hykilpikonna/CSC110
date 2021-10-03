@@ -274,8 +274,6 @@ def test_compatible_sections() -> None:
     assert a2_courses.compatible_sections(SCHEDULE_1, CON123) == {CON123_LEC0123}
 
 
-# TODO: Create more tests
-
 ###################################################################################################
 # Part 4
 ###################################################################################################
@@ -305,8 +303,6 @@ def test_transform_meeting_time_data() -> None:
     actual = a2_part4.transform_meeting_time_data(MON_9_TO_11_RAW)
     assert actual == expected
 
-
-# TODO: Create more tests
 
 if __name__ == "__main__":
     pytest.main(['a2_example_tests.py'])
