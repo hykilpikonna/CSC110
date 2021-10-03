@@ -139,87 +139,91 @@ def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
 
 
 def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
-        -> list[dict[str, tuple[str, str, tuple]]]:
-    """Return a list of all possible schedules of courses c1 and c2.
+            -> list[dict[str, tuple[str, str, tuple]]]:
+        """Return a list of all possible schedules of courses c1 and c2.
 
-    Each returned schedule should contain exactly two key-value pairs, one with the course
-    code and a section of c1, and the other with the course code and a section of c2.
+        Each returned schedule should contain exactly two key-value pairs, one with the course
+        code and a section of c1, and the other with the course code and a section of c2.
 
-    Invalid schedules are returned in this list.
+        Invalid schedules are returned in this list.
 
-    If a given course has no sections, then return an empty list.
-    (This will happen "automatically" if you use a comprehension with an empty collection!)
+        If a given course has no sections, then return an empty list.
+        (This will happen "automatically" if you use a comprehension with an empty collection!)
 
-    Preconditions:
-        - c1 and c2 match the format for a course described by the assignment handout.
-        - c1 != c2
-    """
+        Preconditions:
+            - c1 and c2 match the format for a course described by the assignment handout.
+            - c1 != c2
+        """
+        return [{c1[0]: section1, c2[0]: section2} for section1 in c1[2] for section2 in c2[2]]
 
+    def valid_schedules(c1: tuple[str, str, set],
+                        c2: tuple[str, str, set]) \
+            -> list[dict[str, tuple[str, str, tuple]]]:
+        """Return a list of all VALID schedules of courses c1 and c2.
 
-def valid_schedules(c1: tuple[str, str, set],
-                    c2: tuple[str, str, set]) \
-        -> list[dict[str, tuple[str, str, tuple]]]:
-    """Return a list of all VALID schedules of courses c1 and c2.
+        Each returned schedule should contain exactly two key-value pairs, one with the course
+        code and a section of c1, and the other with the course code and a section of c2.
 
-    Each returned schedule should contain exactly two key-value pairs, one with the course
-    code and a section of c1, and the other with the course code and a section of c2.
+        Invalid schedules are NOT returned in this list.
 
-    Invalid schedules are NOT returned in this list.
+        Hint:
+            - Use is_valid
+            - Use possible_schedules
 
-    Hint:
-        - Use is_valid
-        - Use possible_schedules
+        Preconditions:
+            - c1 and c2 match the format for a course described by the assignment handout.
+            - c1 != c2
+        """
+        schedules = possible_schedules(c1, c2)
+        return [x for x in schedules if is_valid(x)]
 
-    Preconditions:
-        - c1 and c2 match the format for a course described by the assignment handout.
-        - c1 != c2
-    """
+    def possible_five_course_schedules(c1: tuple[str, str, set],
+                                       c2: tuple[str, str, set],
+                                       c3: tuple[str, str, set],
+                                       c4: tuple[str, str, set],
+                                       c5: tuple[str, str, set]) -> list[dict[str, tuple]]:
+        """Return a list of every possible schedule that contains all given courses.
 
+        This is analogous to possible_schedules, except now there are 5 courses instead of 2.
 
-def possible_five_course_schedules(c1: tuple[str, str, set],
-                                   c2: tuple[str, str, set],
-                                   c3: tuple[str, str, set],
-                                   c4: tuple[str, str, set],
-                                   c5: tuple[str, str, set]) -> list[dict[str, tuple]]:
-    """Return a list of every possible schedule that contains all given courses.
+        If a given course has no sections, then return an empty list.
+        (This will happen "automatically" if you use a comprehension with an empty collection!)
 
-    This is analogous to possible_schedules, except now there are 5 courses instead of 2.
+        Preconditions:
+            - all given courses match the format for a course described by the assignment handout.
+            - c1 != c2 and c1 != c3 and c1 != c4 and c1 != c5
+            - c2 != c3 and c2 != c4 and c2 != c5
+            - c3 != c4 and c3 != c5
+            - c4 != c5
 
-    If a given course has no sections, then return an empty list.
-    (This will happen "automatically" if you use a comprehension with an empty collection!)
+        HINT: you'll want a comprehension with 5 different variables. You can split up each
+        "for ... in ..." across multiple lines to help make your code more readable.
+        """
+        return [{c1[0]: a, c2[0]: b, c3[0]: c, c4[0]: d, c5[0]: e} for a in c1[2] for b in c2[2] for c in c3[2] for d in
+                c4[2] for e in c5[2]]
 
-    Preconditions:
-        - all given courses match the format for a course described by the assignment handout.
-        - c1 != c2 and c1 != c3 and c1 != c4 and c1 != c5
-        - c2 != c3 and c2 != c4 and c2 != c5
-        - c3 != c4 and c3 != c5
-        - c4 != c5
+    def valid_five_course_schedules(c1: tuple[str, str, set],
+                                    c2: tuple[str, str, set],
+                                    c3: tuple[str, str, set],
+                                    c4: tuple[str, str, set],
+                                    c5: tuple[str, str, set]) -> list[dict[str, tuple]]:
+        """Return a list of every valid schedule that contains all given courses.
 
-    HINT: you'll want a comprehension with 5 different variables. You can split up each
-    "for ... in ..." across multiple lines to help make your code more readable.
-    """
+        This is analogous to valid_schedules, except now there are 5 courses instead of 2.
 
+        Hint:
+            - Use is_valid
+            - Use possible_five_course_schedules
 
-def valid_five_course_schedules(c1: tuple[str, str, set],
-                                c2: tuple[str, str, set],
-                                c3: tuple[str, str, set],
-                                c4: tuple[str, str, set],
-                                c5: tuple[str, str, set]) -> list[dict[str, tuple]]:
-    """Return a list of every valid schedule that contains all given courses.
-
-    This is analogous to valid_schedules, except now there are 5 courses instead of 2.
-
-    Hint:
-        - Use is_valid
-        - Use possible_five_course_schedules
-
-    Preconditions:
-        - all given courses match the format for a course described by the assignment handout.
-        - c1 != c2 and c1 != c3 and c1 != c4 and c1 != c5
-        - c2 != c3 and c2 != c4 and c2 != c5
-        - c3 != c4 and c3 != c5
-        - c4 != c5
-    """
+        Preconditions:
+            - all given courses match the format for a course described by the assignment handout.
+            - c1 != c2 and c1 != c3 and c1 != c4 and c1 != c5
+            - c2 != c3 and c2 != c4 and c2 != c5
+            - c3 != c4 and c3 != c5
+            - c4 != c5
+        """
+        schedules = possible_five_course_schedules(c1, c2, c3, c4, c5)
+        return [x for x in schedules if is_valid(x)]
 
 
 ###################################################################################################
