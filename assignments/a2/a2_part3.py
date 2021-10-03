@@ -139,7 +139,7 @@ def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
 
 
 def possible_schedules(c1: tuple[str, str, set], c2: tuple[str, str, set]) \
-            -> list[dict[str, tuple[str, str, tuple]]]:
+        -> list[dict[str, tuple[str, str, tuple]]]:
     """Return a list of all possible schedules of courses c1 and c2.
 
     Each returned schedule should contain exactly two key-value pairs, one with the course
@@ -290,8 +290,8 @@ if __name__ == '__main__':
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
     # IMPORTANT: Leave this code uncommented when you submit your files.
-    # python_ta.check_all(config={
-    #     'extra-imports': ['datetime', 'python_ta.contracts'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'R1729']
-    # })
+    python_ta.check_all(config={
+        'extra-imports': ['datetime', 'python_ta.contracts'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'R1729']
+    })
