@@ -45,7 +45,7 @@ def num_lecture_hours(section: tuple[str, str, tuple]) -> int:
 
     Hint: you can use ".hour" to access the hour attribute of a datetime.time value.
     """
-    return sum([t[2].hour - t[1].hour for t in section[2]])
+    return sum(t[2].hour - t[1].hour for t in section[2])
 
 
 def sections_in_semester(schedule: dict[str, tuple[str, str, tuple]], semester: str) \
@@ -124,7 +124,7 @@ def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
     # Cannot conflict if they aren't in overlapping term
     # Conflicts when at least one meeting times conflict
     return (term1 == term2 or term1 == 'Y' or term2 == 'Y') and \
-        any([times_conflict(m1, m2) for m1 in times1 for m2 in times2])
+        any(times_conflict(m1, m2) for m1 in times1 for m2 in times2)
 
 
 def is_valid(schedule: dict[str, tuple[str, str, tuple]]) -> bool:
@@ -248,7 +248,7 @@ def is_section_compatible(schedule: dict[str, tuple[str, str, tuple]],
         - section matches the format for a section described by the assignment handout.
         - schedule matches the format for a schedule described by the assignment handout.
     """
-    return all([not sections_conflict(section, s) for s in schedule.values()])
+    return all(not sections_conflict(section, s) for s in schedule.values())
 
 
 def is_course_compatible(schedule: dict[str, tuple[str, str, tuple]],
@@ -264,7 +264,7 @@ def is_course_compatible(schedule: dict[str, tuple[str, str, tuple]],
         - schedule matches the format for a schedule described by the assignment handout.
         - course[0] not in schedule
     """
-    return any([is_section_compatible(schedule, section) for section in course[2]])
+    return any(is_section_compatible(schedule, section) for section in course[2])
 
 
 def compatible_sections(schedule: dict[str, tuple[str, str, tuple]],
