@@ -37,7 +37,6 @@ WED_9_TO_11 = ('Wednesday', datetime.time(9), datetime.time(11))
 WED_12_TO_1 = ('Wednesday', datetime.time(12), datetime.time(13))
 
 THU_3_TO_4 = ('Thursday', datetime.time(15), datetime.time(16))
-THU_1_TO_2_30 = ('Thursday', datetime.time(13), datetime.time(14, 30))
 
 FRI_9_TO_11 = ('Friday', datetime.time(9), datetime.time(11))
 FRI_12_TO_1 = ('Friday', datetime.time(12), datetime.time(13))
@@ -59,7 +58,6 @@ CON333_LEC1337 = ('LEC1337', 'F', (WED_9_TO_11,))
 CON333_LEC2001 = ('LEC2001', 'F', (MON_9_TO_11,))
 
 STA130_LEC0101 = ('LEC0101', 'F', (THU_3_TO_4,))
-STA130_LEC0201 = ('LEC0201', 'F', (THU_1_TO_2_30,))
 
 ###################################################################################################
 # Sample Courses
@@ -73,7 +71,7 @@ CON333 = ('CON333', 'Advanced Brick Laying', {CON333_LEC1337, CON333_LEC2001})
 MAT137 = ('MAT137', 'Calculus!', {MAT137_LEC0101, MAT137_LEC0201})
 
 STA130 = ('STA130', 'Introduction to Statistical Reasoning',
-          {STA130_LEC0101, STA130_LEC0201})
+          {STA130_LEC0101})
 
 ###################################################################################################
 # Sample Schedule
@@ -131,8 +129,6 @@ def test_num_lecture_hours() -> None:
     assert a2_courses.num_lecture_hours(MAT137_LEC0101) == 6
 
 
-# TODO: Create more tests
-
 ###################################################################################################
 # Part 3 Question 2
 ###################################################################################################
@@ -151,14 +147,22 @@ def test_times_no_conflict() -> None:
     """
     Test times_conflict with non-conflicting meetings times
     """
-    # TODO: Create a test
+    m1 = MON_9_TO_11
+    m2 = TUE_10_TO_12
+    expected = False
+    actual = a2_courses.times_conflict(m1, m2)
+    assert actual == expected
 
 
 def test_sections_conflict() -> None:
     """
     Test sections_conflict with conflicting sections
     """
-    # TODO: Create a test
+    s1 = CON333_LEC2001
+    s2 = MAT137_LEC0101
+    expected = True
+    actual = a2_courses.sections_conflict(s1, s2)
+    assert actual == expected
 
 
 def test_sections_no_conflict() -> None:
