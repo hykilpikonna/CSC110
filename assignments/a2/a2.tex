@@ -30,10 +30,14 @@
 
 \item[2.]
     \begin{enumerate}
-        \item[1.] TODO: Write your definition for $P(x)$ here.
-        \item[2.] TODO: Write your definition for $Q(x)$ here.
+        \item[1.] $P(x): 1 < x < 8$ where $x \in S$
+        \item[2.] $Q(x): x < 8$ where $x \in S$
     \end{enumerate}
-   TODO: Briefly justify your response here.
+    When $x \leq 1$ and $x \geq 8$, $P(x)$ is False, so $P(x) \land Q(x)$ would be False and $P(x) \implies Q(x)$ would be True. \\
+    When $1 < x < 8$, $P(x)$ and $Q(x)$ are both True, so both $P(x) \land Q(x)$ and $P(x) \implies Q(x)$ would be True. \\
+    Since $S = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$, \\
+    Statement 1 would be False because $P(x) \land Q(x)$ is False when $x=0$, \\ 
+    Statement 2 would be True because $P(x) \implies Q(x)$ is true for all values of $x \in S$.
 
 \item[3.]
 Complete this part in the provided \texttt{a2\_part1.py} starter file.
