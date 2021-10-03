@@ -241,14 +241,15 @@ def test_section_compatible() -> None:
     """
     Test is_section_compatible with compatible sections
     """
-    # TODO: Create a test
+    assert a2_courses.is_section_compatible(SCHEDULE_1, CON123_LEC0123)
 
 
 def test_section_not_compatible() -> None:
     """
     Test is_section_compatible with incompatible sections
     """
-    # TODO: Create a test
+    assert not a2_courses.is_section_compatible(SCHEDULE_1, TMP000_LEC0000)
+    assert not a2_courses.is_section_compatible(SCHEDULE_3, CON333_LEC2001)
 
 
 def test_course_compatible() -> None:
