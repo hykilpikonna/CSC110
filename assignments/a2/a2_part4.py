@@ -50,7 +50,13 @@ def read_course_data(file: str) -> dict:
     with open(file) as json_file:
         data = json.load(json_file)
 
-    return data  # TODO: transform data into the format specified in Part 4, then remove this TODO
+    return {raw['courseCode']: (raw['courseCode'], raw['courseTitle'],
+                   [(section['sectionCode'], section['term'],
+                     [(time['day'], datetime.time(int(time['startTime'].split(':')[0])),
+                       datetime.time(int(time['endTime'].split(':')[0])))
+                      for time in section['meetingTimes']])
+                    for section in raw['sections']])
+            for raw in data.values()}
 
 
 def transform_course_data(course_data: dict) -> tuple[str, str, set]:
@@ -139,6 +145,8 @@ if __name__ == '__main__':
 
     import doctest
     doctest.testmod()
+
+    print(read_course_data('data/course_data_small.json'))
 
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
