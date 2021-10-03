@@ -50,13 +50,7 @@ def read_course_data(file: str) -> dict:
     with open(file) as json_file:
         data = json.load(json_file)
 
-    return {raw['courseCode']: (raw['courseCode'], raw['courseTitle'],
-                   [(section['sectionCode'], section['term'],
-                     [(time['day'], datetime.time(int(time['startTime'].split(':')[0])),
-                       datetime.time(int(time['endTime'].split(':')[0])))
-                      for time in section['meetingTimes']])
-                    for section in raw['sections']])
-            for raw in data.values()}
+    return {raw['courseCode']: transform_course_data(raw) for raw in data.values()}
 
 
 def transform_course_data(course_data: dict) -> tuple[str, str, set]:
@@ -68,6 +62,9 @@ def transform_course_data(course_data: dict) -> tuple[str, str, set]:
         - course_data is a dictionary containing data about a single course, in the format
           found in course_data_small.json.
     """
+    return course_data['courseCode'], \
+        course_data['courseTitle'], \
+        {transform_section_data(s) for s in course_data['sections']}
 
 
 def transform_section_data(section_data: dict) -> tuple[str, str, tuple]:
@@ -79,6 +76,9 @@ def transform_section_data(section_data: dict) -> tuple[str, str, tuple]:
         - section_data is a dictionary containing data about a single section, in the format
           found in course_data_small.json.
     """
+    return section_data['sectionCode'], \
+        section_data['term'], \
+        tuple([transform_meeting_time_data(m) for m in section_data['meetingTimes']])
 
 
 def transform_meeting_time_data(meeting_time_data: dict) \
@@ -95,6 +95,9 @@ def transform_meeting_time_data(meeting_time_data: dict) \
     You'll need to do some string processing to extract the hours and minutes, and convert
     these to ints and then to a datetime.time. The str.split method is one approach.
     """
+    return str(meeting_time_data['day']), \
+        datetime.time(int(meeting_time_data['startTime'][:2])), \
+        datetime.time(int(meeting_time_data['endTime'][:2]))
 
 
 def get_valid_schedules(course_data: dict[str, tuple[str, str, set]],
@@ -140,10 +143,12 @@ def filter_by_term(course: tuple[str, str, set], term: str) -> tuple[str, str, s
 if __name__ == '__main__':
     import python_ta
     import python_ta.contracts
+
     python_ta.contracts.DEBUG_CONTRACTS = False
     python_ta.contracts.check_all_contracts()
 
     import doctest
+
     doctest.testmod()
 
     print(read_course_data('data/course_data_small.json'))
