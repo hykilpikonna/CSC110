@@ -104,8 +104,7 @@ def times_conflict(m1: tuple[str, datetime.time, datetime.time],
     #   assuming each course has at least one hour of duration
     # Case 2: 1 starts earlier than 2 and 1 ends later than the start of 2, conflict
     # Case 3: 2 starts earlier than 1 and 2 ends later than the start of 1, conflict
-    return day1 == day2 and \
-        (start1 == start2 or (start1 < start2 < end1) or (start2 < start1 < end2))
+    return day1 == day2 and end1 > start2 and end2 > start1
 
 
 def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
