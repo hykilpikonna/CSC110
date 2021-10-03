@@ -73,7 +73,38 @@ def times_conflict(m1: tuple[str, datetime.time, datetime.time],
 
     Preconditions:
         - m1 and m2 match the format for a meeting described by the assignment handout.
+
+    >>> times_conflict(('Monday', datetime.time(9), datetime.time(11)), \
+                       ('Tuesday', datetime.time(9), datetime.time(11)))
+    False
+    >>> times_conflict(('Monday', datetime.time(8), datetime.time(10)), \
+                       ('Monday', datetime.time(10), datetime.time(12)))
+    False
+    >>> times_conflict(('Monday', datetime.time(10), datetime.time(12)), \
+                       ('Monday', datetime.time(8), datetime.time(10)))
+    False
+    >>> times_conflict(('Monday', datetime.time(8), datetime.time(10)), \
+                       ('Monday', datetime.time(9), datetime.time(11)))
+    True
+    >>> times_conflict(('Monday', datetime.time(9), datetime.time(11)), \
+                       ('Monday', datetime.time(8), datetime.time(10)))
+    True
+    >>> times_conflict(('Monday', datetime.time(8), datetime.time(10)), \
+                       ('Monday', datetime.time(8), datetime.time(9)))
+    True
+    >>> times_conflict(('Monday', datetime.time(0), datetime.time(23)), \
+                       ('Monday', datetime.time(8), datetime.time(9)))
+    True
     """
+    day1, start1, end1 = m1
+    day2, start2, end2 = m2
+
+    # They cannot conflict if they aren't on the same day
+    # Case 1: The start times are equal, they conflict assuming each course has at least one hour of duration
+    # Case 2: 1 starts earlier than 2 and 1 ends later than the start of 2, conflict
+    # Case 3: 2 starts earlier than 1 and 2 ends later than the start of 1, conflict
+    # TODO: Can we assume that end1 > start1 and end2 > start2?
+    return day1 == day2 and (start1 == start2 or (start1 < start2 < end1) or (start2 < start1 < end2))
 
 
 def sections_conflict(s1: tuple[str, str, tuple], s2: tuple[str, str, tuple]) \
