@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<!-- saved from url=(0070)https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/ -->
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>CSC110 Assignment 3: Loops, Mutation, and Applications</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="./handout_files/pandoc.css">
+  <script src="./handout_files/tex-mml-chtml.js" type="text/javascript"></script><style type="text/css">.CtxtMenu_InfoClose {  top:.2em; right:.2em;}
+.CtxtMenu_InfoContent {  overflow:auto; text-align:left; font-size:80%;  padding:.4em .6em; border:1px inset; margin:1em 0px;  max-height:20em; max-width:30em; background-color:#EEEEEE;  white-space:normal;}
+.CtxtMenu_Info.CtxtMenu_MousePost {outline:none;}
+.CtxtMenu_Info {  position:fixed; left:50%; width:auto; text-align:center;  border:3px outset; padding:1em 2em; background-color:#DDDDDD;  color:black;  cursor:default; font-family:message-box; font-size:120%;  font-style:normal; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 15px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius:15px;               /* Safari and Chrome */  -moz-border-radius:15px;                  /* Firefox */  -khtml-border-radius:15px;                /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */  filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color="gray", Positive="true"); /* IE */}
+</style><style type="text/css">.CtxtMenu_MenuClose {  position:absolute;  cursor:pointer;  display:inline-block;  border:2px solid #AAA;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  font-family: "Courier New", Courier;  font-size:24px;  color:#F0F0F0}
+.CtxtMenu_MenuClose span {  display:block; background-color:#AAA; border:1.5px solid;  border-radius:18px;  -webkit-border-radius: 18px;             /* Safari and Chrome */  -moz-border-radius: 18px;                /* Firefox */  -khtml-border-radius: 18px;              /* Konqueror */  line-height:0;  padding:8px 0 6px     /* may need to be browser-specific */}
+.CtxtMenu_MenuClose:hover {  color:white!important;  border:2px solid #CCC!important}
+.CtxtMenu_MenuClose:hover span {  background-color:#CCC!important}
+.CtxtMenu_MenuClose:hover:focus {  outline:none}
+</style><style type="text/css">.CtxtMenu_Menu {  position:absolute;  background-color:white;  color:black;  width:auto; padding:5px 0px;  border:1px solid #CCCCCC; margin:0; cursor:default;  font: menu; text-align:left; text-indent:0; text-transform:none;  line-height:normal; letter-spacing:normal; word-spacing:normal;  word-wrap:normal; white-space:nowrap; float:none; z-index:201;  border-radius: 5px;                     /* Opera 10.5 and IE9 */  -webkit-border-radius: 5px;             /* Safari and Chrome */  -moz-border-radius: 5px;                /* Firefox */  -khtml-border-radius: 5px;              /* Konqueror */  box-shadow:0px 10px 20px #808080;         /* Opera 10.5 and IE9 */  -webkit-box-shadow:0px 10px 20px #808080; /* Safari 3 & Chrome */  -moz-box-shadow:0px 10px 20px #808080;    /* Forefox 3.5 */  -khtml-box-shadow:0px 10px 20px #808080;  /* Konqueror */}
+.CtxtMenu_MenuItem {  padding: 1px 2em;  background:transparent;}
+.CtxtMenu_MenuArrow {  position:absolute; right:.5em; padding-top:.25em; color:#666666;  font-family: null; font-size: .75em}
+.CtxtMenu_MenuActive .CtxtMenu_MenuArrow {color:white}
+.CtxtMenu_MenuArrow.CtxtMenu_RTL {left:.5em; right:auto}
+.CtxtMenu_MenuCheck {  position:absolute; left:.7em;  font-family: null}
+.CtxtMenu_MenuCheck.CtxtMenu_RTL { right:.7em; left:auto }
+.CtxtMenu_MenuRadioCheck {  position:absolute; left: .7em;}
+.CtxtMenu_MenuRadioCheck.CtxtMenu_RTL {  right: .7em; left:auto}
+.CtxtMenu_MenuInputBox {  padding-left: 1em; right:.5em; color:#666666;  font-family: null;}
+.CtxtMenu_MenuInputBox.CtxtMenu_RTL {  left: .1em;}
+.CtxtMenu_MenuComboBox {  left:.1em; padding-bottom:.5em;}
+.CtxtMenu_MenuSlider {  left: .1em;}
+.CtxtMenu_SliderValue {  position:absolute; right:.1em; padding-top:.25em; color:#333333;  font-size: .75em}
+.CtxtMenu_SliderBar {  outline: none; background: #d3d3d3}
+.CtxtMenu_MenuLabel {  padding: 1px 2em 3px 1.33em;  font-style:italic}
+.CtxtMenu_MenuRule {  border-top: 1px solid #DDDDDD;  margin: 4px 3px;}
+.CtxtMenu_MenuDisabled {  color:GrayText}
+.CtxtMenu_MenuActive {  background-color: #606872;  color: white;}
+.CtxtMenu_MenuDisabled:focus {  background-color: #E8E8E8}
+.CtxtMenu_MenuLabel:focus {  background-color: #E8E8E8}
+.CtxtMenu_ContextMenu:focus {  outline:none}
+.CtxtMenu_ContextMenu .CtxtMenu_MenuItem:focus {  outline:none}
+.CtxtMenu_SelectionMenu {  position:relative; float:left;  border-bottom: none; -webkit-box-shadow:none; -webkit-border-radius:0px; }
+.CtxtMenu_SelectionItem {  padding-right: 1em;}
+.CtxtMenu_Selection {  right: 40%; width:50%; }
+.CtxtMenu_SelectionBox {  padding: 0em; max-height:20em; max-width: none;  background-color:#FFFFFF;}
+.CtxtMenu_SelectionDivider {  clear: both; border-top: 2px solid #000000;}
+.CtxtMenu_Menu .CtxtMenu_MenuClose {  top:-10px; left:-10px}
+</style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+<style id="MJX-CHTML-styles">
+mjx-container[jax="CHTML"] {
+  line-height: 0;
+}
+
+mjx-container [space="1"] {
+  margin-left: .111em;
+}
+
+mjx-container [space="2"] {
+  margin-left: .167em;
+}
+
+mjx-container [space="3"] {
+  margin-left: .222em;
+}
+
+mjx-container [space="4"] {
+  margin-left: .278em;
+}
+
+mjx-container [space="5"] {
+  margin-left: .333em;
+}
+
+mjx-container [rspace="1"] {
+  margin-right: .111em;
+}
+
+mjx-container [rspace="2"] {
+  margin-right: .167em;
+}
+
+mjx-container [rspace="3"] {
+  margin-right: .222em;
+}
+
+mjx-container [rspace="4"] {
+  margin-right: .278em;
+}
+
+mjx-container [rspace="5"] {
+  margin-right: .333em;
+}
+
+mjx-container [size="s"] {
+  font-size: 70.7%;
+}
+
+mjx-container [size="ss"] {
+  font-size: 50%;
+}
+
+mjx-container [size="Tn"] {
+  font-size: 60%;
+}
+
+mjx-container [size="sm"] {
+  font-size: 85%;
+}
+
+mjx-container [size="lg"] {
+  font-size: 120%;
+}
+
+mjx-container [size="Lg"] {
+  font-size: 144%;
+}
+
+mjx-container [size="LG"] {
+  font-size: 173%;
+}
+
+mjx-container [size="hg"] {
+  font-size: 207%;
+}
+
+mjx-container [size="HG"] {
+  font-size: 249%;
+}
+
+mjx-container [width="full"] {
+  width: 100%;
+}
+
+mjx-box {
+  display: inline-block;
+}
+
+mjx-block {
+  display: block;
+}
+
+mjx-itable {
+  display: inline-table;
+}
+
+mjx-row {
+  display: table-row;
+}
+
+mjx-row > * {
+  display: table-cell;
+}
+
+mjx-mtext {
+  display: inline-block;
+}
+
+mjx-mstyle {
+  display: inline-block;
+}
+
+mjx-merror {
+  display: inline-block;
+  color: red;
+  background-color: yellow;
+}
+
+mjx-mphantom {
+  visibility: hidden;
+}
+
+_::-webkit-full-page-media, _:future, :root mjx-container {
+  will-change: opacity;
+}
+
+mjx-assistive-mml {
+  position: absolute !important;
+  top: 0px;
+  left: 0px;
+  clip: rect(1px, 1px, 1px, 1px);
+  padding: 1px 0px 0px 0px !important;
+  border: 0px !important;
+  display: block !important;
+  width: auto !important;
+  overflow: hidden !important;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+mjx-assistive-mml[display="block"] {
+  width: 100% !important;
+}
+
+mjx-math {
+  display: inline-block;
+  text-align: left;
+  line-height: 0;
+  text-indent: 0;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 100%;
+  font-size-adjust: none;
+  letter-spacing: normal;
+  word-wrap: normal;
+  word-spacing: normal;
+  white-space: nowrap;
+  direction: ltr;
+  padding: 1px 0;
+}
+
+mjx-container[jax="CHTML"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="CHTML"][display="true"][width="full"] {
+  display: flex;
+}
+
+mjx-container[jax="CHTML"][display="true"] mjx-math {
+  padding: 0;
+}
+
+mjx-container[jax="CHTML"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="CHTML"][justify="right"] {
+  text-align: right;
+}
+
+mjx-mo {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-stretchy-h {
+  display: inline-table;
+  width: 100%;
+}
+
+mjx-stretchy-h > * {
+  display: table-cell;
+  width: 0;
+}
+
+mjx-stretchy-h > * > mjx-c {
+  display: inline-block;
+  transform: scalex(1.0000001);
+}
+
+mjx-stretchy-h > * > mjx-c::before {
+  display: inline-block;
+  width: initial;
+}
+
+mjx-stretchy-h > mjx-ext {
+  /* IE */ overflow: hidden;
+  /* others */ overflow: clip visible;
+  width: 100%;
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c::before {
+  transform: scalex(500);
+}
+
+mjx-stretchy-h > mjx-ext > mjx-c {
+  width: 0;
+}
+
+mjx-stretchy-h > mjx-beg > mjx-c {
+  margin-right: -.1em;
+}
+
+mjx-stretchy-h > mjx-end > mjx-c {
+  margin-left: -.1em;
+}
+
+mjx-stretchy-v {
+  display: inline-block;
+}
+
+mjx-stretchy-v > * {
+  display: block;
+}
+
+mjx-stretchy-v > mjx-beg {
+  height: 0;
+}
+
+mjx-stretchy-v > mjx-end > mjx-c {
+  display: block;
+}
+
+mjx-stretchy-v > * > mjx-c {
+  transform: scaley(1.0000001);
+  transform-origin: left center;
+  overflow: hidden;
+}
+
+mjx-stretchy-v > mjx-ext {
+  display: block;
+  height: 100%;
+  box-sizing: border-box;
+  border: 0px solid transparent;
+  /* IE */ overflow: hidden;
+  /* others */ overflow: visible clip;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c::before {
+  width: initial;
+  box-sizing: border-box;
+}
+
+mjx-stretchy-v > mjx-ext > mjx-c {
+  transform: scaleY(500) translateY(.075em);
+  overflow: visible;
+}
+
+mjx-mark {
+  display: inline-block;
+  height: 0px;
+}
+
+mjx-c {
+  display: inline-block;
+}
+
+mjx-utext {
+  display: inline-block;
+  padding: .75em 0 .2em 0;
+}
+
+mjx-mn {
+  display: inline-block;
+  text-align: left;
+}
+
+mjx-c::before {
+  display: block;
+  width: 0;
+}
+
+.MJX-TEX {
+  font-family: MJXZERO, MJXTEX;
+}
+
+.TEX-B {
+  font-family: MJXZERO, MJXTEX-B;
+}
+
+.TEX-I {
+  font-family: MJXZERO, MJXTEX-I;
+}
+
+.TEX-MI {
+  font-family: MJXZERO, MJXTEX-MI;
+}
+
+.TEX-BI {
+  font-family: MJXZERO, MJXTEX-BI;
+}
+
+.TEX-S1 {
+  font-family: MJXZERO, MJXTEX-S1;
+}
+
+.TEX-S2 {
+  font-family: MJXZERO, MJXTEX-S2;
+}
+
+.TEX-S3 {
+  font-family: MJXZERO, MJXTEX-S3;
+}
+
+.TEX-S4 {
+  font-family: MJXZERO, MJXTEX-S4;
+}
+
+.TEX-A {
+  font-family: MJXZERO, MJXTEX-A;
+}
+
+.TEX-C {
+  font-family: MJXZERO, MJXTEX-C;
+}
+
+.TEX-CB {
+  font-family: MJXZERO, MJXTEX-CB;
+}
+
+.TEX-FR {
+  font-family: MJXZERO, MJXTEX-FR;
+}
+
+.TEX-FRB {
+  font-family: MJXZERO, MJXTEX-FRB;
+}
+
+.TEX-SS {
+  font-family: MJXZERO, MJXTEX-SS;
+}
+
+.TEX-SSB {
+  font-family: MJXZERO, MJXTEX-SSB;
+}
+
+.TEX-SSI {
+  font-family: MJXZERO, MJXTEX-SSI;
+}
+
+.TEX-SC {
+  font-family: MJXZERO, MJXTEX-SC;
+}
+
+.TEX-T {
+  font-family: MJXZERO, MJXTEX-T;
+}
+
+.TEX-V {
+  font-family: MJXZERO, MJXTEX-V;
+}
+
+.TEX-VB {
+  font-family: MJXZERO, MJXTEX-VB;
+}
+
+mjx-stretchy-v mjx-c, mjx-stretchy-h mjx-c {
+  font-family: MJXZERO, MJXTEX-S1, MJXTEX-S4, MJXTEX, MJXTEX-A ! important;
+}
+
+@font-face /* 0 */ {
+  font-family: MJXZERO;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Zero.woff") format("woff");
+}
+
+@font-face /* 1 */ {
+  font-family: MJXTEX;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Regular.woff") format("woff");
+}
+
+@font-face /* 2 */ {
+  font-family: MJXTEX-B;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Bold.woff") format("woff");
+}
+
+@font-face /* 3 */ {
+  font-family: MJXTEX-I;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-Italic.woff") format("woff");
+}
+
+@font-face /* 4 */ {
+  font-family: MJXTEX-MI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Main-Italic.woff") format("woff");
+}
+
+@font-face /* 5 */ {
+  font-family: MJXTEX-BI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Math-BoldItalic.woff") format("woff");
+}
+
+@font-face /* 6 */ {
+  font-family: MJXTEX-S1;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size1-Regular.woff") format("woff");
+}
+
+@font-face /* 7 */ {
+  font-family: MJXTEX-S2;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size2-Regular.woff") format("woff");
+}
+
+@font-face /* 8 */ {
+  font-family: MJXTEX-S3;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size3-Regular.woff") format("woff");
+}
+
+@font-face /* 9 */ {
+  font-family: MJXTEX-S4;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Size4-Regular.woff") format("woff");
+}
+
+@font-face /* 10 */ {
+  font-family: MJXTEX-A;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_AMS-Regular.woff") format("woff");
+}
+
+@font-face /* 11 */ {
+  font-family: MJXTEX-C;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Regular.woff") format("woff");
+}
+
+@font-face /* 12 */ {
+  font-family: MJXTEX-CB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Calligraphic-Bold.woff") format("woff");
+}
+
+@font-face /* 13 */ {
+  font-family: MJXTEX-FR;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Regular.woff") format("woff");
+}
+
+@font-face /* 14 */ {
+  font-family: MJXTEX-FRB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Fraktur-Bold.woff") format("woff");
+}
+
+@font-face /* 15 */ {
+  font-family: MJXTEX-SS;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Regular.woff") format("woff");
+}
+
+@font-face /* 16 */ {
+  font-family: MJXTEX-SSB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Bold.woff") format("woff");
+}
+
+@font-face /* 17 */ {
+  font-family: MJXTEX-SSI;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_SansSerif-Italic.woff") format("woff");
+}
+
+@font-face /* 18 */ {
+  font-family: MJXTEX-SC;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Script-Regular.woff") format("woff");
+}
+
+@font-face /* 19 */ {
+  font-family: MJXTEX-T;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Typewriter-Regular.woff") format("woff");
+}
+
+@font-face /* 20 */ {
+  font-family: MJXTEX-V;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Regular.woff") format("woff");
+}
+
+@font-face /* 21 */ {
+  font-family: MJXTEX-VB;
+  src: url("https://cdn.jsdelivr.net/npm/mathjax@3/es5/output/chtml/fonts/woff-v2/MathJax_Vector-Bold.woff") format("woff");
+}
+
+mjx-c.mjx-c2265::before {
+  padding: 0.636em 0.778em 0.138em 0;
+  content: "\2265";
+}
+
+mjx-c.mjx-c30::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "0";
+}
+
+mjx-c.mjx-c2E::before {
+  padding: 0.12em 0.278em 0 0;
+  content: ".";
+}
+
+mjx-c.mjx-c35::before {
+  padding: 0.666em 0.5em 0.022em 0;
+  content: "5";
+}
+
+mjx-c.mjx-c2212::before {
+  padding: 0.583em 0.778em 0.082em 0;
+  content: "\2212";
+}
+
+mjx-c.mjx-c2264::before {
+  padding: 0.636em 0.778em 0.138em 0;
+  content: "\2264";
+}
+</style></head>
+<body>
+<div style="display:none">
+<mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="0" style="font-size: 113.1%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"></math></mjx-assistive-mml></mjx-container>
+</div>
+<header id="title-block-header">
+<h1 class="title">CSC110 Assignment 3: Loops, Mutation, and Applications</h1>
+</header>
+<p>In this assignment, you’ll take what you learned about using loops and mutation over the past few weeks, and apply these programming techniques to a few new problem domains. In Parts 1 and 2, you will generate English texts by creating and using simple computational models. In Part 3, you will learn about <em>sentiment analysis</em> and debug a small program that analyses the sentiments found in movie reviews. And finally, in Part 4 you will work with the Canadian Forest Fire Weather Index system. What an exciting assignment!</p>
+<h2 id="logistics">Logistics</h2>
+<ul>
+<li>Due date: Tuesday, November 2nd before 9 am Eastern Time.</li>
+<li>This assignment can be done with one partner or individually.</li>
+<li>You will submit your assignment solutions on MarkUs (see submission instructions at the end of this handout).</li>
+<li>Review the Course Syllabus section on <a href="https://q.utoronto.ca/courses/233887/assignments/syllabus">Academic Integrity</a>.</li>
+</ul>
+<h3 id="starter-files">Starter files</h3>
+<p>To obtain the starter files for this assignment:</p>
+<ol type="1">
+<li>Download the starter files from MarkUs. The downloaded file should be a zip file.</li>
+<li>Extract the contents of this zip file into your <code>csc110/assignments/</code> folder. Put all the starter files in a new <code>a3</code> folder. This should look similar to what you had for <a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a1/handout">Assignment 1</a>.</li>
+<li>Mark the <code>a3</code> folder as “Sources Root” by right-clicking on it and selecting <em>Mark Directory as -&gt; Sources Root</em>.</li>
+</ol>
+<h3 id="general-instructions">General instructions</h3>
+<p>This assignment contains a mixture of both written and programming questions. All of your written work should be completed in the <code>a3.tex</code> starter file using the LaTeX typesetting language. You went through the process of getting started with LaTeX in the <a href="https://q.utoronto.ca/courses/160038/pages/setting-up-your-computer-start-here?module_item_id=1346385">Software Installation Guide</a>, but for a quick start we recommend using the online platform <a href="https://www.overleaf.com/">Overleaf</a> for LaTeX. Overleaf also provides many <a href="https://www.overleaf.com/learn/latex/Learn_LaTeX_in_30_minutes">tutorials</a> to help you get started with LaTeX.</p>
+<p>Your programming work should be completed in the different starter files provided (each part has its own starter files). We have provided code at the bottom of each file for running tests and/or PythonTA on each file. We are <em>not</em> grading doctests on this assignment, but encourage you to add some as a way to understand each function we’ve asked you to complete. We <em>are</em> using PythonTA to grade your work, so please run that on every Python file you submit using the code we’ve provided.</p>
+<p><strong>Warning</strong>: one of the purposes of this assignment is to evaluate your understanding and mastery of the concepts that we have covered so far. So on this assignment, you may only use parts of the Python programming language that we have covered in the first five weeks of lecture (i.e., up to and including all of Chapter 5 in the notes). Other parts are not allowed, and parts of your submissions that use them may receive a grade as low as <strong>zero</strong> for doing so.</p>
+<ul>
+<li>You <em>may</em> use augmented assignment operations (e.g., <code>+=</code>)</li>
+<li>You <em>may</em> use the alternate method call syntax (e.g., <code>text.lower()</code> rather than <code>str.lower(text)</code>)</li>
+</ul>
+<h2 id="part-1-text-generation-uniformly-random-model">Part 1: Text generation, uniformly random model</h2>
+<p>Computers have become very good at predicting the next word in a sentence. Consider, for example, the touch-based keyboards on a smartphone. The accuracy of these predictions are based on two things: the model and the data used to “train” that model. In Parts 1 and 2, we will see how we can use textual data to create a model that generates a series of semi-sensible sentences.</p>
+<h3 id="the-model">The model</h3>
+<p>Consider the short sentence <code>'Hello Hello Amy was here'</code>. We can create a dictionary of each word in the sentence to the number of times it appears in this sentence.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-1"></a>{</span>
+<span id="cb1-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-2"></a>    <span class="st">'Hello'</span>: <span class="dv">2</span>,</span>
+<span id="cb1-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-3"></a>    <span class="st">'Amy'</span>: <span class="dv">1</span>,</span>
+<span id="cb1-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-4"></a>    <span class="st">'was'</span>: <span class="dv">1</span>,</span>
+<span id="cb1-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-5"></a>    <span class="st">'here'</span>: <span class="dv">1</span></span>
+<span id="cb1-6"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb1-6"></a>}</span></code></pre></div>
+<p>One naive way to generate new sentences from this data is to <em>randomly select words</em> from this sentence and join them together to generate a new sentence. Here the start of a function to do so:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-1"></a><span class="kw">def</span> generate_text_uniform(model: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>], n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-2"></a>    <span class="co">"""Return a string of n randomly-generated words chosen from the given model.</span></span>
+<span id="cb2-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-3"></a></span>
+<span id="cb2-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-4"></a><span class="co">    Each word in the returned string is separated by a single space.</span></span>
+<span id="cb2-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-5"></a></span>
+<span id="cb2-6"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-6"></a><span class="co">    Preconditions:</span></span>
+<span id="cb2-7"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-7"></a><span class="co">        - n &gt;= 0</span></span>
+<span id="cb2-8"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-8"></a><span class="co">        - model != {}</span></span>
+<span id="cb2-9"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb2-9"></a><span class="co">    """</span></span></code></pre></div>
+<p>For example, here is how we might call this function on the words in our given sentence:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> words <span class="op">=</span> {<span class="st">'Hello'</span>: <span class="dv">2</span>, <span class="st">'Amy'</span>: <span class="dv">1</span>, <span class="st">'was'</span>: <span class="dv">1</span>, <span class="st">'here'</span>: <span class="dv">1</span>}</span>
+<span id="cb3-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> generate_text_uniform(words, <span class="dv">5</span>)</span>
+<span id="cb3-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb3-3"></a><span class="co">'was Amy was was here'</span></span>
+<span id="cb3-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb3-4"></a><span class="op">&gt;&gt;&gt;</span> generate_text_uniform(words, <span class="dv">5</span>)</span>
+<span id="cb3-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb3-5"></a><span class="co">'Hello Hello Amy here Hello'</span></span></code></pre></div>
+<p>This function makes <code>n</code> random choices from the given words, and can be implemented using a loop with the following structure:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-1"></a><span class="kw">def</span> generate_text_uniform(model: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>], n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-2"></a>    <span class="co">"""Return a string of n randomly-generated words chosen from the given model.</span></span>
+<span id="cb4-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-3"></a></span>
+<span id="cb4-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-4"></a><span class="co">    Each word in the returned string is separated by a single space.</span></span>
+<span id="cb4-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-5"></a></span>
+<span id="cb4-6"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-6"></a><span class="co">    Preconditions:</span></span>
+<span id="cb4-7"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-7"></a><span class="co">        - n &gt;= 0</span></span>
+<span id="cb4-8"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-8"></a><span class="co">        - model != {}</span></span>
+<span id="cb4-9"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-9"></a><span class="co">    """</span></span>
+<span id="cb4-10"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-10"></a>    <span class="co"># Unpack model into two lists whose indexes correspond to one another</span></span>
+<span id="cb4-11"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-11"></a>    words <span class="op">=</span> []</span>
+<span id="cb4-12"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-12"></a>    word_frequencies <span class="op">=</span> []</span>
+<span id="cb4-13"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-13"></a>    <span class="cf">for</span> word <span class="kw">in</span> model:</span>
+<span id="cb4-14"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-14"></a>        words.append(word)</span>
+<span id="cb4-15"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-15"></a>        word_frequencies.append(model[word])</span>
+<span id="cb4-16"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-16"></a></span>
+<span id="cb4-17"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-17"></a>    new_words <span class="op">=</span> random.choices(words, weights<span class="op">=</span>word_frequencies, k<span class="op">=</span>n)</span>
+<span id="cb4-18"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb4-18"></a>    <span class="cf">return</span> <span class="bu">str</span>.join(<span class="st">' '</span>, new_words)</span></code></pre></div>
+<p>First, we created two <em>parallel lists</em> <code>words</code> (a <code>list[str]</code>) and <code>word_frequencies</code> (a <code>list[int]</code>). So index 0 in <code>words</code> is a string that appears <code>word_frequencies[0]</code> number of times. We use these parallel lists in <code>random.choices</code>, a function we have not seen yet (not to be confused by <code>random.choice</code>). Our call to the function <code>random.choices</code> will randomly choose strings from <code>words</code> based on the <em>weights</em> in <code>word_frequencies</code>. In addition, we specify the <code>k</code> argument so that <code>random.choices</code> returns a <code>list[str]</code> containing <code>n</code> elements. Finally, recall that the built-in method <code>str.join</code> takes a separator <code>str</code> and <code>list[str]</code>, and returns a new string containing all the words in the given list, separated by the separator.</p>
+<ol type="1">
+<li><p>Open <code>a3.tex</code> and answer the following questions.</p>
+<ol type="a">
+<li><p>Complete the <em>loop accumulation table</em> for the example call to <code>generate_text_uniform(words, 5)</code> where <code>words = {'Hello': 2, 'Amy': 1, 'was': 1, 'here': 1}</code>. For this question, you can assume that the for loop goes in the order in which the key-value pairs appear in (so <code>'Hello'</code>, then <code>'Amy'</code>, then…).</p></li>
+<li><p>Explain why it wouldn’t be a good idea to include this example for <code>generate_text_uniform</code> to check with <code>doctest</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb5-1"></a><span class="co">"""</span></span>
+<span id="cb5-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb5-2"></a><span class="co">&gt;&gt;&gt; words = {'Hello': 2, 'Amy': 1, 'was': 1, 'here': 1}</span></span>
+<span id="cb5-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb5-3"></a><span class="co">&gt;&gt;&gt; generate_text_uniform(words, 5)</span></span>
+<span id="cb5-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb5-4"></a><span class="co">'Hello Hello Amy here Hello'</span></span>
+<span id="cb5-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb5-5"></a><span class="co">"""</span></span></code></pre></div></li>
+<li><p>What inputs to <code>generate_text_uniform</code> could we write doctest examples for? (i.e., inputs where the problem you described in part (b) doesn’t apply.)</p></li>
+</ol></li>
+<li><p>Open <code>a3_part1.py</code> and complete the function <code>create_model_uniform</code> according to its docstring. You may want to check out <code>a3_sample_tests.py</code>, which does not need to be submitted.</p></li>
+</ol>
+<h2 id="part-2-text-generation-one-word-context-model">Part 2: Text Generation, One-Word Context Model</h2>
+<p><code>generate_text_uniform</code> doesn’t return meaningful sentences, whether we give it a “small” dictionary of words or the entire collection of words in the English language. The reason is its model, which makes <em>independent random choices</em> for each word in the generated output. The reason independent word choices generate nonsensical sentences is that in English (and every other language), word order matters: each word in a sentence is very much tied to the previous and next words.</p>
+<p>In this part, we’ll develop and use a text model that stores not just the words from our input data, but some <em>context</em> of how each word is used as well.</p>
+<h3 id="the-model-1">The model</h3>
+<p>Consider the following sentence:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb6-1"></a><span class="co">'I really really like chocolate'</span></span></code></pre></div>
+<p>The <strong>one-word context model</strong> for this text is a dictionary where:</p>
+<ul>
+<li>Each key is a word from the text.</li>
+<li>Each key’s corresponding value is a list of words that <em>immediately follow</em> that word in the text. We call this set the <em>follow list</em> of the key.</li>
+</ul>
+<p>The one-word context model for <code>'I really really like chocolate'</code> is the following:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb7-1"></a>{</span>
+<span id="cb7-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb7-2"></a>    <span class="st">'I'</span>: [<span class="st">'really'</span>],</span>
+<span id="cb7-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb7-3"></a>    <span class="st">'really'</span>: [<span class="st">'really'</span>, <span class="st">'like'</span>],</span>
+<span id="cb7-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb7-4"></a>    <span class="st">'like'</span>: [<span class="st">'chocolate'</span>]</span>
+<span id="cb7-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb7-5"></a>}</span></code></pre></div>
+<p>This model tells us:</p>
+<ul>
+<li>The word <code>'I'</code> can be followed by <code>'really'</code>. Its <em>follow list</em> is <code>['really']</code>.</li>
+<li>The word <code>'really'</code> can be followed by <code>'really'</code> or <code>'like'</code>.</li>
+<li>The word <code>'like'</code> can be followed by <code>'chocolate'</code>.</li>
+<li>The word <code>'chocolate'</code> has no words that follow it. So it is not included as a key.</li>
+</ul>
+<p>What about punctuation? To simplify our model, we consider punctuation as part of the word. This means that the word <code>'chocolate'</code> is not the same as <code>'chocolate.'</code> nor is it the same as <code>'chocolate!'</code>.</p>
+<ol start="0" type="1">
+<li><p>(<em>Not to be handed in, but useful to complete</em>) answer the following questions:</p>
+<ol type="a">
+<li><p>Write the one-word context model for the following string:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb8-1"></a><span class="co">'David is cool and funny and Mario is cool'</span></span></code></pre></div></li>
+<li><p>Write a string whose one-word context model is the following:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-1"></a>{</span>
+<span id="cb9-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-2"></a>    <span class="st">'I'</span>: [<span class="st">'love'</span>],</span>
+<span id="cb9-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-3"></a>    <span class="st">'love'</span>: [<span class="st">'cats'</span>],</span>
+<span id="cb9-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-4"></a>    <span class="st">'hate'</span>: [<span class="st">'dogs'</span>],</span>
+<span id="cb9-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-5"></a>    <span class="st">'cats'</span>: [<span class="st">'and'</span>, <span class="st">'hate'</span>],</span>
+<span id="cb9-6"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-6"></a>    <span class="st">'and'</span>: [<span class="st">'cats'</span>]</span>
+<span id="cb9-7"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb9-7"></a>}</span></code></pre></div></li>
+</ol></li>
+<li><p>In <code>a3.tex</code>, write the one-word context model for the following string:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb10-1"></a><span class="co">'Love is patient. Love is kind. It does not envy. It does not boast. It is not proud.'</span></span></code></pre></div></li>
+<li><p>In <code>a3_part2.py</code>, implement the functions <code>update_follow_list</code> and <code>create_model_owc</code>.</p>
+<p>Some details about the model:</p>
+<ul>
+<li>The keys in the model are case-sensitive; so <code>'love'</code> and <code>'Love'</code> are treated as different words, and have different follow lists.</li>
+<li>Every word in the input text, <em>except the last word</em>, is a key in the returned model.</li>
+<li>Every word in the input text must have a non-empty follow list.</li>
+</ul></li>
+</ol>
+<h3 id="generating-text">Generating text</h3>
+<p>Now we’re going to use our one-word context model to generate text, by implementing the following function:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-1"></a><span class="kw">def</span> generate_text_owc(count: <span class="bu">int</span>, transitions: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">str</span>]]) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb11-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-2"></a>    <span class="co">"""Return a string containing (count - 1) randomly generated words based on the data in</span></span>
+<span id="cb11-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-3"></a><span class="co">    transitions, which maps words to a list of words that follow it.</span></span>
+<span id="cb11-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-4"></a></span>
+<span id="cb11-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-5"></a><span class="co">    A randomly generated word is selected from the keys of transitions when:</span></span>
+<span id="cb11-6"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-6"></a><span class="co">        - it is the first word; or</span></span>
+<span id="cb11-7"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-7"></a><span class="co">        - the last randomly generated word is not a key in transitions.</span></span>
+<span id="cb11-8"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-8"></a></span>
+<span id="cb11-9"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-9"></a><span class="co">    A randomly generated word is selected from the follow list of a key in transitions when the</span></span>
+<span id="cb11-10"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-10"></a><span class="co">    last randomly generated word is a key in transitions. In addition, one occurrence of the word</span></span>
+<span id="cb11-11"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-11"></a><span class="co">    selected from the follow list is removed from the follow list (i.e., mutation). When there are</span></span>
+<span id="cb11-12"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-12"></a><span class="co">    no words in the follow list for a key, the key-value pair is also removed from transitions</span></span>
+<span id="cb11-13"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-13"></a><span class="co">    (i.e., mutation).</span></span>
+<span id="cb11-14"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-14"></a></span>
+<span id="cb11-15"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-15"></a><span class="co">    Your implementation MUST use the helper functions: choose_from_keys and choose_from_follow_list.</span></span>
+<span id="cb11-16"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-16"></a><span class="co">    We recommend completing these functions first, as they simpler and will get you thinking about</span></span>
+<span id="cb11-17"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-17"></a><span class="co">    how to use it here.</span></span>
+<span id="cb11-18"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-18"></a></span>
+<span id="cb11-19"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-19"></a><span class="co">    Preconditions:</span></span>
+<span id="cb11-20"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-20"></a><span class="co">        - model is in the format described by the assignment handout</span></span>
+<span id="cb11-21"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-21"></a><span class="co">    """</span></span>
+<span id="cb11-22"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-22"></a>    <span class="co"># ACCUMULATOR: a list of the randomly-generated words so far</span></span>
+<span id="cb11-23"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-23"></a>    words_so_far <span class="op">=</span> []</span>
+<span id="cb11-24"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-24"></a></span>
+<span id="cb11-25"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-25"></a>    <span class="co"># We've provided this template as a starting point; you may modify it as necessary.</span></span>
+<span id="cb11-26"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-26"></a>    current_word <span class="op">=</span> <span class="st">''</span></span>
+<span id="cb11-27"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-27"></a>    <span class="cf">for</span> _ <span class="kw">in</span> <span class="bu">range</span>(count <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb11-28"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-28"></a>        ...</span>
+<span id="cb11-29"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-29"></a></span>
+<span id="cb11-30"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb11-30"></a>    <span class="cf">return</span> <span class="bu">str</span>.join(<span class="st">' '</span>, words_so_far)</span></code></pre></div>
+<p>This function behaves similarly to <code>generate_text_uniform</code>, except now we aren’t going to make random choices independent of each other— instead, whenever a word <code>w</code> is chosen, the <em>next</em> word to be chosen must come from the follow list of <code>w</code> stored in the <code>transitions</code>. And for each word <code>w</code>, each word in the follow list of <code>w</code> can only be selected once. For example, in this model:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb12-1"></a>{</span>
+<span id="cb12-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb12-2"></a>    <span class="st">'I'</span>: [<span class="st">'like'</span>, <span class="st">'really'</span>],</span>
+<span id="cb12-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb12-3"></a>    <span class="st">'like'</span>: [<span class="st">'chocolate.'</span>, <span class="st">'chocolate.'</span>],</span>
+<span id="cb12-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb12-4"></a>    <span class="st">'really'</span>: [<span class="st">'really'</span>, <span class="st">'like'</span>]</span>
+<span id="cb12-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb12-5"></a>}</span></code></pre></div>
+<p>The word <code>'like'</code> can only follow the word <code>'I'</code> once in the generated sentence. But the word <code>'chocolate.'</code> can follow <code>'like'</code> twice. What is the longest sentence we can generate from this model?</p>
+<p>To accomplish the above, we will <strong>mutate</strong> <code>transitions</code> and the <code>list[str]</code> values in <code>transitions</code> as we “randomly choose” words from it. Sometimes we will need to randomly choose a key from <code>transitions</code>, like when we are generating the very first word or the last word is not a key in <code>transitions</code> (see the <code>choose_from_keys</code> helper function). Other times, when the last word (i.e., the context) is in <code>transitions</code>, we will randomly choose a string from a follow list in <code>transitions</code>. <strong>This is when we mutate</strong> (see the <code>choose_from_follow_list</code> helper function). Let’s try an example.</p>
+<p>Consider our earlier model:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> my_model <span class="op">=</span> {</span>
+<span id="cb13-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb13-2"></a>...    <span class="st">'I'</span>: [<span class="st">'like'</span>, <span class="st">'really'</span>],</span>
+<span id="cb13-3"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb13-3"></a>...    <span class="st">'like'</span>: [<span class="st">'chocolate.'</span>, <span class="st">'chocolate.'</span>],</span>
+<span id="cb13-4"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb13-4"></a>...    <span class="st">'really'</span>: [<span class="st">'really'</span>, <span class="st">'like'</span>]</span>
+<span id="cb13-5"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb13-5"></a>...    }</span></code></pre></div>
+<p>At the beginning, we need to select the “first word” for our randomly generated text. The possible first words are the keys of <code>my_model</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">set</span>(my_model.keys())</span>
+<span id="cb14-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb14-2"></a>{<span class="st">'like'</span>, <span class="st">'I'</span>, <span class="st">'really'</span>}</span></code></pre></div>
+<p>Suppose we randomly selected <code>'like'</code>. This means our second word will come from the follow list that corresponds with the key <code>'like'</code>:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb15-1"></a><span class="op">&gt;&gt;&gt;</span> my_model[<span class="st">'like'</span>]</span>
+<span id="cb15-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb15-2"></a>[<span class="st">'chocolate.'</span>, <span class="st">'chocolate.'</span>]</span></code></pre></div>
+<p>Suppose we randomly select <code>'chocolate.'</code> (though we didn’t have much choice!) and add it to our randomly generated text. We <em>also</em> need to remove one occurence of <code>'chocolate.'</code> from the follow list. So our string becomes: <code>'like chocolate.'</code>. And our model is now:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb16-1"></a><span class="op">&gt;&gt;&gt;</span> my_model</span>
+<span id="cb16-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb16-2"></a>{<span class="st">'I'</span>: [<span class="st">'like'</span>, <span class="st">'really'</span>], <span class="st">'like'</span>: [<span class="st">'chocolate.'</span>], <span class="st">'really'</span>: [<span class="st">'really'</span>, <span class="st">'like'</span>]}</span></code></pre></div>
+<p>The word <code>'chocolate.'</code> is not a key in <code>my_model</code>. So we will need to choose a random word from the keys of <code>my_model</code>, just like we did for our very first word. Suppose we randomly select <code>'like'</code> again. Its follow list is down to just: <code>['chocolate.']</code>. So when this second <code>'chocolate.'</code> word is selected and removed from the follow list, <code>'like'</code> maps to an empty list <code>[]</code>. When this happens, we remove the key-value pair from the model. So our string becomes: <code>'like chocolate. chocolate.'</code>. And our model is now:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb17-1"></a><span class="op">&gt;&gt;&gt;</span> my_model</span>
+<span id="cb17-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb17-2"></a>{<span class="st">'I'</span>: [<span class="st">'like'</span>, <span class="st">'really'</span>], <span class="st">'really'</span>: [<span class="st">'really'</span>, <span class="st">'like'</span>]}</span></code></pre></div>
+<p>These words are rather meaningless. When your done, be sure to try out <code>run_example</code> on one of our sample text files and see what comes out! Here is a small taste:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb18-1"></a><span class="op">&gt;&gt;&gt;</span> run_example(<span class="st">'data/texts/sample_text_raw.txt'</span>)</span>
+<span id="cb18-2"><a href="https://www.teach.cs.toronto.edu/~csc110y/fall/assignments/a3/handout/#cb18-2"></a><span class="co">'has no control about the Little Blind Text, that where it came from the far away, behind the countries Vokalia and again. And if she reached the headline of the way. When she had a large language ocean. A small river named Duden flows by their place and supplies it with the all powerful Pointing the word mountains, far World of blind texts. Separated they live the subline of the first hills of sentences fly into their agency, where they abused her seven versalia, put her drunk with Longe and the belt and devious Semikoli, but the copy warned the Little Blind Text should turn around and so it didn</span><span class="ch">\'</span><span class="co">t listen. She packed her way. On her and return to leave for their projects again and made herself on the Little Blind Text didn</span><span class="ch">\'</span><span class="co">t take long until a last view back on the necessary regelialia. It is a copy. The Big Oxmox advised her not to do so, because there live in which roasted parts of Alphabet Village and Consonantia, there were thousands of her cheek, then they are still using her. a small line of Grammar. The copy said could convince her initial into the name of bad Commas, wild Question Marks and everything that was left from its origin would have been rewritten, then she continued her into your mouth. Even the Italic Mountains, she met a paradisematic country, in Bookmarksgrove right at the blind texts it is an almost unorthographic life One day however a thousand times and Parole and the blind text by Copy Writers ambushed her, made her own road, the coast of Lorem Ipsum decided to its own, safe country. But nothing the Line Lane. Pityful rethoric question ran over her for the word "and" and dragged her way she hasn</span><span class="ch">\'</span><span class="co">t been rewritten a few insidious would be the skyline of her hometown Bookmarksgrove, the Semantics, a far from it'</span></span></code></pre></div>
+<ol start="3" type="1">
+<li><p>In <code>a3_part2.py</code>, complete the functions <code>generate_text_owc</code>, <code>generate_new_word</code>, and <code>generate_next_word</code> (the latter two are helper functions for <code>generate_text_owc</code>).</p>
+<p>Test your functions carefully in the Python console (you can copy-and-paste examples from this handout, and make up your own). You may also want to check out <code>a3_sample_tests.py</code>, which does not need to be submitted.</p></li>
+</ol>
+<h2 id="part-3-loops-and-mutation-debugging-exercise">Part 3: Loops and Mutation Debugging Exercise</h2>
+<p>A movie review typically includes a critic’s comments and a score, but the score doesn’t portray the sentiment and raw emotion in the critic’s comments. Professor Mario has decided to build his own <em>movie review platform</em> that labels reviews as positive, negative, or neutral based on the intensity of the words used in the review.</p>
+<p>Professor Mario uses the <a href="https://github.com/cjhutto/vaderSentiment">VADER Lexicon</a>, which we represent as a mapping from words to a positive/negative intensity score. For example, here are two key words and their intensities:</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Word</th>
+<th style="text-align: center;">Intensity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">awesome</td>
+<td style="text-align: center;">3.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">awful</td>
+<td style="text-align: center;">-2.0</td>
+</tr>
+</tbody>
+</table>
+<p>The <em>polarity</em> of a review is one of <code>{'positive', 'negative', 'neutral'}</code>, and is calculated by finding the average intensity of the lexicon words used in the review. Words that don’t appear in the VADER Lexicon are ignored when calculating the average.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Polarity</th>
+<th style="text-align: center;">Average intensity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>positive</code></td>
+<td style="text-align: center;"><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="1" style="font-size: 108.9%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2265"></mjx-c></mjx-mo><mjx-mn class="mjx-n" space="4"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>≥</mo><mn>0.05</mn></math></mjx-assistive-mml></mjx-container></span></td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>neutral</code></td>
+<td style="text-align: center;"><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="2" style="font-size: 108.9%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>−</mo><mn>0.05</mn></math></mjx-assistive-mml></mjx-container></span> to <span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="3" style="font-size: 108.9%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mn>0.05</mn></math></mjx-assistive-mml></mjx-container></span>, exclusive</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>negative</code></td>
+<td style="text-align: center;"><span class="math inline"><mjx-container class="MathJax CtxtMenu_Attached_0" jax="CHTML" tabindex="0" ctxtmenu_counter="4" style="font-size: 108.9%; position: relative;"><mjx-math class="MJX-TEX" aria-hidden="true"><mjx-mo class="mjx-n"><mjx-c class="mjx-c2264"></mjx-c></mjx-mo><mjx-mo class="mjx-n" space="4"><mjx-c class="mjx-c2212"></mjx-c></mjx-mo><mjx-mn class="mjx-n"><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c2E"></mjx-c><mjx-c class="mjx-c30"></mjx-c><mjx-c class="mjx-c35"></mjx-c></mjx-mn></mjx-math><mjx-assistive-mml unselectable="on" display="inline"><math xmlns="http://www.w3.org/1998/Math/MathML"><mo>≤</mo><mo>−</mo><mn>0.05</mn></math></mjx-assistive-mml></mjx-container></span></td>
+</tr>
+</tbody>
+</table>
+<p>In <code>a3_part3.py</code>, Professor Mario has written a small program to read review data from a csv file, extract the lexicon words from the review, and then compute review’s the average intensity and polarity. Professor Mario has painstakingly gone through three reviews and manually calculated their polarity and average intensity. Unfortunately, when Professor Mario compares his calculated results to the return values from his program, he finds that his program has some errors!</p>
+<p>Answer the following questions about this program and <code>pytest</code> report. Write your responses in <code>a3.tex</code>, except for 2(b).</p>
+<ol type="1">
+<li><p>Run the program to generate a <code>pytest</code> report.</p>
+<p>Based on the report, state which tests, if any, passed, and which tests failed. You can just state the name of the tests and whether they passed/failed, and do not need to give explanations here.</p></li>
+<li><p>For <em>each</em> failing test from the <code>pytest</code> report:</p>
+<ol type="a">
+<li><p>Explain what error is causing the test to fail.</p>
+<p><strong>Hint</strong>: each test refers to a data file under <code>data/reviews</code>; the last column of each csv file stores the test of the review.</p></li>
+<li><p>Edit <code>a3_part3.py</code> by fixing the function code so that all tests pass. Unlike Assignment 1, the tests do <em>not</em> contain errors.</p>
+<p>The changes should be small and must be to fix errors only; the original purpose of all functions and tests must remain the same. The expected value in the tests is correct, do not change it.</p></li>
+</ol></li>
+<li><p>For <em>each</em> test that passed on the original code (before your changes in question 2), explain why that test passed even though there were errors in the Python file.</p></li>
+</ol>
+<h2 id="part-4-forest-fires">Part 4: Forest Fires</h2>
+<p>In Part 4, our problem domain is forest fires. Specifically, we take a close look at the Canadian Forest Fire Weather Index system. The system calculates several fire danger indices based on measurements made by fire weather stations. The measurements and calculations are typically made daily, and the calculations are based on complex models that are well beyond the scope of this course. Our focus in Part 4 is on developing an understanding of the system (rather than its underlying models), using existing code to generate outputs based on measurements in file data, and testing existing code via the “white-box” method.</p>
+<h3 id="the-fire-weather-index-system">The Fire Weather Index System</h3>
+<p>The Forest Fire Weather Index (FWI) System takes, as daily inputs, the following weather measurements:</p>
+<ul>
+<li>Temperature (Celsius)</li>
+<li>Relative Humidity (%)</li>
+<li>Wind Speed (km/h)</li>
+<li>Precipitation (mm)</li>
+</ul>
+<p>The month and day these measurements are taken is also relevant for the models when making calculations for the system’s outputs. As output, the system calculates three moisture codes (sometimes called “subindexes”):</p>
+<ol type="1">
+<li>the Fine Fuel Moisture Code (FFMC)</li>
+<li>the Duff Moisture Code (DMC)</li>
+<li>the Drought Code (DC)</li>
+</ol>
+<p>The higher the values (with type <code>float</code>) of these codes, the drier the conditions of the environment. Based on these codes, three additional outputs of “fire behaviour indexes” can be calculated:</p>
+<ol start="4" type="1">
+<li>The Initial Spread Index (ISI)</li>
+<li>The Buildup Index (BUI)</li>
+<li>The Fire Weather Index (FWI)</li>
+</ol>
+<p>These six components act as a way to monitor the danger of fire in an environment. A summary of the Canadian Forest FWI System can be found <a href="https://cwfis.cfs.nrcan.gc.ca/background/summary/fwi">here</a>. To see some concrete photo examples of how FWI (ranging from values of 9 to 34) correspond to photos of real forest fires, check out <a href="https://cwfis.cfs.nrcan.gc.ca/background/examples/fwi">this link</a>.</p>
+<p>Included in the starter files is <code>a3_ffwi_system.py</code>, which is based on the publicly available source code found <a href="https://cfs.nrcan.gc.ca/publications?id=36461">here</a>. We have adapted the original code to follow our course conventions and divided parts of the code into smaller functions. Rather than reading the body of the functions in detail, you should instead focus on the data classes, their docstring descriptions, and the docstring descriptions of the functions.</p>
+<ol type="1">
+<li><p>Your first task is to complete <code>a3_part4.py</code>. This task involves implementing functions that load data from a csv, calculate all six outputs of the Forest FWI System, and plot the data. In order to calculate the daily outputs of the system, you will need to use the functions in <code>a3_ffwi_system</code> appropriately. Note that, when calculating moisture codes, the previous day’s moisutre code calculation is required. For the very first day, you should use the <code>INITIAL_FFMC</code>, <code>INITIAL_DMC</code>, and <code>INITIAL_DC</code> constants defined in <code>a3_ffwi_system</code>.</p>
+<p>For data, we have included the csv file <code>data/ffwi/sample_data.csv</code>. We will also be releasing additional data from the government on Quercus under a special license. It will appear under the Assignment 3 module on Quercus a little while after this assignment is available. Please note that if you wish to use this additional data, you must understand and adhere to the license.</p></li>
+<li><p>Your second task is to complete <code>a3_part4_tests.py</code>. This task let’s you practice with two forms of testing—complete only the test cases in the starter file, you should not add more. First, you do some “white box testing” – we originally discussed this concept in Section 3.4 of the course notes when we introduced conditional execution. The branches you need to test for are described in the docstring description of the unit tests. To verify that your tests are reaching the right branches, consider using the debugger and breakpoints.</p>
+<p>Second, you will do a new kind of testing that compares the outputs of the Forest FWI system to the “ground truth”. In this case, the ground truth are the values provided in the data; the term ground truth implies that these are the “correct” (or expected) values. Meanwhile, the values obtained via the <code>calculate_</code> functions in <code>a3_ffwi_system</code> are the actual values. Your <code>test_ffmc_against_ground_truth</code> should contain a loop, and the loop body should consist of multiple <code>assert</code> statements (one for each system output you are validating).</p></li>
+<li><p>Using what you know about the object-based Python memory model, answer the following questions in <code>a3.tex</code>. You may find it helpful to draw some memory model diagrams (in fact, we encourage it), but you should <em>not</em> include any memory model diagrams in your submission. Your answers should be brief—long answers may be penalized.</p>
+<ol type="a">
+<li><p>The function <code>calculate_ffmc</code> calls <code>calculate_mr</code>, passing the precipitation from a <code>WeatherMetrics</code> object referred to by <code>wm</code> as the first argument to <code>calculate_mr</code>. Why is it <em>not</em> possible for <code>calculate_mr</code> to mutate the precipitation attribute of the <code>WeatherMetrics</code> object referred to by <code>wm</code> in <code>calculate_ffmc</code>?</p></li>
+<li><p>In the function <code>calculate_dc</code>, why is the local variable <code>temperature</code> assigned instead of simply re-using/re-assigning <code>wm.temperature</code> when the temperature is below -2.8 degrees Celsius?</p></li>
+<li><p>In <code>a3_part4</code>, the return type of <code>load_data</code> is <code>tuple[list[WeatherMetrics], list[FfwiOutput]]</code>. We know that a <code>tuple</code> is immutable. Yet the list objects inside the tuple (i.e., <code>list[WeatherMetrics]</code>, <code>list[FfwiOutput]</code>) can be mutated. So what do we mean when we say that this <code>tuple</code> return type is immutable?</p></li>
+</ol></li>
+</ol>
+<h2 id="submission-instructions">Submission instructions</h2>
+<p>Please <strong>proofread</strong>, <strong>test</strong>, and <strong>fix PythonTA errors</strong> in your work before your final submission!</p>
+<ol type="1">
+<li><p>Login to <a href="https://markus.teach.cs.toronto.edu/csc110-2021-09">MarkUs</a>.</p></li>
+<li><p>Go to Assignment 3, then the “Submissions” tab.</p></li>
+<li><p>Submit the following files: <code>a3.tex</code>, <code>a3.pdf</code> (which must be generated from your <code>a3.tex</code> file), <code>a3_part1.py</code>, <code>a3_part2.py</code>, <code>a3_part3.py</code>, <code>a3_part4.py</code>, and <code>a3_part4_tests.py</code>. Please note that MarkUs is picky with filenames, and so your filenames must match these exactly, including using lowercase letters.</p>
+<p><strong>Note</strong>: for your Python code files, please make sure they run (in the Python console) before submitting them! Code submissions that do not run will receive a grade of <em>zero</em> for that part, which we do not want to happen to any of you, so please check your work carefully.</p></li>
+<li><p>Refresh the page, and then <em>download each file</em> to make sure you submitted the right version.</p></li>
+</ol>
+<p>Remember, you can submit your files multiple times before the due date. So you can aim to submit your work early, and if you find an error or a place to improve before the due date, you can still make your changes and resubmit your work.</p>
+<p>After you’ve submitted your work, please give yourself a well-deserved pat on the back and go take a rest or do something fun or eat some chocolate!</p>
+<div style="text-align: center">
+<p><img src="./handout_files/legally_blonde_chocolate.gif" alt="Legally Blonde GIF of Elle Woods eating chocolate"><br>
+</p>
+</div>
+
+
+</body></html>
