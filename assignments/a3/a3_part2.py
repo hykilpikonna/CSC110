@@ -30,6 +30,9 @@ def update_follow_list(model: dict[str, list[str]], word: str, follow_word: str)
     If word is not already present in model, add it to the model with the follow list
     [follow_word]. Otherwise, add follow_word to the follow list of word.
     """
+    if word not in model:
+        model[word] = []
+    model[word].append(follow_word)
 
 
 def create_model_owc(text: str) -> tuple[int, dict[str, list[str]]]:
@@ -43,6 +46,13 @@ def create_model_owc(text: str) -> tuple[int, dict[str, list[str]]]:
         - text != ''
         - len(str.split(text)) > 1
     """
+    words = text.split()
+    model: dict[str, list[str]] = {}
+
+    for i in range(1, len(words)):
+        update_follow_list(model, words[i - 1], words[i])
+
+    return len(words), model
 
 
 ###############################################################################
