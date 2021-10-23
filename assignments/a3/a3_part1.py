@@ -54,6 +54,8 @@ def create_model_uniform(text: str) -> dict[str, int]:
 
     IMPLEMENTATION NOTE: Use the str.split method to get a list of words.
     """
+    words = text.split()
+    return {unique: words.count(unique) for unique in set(words)}
 
 
 def run_example(filename: str, num_words: int) -> str:
@@ -84,9 +86,9 @@ if __name__ == '__main__':
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # python_ta.check_all(config={
-    #     'allowed-io': ['run_example'],
-    #     'extra-imports': ['python_ta.contracts', 'random'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'C0200']
-    # })
+    python_ta.check_all(config={
+        'allowed-io': ['run_example'],
+        'extra-imports': ['python_ta.contracts', 'random'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
