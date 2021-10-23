@@ -64,6 +64,7 @@ def choose_from_keys(transitions: dict[str, list[str]]) -> str:
     Preconditions:
         - transitions != {}
     """
+    return random.choice(list(transitions.keys()))
 
 
 def choose_from_follow_list(key: str, transitions: dict[str, list[str]]) -> str:
@@ -77,6 +78,13 @@ def choose_from_follow_list(key: str, transitions: dict[str, list[str]]) -> str:
         - key in transitions
         - transitions[key] != []
     """
+    word = random.choice(transitions[key])
+    transitions[key].remove(word)
+
+    if len(transitions[key]) == 0:
+        del transitions[key]
+
+    return word
 
 
 def generate_text_owc(count: int, transitions: dict[str, list[str]]) -> str:
