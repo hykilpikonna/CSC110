@@ -74,6 +74,16 @@ def get_xy_data(outputs: dict[tuple[int, int], FfwiOutput], attribute: str) -> \
         >>> getattr(output, 'ffmc')
         2.0
     """
+    # Accumulators
+    days: list[str] = []
+    data: list[float] = []
+
+    for k in outputs.keys():
+        month, day = k
+        days.append(f'{month}, {day}')
+        data.append(getattr(outputs[k], attribute))
+
+    return days, data
 
 
 def plot_ffwi_attribute(outputs: dict[tuple[int, int], FfwiOutput], attribute: str) -> None:
