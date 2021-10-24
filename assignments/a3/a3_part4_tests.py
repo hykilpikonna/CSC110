@@ -28,11 +28,11 @@ class TestCalculateMr:
 
     def test_equation_3a_branch(self) -> None:
         """Test the branch calculate_mr that contains Equation 3a."""
-        # TODO: Complete this unit test and remove this TODO
+        assert 123.82 == pytest.approx(ffwi.calculate_mr(2.4, 80))
 
     def test_equation_3b_branch(self) -> None:
         """Test the branch calculate_mr that contains Equation 3b."""
-        # TODO: Complete this unit test and remove this TODO
+        assert 182.80 == pytest.approx(ffwi.calculate_mr(2.4, 155))
 
 
 class TestCalculateM:
