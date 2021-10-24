@@ -34,7 +34,7 @@
     Including a specific example as the doctest's expected output when a function is random isn't a good idea because the function's output will be different from the expected output each time it is executed. Since the doctest only verifies if the actual output matches the expected output, specifying a single random outcome as the expected output among many other possibilities will likely produce an error when running the test.
 
     \item[(c)]
-    For example, you can use $\texttt{words = \{'Hello': 1\}}$ as the words dictionary. In this case, \texttt{generate\_text\_uniform(words, 5)} has only one possible outcome, which is \texttt{'Hello Hello Hello Hello Hello'}.
+    For example, you can use $\texttt{words = \{'Hello': 1\}}$ as the words dictionary. In this case, \texttt{generate\_text\_uniform(words, 5)} has only one possible outcome, which is \texttt{'Hello Hello Hello Hello Hello'}, so we can use that as our statement and expected output in the doctest.
 \end{enumerate}
 
 \item[2.]
@@ -59,12 +59,15 @@ One-word context model:
 # TODO: Write your one-word context model here as a Python value.
 # Write each key-value pair on a separate line, like on the assignment handout.
 {
-
-
-
-
-
-
+    'Love': ['is', 'is'],
+    'is': ['patient.', 'kind.', 'not'],
+    'patient.': ['Love'],
+    'kind.': ['It'],
+    'It': ['does', 'does', 'is'],
+    'does': ['not', 'not'],
+    'not': ['envy.', 'boast.', 'proud.'],
+    'envy.': ['It'],
+    'boast.': ['It']
 }
 \end{verbatim}
 
