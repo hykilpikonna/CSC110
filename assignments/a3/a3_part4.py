@@ -61,7 +61,40 @@ def calculate_ffwi_outputs(readings: list[WeatherMetrics]) -> dict[tuple[int, in
     Preconditions:
         - Every reading in readings has a unique (month, day) pair
     """
-    # todo
+    # Sort by month and day
+    readings = sorted(readings, key=lambda x: (x.month, x.day))
+
+    # # Create a input dictionary mapping by month and day
+    # inputs: dict[tuple[int, int], WeatherMetrics] = {(r.month, r.day): r for r in readings}
+
+    # Accumulator
+    output: dict[tuple[int, int], FfwiOutput] = {}
+
+    # Initial values
+    # ASSUME that the input dates are CONTINUOUS
+    # ASSUME that the input dates does not wrap around a year
+    last = FfwiOutput(ffwi.INITIAL_FFMC, ffwi.INITIAL_DMC, ffwi.INITIAL_DC, 0, 0, 0)
+
+    # Loop through inputs
+    for x in readings:
+        # # Calculate yesterday's month and day
+        # yesterday = (x.month, x.day - 1)
+        # # Wrap to last month
+        # if x.day == 0:
+        #
+        #     # Wrap to last year
+        #     if x.month == 1:
+        #         yesterday = (12, )
+        #     yesterday = (x.month - 1)
+        ffmc = ffwi.calculate_ffmc(x, last.ffmc)
+        dmc = ffwi.calculate_dmc(x, last.dmc)
+        dc = ffwi.calculate_dc(x, last.dc)
+        isi = ffwi.calculate_isi(x, ffmc)
+        bui = ffwi.calculate_bui(dmc, dc)
+        fwi = ffwi.calculate_fwi(isi, bui)
+        output[(x.month, x.day)] = FfwiOutput(ffmc, dmc, dc, isi, bui, fwi)
+
+    return output
 
 
 def get_xy_data(outputs: dict[tuple[int, int], FfwiOutput], attribute: str) -> \
