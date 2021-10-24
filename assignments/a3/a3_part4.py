@@ -43,9 +43,9 @@ def load_data(filename: str) -> tuple[list[WeatherMetrics], list[FfwiOutput]]:
 
         for row in reader:
             assert len(row) == 12, 'Expected every row to contain 12 elements.'
-            # row is a list of strings
-            # Your task is to extract the relevant data from row and add it
-            # to the accumulator.
+            month, day, temp, humidity, wind, rain, ffmc, dmc, dc, isi, bui, fwi = [float(a) for a in row]
+            inputs_so_far.append(WeatherMetrics(int(month), int(day), temp, humidity, wind, rain))
+            outputs_so_far.append(FfwiOutput(ffmc, dmc, dc, isi, bui, fwi))
 
     return inputs_so_far, outputs_so_far
 
@@ -60,6 +60,7 @@ def calculate_ffwi_outputs(readings: list[WeatherMetrics]) -> dict[tuple[int, in
     Preconditions:
         - Every reading in readings has a unique (month, day) pair
     """
+    # todo
 
 
 def get_xy_data(outputs: dict[tuple[int, int], FfwiOutput], attribute: str) -> \
