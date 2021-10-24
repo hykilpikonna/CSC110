@@ -114,7 +114,8 @@ def generate_text_owc(count: int, transitions: dict[str, list[str]]) -> str:
     # We've provided this template as a starting point; you may modify it as necessary.
     for _ in range(count - 1):
 
-        # Choose random key if it's the first word or the last randomly generated word not in transitions
+        # Choose random key if it's the first word
+        #   or the last randomly generated word not in transitions
         if len(words_so_far) == 0 or words_so_far[-1] not in transitions:
             words_so_far.append(choose_from_keys(transitions))
 
@@ -151,10 +152,10 @@ if __name__ == '__main__':
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # python_ta.check_all(config={
-    #     'allowed-io': ['run_example'],
-    #     'extra-imports': ['python_ta.contracts', 'random'],
-    #     'max-line-length': 100,
-    #     'max-nested-blocks': 4,
-    #     'disable': ['R1705', 'C0200']
-    # })
+    python_ta.check_all(config={
+        'allowed-io': ['run_example'],
+        'extra-imports': ['python_ta.contracts', 'random'],
+        'max-line-length': 100,
+        'max-nested-blocks': 4,
+        'disable': ['R1705', 'C0200']
+    })
