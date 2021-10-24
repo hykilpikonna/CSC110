@@ -43,7 +43,8 @@ def load_data(filename: str) -> tuple[list[WeatherMetrics], list[FfwiOutput]]:
 
         for row in reader:
             assert len(row) == 12, 'Expected every row to contain 12 elements.'
-            month, day, temp, humidity, wind, rain, ffmc, dmc, dc, isi, bui, fwi = [float(a) for a in row]
+            month, day, temp, humidity, wind, rain, \
+                ffmc, dmc, dc, isi, bui, fwi = [float(a) for a in row]
             inputs_so_far.append(WeatherMetrics(int(month), int(day), temp, humidity, wind, rain))
             outputs_so_far.append(FfwiOutput(ffmc, dmc, dc, isi, bui, fwi))
 
@@ -121,11 +122,11 @@ if __name__ == '__main__':
     # When you are ready to check your work with python_ta, uncomment the following lines.
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
-    # python_ta.check_all(config={
-    #     'allowed-io': ['load_data'],
-    #     'extra-imports': ['python_ta.contracts', 'csv', 'plotly.graph_objects', 'a3_ffwi_system'],
-    #     'max-line-length': 100,
-    #     'max-args': 6,
-    #     'max-locals': 25,
-    #     'disable': ['R1705'],
-    # })
+    python_ta.check_all(config={
+        'allowed-io': ['load_data'],
+        'extra-imports': ['python_ta.contracts', 'csv', 'plotly.graph_objects', 'a3_ffwi_system'],
+        'max-line-length': 100,
+        'max-args': 6,
+        'max-locals': 25,
+        'disable': ['R1705'],
+    })
