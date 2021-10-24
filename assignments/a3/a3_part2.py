@@ -112,9 +112,14 @@ def generate_text_owc(count: int, transitions: dict[str, list[str]]) -> str:
     words_so_far = []
 
     # We've provided this template as a starting point; you may modify it as necessary.
-    current_word = ''
     for _ in range(count - 1):
-        ...
+
+        # Choose random key if it's the first word or the last randomly generated word not in transitions
+        if len(words_so_far) == 0 or words_so_far[-1] not in transitions:
+            words_so_far.append(choose_from_keys(transitions))
+
+        else:
+            words_so_far.append(choose_from_follow_list(words_so_far[-1], transitions))
 
     return str.join(' ', words_so_far)
 
