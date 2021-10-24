@@ -64,9 +64,6 @@ def calculate_ffwi_outputs(readings: list[WeatherMetrics]) -> dict[tuple[int, in
     # Sort by month and day
     readings = sorted(readings, key=lambda x: (x.month, x.day))
 
-    # # Create a input dictionary mapping by month and day
-    # inputs: dict[tuple[int, int], WeatherMetrics] = {(r.month, r.day): r for r in readings}
-
     # Accumulator
     output: dict[tuple[int, int], FfwiOutput] = {}
 
@@ -77,15 +74,6 @@ def calculate_ffwi_outputs(readings: list[WeatherMetrics]) -> dict[tuple[int, in
 
     # Loop through inputs
     for x in readings:
-        # # Calculate yesterday's month and day
-        # yesterday = (x.month, x.day - 1)
-        # # Wrap to last month
-        # if x.day == 0:
-        #
-        #     # Wrap to last year
-        #     if x.month == 1:
-        #         yesterday = (12, )
-        #     yesterday = (x.month - 1)
         ffmc = ffwi.calculate_ffmc(x, last.ffmc)
         dmc = ffwi.calculate_dmc(x, last.dmc)
         dc = ffwi.calculate_dc(x, last.dc)
