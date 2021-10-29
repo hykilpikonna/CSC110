@@ -61,9 +61,6 @@ def calculate_ffwi_outputs(readings: list[WeatherMetrics]) -> dict[tuple[int, in
     Preconditions:
         - Every reading in readings has a unique (month, day) pair
     """
-    # Sort by month and day
-    readings = sorted(readings, key=lambda x: (x.month, x.day))
-
     # Accumulator
     output: dict[tuple[int, int], FfwiOutput] = {}
 
