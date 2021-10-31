@@ -114,13 +114,14 @@ Do \textbf{not} include your solution in this file.
 
 \begin{enumerate}
 \item[a.]
-TODO: Write your answer here.
+The precipitation attribute is a float, and in Python floats are immutable. In \texttt{calculate\_mr}, if ever the \texttt{precipitation} parameter is changed, it will be a variable reassignment, which will change the id of \texttt{precipitation}. This does not change the id of \texttt{wm.precipitation}, which is why \texttt{calculate\_mr} can never mutate the \texttt{precipitation} attribute of \texttt{wm}.
 
 \item [b.]
-TODO: Write your answer here.
+The function wants to use the given temperature or $-2.8$, whichever is higher. If the \texttt{wm.temperature} attribute is below $-2.8$ and gets reassigned to $-2.8$, then it will mutate the \texttt{wm} object, which is unwanted. However, if it is first stored into a different variable \texttt{temperature}, then any change to \texttt{temperature} won't affect \texttt{wm.temperature}, and therefore \texttt{wm} won't get mutated, which is good.
 
 \item[c.]
-TODO: Write your answer here.
+The elements of a tuple themselves can be mutated, as stated in the question. However, they cannot be reassigned, the id's of the elements will all stay the same, and elements cannot be added or removed, which makes tuples immutable.
+
 \end{enumerate}
 
 \end{enumerate}
