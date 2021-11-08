@@ -41,6 +41,19 @@ def coprime_to_2_and_3(n: int) -> list[int]:
         # Note: Write four assert statements here expressing the four loop invariants from the
         # assignment handout. These statements should be at the top of the loop body.
 
+        # Loop Invariant 1: every number k in nums_so_far is coprime to 2 and coprime to 3.
+        assert all(math.gcd(k, 2) == 1 and math.gcd(k, 3) == 1 for k in nums_so_far)
+        # Loop Invariant 2: for all natural numbers i between 0 and len(nums_so_far) - 3 inclusive,
+        #   nums_so_far[i] + 6 == nums_so_far[i + 2].
+        assert all(nums_so_far[i] + 6 == nums_so_far[i + 2] for i in range(len(nums_so_far) - 3 + 1))
+        # Loop Invariant 3: for all natural numbers i between 0 and len(nums_so_far) - 2 inclusive,
+        #   nums_so_far[i] < nums_so_far[i + 1] (this means that nums_so_far is always sorted).
+        assert all(nums_so_far[i] < nums_so_far[i + 1] for i in range(len(nums_so_far) - 2 + 1))
+        # Loop Invariant 4: for all natural numbers k between 0 and nums_so_far[-1] inclusive,
+        #   if k is coprime to 2 and coprime to 3, then k in nums_so_far.
+        assert all(k in nums_so_far for k in range(nums_so_far[-1] + 1)
+                   if math.gcd(k, 2) == 1 and math.gcd(k, 3) == 1)
+
         next_number = nums_so_far[-2] + 6
         list.append(nums_so_far, next_number)
 
