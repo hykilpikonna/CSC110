@@ -27,8 +27,43 @@
 
 $$\forall a, k, n \in \Z,~ \gcd(a, n) = 1 \Rightarrow \gcd(a + kn, n) = 1$$
 
-\begin{proof}
-TODO: Your proof goes here.
+\begin{proof} : \\
+$d = \gcd(a,n)$ is defined as $(a=0 \land n=0 \implies d=0) \land \\ (a \neq 0 \lor n \neq 0 \implies d | a \land d | n \land (\forall e \in \N, e | a \land e | n \implies e \le d))$ \\ 
+\\
+Let $a,k,n \in \Z$ \\
+Assume that $\gcd(a,n) = 1$ \\
+Since $d = 1 \neq 0$, this implies that $a \neq 0 \lor n \neq 0$ \\
+Since $a \neq 0 \lor n \neq 0$, we know $1 | a \land 1 | n \land (\forall e_2 \in \N, e_2 | a \land e_2 | n \implies e_2 \le 1)$ is also true. \\
+We need to prove: $(a + kn) \neq 0 \lor n \neq 0 \implies 1 | (a + kn) \land 1 | n \land (\forall e \in \N, e | (a + kn) \land e | n \implies e \le 1)$ \\ 
+\\
+Suppose $(a + kn) \neq 0 \lor n \neq 0$ \\
+We need to prove: $1 | (a + kn) \land 1 | n \land (\forall e \in \N, e | (a + kn) \land e | n \implies e \le 1)$
+
+\begin{enumerate}
+    \item[1.] Proving for: $1 | (a + kn)$ \\
+        That is: $\exists k \in \Z$ s.t. $(a + kn) = 1 \cdot k$ \\
+        Take $k = (a + kn)$ \\
+        $(a + kn) = 1 \cdot (a + kn)$ is true.
+    
+    \item[2.] $1 | n$ is given to be true.
+    
+    \item[3.] Proving for $\forall e \in \N, e | (a + kn) \land e | n \implies e \le 1$ \\
+        Let $e \in \N$ \\
+        Suppose $e | (a + kn) \land e | n$ \\
+        $a + kn = ex \land n = ey$ for some $x,y \in \Z$ \\
+        $a + key = ex$ for some $x,y \in \Z$ \\
+        $a = e(ky + x)$ for some $x,y \in \Z$ \\
+        Let $c = (ky + x)$ \\
+        By substitution, we now have: $a = ec$ \\
+        Therefore, $\exists c \in \Z$ s.t. $a = ec$ is true. \\
+        Which means $e | a$ is true. \\
+        Since we are given $\forall e_2 \in \N, e_2 | a \land e_2 | n \implies e_2 \le 1$ \\
+        Take $e_2 = e$, we now have $e | a \land e | n \implies e \le 1$ \\
+        And since we now know $e | a$ and $e | n$, we can conclude $e \le 1$. \\
+        Which is what we want to show.
+\end{enumerate}
+
+
 \end{proof}
 
 \item[2.] Statement to prove (we've expanded the definition of Omega for you!):
