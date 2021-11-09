@@ -274,12 +274,12 @@ Let $c_0, \dots, c_n$ be constants that doesn't depend on any variables.
 
 The inner loop \code{for p in primes} runs $P$ iterations, and since each iteration contains only a constant number of constant-time operations, it takes $c_0P$ steps where $c_0$ is a constant. The outer loop iterates $m - 1$ times, taking $c_0P + c_1$ steps each time, with a total of $(m - 1)(c_0P + c_1)$ steps.
 
-Since there are only constant-time operations outside the outer loop, the entire function will take $(m - 1)(c_0P + c_1) + c_2$ steps.
+Outside the outer loop, there is one non-constant-time operation \code{math.prod}, which computes the product of all numbers in \code{primes}, which takes $P$ steps. And there are various constant-time operations as well taking $c_2$ steps. So, the entire function will take $(m - 1)(c_0P + c_1) + P + c_2$ steps.
 
 Thus, the total number of basic operations is:
 \begin{align}
-RT_{\code{starting\_coprime\_numbers}}(P, m) &= (m - 1)(c_0P + c_1) + c_2 \\
-& = c_0mP + c_1m - c_0P - c_1 + c_2 \\
+RT_{\code{starting\_coprime\_numbers}}(P, m) &= (m - 1)(c_0P + c_1) + P + c_2 \\
+& = c_0mP + c_1m - c_0P + P - c_1 + c_2 \\
 & \in \Theta(mP)
 \end{align}
 
