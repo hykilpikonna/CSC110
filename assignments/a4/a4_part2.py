@@ -83,20 +83,20 @@ def coprime_to_all(primes: set[int], n: int) -> list[int]:
           and may NOT modify it (even though it is not as efficient as it could be!!).
         - You will find the math.prod function useful.
     """
-    increment = math.prod(primes)
+    m = math.prod(primes)
     nums_so_far = starting_coprime_numbers(primes)
-    period = len(nums_so_far)
-    while nums_so_far[-period] + increment < n:
+    k = len(nums_so_far)
+    while nums_so_far[-k] + m < n:
         # Note: Write four assert statements here expressing the four loop invariants from the
         # assignment handout. These statements should be at the top of the loop body.
 
         # Loop Invariant 1: every number k in nums_so_far is coprime to every prime
         assert all(all(math.gcd(p, k) == 1 for p in primes) for k in nums_so_far)
         # Loop Invariant 2: for all natural numbers i between 0 and
-        #   len(nums_so_far) - period - 1 inclusive,
-        #   nums_so_far[i] + increment == nums_so_far[i + period].
-        assert all(nums_so_far[i] + increment == nums_so_far[i + period]
-                   for i in range(len(nums_so_far) - period))
+        #   len(nums_so_far) - k - 1 inclusive,
+        #   nums_so_far[i] + m == nums_so_far[i + k].
+        assert all(nums_so_far[i] + m == nums_so_far[i + k]
+                   for i in range(len(nums_so_far) - k))
         # Loop Invariant 3: for all natural numbers i between 0 and len(nums_so_far) - 2 inclusive,
         #   nums_so_far[i] < nums_so_far[i + 1] (this means that nums_so_far is always sorted).
         assert all(nums_so_far[i] < nums_so_far[i + 1] for i in range(len(nums_so_far) - 2 + 1))
@@ -105,7 +105,7 @@ def coprime_to_all(primes: set[int], n: int) -> list[int]:
         assert all(k in nums_so_far for k in range(nums_so_far[-1] + 1)
                    if all(math.gcd(p, k) == 1 for p in primes))
 
-        next_number = nums_so_far[-period] + increment
+        next_number = nums_so_far[-k] + m
         list.append(nums_so_far, next_number)
 
     return nums_so_far
