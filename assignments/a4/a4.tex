@@ -272,7 +272,7 @@ Let $P$ be the size of the input set \code{primes}, and let $m$ be the product o
 
 Let $c_0, \dots, c_n$ be constants that doesn't depend on any variables.
 
-The inner loop \code{for p in primes} runs $P$ iterations, and since each iteration contains only a constant number of constant-time operations, taking $c_0P$ steps where $c_0$ is a constant. The outer loop iterates $m - 1$ times, taking $c_0P + c_1$ steps each time, with a total of $(m - 1)(c_0P + c_1)$ steps.
+The inner loop \code{for p in primes} runs $P$ iterations, and since each iteration contains only a constant number of constant-time operations, it takes $c_0P$ steps where $c_0$ is a constant. The outer loop iterates $m - 1$ times, taking $c_0P + c_1$ steps each time, with a total of $(m - 1)(c_0P + c_1)$ steps.
 
 Since there are only constant-time operations outside the outer loop, the entire function will take $(m - 1)(c_0P + c_1) + c_2$ steps.
 
