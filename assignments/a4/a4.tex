@@ -105,7 +105,7 @@ Prove that each loop invariant holds.
 \begin{proof} : \\
 Variables: In this proof, $N$ is the abbreviation for the list \texttt{nums\_so\_far}. \\
 \\
-Assumption 1: The loop invariant 1 is true for the last iteration. \\
+Assumption 1: The loop invariant 1 is true for the previous iteration. \\
 That is $\forall k_2 \in N, gcd(k_2, 2) = 1 \land gcd(k_2, 3) = 1$ \\
 \\
 Assumption 2: The statement proven in Part 1.1: \\
@@ -115,7 +115,7 @@ We need to prove: $\forall k \in N \cup \{ N[-2] + 6 \}, gcd(k, 2) = 1 \land gcd
 Which is equivalent to: $\forall k \in N, gcd(k, 2) = 1 \land gcd(k, 3) = 1$ and \\ 
 $gcd(N[-2] + 6, 2) = 1 \land gcd(N[-2] + 6, 3) = 1$ \\
 \\ 
-Since the first part is the same as the last iteration, it is true. \\
+Since the first part is the same as the previous iteration, it is true. \\
 What we need to prove becomes: 
 $gcd(N[-2] + 6, 2) = 1 \land gcd(N[-2] + 6, 3) = 1$ \\
 \\
