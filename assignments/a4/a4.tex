@@ -257,11 +257,11 @@ Do \textbf{not} include your solution in this file.
 \item[1.]
 Running-time analysis of \texttt{coprime\_to\_2\_and\_3}.
 
-The loop in the function runs until $N[-2] + 6 < n$. Since $N = \text{list}[1, 5]$ before the first iteration, the loop will run $\text{(amount of coprimes below n)} - 2$ times. Since the loop appends $N[-2] + 6$ to $N$, $N[-2]$ will increase for the next iteration by either $5 - 1 = 4$ or $1 + 6 - 5 = 2$ in an alternating way, which is an increase of $3$ on average. Therefore, the loop will run $(n - 6) / 3 + 2 = n / 3$ times on average, with a minimum of $n / 3 - 1$ and has a maximum of $n / 3 + 1$ times. 
+Let $N$ be the list \code{nums\_so\_far}, and let $n$ be the input integer. 
 
-Since the loop contained only constant-time operations, and since both the minimum $n / 3 - 1$ and the maximum $n / 3 + 1$ iteration counts are contained in $\Theta(n)$, therefore the runtime of the loop is $\Theta(n)$.
+The loop in the function runs until $N[-2] + 6 < n$. Since $N = \text{list}[1, 5]$ before the first iteration, the loop will run $\text{(amount of coprimes below n)} - 2$ times. Since the loop appends $N[-2] + 6$ to $N$, $N[-2]$ will increase for the next iteration by either $5 - 1 = 4$ or $1 + 6 - 5 = 2$ in an alternating way, which is an increase of $3$ on average. This loop will run $(n - 6) / 3 = n / 3 - 2$ times on average. However, since $\cO(n / 3 - 2) = \cO(n)$, we can be conservative here and say that the loop will run at most $n$ times.
 
-Since there are only constant-time operations outside the loop, the runtime of the entire function is $\Theta(n)$.
+Since the loop contained only constant-time operations, the runtime of the loop is $\cO(n)$.
 
 \item[2.]
 TODO: Running-time analysis of \texttt{starting\_coprime\_numbers}.
