@@ -170,8 +170,69 @@ We need to prove: $\forall i \in \{0, \dots, |M| - 3\}, M[i] + 6 = M[i + 2] $
 \end{proof}
 
 \item[c.] Loop Invariant 3
-\begin{proof}
-TODO: Your proof goes here.
+\begin{proof} : \\
+Variables: In this proof, $N$ is the abbreviation for the list \texttt{nums\_so\_far}, and $|N|$ represents the size of $N$. \\
+\\
+Assumption 1: Loop invariant 3 is true for the previous iteration. \\
+That is $\forall i_2 \in \{0, \dots, |N| - 2\}, N[i_2] <  N[i_2 + 1]$ \\
+\\
+Assumption 2: Loop invariant 2 is true for the previous iteration. \\
+That is $\forall i_3 \in \{0, \dots, |N| - 3\}, N[i_3] + 6 = N[i_3 + 2]$ \\
+\\
+Let $M = N \cup \{ N[-2] + 6 \}$ be the list of the current iteration. \\
+We need to prove: $\forall i \in \{0, \dots, |M| - 2\}, M[i] < M[i + 1] $ \\
+\\
+Assumption 3: Loop invariant 2 is true for the current iteration. \\
+That is $\forall i_4 \in \{0, \dots, |M| - 3\}, M[i_4] + 6 = M[i_4 + 2]$ \\
+\\
+Let's first prove an intermediate statment, statment 4: \\
+$\forall i_5 \in \{0, \dots, |N| - 2\}, 0 < N[i_5 + 1] - N[i_5] < 6$ \\
+Let $i_5 \in \{0, \dots, |N| - 2\}$, \\
+We want to show $0 < N[i_5 + 1] - N[i_5] < 6$ \\
+\\
+Pick $i_2 = i_5$, \\
+We know that $N[i_5] < N[i_5 + 1]$ by assumption 1. \\
+Which means $0 < N[i_5 + 1] - N[i_5]$ \\
+\\
+Then, we need to prove $N[i_5 + 1] - N[i_5] < 6$ \\
+Since $N = \text{list}[1, 5]$ before the first iteration, the base case $N[1] < N[0] + 6$ is true. \\
+For the inductive step, let's look at the true statement again: \\
+$N[i_5] < N[i_5 + 1]$ \\
+Add 6 to both sides: \\
+$N[i_5] + 6 < N[i_5 + 1] + 6$ \\
+Pick $i_3 = i_5$ \\
+We know that $N[i_5] + 6 = N[i_5 + 2]$ by asssumption 2. \\
+By substitution, our true statement becomes: \\
+$N[i_5 + 2] < N[i_5 + 1] + 6$ \\
+$N[(i_5 + 1) + 1] < N[i_5 + 1] + 6$ \\
+Which is the end of our induction. \\
+\\
+We have proven the intermediate statement 4. \\
+We now need to prove: $\forall i \in \{0, \dots, |M| - 2\}, M[i] < M[i + 1] $
+
+\begin{enumerate}
+    \item[1.] Let $i < |M| - 2$ \\
+        Since the new entry added to $M$ is not included in $i$, this case is equivalent to the previous iteration, and we know that is true by assumption 1.
+
+    \item[2.] Let $i = |M| - 2$ \\
+        We need to prove: $M[|M| - 2] < M[|M| - 2 + 1]$ \\
+        That is $M[-2] < M[-1]$ \\
+        \\
+        Pick $i_5 = |N| - 2$ \\
+        We know that $0 < N[-1] - N[-2] < 6$ by statement 4 \\
+        Since $N[-1] = (N \cup \{ N[-2] + 6 \})[-2] = M[-2]$, \\
+        Since $N[-2] = (N \cup \{ N[-2] + 6 \})[-3] = M[-3]$, \\
+        $0 < M[-2] - M[-3] < 6$ \\
+        $M[-2] < M[-3] + 6$ \\
+        Pick $i_4 = |M| - 3$ \\
+        We know that $M[-3] + 6 = M[-1]$ by assumption 3 \\
+        By substitution, we now have: \\
+        $M[-2] < M[-1]$
+        Which is what we want to show.
+
+\end{enumerate}
+
+
 \end{proof}
 
 \item[d.] Loop Invariant 4
