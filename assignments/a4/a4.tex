@@ -15,6 +15,7 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\cO}{\mathcal{O}}
 \newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\code}[1]{\texttt{#1}}
 
 \begin{document}
 \maketitle
@@ -254,7 +255,13 @@ Do \textbf{not} include your solution in this file.
 
 \begin{enumerate}
 \item[1.]
-TODO: Running-time analysis of \texttt{coprime\_to\_2\_and\_3}.
+Running-time analysis of \texttt{coprime\_to\_2\_and\_3}.
+
+The loop in the function runs until $N[-2] + 6 < n$. Since $N = \text{list}[1, 5]$ before the first iteration, the loop will run $\text{(amount of coprimes below n)} - 2$ times. Since the loop appends $N[-2] + 6$ to $N$, $N[-2]$ will increase for the next iteration by either $5 - 1 = 4$ or $1 + 6 - 5 = 2$ in an alternating way, which is an increase of $3$ on average. Therefore, the loop will run $(n - 6) / 3 + 2 = n / 3$ times on average, with a minimum of $n / 3 - 1$ and has a maximum of $n / 3 + 1$ times. 
+
+Since the loop contained only constant-time operations, and since both the minimum $n / 3 - 1$ and the maximum $n / 3 + 1$ iteration counts are contained in $\Theta(n)$, therefore the runtime of the loop is $\Theta(n)$.
+
+Since there are only constant-time operations outside the loop, the runtime of the entire function is $\Theta(n)$.
 
 \item[2.]
 TODO: Running-time analysis of \texttt{starting\_coprime\_numbers}.
