@@ -279,7 +279,7 @@ Since there are only constant-time operations outside the outer loop, the entire
 Thus, the total number of basic operations is:
 \begin{align}
 RT_{\code{starting\_coprime\_numbers}}(P, m) &= (m - 1)(c_0P + c_1) + c_2 \\
-& = c_0mP + c_1m - c_0P + c_3 \\
+& = c_0mP + c_1m - c_0P - c_1 + c_2 \\
 & \in \Theta(mP)
 \end{align}
 
