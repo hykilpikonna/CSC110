@@ -45,10 +45,10 @@ def coprime_to_2_and_3(n: int) -> list[int]:
         assert all(math.gcd(k, 2) == 1 and math.gcd(k, 3) == 1 for k in nums_so_far)
         # Loop Invariant 2: for all natural numbers i between 0 and len(nums_so_far) - 3 inclusive,
         #   nums_so_far[i] + 6 == nums_so_far[i + 2].
-        assert all(nums_so_far[i] + 6 == nums_so_far[i + 2] for i in range(len(nums_so_far) - 3 + 1))
+        assert all(nums_so_far[i] + 6 == nums_so_far[i + 2] for i in range(len(nums_so_far) - 2))
         # Loop Invariant 3: for all natural numbers i between 0 and len(nums_so_far) - 2 inclusive,
         #   nums_so_far[i] < nums_so_far[i + 1] (this means that nums_so_far is always sorted).
-        assert all(nums_so_far[i] < nums_so_far[i + 1] for i in range(len(nums_so_far) - 2 + 1))
+        assert all(nums_so_far[i] < nums_so_far[i + 1] for i in range(len(nums_so_far) - 1))
         # Loop Invariant 4: for all natural numbers k between 0 and nums_so_far[-1] inclusive,
         #   if k is coprime to 2 and coprime to 3, then k in nums_so_far.
         assert all(k in nums_so_far for k in range(nums_so_far[-1] + 1)
@@ -92,9 +92,11 @@ def coprime_to_all(primes: set[int], n: int) -> list[int]:
 
         # Loop Invariant 1: every number k in nums_so_far is coprime to every prime
         assert all(all(math.gcd(p, k) == 1 for p in primes) for k in nums_so_far)
-        # Loop Invariant 2: for all natural numbers i between 0 and len(nums_so_far) - period - 1 inclusive,
+        # Loop Invariant 2: for all natural numbers i between 0 and
+        #   len(nums_so_far) - period - 1 inclusive,
         #   nums_so_far[i] + increment == nums_so_far[i + period].
-        assert all(nums_so_far[i] + increment == nums_so_far[i + period] for i in range(len(nums_so_far) - period))
+        assert all(nums_so_far[i] + increment == nums_so_far[i + period]
+                   for i in range(len(nums_so_far) - period))
         # Loop Invariant 3: for all natural numbers i between 0 and len(nums_so_far) - 2 inclusive,
         #   nums_so_far[i] < nums_so_far[i + 1] (this means that nums_so_far is always sorted).
         assert all(nums_so_far[i] < nums_so_far[i + 1] for i in range(len(nums_so_far) - 2 + 1))
@@ -143,13 +145,13 @@ if __name__ == '__main__':
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
     # Leave this code uncommented when you submit your files.
-    # import python_ta
-    #
-    # python_ta.check_all(config={
-    #     'extra-imports': ['python_ta.contracts', 'math'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'C0200']
-    # })
+    import python_ta
+
+    python_ta.check_all(config={
+        'extra-imports': ['python_ta.contracts', 'math'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
 
     import doctest
     doctest.testmod()
