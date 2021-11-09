@@ -102,8 +102,38 @@ Prove that each loop invariant holds.
 
 \begin{enumerate}
 \item[a.] Loop Invariant 1
-\begin{proof}
-TODO: Your proof goes here.
+\begin{proof} : \\
+Variables: In this proof, $N$ is the abbreviation for the list \texttt{nums\_so\_far}. \\
+\\
+Assumption 1: The loop invariant 1 is true for the last iteration. \\
+That is $\forall k_2 \in N, gcd(k_2, 2) = 1 \land gcd(k_2, 3) = 1$ \\
+\\
+Assumption 2: The statement proven in Part 1.1: \\
+$\forall a,k,n \in \Z, gcd(a,n) = 1 \implies gcd(a + kn, n) = 1$ \\
+\\
+We need to prove: $\forall k \in N \cup \{ N[-2] + 6 \}, gcd(k, 2) = 1 \land gcd(k, 3) = 1$ \\
+Which is equivalent to: $\forall k \in N, gcd(k, 2) = 1 \land gcd(k, 3) = 1$ and \\ 
+$gcd(N[-2] + 6, 2) = 1 \land gcd(N[-2] + 6, 3) = 1$ \\
+\\ 
+Since the first part is the same as the last iteration, it is true. \\
+What we need to prove becomes: 
+$gcd(N[-2] + 6, 2) = 1 \land gcd(N[-2] + 6, 3) = 1$ \\
+\\
+Pick $k_2 = N[-2] \in N$ \\
+By assumption 1, we know that $gcd(N[-2], 2) = 1$ and $gcd(N[-2], 3) = 1$
+
+\begin{enumerate}
+    \item[1.] Proving for $gcd(N[-2] + 6, 2) = 1$ \\
+        Pick $a = N[-2], k = 3, n = 2$ \\
+        Since we know $gcd(N[-2], 2) = 1$, $gcd(a, n) = 1$ is true. \\
+        Therefore, by assumption 2, we know that $gcd(a + kn, n) = 1$ is also true. \\
+        Substituting the varaibles back, we know $gcd(N[-2] + 6, 2) = 1$.
+    \item[2.] Proving for $gcd(N[-2] + 6, 3) = 1$ \\
+        Pick $a = N[-2], k = 2, n = 3$ \\
+        Since we know $gcd(N[-2], 3) = 1$, $gcd(a, n) = 1$ is true. \\
+        Therefore, by assumption 2, we know that $gcd(a + kn, n) = 1$ is also true. \\
+        Substituting the varaibles back, we know $gcd(N[-2] + 6, 3) = 1$.
+\end{enumerate}
 \end{proof}
 
 \item[b.] Loop Invariant 2
