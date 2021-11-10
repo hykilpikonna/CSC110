@@ -74,7 +74,14 @@ We need to prove: $1 | (a + kn) \land 1 | n \land (\forall e \in \N, e | (a + kn
 $$\exists c, n_0 \in \R^+,~ \forall n \in \N,~ n \geq n_0 \Rightarrow \log_{3} n - \log_{11} n \geq c \cdot \log_{14} n$$
 
 \begin{proof}
-TODO: Your proof goes here.
+Notice $\log_3n - \log_{11}n = k\log_{14}n$, where $k = \frac{1}{\log_{14}(3)} - \frac{1}{\log_{14}(11)}$.
+
+WTS: $$\exists c, n_0 \in \R^+,~ \forall n \in \N,~ n \geq n_0 \Rightarrow k\log_{14}n \geq c \cdot \log_{14} n$$
+Choose $c = k$ and $n_0 = 2$.
+WTS: $$\forall n \in \N, n \geq 2 \Rightarrow k\log_{14}n \geq k\log_{14}n$$
+Let $n \in \N$ where $n \geq 2$.
+We know $k \geq k$. Multiply both sides by $\log_{14}n$.
+Therefore $k\log_{14}n \geq k\log_{14}n$.
 \end{proof}
 
 \item[3.] Statement to prove (we haven't expanded the definition of Big-O for you, but we encourage you to do so yourself):
@@ -82,7 +89,21 @@ TODO: Your proof goes here.
 $$\forall f, g: \N \to \R^{\geq 0},~ g \in \cO(f) \land \big(\forall m \in \N,~ f(m) \geq 1 \big) \Rightarrow g \in \cO(\floor{f})$$
 
 \begin{proof}
-TODO: Your proof goes here.
+Assume: $$\big(\forall m \in \N,~ f(m) \geq 1 \big) \Rightarrow g \in \cO(\floor{f})$$
+Also assume: $$\exists c_0, n_0 \in \R^+, \forall n \in \N, n \geq n_0 \Rightarrow g(n) \leq c_0 \cdot f(n)$$
+WTS: $$\exists c_1, n_1 \in \R^+, \forall n \in \N, n \geq n_1 \Rightarrow g(n) \leq c_1 \cdot \floor{f(n)}$$
+
+Choose $n_1 = n_0$ and $c_1 = 2c_0$.
+
+Let $n \in \N$ and $n > n_1$.
+
+By definition of $g \in \cO(f)$, we know $g(n) \leq c_0 \cdot f(n)$.
+\begin{align*}
+    g(n) &\leq c_0 \cdot f(n)\\
+    g(n) &\leq c_0 \cdot (\floor{f(n)} + 1)\\
+    g(n) &\leq c_0 \cdot (\floor{f(n)} + \floor{f(n)}) \quad{\text{because } 1 \leq \floor{f(n)}} \\
+    g(n) &\leq 2c_0 \cdot \floor{f(n)}\\
+    g(n) &\leq c_1 \cdot \floor{f(n)}
 \end{proof}
 
 \end{enumerate}
