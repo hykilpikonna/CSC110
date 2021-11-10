@@ -34,6 +34,8 @@ def grid_encrypt(k: int, plaintext: str) -> str:
     >>> grid_encrypt(8, 'DAVID AND MARIO TEACH COMPUTER SCIENCE!!')
     'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!'
     """
+    rows = len(plaintext) // k
+    return ''.join(plaintext[i % rows * k + i // rows] for i in range(len(plaintext)))
 
 
 def grid_decrypt(k: int, ciphertext: str) -> str:
@@ -47,6 +49,8 @@ def grid_decrypt(k: int, ciphertext: str) -> str:
     >>> grid_decrypt(8, 'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!')
     'DAVID AND MARIO TEACH COMPUTER SCIENCE!!'
     """
+    cols = len(ciphertext) // k
+    return ''.join(ciphertext[i % k * cols + i // k] for i in range(len(ciphertext)))
 
 
 def plaintext_to_grid(k: int, plaintext: str) -> list[list[str]]:
