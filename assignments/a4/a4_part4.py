@@ -34,8 +34,19 @@ def grid_encrypt(k: int, plaintext: str) -> str:
     >>> grid_encrypt(8, 'DAVID AND MARIO TEACH COMPUTER SCIENCE!!')
     'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!'
     """
-    rows = len(plaintext) // k
-    return ''.join(plaintext[i % rows * k + i // rows] for i in range(len(plaintext)))
+    # We don't actually need a grid to implement this.
+    # - number of columns: cols = k
+    # - number of rows:    rows = floor(len / k)
+    # - row index wraps around columns: row = i % rows
+    # - column index:                   col = i // rows
+    #
+    # Since grid[row][col] = list[row * num_cols + col],
+    # The final index is (i % rows * k + i // rows)
+    # Code below:
+    #
+    # rows = len(plaintext) // k
+    # return ''.join(plaintext[i % rows * k + i // rows] for i in range(len(plaintext)))
+    return grid_to_ciphertext(plaintext_to_grid(k, plaintext))
 
 
 def grid_decrypt(k: int, ciphertext: str) -> str:
@@ -49,8 +60,19 @@ def grid_decrypt(k: int, ciphertext: str) -> str:
     >>> grid_decrypt(8, 'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!')
     'DAVID AND MARIO TEACH COMPUTER SCIENCE!!'
     """
-    cols = len(ciphertext) // k
-    return ''.join(ciphertext[i % k * cols + i // k] for i in range(len(ciphertext)))
+    # We don't actually need a grid to implement this.
+    # - number of rows:    rows = k
+    # - number of columns: cols = floor(len / k)
+    # - row index wraps around columns: row = i % rows
+    # - column index:                   cols = i // rows
+    #
+    # Since grid[row][col] = list[row * num_cols + col],
+    # The final index is (i % k * cols + i // k)
+    # Code below:
+    #
+    # cols = len(ciphertext) // k
+    # return ''.join(ciphertext[i % k * cols + i // k] for i in range(len(ciphertext)))
+    return grid_to_plaintext(ciphertext_to_grid(k, ciphertext))
 
 
 def plaintext_to_grid(k: int, plaintext: str) -> list[list[str]]:
@@ -61,6 +83,7 @@ def plaintext_to_grid(k: int, plaintext: str) -> list[list[str]]:
         - len(plaintext) % k == 0
         - plaintext != ''
     """
+    return [list(plaintext[i:i + k]) for i in range(0, len(plaintext), k)]
 
 
 def grid_to_ciphertext(grid: list[list[str]]) -> str:
@@ -71,6 +94,10 @@ def grid_to_ciphertext(grid: list[list[str]]) -> str:
         - grid[0] != []
         - all({len(row1) == len(row2) for row1 in grid for row2 in grid})
     """
+    # zip transposes an array: list(zip([1, 2], [3, 4], [5, 6])) = [(1, 3, 5), (2, 4, 6)]
+    # return ''.join([s for row in zip(*grid) for s in row])
+    # But since we didn't learn zip:
+    return ''.join(''.join(grid[j][i] for j in range(len(grid))) for i in range(len(grid[0])))
 
 
 def ciphertext_to_grid(k: int, ciphertext: str) -> list[list[str]]:
@@ -83,17 +110,20 @@ def ciphertext_to_grid(k: int, ciphertext: str) -> list[list[str]]:
         - len(ciphertext) % k == 0
         - ciphertext != ''
     """
+    rows = len(ciphertext) // k
+    return [list(ciphertext[i:i + rows]) for i in range(0, len(ciphertext), rows)]
 
 
 def grid_to_plaintext(grid: list[list[str]]) -> str:
     """Return the plaintext message corresponding to the given grid.
-
 
     Preconditions:
         - grid != []
         - grid[0] != []
         - all({len(row1) == len(row2) for row1 in grid for row2 in grid})
     """
+    # They do the same thing
+    return grid_to_ciphertext(grid)
 
 
 ################################################################################
