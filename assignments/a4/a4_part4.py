@@ -125,8 +125,9 @@ def grid_break(ciphertext: str, candidates: set[str]) -> set[int]:
     # We first filter only possible k, then filter for messages where only the candidates exists
     c = ciphertext
     n = len(c)
-    return {k for k in range(1, n) if n % k == 0 and
-            any(w in ''.join(c[i % k * n // k + i // k] for i in range(n)) for w in candidates)}
+    return {k for k in range(1, n) if n % k == 0
+            and any(w in ''.join(c[i % k * n // k + i // k] for i in range(n)) for w in candidates)
+            }
 
 
 def run_example_break(ciphertext_file: str, candidates: set[str]) -> list[str]:
@@ -201,7 +202,7 @@ def permutation_grid_decrypt(k: int, perm: list[int], ciphertext: str) -> str:
     # Create grid
     grid = [list(ciphertext[i:i + n // k]) for i in range(0, len(ciphertext), n // k)]
     # Permute back
-    grid = [grid[perm.index(n)] for n in range(k)]
+    grid = [grid[perm.index(p)] for p in range(k)]
     # Stringify transposed grid
     return ''.join(s for row in transpose(grid) for s in row)
 
@@ -211,14 +212,13 @@ if __name__ == '__main__':
     # (Delete the "#" and space before each line.)
     # IMPORTANT: keep this code indented inside the "if __name__ == '__main__'" block
     # Leave this code uncommented when you submit your files.
-    #
-    # import python_ta
-    # python_ta.check_all(config={
-    #     'extra-imports': ['python_ta.contracts'],
-    #     'allowed-io': ['run_example_break'],
-    #     'max-line-length': 100,
-    #     'disable': ['R1705', 'C0200']
-    # })
+    import python_ta
+    python_ta.check_all(config={
+        'extra-imports': ['python_ta.contracts'],
+        'allowed-io': ['run_example_break'],
+        'max-line-length': 100,
+        'disable': ['R1705', 'C0200']
+    })
 
     import python_ta.contracts
     python_ta.contracts.check_all_contracts()
