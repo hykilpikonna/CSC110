@@ -282,7 +282,8 @@ Thus, the total number of basic operations is:
 \begin{align}
 RT_{\code{starting\_coprime\_numbers}}(P, m) &= (m - 1)(c_0P + c_1) + P + c_2 \\
 & = c_0mP + c_1m - c_0P + P - c_1 + c_2 \\
-& \in \Theta(mP)
+& \in \Theta(mP + m) \\
+& \in \Theta(mP) ~~~ (\text{since } P \ge 1)
 \end{align}
 
 \item[3.]
@@ -294,19 +295,21 @@ Let $N$ be the list \code{nums\_so\_far}, and let $|N|$ be its length.
 
 Let $c_0, \dots, c_n$ be constants that doesn't depend on any variables.
 
-The loop in the function runs until $N[-\varphi(m)] + m < n$ where $\varphi(m)$ is the initial length of $N$ which is the amount of starting coprime numbers. The loop will run $\text{(amount of coprimes below n)} - \varphi(m)$ times. Since the loop appends $N[-\varphi(m)] + m$ to $N$, $N[-\varphi(m)]$ will increase for the next iteration by $k$ on average and the loop will run $(n - m) / k = n / k - m / k$ times on average, where $k$ is the average of the sequential differences in $N$ before the first iteration, which can be written as:
+The loop in the function runs until $N[-\varphi(m)] + m < n$ where $\varphi(m)$ is the initial length of $N$ which is the amount of starting coprime numbers. The loop will run $\text{(amount of coprimes below n)} - \varphi(m)$ times. Since the loop appends $N[-\varphi(m)] + m$ to $N$, $N[-\varphi(m)]$ will increase for the next iteration by $k$ on average and the loop will run $(n - m) / k$ times on average, where $k$ is the average of the sequential differences in $N$ before the first iteration, which can be written as:
 \begin{align}
     k &= (N[1] - N[0] + N[2] - N[1] + \dots + N[-1] - N[-2] + (N[0] + m) - N[-1]) / \varphi(m)\\
-    &= \frac{m}{\varphi(m)} \\
-    &= \frac{m}{m \prod_{p \mid m} (1 - 1/p)} \\
-    &= \frac{1}{\prod_{p\mid m} (1 - 1/p)} \\ 
-    &= \prod_{p\mid m}{\frac{p}{p-1}}
+    &= \frac{m}{\varphi(m)}
 \end{align}
-Where $p$ is the prime numbers in \code{primes}. Since $\frac{p}{p-1}$ will be minimized when $p$ is minimized, and since $\frac{p}{p-1} > 1$, $k = \prod_{p\mid m}{\frac{p}{p-1}}$ will be minimized when \code{primes = [2]}, in which case $m = 2$ and $k = 2$, which happens to minimize $m$ as well. Since the loop will run $(n - m) / k$ times on average, it will run $(n - 2) / 2 = n / 2 - 1$ steps on average when $m$ and $k$ are minimized, and it will run $n / 2$ steps at absolute maximum. Since $\cO(n / 2) = \cO(n)$, we can say that it runs at most $n$ steps.
 
-Outside the loop, there are two non-constant-time operations. One is \code{math.prod}, which computes the product of all numbers in \code{primes}, which takes $P$ steps. And the other is \code{starting\_coprime\_numbers(primes)}, which we previously computed the steps to be $c_0mP + c_1m - c_0P + P - c_1 + c_2$.
+The loop will run $(n - m) / k  = (n - m) * (\varphi(m) / m)$
 
-The total number of steps in this function is at most $n + P + c_0mP + c_1m - c_0P + P - c_1 + c_2$ steps, which is contained in $\cO(n + mP)$.
+Since $\varphi(m)$ will be maximized when $m$ is a prime number, in which case $\varphi(m) = m - 1$, so $\varphi(m) < m$, and $\varphi(m) / m < 1$. Therefore, $\varphi(m) / m$ is bounded by a constant, and we can ignore it in our runtime analysis, and we can say that our loop will take $n - m$ operations (by the precondition, $n \ge m$).
+
+Outside the loop, there are two non-constant-time operations. One is \code{math.prod}, which computes the product of all numbers in \code{primes}, which takes $P$ steps. And the other is \code{starting\_coprime\_numbers(primes)}, which we previously computed the steps to be $mP + m$, ignoring constants.
+
+The total number of steps in this function is at most $n - m + P + mP + m = n + P + mP$ steps, which is contained in $\cO(n + P + mP)$.
+
+And since $P \ge 1$, $\cO(n + P + mP) = \cO(n + mP)$
 
 \end{enumerate}
 
