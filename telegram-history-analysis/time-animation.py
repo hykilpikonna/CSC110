@@ -12,10 +12,10 @@ if __name__ == '__main__':
 
     with io.open(file, mode='r', encoding="utf-8") as f:
         content = f.read()
-        obj = json5.loads(content)
+        obj = json.loads(content)
 
     with io.open('userid_to_name.json5', mode='r', encoding='utf-8') as f:
-        userid_to_name = json.loads(f.read())
+        userid_to_name = json5.loads(f.read())
 
     messages: list = obj['messages']
     messages = [m for m in messages if True
