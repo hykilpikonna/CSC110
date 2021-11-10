@@ -138,7 +138,7 @@ That is $\forall k_2 \in N, gcd(k_2, 2) = 1 \land gcd(k_2, 3) = 1$ \\
 Assumption 2: The statement proven in Part 1.1: \\
 $\forall a,k,n \in \Z, gcd(a,n) = 1 \implies gcd(a + kn, n) = 1$ \\
 \\
-We need to prove: $\forall k \in N \cup \{ N[-2] + 6 \}, gcd(k, 2) = 1 \land gcd(k, 3) = 1$ \\
+We need to prove: $\forall k \in N + [N[-2] + 6], gcd(k, 2) = 1 \land gcd(k, 3) = 1$ \\
 Which is equivalent to: $\forall k \in N, gcd(k, 2) = 1 \land gcd(k, 3) = 1$ and \\ 
 $gcd(N[-2] + 6, 2) = 1 \land gcd(N[-2] + 6, 3) = 1$ \\
 \\ 
@@ -168,10 +168,10 @@ By assumption 1, we know that $gcd(N[-2], 2) = 1$ and $gcd(N[-2], 3) = 1$
 Variables: In this proof, $N$ is the abbreviation for the list \texttt{nums\_so\_far}, and $|N|$ represents the size of $N$. \\
 \\
 Assumption 1: The loop invariant 2 is true for the previous iteration. \\
-That is $\forall i_2 \in \{ 0, \dots, |N| - 3\}, N[i_2] + 6 = N[i_2 + 2]$ \\
+That is $\forall i_2 \in [0, \dots, |N| - 3], N[i_2] + 6 = N[i_2 + 2]$ \\
 \\
-Let $M = N \cup \{ N[-2] + 6 \}$ be the list of the current iteration. \\
-We need to prove: $\forall i \in \{0, \dots, |M| - 3\}, M[i] + 6 = M[i + 2] $
+Let $M = N + [N[-2] + 6]$ be the list of the current iteration. \\
+We need to prove: $\forall i \in [0, \dots, |M| - 3], M[i] + 6 = M[i + 2] $
 
 \begin{enumerate}
     \item[1.] Let $i < |M| - 3$ \\
@@ -183,11 +183,11 @@ We need to prove: $\forall i \in \{0, \dots, |M| - 3\}, M[i] + 6 = M[i + 2] $
         \\
         Let's start with a true statement: \\
         $N[-2] = N[-2]$ \\
-        Since $N[-2] = (N \cup \{ N[-2] + 6 \})[-3] = M[-3]$, \\
+        Since $N[-2] = (N + [N[-2] + 6])[-3] = M[-3]$, \\
         $M[-3] = N[-2]$ \\
         Add 6 to both sides: \\ 
         $M[-3] + 6 = N[-2] + 6$ \\
-        Since $M[-1] = (N \cup \{ N[-2] + 6 \})[-1] = N[-2] + 6$ is it's last entry, \\
+        Since $M[-1] = (N + [N[-2] + 6])[-1] = N[-2] + 6$ is it's last entry, \\
         $M[-3] + 6 = M[-1]$ \\
         Which is what we want to show.
         
@@ -199,20 +199,20 @@ We need to prove: $\forall i \in \{0, \dots, |M| - 3\}, M[i] + 6 = M[i + 2] $
 Variables: In this proof, $N$ is the abbreviation for the list \texttt{nums\_so\_far}, and $|N|$ represents the size of $N$. \\
 \\
 Assumption 1: Loop invariant 3 is true for the previous iteration. \\
-That is $\forall i_2 \in \{0, \dots, |N| - 2\}, N[i_2] <  N[i_2 + 1]$ \\
+That is $\forall i_2 \in [0, \dots, |N| - 2], N[i_2] <  N[i_2 + 1]$ \\
 \\
 Assumption 2: Loop invariant 2 is true for the previous iteration. \\
-That is $\forall i_3 \in \{0, \dots, |N| - 3\}, N[i_3] + 6 = N[i_3 + 2]$ \\
+That is $\forall i_3 \in [0, \dots, |N| - 3], N[i_3] + 6 = N[i_3 + 2]$ \\
 \\
-Let $M = N \cup \{ N[-2] + 6 \}$ be the list of the current iteration. \\
-We need to prove: $\forall i \in \{0, \dots, |M| - 2\}, M[i] < M[i + 1] $ \\
+Let $M = N + [N[-2] + 6]$ be the list of the current iteration. \\
+We need to prove: $\forall i \in [0, \dots, |M| - 2], M[i] < M[i + 1] $ \\
 \\
 Assumption 3: Loop invariant 2 is true for the current iteration. \\
-That is $\forall i_4 \in \{0, \dots, |M| - 3\}, M[i_4] + 6 = M[i_4 + 2]$ \\
+That is $\forall i_4 \in [0, \dots, |M| - 3], M[i_4] + 6 = M[i_4 + 2]$ \\
 \\
 Let's first prove an intermediate statment, statment 4: \\
-$\forall i_5 \in \{0, \dots, |N| - 2\}, 0 < N[i_5 + 1] - N[i_5] < 6$ \\
-Let $i_5 \in \{0, \dots, |N| - 2\}$, \\
+$\forall i_5 \in [0, \dots, |N| - 2], 0 < N[i_5 + 1] - N[i_5] < 6$ \\
+Let $i_5 \in [0, \dots, |N| - 2]$, \\
 We want to show $0 < N[i_5 + 1] - N[i_5] < 6$ \\
 \\
 Pick $i_2 = i_5$, \\
@@ -233,7 +233,7 @@ $N[(i_5 + 1) + 1] < N[i_5 + 1] + 6$ \\
 Which is the end of our induction. \\
 \\
 We have proven the intermediate statement 4. \\
-We now need to prove: $\forall i \in \{0, \dots, |M| - 2\}, M[i] < M[i + 1] $
+We now need to prove: $\forall i \in [0, \dots, |M| - 2], M[i] < M[i + 1] $
 
 \begin{enumerate}
     \item[1.] Let $i < |M| - 2$ \\
@@ -245,8 +245,8 @@ We now need to prove: $\forall i \in \{0, \dots, |M| - 2\}, M[i] < M[i + 1] $
         \\
         Pick $i_5 = |N| - 2$ \\
         We know that $0 < N[-1] - N[-2] < 6$ by statement 4 \\
-        Since $N[-1] = (N \cup \{ N[-2] + 6 \})[-2] = M[-2]$, \\
-        Since $N[-2] = (N \cup \{ N[-2] + 6 \})[-3] = M[-3]$, \\
+        Since $N[-1] = (N + [N[-2] + 6])[-2] = M[-2]$, \\
+        Since $N[-2] = (N + [N[-2] + 6])[-3] = M[-3]$, \\
         $0 < M[-2] - M[-3] < 6$ \\
         $M[-2] < M[-3] + 6$ \\
         Pick $i_4 = |M| - 3$ \\
