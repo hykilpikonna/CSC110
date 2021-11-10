@@ -120,7 +120,7 @@ def grid_break(ciphertext: str, candidates: set[str]) -> set[int]:
     # - column index:                   cols = i // rows
     #
     # Since grid[row][col] = list[row * num_cols + col],
-    # The final index of a letter is (i % k * cols + i // k)
+    # The final index of a letter is (i % k * n // k + i // k)
     #
     # We first filter only possible k, then filter for messages where only the candidates exists
     c = ciphertext
@@ -144,6 +144,17 @@ def run_example_break(ciphertext_file: str, candidates: set[str]) -> list[str]:
 ################################################################################
 # Task 3 - The Permuted Grid Transpose Cryptosystem
 ################################################################################
+def transpose(grid: list[list[str]]) -> list[list[str]]:
+    """Transpose a grid
+
+    Preconditions:
+        - grid != []
+        - grid[0] != []
+        - all({len(row1) == len(row2) for row1 in grid for row2 in grid})
+    """
+    return [[grid[j][i] for j in range(len(grid))] for i in range(len(grid[0]))]
+
+
 def permutation_grid_encrypt(k: int, perm: list[int], plaintext: str) -> str:
     """Encrypt the given plaintext using the grid cryptosystem.
 
@@ -160,6 +171,12 @@ def permutation_grid_encrypt(k: int, perm: list[int], plaintext: str) -> str:
     ...                          'DAVID AND MARIO TEACH COMPUTER SCIENCE!!')
     'IACTNVMAUE I REDDTMCN OS!A EPIAOC !DRHEC'
     """
+    # Create and transpose grid
+    grid = transpose([list(plaintext[i:i + k]) for i in range(0, len(plaintext), k)])
+    # Permute grid
+    grid = [grid[i] for i in perm]
+    # Stringify
+    return ''.join(s for row in grid for s in row)
 
 
 def permutation_grid_decrypt(k: int, perm: list[int], ciphertext: str) -> str:
@@ -180,6 +197,13 @@ def permutation_grid_decrypt(k: int, perm: list[int], ciphertext: str) -> str:
     ...                          'IACTNVMAUE I REDDTMCN OS!A EPIAOC !DRHEC')
     'DAVID AND MARIO TEACH COMPUTER SCIENCE!!'
     """
+    n = len(ciphertext)
+    # Create grid
+    grid = [list(ciphertext[i:i + n // k]) for i in range(0, len(ciphertext), n // k)]
+    # Permute back
+    grid = [grid[perm.index(n)] for n in range(k)]
+    # Stringify transposed grid
+    return ''.join(s for row in transpose(grid) for s in row)
 
 
 if __name__ == '__main__':
