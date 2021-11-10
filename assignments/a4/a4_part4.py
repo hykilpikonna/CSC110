@@ -122,7 +122,7 @@ def grid_break(ciphertext: str, candidates: set[str]) -> set[int]:
     # Since grid[row][col] = list[row * num_cols + col],
     # The final index of a letter is (i % k * cols + i // k)
     #
-    # We first filter only possible k, and then filter for messages where only the candidates exists
+    # We first filter only possible k, then filter for messages where only the candidates exists
     c = ciphertext
     n = len(c)
     return {k for k in range(1, n) if n % k == 0 and
@@ -138,10 +138,7 @@ def run_example_break(ciphertext_file: str, candidates: set[str]) -> list[str]:
     with open(ciphertext_file, encoding='utf-8') as f:
         ciphertext = f.read()
 
-    # (Not to be handed in) Try completing this function by calling grid_break and returning a
-    # list of the possible plaintext messages.
-
-    return [ciphertext] + list(candidates)  # This is a dummy line, please replace it!
+    return [grid_decrypt(k, ciphertext) for k in grid_break(ciphertext, candidates)]
 
 
 ################################################################################
