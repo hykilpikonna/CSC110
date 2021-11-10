@@ -89,8 +89,10 @@ Therefore $k\log_{14}n \geq k\log_{14}n$.
 $$\forall f, g: \N \to \R^{\geq 0},~ g \in \cO(f) \land \big(\forall m \in \N,~ f(m) \geq 1 \big) \Rightarrow g \in \cO(\floor{f})$$
 
 \begin{proof}
-Assume: $$\big(\forall m \in \N,~ f(m) \geq 1 \big) \Rightarrow g \in \cO(\floor{f})$$
-Also assume: $$\exists c_0, n_0 \in \R^+, \forall n \in \N, n \geq n_0 \Rightarrow g(n) \leq c_0 \cdot f(n)$$
+Assume: 
+$$\forall m \in \N,~ f(m) \geq 1$$
+Also assume $g \in O(f)$, that is:
+$$\exists c_0, n_0 \in \R^+, \forall n \in \N, n \geq n_0 \Rightarrow g(n) \leq c_0 \cdot f(n)$$
 WTS: $$\exists c_1, n_1 \in \R^+, \forall n \in \N, n \geq n_1 \Rightarrow g(n) \leq c_1 \cdot \floor{f(n)}$$
 
 Choose $n_1 = n_0$ and $c_1 = 2c_0$.
