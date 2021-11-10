@@ -34,18 +34,6 @@ def grid_encrypt(k: int, plaintext: str) -> str:
     >>> grid_encrypt(8, 'DAVID AND MARIO TEACH COMPUTER SCIENCE!!')
     'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!'
     """
-    # We don't actually need a grid to implement this.
-    # - number of columns: cols = k
-    # - number of rows:    rows = floor(len / k)
-    # - row index wraps around columns: row = i % rows
-    # - column index:                   col = i // rows
-    #
-    # Since grid[row][col] = list[row * num_cols + col],
-    # The final index is (i % rows * k + i // rows)
-    # Code below:
-    #
-    # rows = len(plaintext) // k
-    # return ''.join(plaintext[i % rows * k + i // rows] for i in range(len(plaintext)))
     return grid_to_ciphertext(plaintext_to_grid(k, plaintext))
 
 
@@ -60,18 +48,6 @@ def grid_decrypt(k: int, ciphertext: str) -> str:
     >>> grid_decrypt(8, 'DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!')
     'DAVID AND MARIO TEACH COMPUTER SCIENCE!!'
     """
-    # We don't actually need a grid to implement this.
-    # - number of rows:    rows = k
-    # - number of columns: cols = floor(len / k)
-    # - row index wraps around columns: row = i % rows
-    # - column index:                   cols = i // rows
-    #
-    # Since grid[row][col] = list[row * num_cols + col],
-    # The final index is (i % k * cols + i // k)
-    # Code below:
-    #
-    # cols = len(ciphertext) // k
-    # return ''.join(ciphertext[i % k * cols + i // k] for i in range(len(ciphertext)))
     return grid_to_plaintext(ciphertext_to_grid(k, ciphertext))
 
 
@@ -137,6 +113,20 @@ def grid_break(ciphertext: str, candidates: set[str]) -> set[int]:
     >>> grid_break('DDTMCA EPIVMAUEIACTNDRHEC I REAOC !N OS!', candidate_words) == {8, 10}
     True
     """
+    # For each iteration:
+    # - number of rows:    rows = k
+    # - number of columns: cols = floor(len / k)
+    # - row index wraps around columns: row = i % rows
+    # - column index:                   cols = i // rows
+    #
+    # Since grid[row][col] = list[row * num_cols + col],
+    # The final index of a letter is (i % k * cols + i // k)
+    #
+    # We first filter only possible k, and then filter for messages where only the candidates exists
+    c = ciphertext
+    n = len(c)
+    return {k for k in range(1, n) if n % k == 0 and
+            any(w in ''.join(c[i % k * n // k + i // k] for i in range(n)) for w in candidates)}
 
 
 def run_example_break(ciphertext_file: str, candidates: set[str]) -> list[str]:
