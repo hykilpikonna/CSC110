@@ -262,7 +262,32 @@ We now need to prove: $\forall i \in [0, \dots, |M| - 2], M[i] < M[i + 1] $
 
 \item[d.] Loop Invariant 4
 \begin{proof}
-TODO: Your proof goes here.
+\textit{\newline } Let $N$ = \texttt{nums\_so\_far}.\\
+\textit{\newline Lemma 1}. Let $p$ be a prime number and $x \in \Z^+$. Then $p \not|\ x \Leftrightarrow gcd(p, x) = 1$.\\
+To prove $p \not|\ x \Rightarrow gcd(p, x) = 1$, assume $p \not|\ x$ and find $gcd(p, x)$. To find the greatest common divisor, only check the 2 positive divisors of $p$, which are $1$ and $p$. $p$ does not divide $x$ by assumption, therefore $gcd(p, x) = 1$ (1 divides all integers).
+
+To prove $p \not|\ x \Leftarrow gcd(p, x) = 1$, consider the contrapositive $gcd(p, x) \neq 1 \Rightarrow p | x$. Because $p$ is prime, its only divisors are $1$ and $p$. If $1$ is not the greatest common divisor, then $p$ must be, which means $p | x$, which proves the contrapositive.\\
+
+\textit{Lemma 2}. $(gcd(2, x) = 1 \land gcd(3, x) = 1) \Rightarrow (x \equiv 1 \lor x \equiv 5 \bmod 6)$.\\
+Consider the contrapositive, $(x \not\equiv 1 \land x \not\equiv 5 \bmod 6) \Rightarrow (gcd(2, x) \neq 1 \lor gcd(3, x) \neq 1)$.\\
+If $x$ is equivalent to $0$, $2$, or $4 \bmod 6$ then $2 | x$ and $gcd(2, x) = 2 \neq 1$. If $x$ is equivalent to $0$ or $3 \bmod 6$ then $3 | x$ and $gcd(3, x) = 3 \neq 1$. The only numbers that weren't considered were $1$ and $5$, which proves Lemma 2.\\
+
+\textit{Lemma 3}. $\forall n \in \N, N[2n] = 6n + 1 \land N[2n + 1] = 6n + 5$.\\
+Let us do a proof by induction over $n$.\\
+When $n = 0$, $N[2n] = 1 \land N[2n + 1] = 5$.\\
+For the induction step, show\\
+$(N[2n] = 6n + 1 \land N[2n + 1] = 6n + 5) \Rightarrow (N[2(n + 1)] = 6(n + 1) + 1 \land N[2(n + 1) + 1] = 6(n + 1) + 5)$.\\
+\begin{alignat*}{5}
+    &N[2n]       &&= 6n + 1       \quad &&\land N[2n + 1]       &&= 6n + 5\\
+    &N[2n] + 6   &&= 6(n + 1) + 1 \quad &&\land N[2n + 1] + 6   &&= 6(n + 1) + 5\\
+    &N[2n + 2]   &&= 6(n + 1) + 1 \quad &&\land N[2n + 1 + 2]   &&= 6(n + 1) + 5\\
+    &N[2(n + 1)] &&= 6(n + 1) + 1 \quad &&\land N[2(n + 1) + 1] &&= 6(n + 1) + 5\\
+\end{alignat*}
+which proves Lemma 3.\\
+
+To prove Loop Invariant 4, let $k \in \N$, $0 \leq k \leq N[-1]$ and $k$ is coprime to $2$ and $3$.\\
+By Lemma 2, $\exists n \in \N \text{ s.t. } k = 6n + 1 \lor k = 6n + 5$. Then either $N[2n] = k$ or $N[2n + 1] = k$.\\
+In addition, because $k \leq N[-1]$, the index of $k$ must be less than $|N| - 1$, by Loop Invariant 3 ($N$ is increasing).
 \end{proof}
 \end{enumerate}
 
