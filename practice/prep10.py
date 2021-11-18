@@ -111,7 +111,8 @@ class Spinner:
         Preconditions:
             - size >= 1
         """
-        # TODO: complete this method body
+        self.slots = size
+        self.position = 0
 
     def spin(self, force: int) -> None:
         """Spin this spinner, advancing the arrow <force> slots.
@@ -122,7 +123,7 @@ class Spinner:
         Preconditions:
             - force >= 0
         """
-        # TODO: complete this method body
+        self.position = (self.position + force) % self.slots
 
     def spin_randomly(self) -> None:
         """Spin this spinner randomly.
@@ -135,7 +136,7 @@ class Spinner:
         >>> 0 <= s.position < 8
         True
         """
-        # TODO: complete this method body
+        self.position = random.randint(0, self.slots - 1)
 
     def draw(self, canvas: tk.Canvas) -> None:
         """Draw this spinner onto the given canvas.
@@ -163,10 +164,12 @@ class Spinner:
         width = canvas.winfo_reqwidth()
         x, y, radius = width // 2, height // 2, width // 4
 
-        # TODO: complete this method body
         # Draw each the sector for slot i using the draw_arc function and get_colour method.
         # You will need to calculate the start and stop angles by doing some math. As a hint,
         # slot 0's sector has a start angle of 0.
+        angle = 360 / self.slots
+        for i in range(self.slots):
+            draw_arc(canvas, x, y, radius, angle * i, angle * (i + 1), self.get_colour(canvas, i))
 
     def get_colour(self, w: tk.Widget, slot: int) -> str:
         """Return a unique colour to use for the slot in spinner.
