@@ -45,11 +45,13 @@ if __name__ == '__main__':
         users = date_data[date]
         for u in users:
             if u not in user_totals:
-                user_totals[u] = 0
-            user_totals[u] += users[u]
+                user_totals[u] = []
+            user_totals[u].append(users[u])
 
         for u in user_totals:
-            total = user_totals[u]
+            if u not in users:
+                user_totals[u].append(0)
+            total = sum(user_totals[u][-7:])
             if u in userid_to_name:
                 u = userid_to_name[u]
             lines.append(f'{u},{date},{total}')
