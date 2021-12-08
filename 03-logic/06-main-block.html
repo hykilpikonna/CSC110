@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.6 if __name__ == '__main__'</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.6 <code>if __name__ == '__main__'</code></h1>
+</header>
+<section>
+<p>One small application of if statements that we’ve already taken for granted in this course is writing certain “boilerplate” code for running certain libraries on our file. For example, we saw in <a href="../02-functions/06-testing-functions-1.html">2.6 Testing Functions I: <code>doctest</code> and <code>pytest</code></a> that we add the following code to our Python file to run the doctests in that file:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="im">import</span> doctest</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    doctest.testmod()</span></code></pre></div>
+<p>Now that we’ve learned about if statements, we are ready to understand that first line, <code>if __name__ == '__main__'</code>.</p>
+<h2 id="import-statements-revisited">import statements revisited</h2>
+<p>In <a href="../02-functions/04-importing-modules.html">2.4 Importing Modules</a>, we learned that an import statement is an instruction to the Python interpreter to find a Python module with a specified name and run it. This allows the program that executes the import statement to access the functions and data types defined within that module.</p>
+<p>One consequence of this behaviour, though, is that by default <em>all</em> statements in the imported module are executed, not just function and data type definitions.</p>
+<p>For example, suppose we had the following file <code>useful.py</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># useful.py</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">def</span> useful_function1(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="co">&quot;&quot;&quot;...</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &gt;&gt;&gt; useful_function1(1)</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">    110</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    <span class="co"># Body omitted</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="kw">def</span> useful_function2(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="co">&quot;&quot;&quot;...</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">    &gt;&gt;&gt; useful_function1(&#39;Hello&#39;)</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">    &#39;Hello David&#39;</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="co"># Body omitted</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="im">import</span> doctest</span>
+<span id="cb2-22"><a href="#cb2-22"></a>doctest.testmod()</span></code></pre></div>
+<p>Note that here, the code to run <code>doctest</code> is not indented inside an if statement. It turns out that we can still run this file in the Python console, and the doctests will be run. However, these statements will also be executed every time <code>useful.py</code> is imported by another Python program. In other words, any time another program writes <code>import useful</code>, the doctests inside <code>useful.py</code> will be run, even though the doctests are not relevant for a program that just wants to use <code>useful.py</code>!</p>
+<h2 id="enter-__name__">Enter <code>__name__</code></h2>
+<p>To fix this problem, the Python interpreter creates a special variable called <code>__name__</code> for each module when a program is run.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Python uses the “double underscore” naming convention to denote special variable or function names. We’ll encounter a few more of these throughout the course.</span> By default, the <code>__name__</code> variable is set to the name of the module: the <code>__name__</code> of <code>useful.py</code> is <code>'useful'</code>, and the <code>__name__</code> attribute of <code>math</code> is <code>'math'</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> math</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> math.<span class="va">__name__</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">&#39;math&#39;</span></span></code></pre></div>
+<p>However, when you <em>run</em> a module (e.g., right-click and select “Run File in Python Console”), the Python interpreter overrides the default module <code>__name__</code> and instead sets it to the special string <code>'__main__'</code>. And so checking the <code>__name__</code> variable is a way to determine if the current module is being run, or whether it’s being imported by another module!</p>
+<p>When we write <code>if __name__ == '__main__'</code>, we are really saying, “Execute the following code if this module is being run, and ignore the following code if this module is being imported by another module”. The boolean expression <code>__name__ == '__main__'</code> evaluates to <code>True</code> in the former case, and <code>False</code> in the latter, and the conditional execution happens because of the if statement.</p>
+<h2 id="organizing-a-python-file">Organizing a Python file</h2>
+<p>We call this if branch (all the code under <code>if __name__ == '__main__'</code>) the module’s <strong>main block</strong>. Here are some important conventions to follow for organizing a Python file with a main block:</p>
+<ol type="1">
+<li>The only code that goes outside of the main block are import statements (<code>import ...</code>), constant definitions (<code>MY_CONSTANT = ...</code>), function definitions (<code>def ...</code>), and data type definitions (<code>class ...</code>), which we will see in the next chapter.</li>
+<li>Other code, like code for running <code>doctest</code> or <code>pytest</code>, goes inside the main block so that it is only executed when the module is run, and not when it is imported.</li>
+<li>The main block goes at the bottom of the module.</li>
+</ol>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

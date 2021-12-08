@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.9 The object Superclass</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.9 The <code>object</code> Superclass</h1>
+</header>
+<section>
+<p>In our very first chapter, we described every piece of data as an <em>object</em>, and have continued to use this term throughout this course. It turns out that “object” is not merely a theoretical concept, but made explicit in the Python language. Python has a special class called <code>object</code>, which is an <em>ancestor class</em><label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">By “ancestor” we mean either a parent class, or a parent of a parent class, etc.</span> of every other class, both built-in classes like <code>int</code> or our custom data classes and the classes we’ve defined in this chapter. And this includes abstract classes like <code>Stack</code>!</p>
+<p>By default, whenever we define a new class (including data classes), if we do not specify a superclass in parentheses, <code>object</code> is the <em>implicit</em> superclass, which is why we can write <code>class Stack:</code> instead of <code>class Stack(object):</code>.</p>
+<p><img src="images/object_inheritance_diagram.png" /></p>
+<h2 id="the-object-special-methods">The <code>object</code> special methods</h2>
+<p>This <code>object</code> class defines several special methods as part of its shared public interface, including:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> The Python convention is to name methods that have a special purpose with double underscores. These are sometimes called “dunder” methods (<strong>d</strong>ouble <strong>under</strong>score).</span></p>
+<ul>
+<li><code>__init__(self, ...)</code>, the initializer</li>
+<li><code>__str__(self)</code>, which returns a <code>str</code> representation of the object.</li>
+</ul>
+<h3 id="method-inheritance">Method inheritance</h3>
+<p>Unlike our <code>Stack</code> abstract class earlier this chapter, the <code>object</code> class is actually <em>not abstract</em>, and implements each of these methods. We can use this to illustrate a different form of inheritance, where the superclass is a concrete class. In this case, inheritance is used not just to define a shared public interface, but also to provide <em>default implementations</em> for each method in the interface.</p>
+<p>For example, suppose we create a dummy class with a completely empty body:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Donut:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;A donut, because why not?&quot;</span></span></code></pre></div>
+<p>This class inherits the <code>object.__init__</code> method, which allows us to create new <code>Donut</code> instances.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> donut <span class="op">=</span> Donut()</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(donut)</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;__main__.Donut&#39;</span><span class="op">&gt;</span></span></code></pre></div>
+<p>Similarly, this class inherits the <code>object.__str__</code> method, which returns a string that states the class name and memory location of the object:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Donut()</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> d.<span class="fu">__str__</span>()</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">&#39;&lt;__main__.Donut object at 0x7fc299d7b588&gt;&#39;</span></span></code></pre></div>
+<p>We can use the built-in <code>dir</code> function to see all of the special methods that <code>Donut</code> has inherited from <code>object</code>:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Though this list includes few special attributes set directly by the Python interpreter, which are beyond the scope of this course.</span></p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">dir</span>(Donut)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>[<span class="st">&#39;__class__&#39;</span>, <span class="st">&#39;__delattr__&#39;</span>, <span class="st">&#39;__dict__&#39;</span>, <span class="st">&#39;__dir__&#39;</span>, <span class="st">&#39;__doc__&#39;</span>, <span class="st">&#39;__eq__&#39;</span>, <span class="st">&#39;__format__&#39;</span>, <span class="st">&#39;__ge__&#39;</span>, <span class="st">&#39;__getattribute__&#39;</span>, <span class="st">&#39;__gt__&#39;</span>, <span class="st">&#39;__hash__&#39;</span>, <span class="st">&#39;__init__&#39;</span>, <span class="st">&#39;__init_subclass__&#39;</span>, <span class="st">&#39;__le__&#39;</span>, <span class="st">&#39;__lt__&#39;</span>, <span class="st">&#39;__module__&#39;</span>, <span class="st">&#39;__ne__&#39;</span>, <span class="st">&#39;__new__&#39;</span>, <span class="st">&#39;__reduce__&#39;</span>, <span class="st">&#39;__reduce_ex__&#39;</span>, <span class="st">&#39;__repr__&#39;</span>, <span class="st">&#39;__setattr__&#39;</span>, <span class="st">&#39;__sizeof__&#39;</span>, <span class="st">&#39;__str__&#39;</span>, <span class="st">&#39;__subclasshook__&#39;</span>, <span class="st">&#39;__weakref__&#39;</span>]</span></code></pre></div>
+<p>There is another reason these methods are special beyond simply being inherited from the <code>object</code> superclass: they are often called by other functions or parts of Python syntax. For example, we have already seen how the <code>__init__</code> method is called when a new object is initialized.</p>
+<p>The <code>__str__</code> method is called when we attempt to convert an object to a string by calling <code>str</code> on it:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> Donut()</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> d.<span class="fu">__str__</span>()</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">&#39;&lt;__main__.Donut object at 0x7fc299d7b588&gt;&#39;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>(d)</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">&#39;&lt;__main__.Donut object at 0x7fc299d7b588&gt;&#39;</span></span></code></pre></div>
+<p>Similarly, the built-in <code>print</code> function actually first converts its arguments into strings using their <code>__str__</code> methods, and then prints out the resulting text.</p>
+<h3 id="method-overriding">Method overriding</h3>
+<p>Now, even though the <code>object</code> superclass contains default implementations of <code>__init__</code> and <code>__str__</code>, in practice we often want to define our own custom implementations of these methods.</p>
+<p>Every time we’ve defined our own <code>__init__</code> in a class, we have <strong>overridden</strong> the <code>object.__init__</code> method. Formally, we say that a class <code>C</code> <strong>overrides</strong> a method <code>m</code> when the method <code>m</code> is defined in the superclass of <code>C</code>, and is also given a concrete implementation in the body of <code>C</code>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> This definition applies whether the superclass of <code>C</code> has <code>m</code> as an abstract or concrete method. For example, we could say that <code>Stack1</code> overrides the <code>push</code> and <code>pop</code> method from its abstract superclass <code>Stack</code>.</span></p>
+<p>Similarly, when we defined a custom exception class in <a href="05-section.html">Section 9.5</a>,</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> EmptyStackError(<span class="pp">Exception</span>):</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Exception raised when calling pop on an empty stack.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb6-5"><a href="#cb6-5"></a>        <span class="co">&quot;&quot;&quot;Return a string representation of this error.&quot;&quot;&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>        <span class="cf">return</span> <span class="st">&#39;pop may not be called on an empty stack&#39;</span></span></code></pre></div>
+<p>this class <em>overrode</em> the <code>__str__</code> method to use its own string representation, which is displayed when this exception is raised.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

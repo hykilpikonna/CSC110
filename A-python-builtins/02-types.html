@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A.2 Python Built-In Data Types Reference</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">A.2 Python Built-In Data Types Reference</h1>
+</header>
+<section>
+<p><em>Adapted from <a href="https://docs.python.org/3/library/stdtypes.html" class="uri">https://docs.python.org/3/library/stdtypes.html</a>.</em></p>
+<h2 id="boolean-typebool">Boolean type—<code>bool</code></h2>
+<p>Boolean values are the two constant objects <code>False</code> and <code>True</code>. They are used to represent truth values.</p>
+<h2 id="numeric-typesint-float">Numeric types—<code>int</code>, <code>float</code></h2>
+<p>There are two distinct numeric types: integers and floating point numbers. Numbers are created by numeric literals or as the result of built-in functions and operators. Unadorned integer literals yield integers. Numeric literals containing a decimal point or an exponent sign yield floating point numbers.</p>
+<p>Python fully supports mixed arithmetic: when a binary arithmetic operator has operands of different numeric types, the operand with the “narrower” type is widened to that of the other, where integer is narrower than floating point. Comparisons between numbers of mixed type use the same rule.</p>
+<p>All numeric types support the following operations (for priorities of the operations, see Operator precedence):</p>
+<div class="fullwidth reference-table">
+<table style="width:97%;">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x + y</code></td>
+<td><p>Returns the sum of <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">+</span> y</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="dv">8</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>x - y</code></td>
+<td><p>Returns the difference of <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">-</span> y</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="dv">2</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>x * y</code></td>
+<td><p>Returns the product of <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">*</span> y</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dv">15</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>x / y</code></td>
+<td><p>Returns the quotient of <code>x</code> and <code>y</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">/</span> y</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fl">1.6666666666666667</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>x // y</code></td>
+<td><p>Returns the floored quotient of <code>x</code> and <code>y</code>. Also referred to as <em>integer division</em>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">//</span> y</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="dv">1</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>x % y</code></td>
+<td><p>Returns the remainder of <code>x / y</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">%</span> y</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="dv">2</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>x ** y</code></td>
+<td><p>Returns <code>x</code> to raised to the power of <code>y</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">3</span> <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="dv">9</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>-x</code></td>
+<td><p>Returns <code>x</code> negated.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">-</span>x</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">-</span><span class="dv">5</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>int(x)</code></td>
+<td><p>Returns <code>x</code> converted to integer. For floating-point numbers, this truncates towards 0.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;3&#39;</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">int</span>(x)</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="dv">3</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="op">-</span><span class="fl">1.5</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">int</span>(x)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="op">-</span><span class="dv">1</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>float(x)</code></td>
+<td><p>Returns <code>x</code> converted to a floating point number.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;3.5&#39;</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">float</span>(x)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="fl">3.5</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="op">-</span><span class="dv">1</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">float</span>(x)</span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="op">-</span><span class="fl">1.0</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>math.floor(x)</code></td>
+<td><p>Returns the greatest integer <code>&lt;= x</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> math</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="op">&gt;&gt;&gt;</span> math.floor(<span class="fl">2.45</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="dv">2</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>math.ceil(x)</code></td>
+<td><p>Returns the least integer <code>&gt;= x</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">import</span> math</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="op">&gt;&gt;&gt;</span> math.ceil(<span class="fl">2.45</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="dv">3</span></span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+<p>See also the <a href="../01-builtins.html">built-in functions</a> <code>abs</code>, <code>divmod</code>, <code>pow</code>, and <code>round</code>.</p>
+</div>
+<h2 id="sequence-typesstr-list-tuple">Sequence types—<code>str</code>, <code>list</code>, <code>tuple</code></h2>
+<p>The operations in the following table are supported by most sequence types, both mutable and immutable.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x in s</code></td>
+<td><p>Returns <code>True</code> if an item of <code>s</code> is equal to <code>x</code>, else <code>False</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="st">&#39;Mon&#39;</span>, <span class="st">&#39;Wed&#39;</span>, <span class="st">&#39;Fri&#39;</span>]</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;Tue&#39;</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">in</span> s</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="va">False</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;Wed&#39;</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">in</span> s</span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>x not in s</code></td>
+<td><p>Returns <code>False</code> if an item of <code>s</code> is equal to <code>x</code>, else <code>True</code>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="st">&#39;Mon&#39;</span>, <span class="st">&#39;Wed&#39;</span>, <span class="st">&#39;Fri&#39;</span>]</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;Tue&#39;</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">not</span> <span class="kw">in</span> s</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="va">True</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;Wed&#39;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">not</span> <span class="kw">in</span> s</span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="va">False</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>s + t</code></td>
+<td><p>Returns the concatenation of <code>s</code> and <code>t</code>.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Mon&#39;</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="st">&#39;day&#39;</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">+</span> s</span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">&#39;Monday&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>s * n</code> or <code>n * s</code></td>
+<td><p>Returns the equivalent to adding <code>s</code> to itself <code>n</code> times.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;ha&#39;</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">*</span> s</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="co">&#39;hahahahaha&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>s[i]</code></td>
+<td><p>Returns the <code>i</code>th item of <code>s</code>, with starting index <code>0</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Hugo&#39;</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">0</span>]</span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co">&#39;H&#39;</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co">&#39;o&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>s[i:j]</code></td>
+<td><p>Returns the slice of <code>s</code> from <code>i</code> to <code>j</code>.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Hugo&#39;</span></span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">0</span>:<span class="dv">3</span>]</span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">&#39;Hug&#39;</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="op">-</span><span class="dv">2</span>:]</span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">&#39;go&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>s[i:j:k]</code></td>
+<td><p>Returns the slice of <code>s</code> from <code>i</code> to <code>j</code> with step <code>k</code>.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Hugo&#39;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">0</span>:<span class="dv">3</span>:<span class="dv">2</span>]</span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="co">&#39;Hg&#39;</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="op">-</span><span class="dv">1</span>:<span class="op">-</span><span class="dv">4</span>:<span class="op">-</span><span class="dv">2</span>]</span>
+<span id="cb19-5"><a href="#cb19-5"></a><span class="co">&#39;ou&#39;</span></span>
+<span id="cb19-6"><a href="#cb19-6"></a><span class="op">&gt;&gt;&gt;</span> s[::<span class="op">-</span><span class="dv">1</span>]</span>
+<span id="cb19-7"><a href="#cb19-7"></a><span class="co">&#39;oguH&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>s.index(x[, i[, j]])</code></td>
+<td><p>Returns the <code>index</code> of the first occurrence of <code>x</code> in <code>s</code> (at or after index <code>i</code> and before index <code>j</code>, if those parameters are given).</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Bipbopboopbap&#39;</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;b&#39;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="dv">3</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;b&#39;</span>, <span class="dv">3</span>)</span>
+<span id="cb20-5"><a href="#cb20-5"></a><span class="dv">3</span></span>
+<span id="cb20-6"><a href="#cb20-6"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;b&#39;</span>, <span class="dv">4</span>)</span>
+<span id="cb20-7"><a href="#cb20-7"></a><span class="dv">6</span></span>
+<span id="cb20-8"><a href="#cb20-8"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;b&#39;</span>, <span class="dv">0</span>, <span class="dv">5</span>)</span>
+<span id="cb20-9"><a href="#cb20-9"></a><span class="dv">3</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>s.count(x)</code></td>
+<td><p>Returns the total number of occurrences of <code>x</code> in <code>s</code>.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Bipbopboop&#39;</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="op">&gt;&gt;&gt;</span> s.count(<span class="st">&#39;o&#39;</span>)</span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="dv">3</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="st">&#39;ho&#39;</span>, <span class="st">&#39;hey&#39;</span>, <span class="st">&#39;ho&#39;</span>]</span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="op">&gt;&gt;&gt;</span> s.count(<span class="st">&#39;ho&#39;</span>)</span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="dv">2</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="op">&gt;&gt;&gt;</span> s.count(<span class="st">&#39;h&#39;</span>)</span>
+<span id="cb21-8"><a href="#cb21-8"></a><span class="dv">0</span></span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+<p>See also the <a href="../01-builtins.html">built-in functions</a> <code>len</code>, <code>max</code>, and <code>min</code>.</p>
+</div>
+<p>Sequences of the same type also support comparisons. In particular, tuples and lists are compared lexicographically by comparing corresponding elements. This means that to compare equal, every element must compare equal and the two sequences must be of the same type and have the same length.</p>
+<h2 id="mutable-sequence-typelist">Mutable sequence type—<code>list</code></h2>
+<p>The <code>list</code> data type supports all of the immutable sequence operations from the previous section, as well as the following operations.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 72%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>s[i] = x</code></td>
+<td><p>Set the item at index <code>i</code> of <code>s</code> to be <code>x</code>.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb22-3"><a href="#cb22-3"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">3</span>] <span class="op">=</span> <span class="dv">100</span></span>
+<span id="cb22-4"><a href="#cb22-4"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb22-5"><a href="#cb22-5"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">100</span>, <span class="dv">5</span>]</span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>list.append(self, x)</code></td>
+<td><p>Appends <code>x</code> to the end of the sequence <code>self</code>.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.append(s, <span class="dv">100</span>)  <span class="co"># or, s.append(100)</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb23-4"><a href="#cb23-4"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">100</span>]</span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>list.extend(self, t)</code> or <code>self += t</code></td>
+<td><p>Extends <code>self</code> with the contents of an iterable <code>t</code>.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.extend(s, [<span class="dv">100</span>, <span class="dv">200</span>])  <span class="co"># or, s.extend([100, 200])</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb24-4"><a href="#cb24-4"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">100</span>, <span class="dv">200</span>]</span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">+=</span> [<span class="dv">300</span>]</span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb24-7"><a href="#cb24-7"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">300</span>]</span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>list.insert(self, i, x)</code></td>
+<td><p>Inserts <code>x</code> into <code>self</code> at the index given by <code>i</code>.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.insert(s, <span class="dv">1</span>, <span class="dv">100</span>)  <span class="co"># or, s.insert(1, 100)</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb25-4"><a href="#cb25-4"></a>[<span class="dv">1</span>, <span class="dv">100</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>list.pop(self[, i])</code></td>
+<td><p>Returns the item at <code>i</code> and also removes it from <code>self</code>. If <code>i</code> is omitted, the last item is removed and returned.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="op">&gt;&gt;&gt;</span> s.pop()  <span class="co"># or, list.pop(s)</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb26-4"><a href="#cb26-4"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb26-5"><a href="#cb26-5"></a><span class="op">&gt;&gt;&gt;</span> s.pop(<span class="dv">1</span>)  <span class="co"># or, list.pop(s, 1)</span></span>
+<span id="cb26-6"><a href="#cb26-6"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb26-7"><a href="#cb26-7"></a>[<span class="dv">1</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>list.remove(self, x)</code></td>
+<td><p>Removes the first occurrence of <code>x</code> from <code>self</code>.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.remove(s, <span class="dv">3</span>)  <span class="co"># or, s.remove(3)</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb27-4"><a href="#cb27-4"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">5</span>]</span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>list.reverse(self)</code></td>
+<td>Reverses the items of <code>self</code> in place (mutates <code>self</code>).</td>
+</tr>
+<tr class="even">
+<td><pre><code>list.sort(
+  self, *,
+  key=None,
+  reverse=False
+)</code></pre></td>
+<td><p>Sorts <code>self</code> in place, using only <code>&lt;</code> comparisons between items.</p>
+<p><code>key</code> specifies a function of one argument that is used to extract a comparison key from each list element (for example, <code>key=str.lower</code>). The key corresponding to each item in the list is calculated once and then used for the entire sorting process. The default value of <code>None</code> means that list items are sorted directly without calculating a separate key value.</p>
+<p><code>reverse</code> is a boolean value. If set to <code>True</code>, then the list elements are sorted as if each comparison were reversed.</p>
+<p>The <code>list.sort</code> method is guaranteed to be stable. A sort is stable if it guarantees not to change the relative order of elements that compare equal—this is helpful for sorting in multiple passes (for example, sort by department, then by salary grade).</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.sort(s)  <span class="co"># or, s.sort()</span></span>
+<span id="cb29-3"><a href="#cb29-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb29-4"><a href="#cb29-4"></a>[<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb29-5"><a href="#cb29-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.sort(s, reverse<span class="op">=</span><span class="va">True</span>)  <span class="co"># or, s.sort(reverse=True)</span></span>
+<span id="cb29-6"><a href="#cb29-6"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb29-7"><a href="#cb29-7"></a>[<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>]</span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="text-sequence-typestr">Text sequence type—<code>str</code></h2>
+<p>Textual data in Python is handled with <code>str</code> objects, or <strong>strings</strong>. Strings are immutable sequences.</p>
+<p>Triple quoted strings may span multiple lines—all associated whitespace will be included in the string literal.</p>
+<p>Strings may also be created from other objects using the <code>str</code> constructor.</p>
+<p>Since there is no separate “character” type, indexing a string produces strings of length 1. That is, for a non-empty string <code>s</code>, <code>s[0] == s[0:1]</code>. Strings implement all of the common sequence operations, along with the additional methods described below.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 68%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>str.capitalize(self)</code></td>
+<td><p>Return a copy of the string with its first character capitalized and the rest lowercased. Example:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> ABC<span class="st">&#39;</span></span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="st">&gt;&gt;&gt; str.capitalize(s)  # or, s.capitalize()</span></span>
+<span id="cb30-3"><a href="#cb30-3"></a><span class="st">&#39;</span>Abc<span class="st">&#39;</span></span>
+<span id="cb30-4"><a href="#cb30-4"></a><span class="st">&gt;&gt;&gt; s = &#39;</span>aBC<span class="st">&#39;</span></span>
+<span id="cb30-5"><a href="#cb30-5"></a><span class="st">&gt;&gt;&gt; str.capitalize(s)</span></span>
+<span id="cb30-6"><a href="#cb30-6"></a><span class="st">&#39;</span>Abc<span class="st">&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><pre><code>str.count(
+  self, sub
+  [, start
+  [, end]]
+)</code></pre></td>
+<td><p>Return the number of non-overlapping occurrences of substring <code>sub</code> in the range <code>[start, end]</code>.</p>
+<p>Optional arguments <code>start</code> and <code>end</code> are interpreted as in slice notation.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Beepbopboopbop&#39;</span></span>
+<span id="cb32-2"><a href="#cb32-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.count(s, <span class="st">&#39;o&#39;</span>)  <span class="co"># or, s.count(&#39;o&#39;)</span></span>
+<span id="cb32-3"><a href="#cb32-3"></a><span class="dv">4</span></span>
+<span id="cb32-4"><a href="#cb32-4"></a><span class="op">&gt;&gt;</span> <span class="bu">str</span>.count(s, <span class="st">&#39;bo&#39;</span>)</span>
+<span id="cb32-5"><a href="#cb32-5"></a><span class="dv">3</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><pre><code>str.endswith(
+  self, suffix
+  [, start
+  [, end]]
+)</code></pre></td>
+<td><p>Return <code>True</code> if the string ends with the specified suffix, otherwise return <code>False</code> <code>suffix</code> can also be a tuple of suffixes to look for.</p>
+<p>With optional <code>start</code>, test beginning at that position. With optional <code>end</code>, stop comparing at that position.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb34-2"><a href="#cb34-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.endswith(s, <span class="st">&#39;.com&#39;</span>)  <span class="co"># or, s.endswith(&#39;.com&#39;)</span></span>
+<span id="cb34-3"><a href="#cb34-3"></a><span class="va">True</span></span>
+<span id="cb34-4"><a href="#cb34-4"></a><span class="op">&gt;&gt;&gt;</span> s.endswith(<span class="st">&#39;.com&#39;</span>, <span class="dv">12</span>)</span>
+<span id="cb34-5"><a href="#cb34-5"></a><span class="va">False</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>str.find(self, sub[, start[, end]])</code></td>
+<td><p>Return the lowest index in the string where substring <code>sub</code> is found within the slice <code>s[start:end]</code>.</p>
+<p>Optional arguments <code>start</code> and <code>end</code> are interpreted as in slice notation.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb35"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb35-2"><a href="#cb35-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.find(s, <span class="st">&#39;o&#39;</span>)  <span class="co"># or, s.find(&#39;o&#39;)</span></span>
+<span id="cb35-3"><a href="#cb35-3"></a><span class="dv">5</span></span>
+<span id="cb35-4"><a href="#cb35-4"></a><span class="op">&gt;&gt;&gt;</span> s.find(<span class="st">&#39;.com&#39;</span>)</span>
+<span id="cb35-5"><a href="#cb35-5"></a><span class="dv">10</span></span>
+<span id="cb35-6"><a href="#cb35-6"></a><span class="op">&gt;&gt;&gt;</span> s.find(bop<span class="st">&#39;)</span></span>
+<span id="cb35-7"><a href="#cb35-7"></a><span class="st">-1</span></span></code></pre></div>
+<p>Return -1 if <code>sub</code> is not found.</p>
+<p>Note: The <code>find()</code> method should be used only if you need to know the position of <code>sub</code>. To check if <code>sub</code> is a substring or not, use the <code>in</code> operator:</p>
+<div class="sourceCode" id="cb36"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;Py&#39;</span> <span class="kw">in</span> <span class="st">&#39;Python&#39;</span></span>
+<span id="cb36-2"><a href="#cb36-2"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><pre><code>str.index(
+  self, sub
+  [, start
+  [, end]]
+)</code></pre></td>
+<td><p>Like <code>find()</code>, but raise <code>ValueError</code> when the substring is not found.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb38-2"><a href="#cb38-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.index(x, <span class="st">&#39;o&#39;</span>)  <span class="co"># or, s.index(&#39;o&#39;)</span></span>
+<span id="cb38-3"><a href="#cb38-3"></a><span class="dv">5</span></span>
+<span id="cb38-4"><a href="#cb38-4"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;.com&#39;</span>)</span>
+<span id="cb38-5"><a href="#cb38-5"></a><span class="dv">10</span></span>
+<span id="cb38-6"><a href="#cb38-6"></a><span class="op">&gt;&gt;&gt;</span> s.index(<span class="st">&#39;bop&#39;</span>)</span>
+<span id="cb38-7"><a href="#cb38-7"></a><span class="pp">ValueError</span>: substring <span class="kw">not</span> found</span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>str.isalnum(self)</code></td>
+<td><p>Return <code>True</code> if all characters in the string are alphanumeric and there is at least one character, <code>False</code> otherwise. A character <code>c</code> is alphanumeric if one of the following returns <code>True</code>: <code>c.isalpha()</code>, <code>c.isdecimal()</code>, <code>c.isdigit()</code>, or <code>c.isnumeric()</code>.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb39-2"><a href="#cb39-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.isalnum(s)  <span class="co"># or, s.isalnum()</span></span>
+<span id="cb39-3"><a href="#cb39-3"></a><span class="va">False</span></span>
+<span id="cb39-4"><a href="#cb39-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;passw0rd&#39;</span></span>
+<span id="cb39-5"><a href="#cb39-5"></a><span class="op">&gt;&gt;&gt;</span> s.isalnum()</span>
+<span id="cb39-6"><a href="#cb39-6"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>str.isalpha(self)</code></td>
+<td><p>Return <code>True</code> if all characters in the string are alphabetic and there is at least one character, <code>False</code> otherwise. Alphabetic characters are those characters defined in the Unicode character database as “Letter”, i.e., those with general category property being one of “Lm”, “Lt”, “Lu”, “Ll”, or “Lo”. Note that this is different from the “Alphabetic” property defined in the Unicode Standard.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;&#39;</span></span>
+<span id="cb40-2"><a href="#cb40-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.isalpha(s)  <span class="co"># or, s.isalpha()</span></span>
+<span id="cb40-3"><a href="#cb40-3"></a><span class="va">False</span></span>
+<span id="cb40-4"><a href="#cb40-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;passw0rd&#39;</span></span>
+<span id="cb40-5"><a href="#cb40-5"></a><span class="op">&gt;&gt;&gt;</span> s.isalpha()</span>
+<span id="cb40-6"><a href="#cb40-6"></a><span class="va">False</span></span>
+<span id="cb40-7"><a href="#cb40-7"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;word&#39;</span></span>
+<span id="cb40-8"><a href="#cb40-8"></a><span class="op">&gt;&gt;&gt;</span> s.isalpha()</span>
+<span id="cb40-9"><a href="#cb40-9"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>str.isdigit(self)</code></td>
+<td><p>Return <code>True</code> if all characters in the string are digits and there is at least one character, <code>False</code> otherwise. Example:</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;10&#39;</span></span>
+<span id="cb41-2"><a href="#cb41-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.isdigit(s)  <span class="co"># or, s.isdigit()</span></span>
+<span id="cb41-3"><a href="#cb41-3"></a><span class="va">True</span></span>
+<span id="cb41-4"><a href="#cb41-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;-10&#39;</span></span>
+<span id="cb41-5"><a href="#cb41-5"></a><span class="op">&gt;&gt;&gt;</span> s.isdigit()</span>
+<span id="cb41-6"><a href="#cb41-6"></a><span class="va">False</span></span>
+<span id="cb41-7"><a href="#cb41-7"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;10 kittens&#39;</span></span>
+<span id="cb41-8"><a href="#cb41-8"></a><span class="op">&gt;&gt;&gt;</span> s.isdigit()</span>
+<span id="cb41-9"><a href="#cb41-9"></a><span class="va">False</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>str.islower(self)</code></td>
+<td><p>Return <code>True</code> if all cased characters in the string are lowercase and there is at least one cased character, <code>False</code> otherwise.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb42-2"><a href="#cb42-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.islower(s)  <span class="co"># or, s.islower()</span></span>
+<span id="cb42-3"><a href="#cb42-3"></a><span class="va">True</span></span>
+<span id="cb42-4"><a href="#cb42-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Capitalized&#39;</span></span>
+<span id="cb42-5"><a href="#cb42-5"></a><span class="op">&gt;&gt;&gt;</span> s.islower()</span>
+<span id="cb42-6"><a href="#cb42-6"></a><span class="va">False</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>str.isnumeric(self)</code></td>
+<td><p>Return <code>True</code> if all characters in the string are numeric characters, and there is at least one character, <code>False</code> otherwise. Numeric characters include digit characters, and all characters that have the Unicode numeric value property.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb43-1"><a href="#cb43-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;abc123&#39;</span></span>
+<span id="cb43-2"><a href="#cb43-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.isnumeric(s)  <span class="co"># or, s.isnumeric()</span></span>
+<span id="cb43-3"><a href="#cb43-3"></a><span class="va">False</span></span>
+<span id="cb43-4"><a href="#cb43-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;1647123123&#39;</span></span>
+<span id="cb43-5"><a href="#cb43-5"></a><span class="op">&gt;&gt;&gt;</span> s.isnumeric()</span>
+<span id="cb43-6"><a href="#cb43-6"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>str.isupper(self)</code></td>
+<td><p>Return <code>True</code> if all cased characters in the string are uppercase and there is at least one cased character, <code>False</code> otherwise.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb44-2"><a href="#cb44-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.isupper(s)  <span class="co"># or, s.isupper()</span></span>
+<span id="cb44-3"><a href="#cb44-3"></a><span class="va">False</span></span>
+<span id="cb44-4"><a href="#cb44-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Capitalized&#39;</span></span>
+<span id="cb44-5"><a href="#cb44-5"></a><span class="op">&gt;&gt;&gt;</span> s.isupper()</span>
+<span id="cb44-6"><a href="#cb44-6"></a><span class="va">False</span></span>
+<span id="cb44-7"><a href="#cb44-7"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;SHOUTING&#39;</span></span>
+<span id="cb44-8"><a href="#cb44-8"></a><span class="op">&gt;&gt;&gt;</span> s.isupper()</span>
+<span id="cb44-9"><a href="#cb44-9"></a><span class="va">True</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><code>str.join(self, iterable)</code></td>
+<td><p>Return a string which is the concatenation of the strings in <code>iterable</code>. A <code>TypeError</code> will be raised if there are any non-string values in <code>iterable</code>, including bytes objects. The separator between elements is the string providing this method.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1"></a><span class="op">&gt;&gt;&gt;</span> lst <span class="op">=</span> [<span class="st">&#39;John&#39;</span>, <span class="st">&#39;David&#39;</span>, <span class="st">&#39;Jen&#39;</span>]</span>
+<span id="cb45-2"><a href="#cb45-2"></a><span class="op">&gt;&gt;&gt;</span> separator <span class="op">=</span> <span class="st">&#39;, and &#39;</span></span>
+<span id="cb45-3"><a href="#cb45-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.join(separator, lst)  <span class="co"># or, separator.join(lst)</span></span>
+<span id="cb45-4"><a href="#cb45-4"></a><span class="co">&#39;John, and David, and Jen&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><code>str.lower(self)</code></td>
+<td><p>Return a copy of the string with all the cased characters converted to lowercase. Example:</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb46-1"><a href="#cb46-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;lower&#39;</span></span>
+<span id="cb46-2"><a href="#cb46-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.lower(s)  <span class="co"># or, s.lower()</span></span>
+<span id="cb46-3"><a href="#cb46-3"></a><span class="co">&#39;www.google.com&#39;</span></span>
+<span id="cb46-4"><a href="#cb46-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Capitalized&#39;</span></span>
+<span id="cb46-5"><a href="#cb46-5"></a><span class="op">&gt;&gt;&gt;</span> s.lower()</span>
+<span id="cb46-6"><a href="#cb46-6"></a><span class="co">&#39;capitalized&#39;</span></span>
+<span id="cb46-7"><a href="#cb46-7"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;SHOUTING&#39;</span></span>
+<span id="cb46-8"><a href="#cb46-8"></a><span class="op">&gt;&gt;&gt;</span> s.lower()</span>
+<span id="cb46-9"><a href="#cb46-9"></a><span class="co">&#39;shouting&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="even">
+<td><pre><code>str.replace(
+  self, old, new
+  [, count]
+)</code></pre></td>
+<td><p>Return a copy of the string with all occurrences of substring <code>old</code> replaced by <code>new</code>. If the optional argument <code>count</code> is given, only the first <code>count</code> occurrences are replaced.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb48-1"><a href="#cb48-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;www.google.com&#39;</span></span>
+<span id="cb48-2"><a href="#cb48-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.replace(s, <span class="st">&#39;www.&#39;</span>, <span class="st">&#39;https://&#39;</span>)  <span class="co"># or, s.replace(&#39;www.&#39;, &#39;https://&#39;)</span></span>
+<span id="cb48-3"><a href="#cb48-3"></a><span class="co">&#39;https://google.com&#39;</span></span>
+<span id="cb48-4"><a href="#cb48-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="st">&#39;Far Farquad on a Far Quad&#39;</span></span>
+<span id="cb48-5"><a href="#cb48-5"></a><span class="op">&gt;&gt;&gt;</span> s.replace(<span class="st">&#39;Far&#39;</span>, <span class="st">&#39;Close&#39;</span>)</span>
+<span id="cb48-6"><a href="#cb48-6"></a><span class="co">&#39;Close Closequad on a Close Quad&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><pre><code>str.split(
+  self,
+  sep=None,
+  maxsplit=-1
+)</code></pre></td>
+<td><p>Return a list of the words in the string, using <code>sep</code> as the delimiter string. If <code>maxsplit</code> is given, at most <code>maxsplit</code> splits are done (thus, the list will have at most <code>maxsplit+1</code> elements). If <code>maxsplit</code> is not specified or -1, then there is no limit on the number of splits (all possible splits are made).</p>
+<p>If <code>sep</code> is given, consecutive delimiters are not grouped together and are deemed to delimit empty strings (for example, <code>'1,,2'.split(',')</code> returns <code>['1', '', '2']</code>). The <code>sep</code> argument may consist of multiple characters (for example, <code>'1&lt;&gt;2&lt;&gt;3'.split('&lt;&gt;')</code> returns <code>['1', '2', '3']</code>).</p>
+<p>Splitting an empty string with a specified separator returns [’’].</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb50"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb50-1"><a href="#cb50-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.split(<span class="st">&#39;1,2,3&#39;</span>, <span class="st">&#39;,&#39;</span>)  <span class="co"># or, &#39;1,2,3&#39;.split(&#39;,&#39;)</span></span>
+<span id="cb50-2"><a href="#cb50-2"></a>[<span class="st">&#39;1&#39;</span>, <span class="st">&#39;2&#39;</span>, <span class="st">&#39;3&#39;</span>]</span>
+<span id="cb50-3"><a href="#cb50-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;1,2,3&#39;</span>.split(<span class="st">&#39;,&#39;</span>, maxsplit<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb50-4"><a href="#cb50-4"></a>[<span class="st">&#39;1&#39;</span>, <span class="st">&#39;2,3&#39;</span>]</span>
+<span id="cb50-5"><a href="#cb50-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;1,2,,3,&#39;</span>.split(<span class="st">&#39;,&#39;</span>)</span>
+<span id="cb50-6"><a href="#cb50-6"></a>[<span class="st">&#39;1&#39;</span>, <span class="st">&#39;2&#39;</span>, <span class="st">&#39;&#39;</span>, <span class="st">&#39;3&#39;</span>, <span class="st">&#39;&#39;</span>]</span></code></pre></div>
+<p>If <code>sep</code> is not specified or is <code>None</code>, a different splitting algorithm is applied: runs of consecutive whitespace are regarded as a single separator, and the result will contain no empty strings at the start or end if the string has leading or trailing whitespace. Consequently, splitting an empty string or a string consisting of just whitespace with a <code>None</code> separator returns <code>[]</code>.</p></td>
+</tr>
+<tr class="even">
+<td><pre><code>str.startswith(
+  self, prefix,
+  [, start
+  [, end]]
+)</code></pre></td>
+<td>Return <code>True</code> if string starts with the <code>prefix</code>, otherwise return <code>False</code>. With optional <code>start</code>, test string begins at that position. With optional <code>end</code>, stop comparing string at that position.</td>
+</tr>
+<tr class="odd">
+<td><code>str.strip(self, [chars])</code></td>
+<td><p>Return a copy of the string with the leading and trailing characters removed. The <code>chars</code> argument is a string specifying the set of characters to be removed. If omitted or <code>None</code>, the chars argument defaults to removing whitespace.</p>
+<p>The <code>chars</code> argument is not a prefix or suffix; rather, all combinations of its values are stripped.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb52-1"><a href="#cb52-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.strip(<span class="st">&#39;   spacious   &#39;</span>)  <span class="co"># or, &#39;   spacious   &#39;.strip()</span></span>
+<span id="cb52-2"><a href="#cb52-2"></a><span class="co">&#39;spacious&#39;</span></span>
+<span id="cb52-3"><a href="#cb52-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;www.example.com&#39;</span>.strip(<span class="st">&#39;cmowz.&#39;</span>)</span>
+<span id="cb52-4"><a href="#cb52-4"></a><span class="co">&#39;example&#39;</span></span></code></pre></div>
+<p>The outermost leading and trailing chars argument values are stripped from the string. Characters are removed from the leading end until reaching a string character that is not contained in the set of characters in chars. A similar action takes place on the trailing end.</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1"></a><span class="op">&gt;&gt;&gt;</span> comment_string <span class="op">=</span> <span class="st">&#39;#....... Section 3.2.1 Issue #32 .......&#39;</span></span>
+<span id="cb53-2"><a href="#cb53-2"></a><span class="op">&gt;&gt;&gt;</span> comment_string.strip(<span class="st">&#39;.#! &#39;</span>)</span>
+<span id="cb53-3"><a href="#cb53-3"></a><span class="co">&#39;Section 3.2.1 Issue #32&#39;</span></span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="set-typeset">Set type—<code>set</code></h2>
+<p>A set object is an unordered collection of distinct hashable objects. Common uses include membership testing, removing duplicates from a sequence, and computing mathematical operations such as intersection, union, difference, and symmetric difference.</p>
+<p>Like other collections, sets support x in set, <code>len(set)</code>, and <code>for x in set</code>. Being an unordered collection, sets do not record element position or order of insertion. Accordingly, sets do not support indexing, slicing, or other sequence-like behavior.</p>
+<p>The set type is mutable—the contents can be changed using methods like <code>add()</code> and <code>remove()</code>. Since it is mutable, it has no hash value and cannot be used as either a dictionary key or as an element of another set.</p>
+<p>Non-empty sets can be created by placing a comma-separated list of elements within braces, for example: <code>{'jack', 'sjoerd'}</code>, in addition to the <code>set</code> constructor.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 61%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>len(self)</code></td>
+<td>Return the size (number of elements) of <code>self</code>.</td>
+</tr>
+<tr class="even">
+<td><code>x in self</code></td>
+<td>Return whether <code>x</code> is in <code>self</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>x not in self</code></td>
+<td>Return whether <code>x</code> is <em>not</em> in <code>self</code>.</td>
+</tr>
+<tr class="even">
+<td><code>set.isdisjoint(self, other)</code></td>
+<td>Return whether the set <code>self</code> has no elements in common with <code>other</code>. Sets are disjoint if and only if their intersection is the empty set.</td>
+</tr>
+<tr class="odd">
+<td><code>set.issubset(self, other)</code></td>
+<td>Return whether every element in the set <code>self</code> is in <code>other</code>. Can also use <code>self &lt;= other</code>.</td>
+</tr>
+<tr class="even">
+<td><code>self &lt; other</code></td>
+<td>Return whether the set <code>self</code> is a proper subset of <code>other</code>, that is, <code>self &lt;= other and self != other</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>set.issuperset(self, other)</code></td>
+<td>Return whether every element in <code>other</code> is in the set <code>self</code>. Can also use <code>self &gt;= other</code>.</td>
+</tr>
+<tr class="even">
+<td><code>self &gt; other</code></td>
+<td>Return whether the set <code>self</code> is a proper superset of <code>other</code>, that is, <code>self &gt;= other and self != other</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>set.union(self, *others)</code></td>
+<td>Return a new set with elements from the set and all others.</td>
+</tr>
+<tr class="even">
+<td><code>set.intersection(self, *others)</code></td>
+<td>Return a new set with elements common to the set and all others.</td>
+</tr>
+<tr class="odd">
+<td><code>set.difference(self, *others)</code></td>
+<td>Return a new set with elements in the set that are not in the others.</td>
+</tr>
+<tr class="even">
+<td><code>set.symmetric_difference(self, other)</code></td>
+<td>Return a new set with elements in either the set or <code>other</code> but not both.</td>
+</tr>
+<tr class="odd">
+<td><code>set.update(self, *others)</code></td>
+<td>Update the set, adding elements from all others.</td>
+</tr>
+<tr class="even">
+<td><code>set.intersection_update(self, *others)</code></td>
+<td>Update the set, keeping only elements found in it and all others.</td>
+</tr>
+<tr class="odd">
+<td><code>set.difference_update(self, *others)</code></td>
+<td>Update the set, removing elements found in others.</td>
+</tr>
+<tr class="even">
+<td><code>set.symmetric_difference_update(self, other)</code></td>
+<td>Update the set, keeping only elements found in either set, but not in both.</td>
+</tr>
+<tr class="odd">
+<td><code>set.add(self, elem)</code></td>
+<td>Add element <code>elem</code> to the <code>set</code>.</td>
+</tr>
+<tr class="even">
+<td><code>set.remove(self, elem)</code></td>
+<td>Remove element <code>elem</code> from the set. Raises <code>KeyError</code> if <code>elem</code> is not contained in the set.</td>
+</tr>
+<tr class="odd">
+<td><code>set.discard(self, elem)</code></td>
+<td>Remove element <code>elem</code> from the set if it is present.</td>
+</tr>
+<tr class="even">
+<td><code>set.pop(self)</code></td>
+<td>Remove and return an arbitrary element from the set. Raises <code>KeyError</code> if the set is empty.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><code>set</code> supports set to set comparisons. Two sets are equal if and only if every element of each set is contained in the other (each is a subset of the other). A set is less than another set if and only if the first set is a proper subset of the second set (is a subset, but is not equal). A set is greater than another set if and only if the first set is a proper superset of the second set (is a superset, but is not equal).</p>
+<h2 id="mapping-typedict">Mapping type–<code>dict</code></h2>
+<p>A mapping object maps hashable values to arbitrary objects. Mappings are mutable objects. There is currently only one standard mapping type, the dictionary.</p>
+<p>Dictionaries can be created by placing a comma-separated list of key: value pairs within braces, for example: <code>{'jack': 4098, 'sjoerd': 4127}</code> or <code>{4098: 'jack', 4127: 'sjoerd'}</code>, or by the <code>dic</code>t constructor.</p>
+<p>These are the operations that dictionaries support (and therefore, custom mapping types should support too):</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 78%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>list(d)</code></td>
+<td>Return a list of all the keys used in the dictionary <code>d</code>.</td>
+</tr>
+<tr class="even">
+<td><code>len(d)</code></td>
+<td>Return the number of items in the dictionary <code>d</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>d[key]</code></td>
+<td>Return the item of <code>d</code> with key <code>key</code>. Raises a <code>KeyError</code> if <code>key</code> is not in the map.</td>
+</tr>
+<tr class="even">
+<td><code>d[key] = value</code></td>
+<td>Set <code>d[key]</code> to <code>value</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>key in d</code></td>
+<td>Return <code>True</code> if <code>d</code> has a key <code>key</code>, else <code>False</code>.</td>
+</tr>
+<tr class="even">
+<td><code>key not in d</code></td>
+<td>Equivalent to <code>not key in d</code>.</td>
+</tr>
+<tr class="odd">
+<td><pre><code>dict.get(self, key
+  [, default]
+)</code></pre></td>
+<td>Return the value for <code>key</code> if <code>key</code> is in the dictionary, else <code>default</code>. If <code>default</code> is not given, it defaults to <code>None</code>, so that this method never raises a <code>KeyError</code>.</td>
+</tr>
+<tr class="even">
+<td><code>dict.items(self)</code></td>
+<td>Return a new view of the dictionary’s items ((key, value) pairs).</td>
+</tr>
+<tr class="odd">
+<td><pre><code>dict.pop(self, key
+  [, default]
+)</code></pre></td>
+<td>If <code>key</code> is in the dictionary, remove it and return its value, else return <code>default</code> If <code>default</code> is not given and <code>key</code> is not in the dictionary, a <code>KeyError</code> is raised.</td>
+</tr>
+<tr class="even">
+<td><code>dict.popitem(self)</code></td>
+<td>Remove and return a (key, value) pair from the dictionary. Pairs are returned in last-in-first-out (LIFO) order. <code>popitem()</code> is useful to destructively iterate over a dictionary, as often used in set algorithms. If the dictionary is empty, calling <code>popitem()</code> raises a <code>KeyError</code>.</td>
+</tr>
+<tr class="odd">
+<td><pre><code>dict.setdefault(self, key
+  [, default]
+)</code></pre></td>
+<td>If <code>key</code> is in the dictionary, return its value. If not, insert <code>key</code> with a value of <code>default</code> and return <code>default</code>. <code>default</code> defaults to <code>None</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Dictionaries compare equal if and only if they have the same (key, value) pairs (regardless of ordering). Order comparisons (<code>&lt;</code>, <code>&lt;=</code>, <code>&gt;=</code> <code>&gt;</code>) raise <code>TypeError</code>.</p>
+<p>Dictionaries preserve insertion order. Note that updating a key does not affect the order. Keys added after deletion are inserted at the end.</p>
+<div class="sourceCode" id="cb57"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1"></a><span class="op">&gt;&gt;&gt;</span> d <span class="op">=</span> {<span class="st">&quot;one&quot;</span>: <span class="dv">1</span>, <span class="st">&quot;two&quot;</span>: <span class="dv">2</span>, <span class="st">&quot;three&quot;</span>: <span class="dv">3</span>, <span class="st">&quot;four&quot;</span>: <span class="dv">4</span>}</span>
+<span id="cb57-2"><a href="#cb57-2"></a><span class="op">&gt;&gt;&gt;</span> d</span>
+<span id="cb57-3"><a href="#cb57-3"></a>{<span class="st">&#39;one&#39;</span>: <span class="dv">1</span>, <span class="st">&#39;two&#39;</span>: <span class="dv">2</span>, <span class="st">&#39;three&#39;</span>: <span class="dv">3</span>, <span class="st">&#39;four&#39;</span>: <span class="dv">4</span>}</span>
+<span id="cb57-4"><a href="#cb57-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(d)</span>
+<span id="cb57-5"><a href="#cb57-5"></a>[<span class="st">&#39;one&#39;</span>, <span class="st">&#39;two&#39;</span>, <span class="st">&#39;three&#39;</span>, <span class="st">&#39;four&#39;</span>]</span>
+<span id="cb57-6"><a href="#cb57-6"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(d.values())</span>
+<span id="cb57-7"><a href="#cb57-7"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]</span>
+<span id="cb57-8"><a href="#cb57-8"></a><span class="op">&gt;&gt;&gt;</span> d[<span class="st">&quot;one&quot;</span>] <span class="op">=</span> <span class="dv">42</span></span>
+<span id="cb57-9"><a href="#cb57-9"></a><span class="op">&gt;&gt;&gt;</span> d</span>
+<span id="cb57-10"><a href="#cb57-10"></a>{<span class="st">&#39;one&#39;</span>: <span class="dv">42</span>, <span class="st">&#39;two&#39;</span>: <span class="dv">2</span>, <span class="st">&#39;three&#39;</span>: <span class="dv">3</span>, <span class="st">&#39;four&#39;</span>: <span class="dv">4</span>}</span>
+<span id="cb57-11"><a href="#cb57-11"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">del</span> d[<span class="st">&quot;two&quot;</span>]</span>
+<span id="cb57-12"><a href="#cb57-12"></a><span class="op">&gt;&gt;&gt;</span> d[<span class="st">&quot;two&quot;</span>] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb57-13"><a href="#cb57-13"></a><span class="op">&gt;&gt;&gt;</span> d</span>
+<span id="cb57-14"><a href="#cb57-14"></a>{<span class="st">&#39;one&#39;</span>: <span class="dv">42</span>, <span class="st">&#39;three&#39;</span>: <span class="dv">3</span>, <span class="st">&#39;four&#39;</span>: <span class="dv">4</span>, <span class="st">&#39;two&#39;</span>: <span class="va">None</span>}</span></code></pre></div>
+<h2 id="numeric-sequence-data-typerange">Numeric sequence data type—<code>range</code></h2>
+<p>The <code>range</code> type represents an immutable sequence of numbers and is commonly used for looping a specific number of times in for loops.</p>
+<p>Constructor: <code>range(stop)</code> or <code>range(start, stop[, step])</code>.</p>
+<p>The arguments to the range constructor must be integers. If the <code>step</code> argument is omitted, it defaults to 1. If the <code>start</code> argument is omitted, it defaults to 0. If <code>step</code> is zero, <code>ValueError</code> is raised.</p>
+<p>For a positive step, the contents of a range <code>r</code> are determined by the formula <code>r[i] = start + step*i</code> where <code>i &gt;= 0</code> and <code>r[i] &lt; stop</code>.</p>
+<p>For a negative step, the contents of the range are still determined by the formula <code>r[i] = start + step*i</code>, but the constraints are <code>i &gt;= 0</code> and <code>r[i] &gt; stop</code>.</p>
+<p>Range examples:</p>
+<div class="sourceCode" id="cb58"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb58-1"><a href="#cb58-1"></a></span>
+<span id="cb58-2"><a href="#cb58-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">10</span>))</span>
+<span id="cb58-3"><a href="#cb58-3"></a>[<span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>]</span>
+<span id="cb58-4"><a href="#cb58-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">11</span>))</span>
+<span id="cb58-5"><a href="#cb58-5"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>, <span class="dv">9</span>, <span class="dv">10</span>]</span>
+<span id="cb58-6"><a href="#cb58-6"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">30</span>, <span class="dv">5</span>))</span>
+<span id="cb58-7"><a href="#cb58-7"></a>[<span class="dv">0</span>, <span class="dv">5</span>, <span class="dv">10</span>, <span class="dv">15</span>, <span class="dv">20</span>, <span class="dv">25</span>]</span>
+<span id="cb58-8"><a href="#cb58-8"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">10</span>, <span class="dv">3</span>))</span>
+<span id="cb58-9"><a href="#cb58-9"></a>[<span class="dv">0</span>, <span class="dv">3</span>, <span class="dv">6</span>, <span class="dv">9</span>]</span>
+<span id="cb58-10"><a href="#cb58-10"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, <span class="op">-</span><span class="dv">10</span>, <span class="op">-</span><span class="dv">1</span>))</span>
+<span id="cb58-11"><a href="#cb58-11"></a>[<span class="dv">0</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">2</span>, <span class="op">-</span><span class="dv">3</span>, <span class="op">-</span><span class="dv">4</span>, <span class="op">-</span><span class="dv">5</span>, <span class="op">-</span><span class="dv">6</span>, <span class="op">-</span><span class="dv">7</span>, <span class="op">-</span><span class="dv">8</span>, <span class="op">-</span><span class="dv">9</span>]</span>
+<span id="cb58-12"><a href="#cb58-12"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>))</span>
+<span id="cb58-13"><a href="#cb58-13"></a>[]</span>
+<span id="cb58-14"><a href="#cb58-14"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">1</span>, <span class="dv">0</span>))</span>
+<span id="cb58-15"><a href="#cb58-15"></a>[]</span></code></pre></div>
+<h2 id="the-null-typenone">The “Null” type—<code>None</code></h2>
+<p>This object is returned by functions that don’t explicitly return a value. It supports no special operations. There is exactly one null object, named <code>None</code> (a built-in name).</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

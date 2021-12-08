@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.7 Function Specifications</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.7 Function Specifications</h1>
+</header>
+<section>
+<p>One of the most central questions in software development is, “How do we know that the software we write is correct?” Certainly, writing test cases will ensure that our functions produce the expected output for specific situations. But as our programs increase in complexity, how confident can we be that our test cases are sufficient?</p>
+<h2 id="function-specifications-and-correctness">Function specifications and correctness</h2>
+<p>Before we address this question, we will formalize what it means for a program to be correct in the first place. Because functions are the primary way we organize programs, we’ll focus on what it means for an individual function to be correct.</p>
+<p>A <strong>specification</strong> for a function consists of two parts:</p>
+<ol type="1">
+<li>A description of what values the function takes as valid inputs. We can represent this description as a set of predicates, where a valid input must satisfy all these predicates. We call these predicates the <strong>preconditions</strong> of the function.</li>
+<li>A description of what the function returns/does, in terms of its inputs.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> For now, all of our Python functions only return values, and do nothing else. Later on in the course, we’ll study other kinds of function behaviour that could be included in a specification.</span> We can represent this description as a set of predicates as well, that must all be satisfied by the return value of the function. We call these predicates the <strong>postconditions</strong> of the function.</li>
+</ol>
+<p>With these two parts, a function’s specification defines what we expect the function to do. The job of an implementation of the function is to provide the Python code in the function body that meets this specification. We say that a function implementation is <strong>correct</strong> when the following holds: <em>For all inputs that satisfy the specification’s preconditions, the function implementation’s return value satisfies the specification’s postconditions.</em></p>
+<p>A function specification acts as a contract or agreement between the person who implements the function and the person who calls the function. For the person implementing the function, their responsibility is to make sure their code correctly returns or does what the specification says. When writing this code, they do not need to worry about exactly how the function is called and <em>assume</em> that the function’s input is always valid.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> So in fact, we have already seen several preconditions in this course. Every time we had a function description that said “assume X about the input(s)”, that was a precondition.</span> For the person calling the function, their responsibility is to make sure they call the function with valid inputs. When they make this call, they do not need to worry about exactly how the function is implemented and <em>assume</em> that the function works correctly.</p>
+<p>The concept of a function specification is a very powerful one, as it spreads the responsibility of function correctness across two parties that do their parts separately—as long as they both know what the function specification is. As a result, these specifications must be very precise. Outside of software, lawyers are hired to draft and review contracts to make sure that they are defensible in the eyes of the law. Similarly, programmers must behave as lawyers when designing software to write ironclad contracts that leave no ambiguity in what is expected of the user or how the software will behave. In this section, we introduce some new tools and terminology that can help our functions be more explicit in their requirements and behaviour.</p>
+<h2 id="simple-specifications">Simple specifications</h2>
+<p>Even though we haven’t formally introduced the notion of a function specification until this section, you’ve been writing specifications all along simply by following the Function Design Recipe. Let’s take a look at an early example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> is_even(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return whether n is even.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    &gt;&gt;&gt; is_even(1)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    False</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &gt;&gt;&gt; is_even(2)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    True</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="co"># Body omitted.</span></span></code></pre></div>
+<p>Here, the <em>type contract</em> and <em>description</em> actually form a complete specification of this function’s behaviour:</p>
+<ol type="1">
+<li>The type annotation of the parameter <code>n</code> tells us that the valid inputs to <code>is_even</code> are <code>int</code> values. The type annotation <code>int</code> is itself a <em>precondition</em> of the function.</li>
+<li>Similarly, the type annotation for the return value tells us that the function will always return a <code>bool</code>. In addition, the description “Return whether n is even.” specifies the relationship between the function’s return value and its input.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> The doctest examples aid understanding, but are not strictly required to specify what this function does.</span> The function description and return type annotation specify the <em>postconditions</em> of the function.</li>
+</ol>
+<p>From this alone, we know what it means for this function to be implemented correctly, even if we can’t see the implementation.</p>
+<blockquote>
+<p><code>is_even</code> is implemented correctly when <em>for all <code>int</code>s <code>n</code>, <code>is_even(n)</code> returns a <code>bool</code> that is <code>True</code> when <code>n</code> is even, and <code>False</code> when <code>n</code> is not even</em>.</p>
+</blockquote>
+<p>For example, suppose David has implemented this function. Mario loads this function implementation into the Python console and calls it:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> is_even(<span class="dv">4</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="va">False</span></span></code></pre></div>
+<p>In this case, <code>4</code> is an <code>int</code>, so Mario held up his end of the contract when he called the function. But the <code>False</code> return value is inconsistent with the function description, and so we know there must be an error in the implementation—David is at fault, not Mario.</p>
+<p>Suppose David fixes his implementation, and asks Mario to try another call. Mario types in:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> is_even(<span class="dv">4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="va">True</span></span></code></pre></div>
+<p>Okay pretty good, and now Mario tries:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> is_even([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
+<span id="cb4-2"><a href="#cb4-2"></a>Traceback (most recent call last):</span>
+<span id="cb4-3"><a href="#cb4-3"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">2</span>, <span class="kw">in</span> is_even</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="pp">TypeError</span>: unsupported operand <span class="bu">type</span>(s) <span class="cf">for</span> <span class="op">%</span>: <span class="st">&#39;list&#39;</span> <span class="kw">and</span> <span class="st">&#39;int&#39;</span></span></code></pre></div>
+<p>In this case, the function did not produce a return value but rather an error (i.e., <code>TypeError</code>). Is David at fault again? <em>No!</em> Mario violated the function’s precondition by passing in a <code>list</code> rather than an <code>int</code>, and so he should have no expectation that <code>is_even</code> will meet its postcondition. Therefore, Mario (the caller of the function) caused the error.</p>
+<h2 id="preconditions-in-general">Preconditions in general</h2>
+<p>All parameter type annotations are preconditions for a function. But often these type annotations are not precise enough to specify the exact set of valid inputs. Consider this function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">    &gt;&gt;&gt; max_length({&#39;Hello&#39;, &#39;Mario&#39;, &#39;David Liu&#39;})</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">    9</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>What happens when the set is empty? Let’s try it out in the console:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> empty_set <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> max_length(empty_set)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>Traceback (most recent call last):</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">7</span>, <span class="kw">in</span> max_length</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="pp">ValueError</span>: <span class="bu">max</span>() arg <span class="kw">is</span> an empty sequence</span></code></pre></div>
+<p>We’ve obtained an error, rather than an <code>int</code>; this makes logical sense, because it is impossible to find the maximum value in a set that contains no values at all. But from a formal function specification sense, who is to blame: the function’s caller or the function’s implementer?</p>
+<p>As it stands, the implementer is at fault because the only description of “valid inputs” given is the type annotation <code>set</code>; the empty set is still a <code>set</code>. So we need to update the specification to rule out this possibility, but how?<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> You may recall that we’ve been adding extra “assumptions” on inputs for programming exercises in this course for the past few weeks already. What we’re learning here is how to formalize these assumptions into function docstrings.</span> We encountered this issue in <a href="03-filtering-collections.html">3.3 Filtering Collections</a>, when we wanted to restrict a statement to apply to a subset of our domain. Here we’re doing the same thing: making the set of valid function inputs more specific, because we only want to guarantee our implementation works correctly on those inputs. We add a precondition to the function docstring as follows:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">      - len(strings) &gt; 0</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>Whenever possible, we’ll express these general preconditions as valid Python expressions involving the function’s parameters.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Sometimes we’ll encounter a precondition that is extremely complex, in which case you can write them in English.</span> In English, we would say that the full specification of <code>max_length</code>’s valid inputs is “<code>strings</code> is a <code>set</code>, and <code>len(strings) &gt; 0</code>”. As functions get more complex, we can add additional preconditions by listing them under the header <code>Preconditions:</code> in the docstring. <strong>A function input is valid when it satisfies the type annotations and <em>all</em> general precondition expressions</strong>.</p>
+<p>Note that adding the precondition to the docstring does not change the behaviour of the function. If an empty set is passed into the function by the user, the function will still produce the <code>ValueError</code> we saw above. However, now that the precondition has been documented in the function specification, if we call <code>max_length(empty_set)</code>, we know that the error is entirely our fault because we violated a precondition.</p>
+<h3 id="checking-preconditions-automatically-with-python_ta">Checking preconditions automatically with python_ta</h3>
+<p>While our previous example illustrates how to document preconditions as part of a function specification, it has one drawback: it relies on whoever is calling the function to read the documentation! Of course, reading documentation is an important skill for any computer scientist, but despite our best intentions we sometimes miss things. It would be nice if we could turn our preconditions into executable Python code so that the Python interpreter checks them every time we call the function.</p>
+<p>One way to do this is to use an <code>assert</code> statement, just like we do in unit tests. Because we’ve written the precondition as a Python expression, we can convert this to an assertion by copy-and-pasting it at the top of the function body.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">      - len(strings) &gt; 0</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="cf">assert</span> <span class="bu">len</span>(strings) <span class="op">&gt;</span> <span class="dv">0</span>, <span class="st">&#39;Precondition violated: max_length called on an empty set.&#39;</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>Now, the precondition is checked every time the function is called, with a meaningful error message when the precondition is violated:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> empty_set <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">&gt;&gt;&gt;</span> max_length(empty_set)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>Traceback (most recent call last):</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">7</span>, <span class="kw">in</span> max_length</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="pp">AssertionError</span>: Precondition violated: max_length called on an empty <span class="bu">set</span>.</span></code></pre></div>
+<p>However, this approach is annoying and error-prone. First, we have to duplicate the precondition in two places. And second, we have increased the size of the function body with extra code. The <code>python_ta</code> library we use in this course has a way to automatically check preconditions for all functions in a given file. Here is an example:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">      - len(strings) &gt; 0</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span>
+<span id="cb10-8"><a href="#cb10-8"></a></span>
+<span id="cb10-9"><a href="#cb10-9"></a></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb10-11"><a href="#cb10-11"></a>    <span class="im">import</span> python_ta.contracts</span>
+<span id="cb10-12"><a href="#cb10-12"></a>    python_ta.contracts.DEBUG_CONTRACTS <span class="op">=</span> <span class="va">False</span>  <span class="co"># Disable contract debug messages</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>    python_ta.contracts.check_all_contracts()</span>
+<span id="cb10-14"><a href="#cb10-14"></a></span>
+<span id="cb10-15"><a href="#cb10-15"></a>    max_length(<span class="bu">set</span>())</span></code></pre></div>
+<p>Notice that we’ve kept the function docstring the same, but removed the assertion. The function we call, <code>python_ta.contracts.check_all_contracts</code>, modifies our <code>max_length</code> function. That is, <code>python_ta</code> takes the function’s type contract and the preconditions it finds in the function docstring, and causes the function to check these preconditions every time the function is called! Let’s see what happens when we run this file:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>Traceback (most recent call last):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>...</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="pp">AssertionError</span>: max_length precondition <span class="st">&quot;len(strings) &gt; 0&quot;</span> violated <span class="cf">for</span> arguments {<span class="st">&#39;strings&#39;</span>: <span class="bu">set</span>()}.</span></code></pre></div>
+<p>Pretty cool! We’ll be using <code>check_all_contracts</code> for the rest of this course to help us make sure we’re sticking to the specifications we’ve written in our function header and docstrings when we call our functions. Moreover, <code>check_all_contracts</code> checks the return type of each function, so it’ll also work as a check when we’re implementing our functions to make sure the return value is of the correct type.</p>
+<h2 id="preconditions-as-assumptions-and-restrictions">Preconditions as assumptions and restrictions</h2>
+<p>Preconditions allow the implementer of a function to specify assumptions about the function’s inputs, and so simplify the work of the implementer. On the other hand, preconditions place restrictions on the user of the function; the onus is on them to respect these preconditions every time the function is called. This often increases the complexity of the code that calls the function. For example, in our <code>max_length</code> function, the calling code might need an if statement to first check whether a set is empty before passing it to <code>max_length</code>.</p>
+<p>When confronted with an “invalid input”, there is another strategy other than simply ruling out the invalid input with a precondition: explicitly defining some alternate function behaviour for this input. Here is another way we could define <code>max_length</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    Return 0 if strings is empty.</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>    <span class="cf">if</span> strings <span class="op">==</span> <span class="bu">set</span>():</span>
+<span id="cb12-7"><a href="#cb12-7"></a>        <span class="cf">return</span> <span class="dv">0</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>    <span class="cf">else</span>:</span>
+<span id="cb12-9"><a href="#cb12-9"></a>        <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>Here, we picked a reasonable default value for <code>max_length</code> when given an empty set,<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> This is very similar to how we define empty sums and products by a mathematical convention.</span> and then handled that as an explicit case in our implementation by using an if statement. Our function implementation is more complex than before, but now another person can call our function on an empty set without producing an error:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> empty_set <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="op">&gt;&gt;&gt;</span> max_length(empty_set)</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="dv">0</span></span></code></pre></div>
+<p>You’re probably wondering: is this version of <code>max_length</code> better or worse than our original one with the precondition? This version resulted in a longer description and function body, but it also removed a possible error we might encounter when calling the function. On the other hand, is 0 really a “reasonable” value for the behaviour of this function? Because this is ultimately a design decision, there is no clear “right answer”—there are always trade-offs to be made. Rather than sticking with a particular rule (i.e., “always/never use preconditions”), it’s better to use broader principles to evaluate different choices. How much complexity is added by handling an additional input in a function implementation? Are there “reasonable” behaviours defined for a larger set of inputs than what you originally intended? The trade-offs are rarely clear cut.</p>
+<h2 id="thats-not-all">That’s not all!</h2>
+<p>It turns out that with either of the “precondition” or “reasonable default” strategies, our specification of <code>max_length</code> is still incomplete. Before moving onto the next section, take a moment to study these implementations and try to guess what the gap might be!</p>
+</section>
+<!--
+
+## The assert statement
+
+TODO The outline currently introduces assertions, but this is done already in the Testing Functions I reading.
+
+An `assert` statement looks very similar to an if statement.
+But instead of branching into a specific path of the program, an `assert` statement instead raises an `AssertionError`.
+Typically, these errors will terminate the program.
+The syntax for an `assert` statement is:
+
+```python
+assert <expression>[, <message>]
+```
+
+The `assert` keyword must always be followed by a boolean expression.
+When the expression evaluates to `False`, an `AssertionError` is raised.
+We also have the option to include a message (i.e., a string) after the expression, separating the expression and the message with a comma.
+The message is used to give the user additional information caused by a failure.
+We can try this right inside the console:
+
+```python
+>>> assert 0 == 0
+>>> assert 0 == 1
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+AssertionError
+>>> assert 0 == 1, 'Oops!'
+Traceback (most recent call last):
+  File "<input>", line 1, in <module>
+AssertionError: Oops!
+```
+
+Notice how when the expression evaluated to `True` (i.e., `0 == 0`), no error was raised and *nothing* was output on the console.
+This is the main advantage of assertions: the only time an assertion will cause an issue is when the assertion fails.
+Failed assertions also give us some information on where the failure occured.
+Because our current example is done directly in the console, this information is not very useful.
+But when our code is spread across multiple files with hundreds of lines of Python, this information becomes invaluable for tracking down issues.
+
+
+-->
+<!-- ## References
+
+- [Appendix B.3 `python-ta`] -->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

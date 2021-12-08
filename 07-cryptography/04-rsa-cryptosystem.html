@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>7.4 The RSA Cryptosystem</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">7.4 The RSA Cryptosystem</h1>
+</header>
+<section>
+<p>So far, we have studied symmetric-key cryptosystems to allow two parties to communicate securely with each other when they share a secret key. We have also studied how two parties can establish a shared secret key using the Diffie-Hellman key exchange algorithm.</p>
+<p>One of the limitations of symmetric-key encryption schemes is that a shared secret key needs to be established for every pair of people who want to communicate. If there are <span class="math inline">\(n\)</span> people who each want to communicate securely with each other, there are <span class="math inline">\(\frac{n(n-1)}{2}\)</span> keys needed:</p>
+<ul>
+<li>The first person needs <span class="math inline">\(n-1\)</span> secret keys to communicate with everyone else.</li>
+<li>The second person needs <span class="math inline">\(n-2\)</span> secret keys to communicate with everyone else besides the first person.</li>
+<li>The third person needs <span class="math inline">\(n-3\)</span> secret keys to communicate with everyone else besides the first two people.</li>
+<li>This pattern repeats, for a total sum of <span class="math inline">\((n-1) + (n-2) + \cdots + 1 = \frac{n(n-1)}{2}\)</span>.</li>
+</ul>
+<!-- At the beginning of this chapter we introduced symmetric-key cryptosystems that can encrypt and decrypt messages given some key $k$.
+The main issue with symmetric-key cryptosystems is that they do not provide a mechanism for exchanging $k$ securely.
+We saw how the Diffie-Hellman key exchange could address this issue by relying on both a combination of private (one for Alice and one for Bob) and public (for both Alice and Bob) data to jointly establish a key $k$.
+Unfortunately, the Diffie-Hellman key exchange does not provide any form of authentication;
+Alice does not know if she is actually communicating with Bob, or some malicious man-in-the-middle. -->
+<p>In this section, we’ll introduce a new form of cryptosystem called a <strong>public-key cryptosystem</strong>, for each each person has two keys: a private key known only to them, and a public key known to everyone. We’ll see what how to encrypt and decrypt messages in these cryptosystems, how they reduce the number of keys needed for people to communicate, and learn about the most widely-used public-key cryptosystem today, the RSA cryptosystem.</p>
+<h2 id="public-key-cryptography">Public-key cryptography</h2>
+<p>A <strong>public-key cryptosystem</strong> is one where each party in the communication generates a pair of keys: a <em>private</em> (or <em>secret</em> key, known only to them) and a <em>public</em> key which is known to everyone. Suppose Alice wants to send Bob a message. She uses Bob’s <em>public key</em> to encrypt the message, and Bob uses his <em>private key</em> to decrypt the message.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Recall that in a symmetric-key cryptosystem, messages are encrypted and decrypted with the same key–hence, the symmetry.</span> Similarly, if Bob wants to send a message to Alice, he uses Alice’s public key to encrypt the message, and Alice uses her private key to decrypt it.</p>
+<p>More formally, we define a <strong>secure public-key cryptosystem</strong> as a system with the following parts:</p>
+<ul>
+<li><p>A set <span class="math inline">\(\mathcal{P}\)</span> of possible original messages, called <strong>plaintext</strong> messages. (E.g., a set of strings)</p></li>
+<li><p>A set <span class="math inline">\(\mathcal{C}\)</span> of possible encrypted messages, called <strong>ciphertext</strong> messages. (E.g., another set of strings)</p></li>
+<li><p>A set <span class="math inline">\(\mathcal{K}_1\)</span> of possible public keys and a set <span class="math inline">\(\mathcal{K}_2\)</span> of possible private keys.</p></li>
+<li><p>A subset <span class="math inline">\(\mathcal{K} \subseteq \mathcal{K}_1 \times \mathcal{K}_2\)</span> of possible <strong>public-private key pairs</strong>. Note that we use <span class="math inline">\(\subseteq\)</span> and not <span class="math inline">\(=\)</span> because not every public key can be paired with every private key.</p></li>
+<li><p>Two functions <span class="math inline">\(Encrypt : \mathcal{K_1} \times \mathcal{P} \to \mathcal{C}\)</span> and <span class="math inline">\(Decrypt : \mathcal{K}_2 \times \mathcal{C} \to \mathcal{P}\)</span> that satisfy the following two properties:</p>
+<ul>
+<li>(<em>correctness</em>) For all <span class="math inline">\((k_1, k_2) \in \mathcal{K}\)</span> and <span class="math inline">\(m \in \mathcal{P}\)</span>, <span class="math inline">\(Decrypt(k_2, Encrypt(k_1, m)) = m\)</span>. (That is, if you encrypt and then decrypt the same message with a public-private key pair, you get back the original message.)</li>
+<li>(<em>security</em>) For all <span class="math inline">\((k_1, k_2) \in \mathcal{K}\)</span> and <span class="math inline">\(m \in \mathcal{P}\)</span>, if an eavesdropper only knows the values of the public key <span class="math inline">\(k_1\)</span> and the ciphertext <span class="math inline">\(c = Encrypt(k_1, m)\)</span> but does not know <span class="math inline">\(k_2\)</span>, it is computationally infeasible to find the plaintext message <span class="math inline">\(m\)</span>.</li>
+</ul></li>
+</ul>
+<h2 id="the-rsa-cryptosystem">The RSA cryptosystem</h2>
+<p>The Diffie-Hellman key exchange algorithm we studied in the last section worked by relying on the hardness of the <em>discrete logarithm problem</em>. This allowed Alice and Bob to communicate their numbers <span class="math inline">\(g^a ~\%~ p\)</span> and $<span class="math inline">\(g^b ~\%~ p\)</span> publicly, without anyone being able to find the “secret” <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>.</p>
+<p>The <strong>Rivest-Shamir-Adleman (RSA) cryptosystem</strong> works with numbers as well, and relies on the surprising hardness of factoring large integers. For example, can you tell me which two prime numbers can be multiplied together to produce <span class="math inline">\(30,929\)</span>? You could write a small Python program to answer this question quite quickly, but that was only a number with 5 digits. What about the number <span class="math inline">\(1,455,980,635,647,702,351,701\)</span>, with 22 digits? In practice, RSA relies on the hardness of factoring integers with <em>hundreds</em> of digits!</p>
+<p>Let’s see how RSA works.</p>
+<h3 id="phase-1-key-generation">Phase 1: Key generation</h3>
+<p>Each person in a public-key cryptosystem must first generate a public-private key pair before they can communicate with anyone else. (Think about this as choosing a valid key-pair from the set <span class="math inline">\(\mathcal{K} = \mathcal{K}_1 \times \mathcal{K}_2\)</span>.) For RSA, we’ll put ourselves in Alice’s shoes and see what she must do to to generate a public and private key.</p>
+<ol type="1">
+<li><p>First, Alice picks two distinct prime numbers <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>.</p></li>
+<li><p>Next, Alice computes the product <span class="math inline">\(n = pq\)</span>.</p></li>
+<li><p>Then, Alice chooses an integer <span class="math inline">\(e \in \{2, 3, \dots, \varphi(n) - 1\}\)</span> such that <span class="math inline">\(\gcd(e, \varphi(n)) = 1\)</span>.</p></li>
+<li><p>Finally, Alice chooses an integer <span class="math inline">\(d \in \{2, 3, \dots, \varphi(n) - 1\}\)</span> that is the modular inverse of <span class="math inline">\(e\)</span> modulo <span class="math inline">\(\varphi(n)\)</span>. (That is, <span class="math inline">\(de \equiv 1 \pmod{\varphi(n)}\)</span>.)</p></li>
+</ol>
+<p>That’s it! Alice’s <em>private key</em> is the tuple <span class="math inline">\((p, q, d)\)</span>, and her public key is the tuple <span class="math inline">\((n, e)\)</span>. Alice shares her public key with the world, but she never tells her private key to anyone.</p>
+<h3 id="phase-2-message-encryption">Phase 2: Message encryption</h3>
+<p>Now suppose that Bob wants to send Alice a plaintext message <span class="math inline">\(m\)</span>. For now we’ll treat the message as a number between <span class="math inline">\(1\)</span> and <span class="math inline">\(n - 1\)</span>, and will discuss string messages later on in this section. Bob uses Alice’s public key <span class="math inline">\((n, e)\)</span>:</p>
+<ol type="1">
+<li>Bob computes the ciphertext <span class="math inline">\(c = m^e ~\%~ n\)</span> and sends it to Alice.</li>
+</ol>
+<h3 id="phase-3-message-decryption">Phase 3: Message decryption</h3>
+<p>Alice receives the ciphertext <span class="math inline">\(c\)</span>. She uses her private key <span class="math inline">\((p, q, d)\)</span> to decrypt the message:</p>
+<ol type="1">
+<li>Alice computes <span class="math inline">\(m&#39; = c^d ~\%~ n\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Techincally, Alice can recompute <span class="math inline">\(n\)</span> from the <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> of her private key. Another version of RSA is actually just to store <span class="math inline">\(n\)</span> in the private key, or use the <span class="math inline">\(n\)</span> from her public key (which Alice also has access to) and keep only <span class="math inline">\(d\)</span> as the private key.</span></li>
+</ol>
+<h3 id="an-example">An example</h3>
+<p>Before moving on, let’s see an example of a full use of the RSA cryptosystem in action. Alice first needs to generate a public and private key.</p>
+<ol type="1">
+<li>Alice chooses the prime numbers <span class="math inline">\(p = 23\)</span> and <span class="math inline">\(q = 31\)</span>.</li>
+<li>The product is <span class="math inline">\(n = p \cdot q = 23 \cdot 31 = 713\)</span></li>
+<li>Next, Alice needs to choose an <span class="math inline">\(e\)</span> where <span class="math inline">\(\gcd(e, \varphi(n)) = 1\)</span>. Alice calculates that <span class="math inline">\(\varphi(713) = 660\)</span>, and chooses <span class="math inline">\(e = 547\)</span> to satisfy the constraints on <span class="math inline">\(e\)</span>.</li>
+<li>Finally, Alice calculates the modular inverse to find the last part of the private key (<span class="math inline">\(d \cdot 547 \equiv 1 \pmod{660}\)</span>), so <span class="math inline">\(d = 403\)</span>.</li>
+</ol>
+<p>For reference, the private key is: <span class="math inline">\((p=23, q=31, d=403)\)</span> and the public key is: <span class="math inline">\((n=713, e=547)\)</span>.</p>
+<p>Bob wants to send the number <span class="math inline">\(42\)</span> to Alice. He computes the encrypted number to be <span class="math inline">\(c = 42^e ~\%~ n = 42^{547} ~\%~ 713 = 106\)</span> and sends it to Alice. Alice receives the number <span class="math inline">\(106\)</span> from Bob. She computes the decrypted number to be <span class="math inline">\(m = 106^d ~\%~ 713 = 106^{403} ~\%~ 713 = 42\)</span>. Voila!</p>
+<h2 id="proving-the-correctness-of-rsa">Proving the correctness of RSA</h2>
+<p>In the RSA cryptosystem, the encryption and decryption algorithms are very straightforward. The “interesting” part is in how the public-private key pair is generated to make the encryption and decryption work! In this section, we’ll come to understand why the key generation involves the steps that it does by proving that the RSA algorithm works correctly, using all the number theory work we developed last week.</p>
+<div class="theorem">
+<p>Let <span class="math inline">\((p, q, d) \in \Z^+ \times \Z^+ \times \Z^+\)</span> be a private key and <span class="math inline">\((n, e) \in \Z^+ \times \Z^+\)</span> its corresponding public key as generated by “RSA Phase 1”. Let <span class="math inline">\(m, c, m&#39; \in \{1, \dots, n - 1\}\)</span> be the original plaintext message, ciphertext, and decrypted message, respectively, as described in the RSA encryption and decryption phases.</p>
+<p>Then <span class="math inline">\(m&#39; = m\)</span> (i.e., the decrypted message is the same as the original message).</p>
+<div class="proof">
+<p>Let <span class="math inline">\(p, q, n, d, e, m, c, m&#39; \in \N\)</span> be defined as in the above definition of the RSA algorithm. We need to prove that <span class="math inline">\(m&#39; = m\)</span>.</p>
+<p> (It is possible to prove this theorem without this assumption, but we will not do so here.)</p>
+<p>From the definition of <span class="math inline">\(m&#39;\)</span> in the decryption step, we know <span class="math inline">\(m&#39; \equiv c^d \pmod n\)</span>. From the definition of <span class="math inline">\(c\)</span> in the encryption step, we know <span class="math inline">\(c \equiv m^e \pmod n\)</span>. Putting these together, we have: <span class="math display">\[m&#39; \equiv (m^e)^d \equiv m^{ed} \pmod n.\]</span></p>
+<p>So we need to prove that <span class="math inline">\(m^{ed} \equiv m \pmod n\)</span>. From Steps 3 and 4 of the RSA key generation phase, we know that <span class="math inline">\(de \equiv 1 \pmod{\varphi(n)}\)</span>, i.e., there exists a <span class="math inline">\(k \in \Z\)</span> such that <span class="math inline">\(de = k \cdot \varphi(n) + 1\)</span>.</p>
+<p>We also know that since <span class="math inline">\(\gcd(m, n) = 1\)</span>, by Euler’s Theorem <span class="math inline">\(m^{\varphi(n)} \equiv 1 \pmod n\)</span>.</p>
+<p>Putting this all together, we have <span class="math display">\[\begin{align*}
+m&#39; &amp;\equiv m^{ed} \pmod n \\
+&amp;\equiv m^{k \varphi(n) + 1} \pmod n \\
+&amp;\equiv (m^{\varphi(n)})^k \cdot m \pmod n \\
+&amp;\equiv 1^k \cdot m \pmod n \tag{by Euler&#39;s Theorem!} \\
+&amp;\equiv m \pmod n
+\end{align*}\]</span></p>
+<p>So <span class="math inline">\(m&#39; \equiv m \pmod n\)</span>. Since we also know <span class="math inline">\(m\)</span> and <span class="math inline">\(m&#39;\)</span> are between <span class="math inline">\(1\)</span> and <span class="math inline">\(n-1\)</span>, we can conclude that <span class="math inline">\(m&#39; = m\)</span>.</p>
+</div>
+</div>
+<h2 id="the-security-of-rsa">The security of RSA</h2>
+<p>Now that we’ve established the correctness of the RSA cryptosystem, let’s now discuss its security. As we did for the Diffie-Hellman key exchange, we’ll put ourselves in the role of an eavesdropper who is trying to gain information about a secret message. Suppose we observe Bob sending an encrypted message <span class="math inline">\(c\)</span> to Alice. In addition to the ciphertext, we also know Alice’s public key <span class="math inline">\((n, e)\)</span>.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Remember that “public” means that <em>everyone</em> can see it—including possibly malicious users!</span> What information can we hope to gain about Bob’s original plaintext message?</p>
+<p>First, we know from the RSA encryption phase that <span class="math inline">\(c \equiv m^e \pmod n\)</span>, so if we know all three of <span class="math inline">\(c\)</span>, <span class="math inline">\(e\)</span>, and <span class="math inline">\(n\)</span>, can we determine the value of <span class="math inline">\(m\)</span>? <em>No!</em> We don’t have an efficient way of computing “<span class="math inline">\(e\)</span>-th roots” in modular arithmetic.</p>
+<p>Another approach we could take is to attempt to discover Alice’s private key. Recall that <span class="math inline">\(de \equiv 1 \pmod{\varphi(n)}\)</span>. So <span class="math inline">\(d\)</span> is the inverse of <span class="math inline">\(e\)</span> modulo <span class="math inline">\(\varphi(n)\)</span>, and we learned in the last chapter that we can compute modular inverses, so this should be easy, right?</p>
+<p><em>Not so fast!</em> We can compute the modular inverse of <span class="math inline">\(d\)</span> modulo <span class="math inline">\(\varphi(n)\)</span> when we know both <span class="math inline">\(d\)</span> and <span class="math inline">\(\varphi(n)\)</span>, but right now we only know <span class="math inline">\(n\)</span>, not <span class="math inline">\(\varphi(n)\)</span>.</p>
+<p>So how do we compute <span class="math inline">\(\varphi(n)\)</span>? Well, we know that if <span class="math inline">\(n = p \cdot q\)</span> where <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are distinct primes, then <span class="math inline">\(\varphi(n) = (p - 1)(q - 1)\)</span>. But here is the problem: <em>it is not computationally feasible to factor <span class="math inline">\(n\)</span> when it is extremely large</em>. This is our second “computationally hard” problem in computer science, the <em>Integer Factorization Problem</em>. Despite the best efforts of computer scientists and mathematicians for centuries, there is no known efficient general algorithm for factoring integers, and it is this fact that keeps the RSA private key <span class="math inline">\((p, q, d)\)</span> secure.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

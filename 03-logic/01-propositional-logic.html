@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.1 Propositional Logic</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.1 Propositional Logic</h1>
+</header>
+<section>
+<p>As we get ready to write larger and more complex programs, we’re going to take a pause on programming to study formal mathematical logic. You might wonder what logic has to do with software development. As we’ll see over the course of this chapter, a firm understanding of logic allows us to precisely identify, define, and write <em>boolean expressions</em> and use them in our programs.</p>
+<p>It might seem counter-intuitive to spend a whole chapter on logic, as <code>bool</code> is the simplest data type in Python. But writing boolean expressions that correctly capture definitions and conditions in a given problem domain can be tricky as these definitions and conditions grow in complexity. It will turn out to be very useful to have a formal mathematical language—logic—to express these complex boolean expressions before turning them into code.</p>
+<h2 id="propositions">Propositions</h2>
+<p>We will start our study in this chapter with <em>propositional logic</em>, an elementary system of logic that is a crucial building block underlying other, more expressive systems of logic that we will need in this course.</p>
+<div class="definition" data-terms="proposition, propositional variable, propositional/logical operator, propositional formula">
+<p>A <strong>proposition</strong> is a statement that is either True or False. Examples of propositions are:</p>
+<ul>
+<li><span class="math inline">\(2+4 =6\)</span></li>
+<li><span class="math inline">\(3-5 &gt; 0\)</span></li>
+<li>Every even integer greater than <span class="math inline">\(2\)</span> is the sum of two prime numbers.</li>
+<li>Python’s implementation of <code>list.sort</code> is correct on every input list.</li>
+</ul>
+<p>We use <strong>propositional variables</strong> to represent propositions; by convention, propositional variable names are lowercase letters starting at <span class="math inline">\(p\)</span>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The concept of a propositional variable is different from other forms of variables you have seen before, and even ones that we will see later in this chapter. Here’s a rule of thumb: if you read an expression involving a propositional variable <span class="math inline">\(p\)</span>, you should be able to replace <span class="math inline">\(p\)</span> with the statement “CSC110 is cool” and still have the expression make sense.</span></p>
+<p>A <strong>propositional/logical operator</strong> is an operator whose arguments must all be either True or False. Finally, a <strong>propositional formula</strong> is an expression that is built up from propositional variables by applying these operators.</p>
+</div>
+<p>In the following sections, we describe the various operators we will use in this course. It is important to keep in mind when reading that these operators inform both the <em>structure</em> of formulas (what they look like) as well as the <em>truth value</em> of these formulas (what they mean: whether the formula is True or False based on the truth values of the individual propositional variables).</p>
+<h2 id="the-basic-operators-not-and-or">The basic operators <strong>NOT</strong>, <strong>AND</strong>, <strong>OR</strong></h2>
+<p>We have seen these operators earlier when discussing different types of data. The fact that Python has specific keywords dedicated to these operators should at least hint that they are frequently used. Here, we spend some time introducing the operators more formally and developing our first truth tables.</p>
+<div class="margintable">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(p\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(\lnot p\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">False</td>
+<td style="text-align: right;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">True</td>
+<td style="text-align: right;">False</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The unary operator <strong>NOT</strong> (also called “negation”) is denoted by the symbol <span class="math inline">\(\lnot\)</span>. It negates the truth value of its input. So if <span class="math inline">\(p\)</span> is True, then <span class="math inline">\(\lnot p\)</span> is False, and vice versa. This is shown in the <em>truth table</em> at the side. In Python, we use the <code>not</code> keyword to represent this operation.</p>
+<div class="margintable">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(p\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(q\)</span></th>
+<th style="text-align: right;"><span class="math inline">\(p \land q\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: right;">False</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: right;">False</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: right;">False</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: right;">True</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The binary operator <strong>AND</strong> (also called “conjunction”) is denoted by the symbol <span class="math inline">\(\land\)</span>. It returns True when both its arguments are True. In Python, we use the <code>and</code> keyword to represent this operation.</p>
+<p>The binary operator <strong>OR</strong> (also called “disjunction”) is denoted by the symbol <span class="math inline">\(\lor\)</span>, and returns True if one or both of its arguments are True. In Python, we use the <code>or</code> keyword to represent this operation.</p>
+<div class="margintable">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(p\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(q\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(p \lor q\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The truth tables for <strong>AND</strong> and <strong>NOT</strong> agree with the popular English usage of the terms; however, the operator <strong>OR</strong> may seem somewhat different from your intuition, because the word “or” has two different meanings to most English speakers. Consider the English statement “You can have cake or ice cream.” From a nutritionist, this might be an <em>exclusive or</em>: you can have cake or you can have ice cream, but not both. But from a kindly relative at a family reunion, this might be an <em>inclusive or</em>: you can have both cake and ice cream if you want! The study of mathematical logic is meant to eliminate the ambiguity by picking one meaning of <strong>OR</strong> and sticking with it. In our case, we will always use <strong>OR</strong> to mean the <em>inclusive or</em>, as illustrated in the last row of its truth table.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">The symbol <span class="math inline">\(\oplus\)</span> is often used to represent the <em>exclusive or</em> operator, but we will not use it in this course.</span> This is also the behaviour of the <code>or</code> operator in Python, which evaluates to <code>True</code> when both of its operands are <code>True</code>.</p>
+<p><strong>AND</strong> and <strong>OR</strong> are similar in that they are both <em>binary</em> operators on propositional variables. However, the distinction between <strong>AND</strong> and <strong>OR</strong> is very important. Consider for example a rental agreement that reads “first and last months’ rent <em>and</em> a $1000 deposit” versus a rental agreement that reads “first and last months’ rent <em>or</em> a $1000 deposit.” The second contract is fulfilled with much less money down than the first contract.</p>
+<h2 id="the-implication-operator">The implication operator</h2>
+<p>One of the most subtle and powerful relationships between two propositions is <em>implication</em>, which is represented by the symbol <span class="math inline">\(\Rightarrow\)</span>. The implication <span class="math inline">\(p \Rightarrow q\)</span> asserts that whenever <span class="math inline">\(p\)</span> is True, <span class="math inline">\(q\)</span> must also be True. An example of logical implication in English is the statement: “If you push that button, then the fire alarm will go off.”<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> In some contexts, we think of logical implication as the temporal relationship that <span class="math inline">\(q\)</span> is inevitable if <span class="math inline">\(p\)</span> occurs. But this is <em>not</em> always the case! Be careful not to confuse implication with causation.</span> Implications are so important that the parts have been given names. The statement <span class="math inline">\(p\)</span> is called the <em>hypothesis</em> of the implication and the statement <span class="math inline">\(q\)</span> is called the <em>conclusion</em> of the implication.</p>
+<div class="margintable">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(p\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(q\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(p \Rightarrow q\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>How should the truth table be defined for <span class="math inline">\(p \Rightarrow q\)</span>? First, when both <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are True, then <span class="math inline">\(p \Rightarrow q\)</span> should be True, since when <span class="math inline">\(p\)</span> occurs, <span class="math inline">\(q\)</span> also occurs. Similarly, it is clear that when <span class="math inline">\(p\)</span> is True and <span class="math inline">\(q\)</span> is False, then <span class="math inline">\(p \Rightarrow q\)</span> is False (since then <span class="math inline">\(q\)</span> is not inevitably True when <span class="math inline">\(p\)</span> is True). But what about the other two cases, when <span class="math inline">\(p\)</span> is False and <span class="math inline">\(q\)</span> is either True or False? This is another case where our intuition from both English language it a little unclear. Perhaps somewhat surprisingly, in both of these remaining cases, we will still define <span class="math inline">\(p \Rightarrow q\)</span> to be True.</p>
+<p>The two cases when <span class="math inline">\(p\)</span> is False but <span class="math inline">\(p \Rightarrow q\)</span> is True are called the <strong>vacuous truth</strong> cases. How do we justify this assignment of truth values? The key intuition is that because the statement doesn’t say anything about whether or not <span class="math inline">\(q\)</span> should occur when <span class="math inline">\(p\)</span> is False, it cannot be disproven when <span class="math inline">\(p\)</span> is False. In our example above, if the alarm button is <em>not</em> pushed, then the statement is not saying anything about whether or not the fire alarm will go off. It is entirely consistent with this statement that if the button is not pushed, the fire alarm can still go off, or may not go off.</p>
+<p>The formula <span class="math inline">\(p \Rightarrow q\)</span> has two equivalent<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Here, “equivalent” means that the two formulas have the same truth values; for any setting of their propositional variables to True and False, the formulas will either both be True or both be False.</span> formulas which are often useful. To make this concrete, we’ll use our example “If you are a Pittsburgh Pens fan, then you are not a Flyers fan” from the introduction.</p>
+<p>The following two formulas are equivalent to <span class="math inline">\(p \Rightarrow q\)</span>:</p>
+<ul>
+<li><p><span class="math inline">\(\lnot p \lor q\)</span>. On our example: “You are not a Pittsburgh Pens fan, or you are not a Flyers fan.” This makes use of the vacuous truth cases of implication, in that if <span class="math inline">\(p\)</span> is False then <span class="math inline">\(p \Rightarrow q\)</span> is True, and if <span class="math inline">\(p\)</span> is True then <span class="math inline">\(q\)</span> must be True as well.</p></li>
+<li><p><span class="math inline">\(\lnot q \Rightarrow \lnot p\)</span>. On our example: “If you <em>are</em> a Flyers fan, then you are <em>not</em> a Pittsburgh Pens fan.” Intuitively, this says that if <span class="math inline">\(q\)</span> doesn’t occur, then <span class="math inline">\(p\)</span> cannot have occurred either.</p>
+<p>This equivalent formula is in fact so common that we give it a special name: the <strong>contrapositive</strong> of the implication <span class="math inline">\(p \Rightarrow q\)</span>.</p></li>
+</ul>
+<p>There is one more related formula that we will discuss before moving on. If we take <span class="math inline">\(p \Rightarrow q\)</span> and switch the hypothesis and conclusion, we obtain the implication <span class="math inline">\(q \Rightarrow p\)</span>, which is called the <strong>converse</strong> of the original implication.</p>
+<p>Unlike the two formulas in the list above, the converse of an implication is <em>not</em> logically equivalent to the original implication. Consider the statement “If you can solve any problem in this course, then you will get an A.” Its converse is “If you will get an A, then you can solve any problem in this course.” These two statements certainly don’t mean the same thing!</p>
+<p>In Python, there is no operator or keyword that represents implication directly. If you do want to express an implication as a Python expression, we can use the first equivalent form from above, writing <span class="math inline">\(p \Rightarrow q\)</span> as <span class="math inline">\(\lnot p \lor q\)</span>. This is less common in Python programs; however, implication has other uses in manipulating data and expressing algorithms that we’ll explore later in this course.</p>
+<h2 id="biconditional-if-and-only-if">Biconditional (“if and only if”)</h2>
+<p>The final logical operator that we will consider is the <em>biconditional</em>, denoted by <span class="math inline">\(p \Leftrightarrow q\)</span>. This operator returns True when the implication <span class="math inline">\(p \Rightarrow q\)</span> and its converse <span class="math inline">\(q \Rightarrow p\)</span> are both True.</p>
+<div class="margintable">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><span class="math inline">\(p\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(q\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(p \Leftrightarrow q\)</span></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">False</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">False</td>
+<td style="text-align: center;">False</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+<td style="text-align: center;">True</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In other words, <span class="math inline">\(p \Leftrightarrow q\)</span> is an abbreviation for <span class="math inline">\((p \Rightarrow q) \land (q \Rightarrow p)\)</span>. A nice way of thinking about the biconditional is that it asserts that its two arguments have the <em>same</em> truth value.</p>
+<p>While we could use the natural translation of <span class="math inline">\(\Rightarrow\)</span> and <span class="math inline">\(\land\)</span> into English to also translate <span class="math inline">\(\Leftrightarrow\)</span>, the result is a little clunky: <span class="math inline">\(p \Leftrightarrow q\)</span> becomes “if <span class="math inline">\(p\)</span> then <span class="math inline">\(q\)</span>, and if <span class="math inline">\(q\)</span> then <span class="math inline">\(p\)</span>.” Instead, we often shorten this using a quite nice turn of phrase: “<span class="math inline">\(p\)</span> if and only if <span class="math inline">\(q\)</span>,” which is abbreviated to “<span class="math inline">\(p\)</span> iff <span class="math inline">\(q\)</span>.”</p>
+<p>In Python, we don’t need a separate operator to represent <span class="math inline">\(\Leftrightarrow\)</span>, since we can simply use <code>==</code> to determine whether two boolean values are the same!</p>
+<h2 id="summary">Summary</h2>
+<p>We have now seen all five propositional operators that we will use in this course. Now is an excellent time to review these and make sure you understand the notation, meaning, and English words used to indicate each one.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">operator</th>
+<th style="text-align: center;">notation</th>
+<th style="text-align: center;">English</th>
+<th style="text-align: center;">Python operation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><strong>NOT</strong></td>
+<td style="text-align: center;"><span class="math inline">\(\lnot p\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p\)</span> is not true</td>
+<td style="text-align: center;"><code>not p</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><strong>AND</strong></td>
+<td style="text-align: center;"><span class="math inline">\(p \land q\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span></td>
+<td style="text-align: center;"><code>p and q</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><strong>OR</strong></td>
+<td style="text-align: center;"><span class="math inline">\(p \lor q\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p\)</span> or <span class="math inline">\(q\)</span> (or both!)</td>
+<td style="text-align: center;"><code>p or q</code></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">implication</td>
+<td style="text-align: center;"><span class="math inline">\(p \Rightarrow q\)</span></td>
+<td style="text-align: center;">if <span class="math inline">\(p\)</span>, then <span class="math inline">\(q\)</span></td>
+<td style="text-align: center;"><code>not p or q</code></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">biconditional</td>
+<td style="text-align: center;"><span class="math inline">\(p \Leftrightarrow q\)</span></td>
+<td style="text-align: center;"><span class="math inline">\(p\)</span> if and only if <span class="math inline">\(q\)</span></td>
+<td style="text-align: center;"><code>p == q</code></td>
+</tr>
+</tbody>
+</table>
+<!--div exercise>
+<div questions data-series="chapter1">
+\item
+A **tautology** is a formula that is True for every possible assignment of values
+to its propositional variables.
+Decide if each of the following propositional formulas are tautologies.
+
+a) $((p \Rightarrow q) \land (p \Rightarrow r)) \Leftrightarrow (p \Rightarrow (q \land r))$
+b) $(p \Rightarrow q) \Leftrightarrow (\lnot p \lor q)$
+c) $(\lnot (p \lor q)) \Leftrightarrow (\lnot p \land \lnot q)$
+</div>
+</div-->
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

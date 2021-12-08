@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10.3 A “Manager” Class</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">10.3 A “Manager” Class</h1>
+</header>
+<section>
+<p>In the previous section, we defined four different data classes—<code>Restaurant</code>, <code>Customer</code>, <code>Courier</code>, <code>Order</code>—to represent different entities in our food delivery system. We must now determine how to keep track of all of these entities, and how they can interact with each other. For example, as a user I would want to be able to look up a list of restaurants in my area to order food from. In code, how does a single <code>Customer</code> object “know” about all the different <code>Restaurant</code>s in the system? Should each <code>Customer</code> have an attribute containing list of <code>Restaurant</code>s?<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The question of how objects “know” about other objects is similar to the notion of variable <em>scope</em>. A variable’s scope determines where it can be accessed in a program; the scope of an object dictates the object’s lifetime and who the object belongs to. But now consider our current problem domain, with the hundreds of restaurants and potential thousands of customers. What should the scope of all those objects be?</span></p>
+<p>There are many ways to approach this problem. A common object-oriented design approach is to create a new manager class whose role is to keep track of all of the entities in the system and to mediate the interactions between them (like a customer placing a new order). This class is more complex than the others we saw in the last section, and so we will not use a data class, and instead use a general class with a custom initializer and keep most of the instance attributes private.</p>
+<p>Here is the manager class we’ll create for our food delivery system. The <code>FoodDeliverySystem</code> class will store (and have access to) every customer, courier, and restaurant represented in our system.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> FoodDeliverySystem:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;A system that maintains all entities (restaurants, customers, couriers, and orders).</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    Public Attributes:</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">        - name: the name of this food delivery system</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">        - self.name != &#39;&#39;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">        - all(r == self._restaurants[r].name for r in self._restaurants)</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">        - all(c == self._customers[c].name for c in self._customers)</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">        - all(c == self._couriers[c].name for c in self._couriers)</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a>    name: <span class="bu">str</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a></span>
+<span id="cb1-15"><a href="#cb1-15"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a>    <span class="co">#   - _restaurants: a mapping from restaurant name to Restaurant object.</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="co">#       This represents all the restaurants in the system.</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a>    <span class="co">#   - _customers: a mapping from customer name to Customer object.</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a>    <span class="co">#       This represents all the customers in the system.</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a>    <span class="co">#   - _couriers: a mapping from courier name to Courier object.</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a>    <span class="co">#       This represents all the couriers in the system.</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="co">#   - _orders: a list of all orders (both open and completed orders).</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a></span>
+<span id="cb1-24"><a href="#cb1-24"></a>    _restaurants: <span class="bu">dict</span>[<span class="bu">str</span>, Restaurant]</span>
+<span id="cb1-25"><a href="#cb1-25"></a>    _customers: <span class="bu">dict</span>[<span class="bu">str</span>, Customer]</span>
+<span id="cb1-26"><a href="#cb1-26"></a>    _couriers: <span class="bu">dict</span>[<span class="bu">str</span>, Courier]</span>
+<span id="cb1-27"><a href="#cb1-27"></a>    _orders: <span class="bu">list</span>[Order]</span>
+<span id="cb1-28"><a href="#cb1-28"></a></span>
+<span id="cb1-29"><a href="#cb1-29"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, name: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-30"><a href="#cb1-30"></a>        <span class="co">&quot;&quot;&quot;Initialize a new food delivery system with the given company name.</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="co">        The system starts with no entities.</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a>        <span class="va">self</span>.name <span class="op">=</span> name</span>
+<span id="cb1-35"><a href="#cb1-35"></a></span>
+<span id="cb1-36"><a href="#cb1-36"></a>        <span class="va">self</span>._restaurants <span class="op">=</span> {}</span>
+<span id="cb1-37"><a href="#cb1-37"></a>        <span class="va">self</span>._customers <span class="op">=</span> {}</span>
+<span id="cb1-38"><a href="#cb1-38"></a>        <span class="va">self</span>._couriers <span class="op">=</span> {}</span>
+<span id="cb1-39"><a href="#cb1-39"></a>        <span class="va">self</span>._orders <span class="op">=</span> []</span></code></pre></div>
+<h2 id="changing-state">Changing state</h2>
+<p>What we have done so far is model the <em>static</em> properties of our food delivery system, that is, the attributes that are necessary to capture a particular snapshot of the state of the system at a specific moment in time. Next, we’re going to look at how to model the <em>dynamic</em> properties of the system: how the entities interact with each other and cause the system state to change over time.</p>
+<h3 id="adding-entities">Adding entities</h3>
+<p>Though a <code>FoodDeliverySystem</code> instance starts off empty, we can define simple methods to add entities to the system.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> You can picture this happening when a new restaurant/customer/courier signs up for our app.</span> By making our collection attributes private and requiring client code call these methods, we can check for uniqueness of these entity names as well.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">class</span> FoodDeliverySystem:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    ...</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="kw">def</span> add_restaurant(<span class="va">self</span>, restaurant: Restaurant) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-5"><a href="#cb2-5"></a>        <span class="co">&quot;&quot;&quot;Add the given restaurant to this system.</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">        Do NOT add the restaurant if one with the same name already exists.</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">        Return whether the restaurant was successfully added to this system.</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>        <span class="cf">if</span> restaurant.name <span class="kw">in</span> <span class="va">self</span>._restaurants:</span>
+<span id="cb2-12"><a href="#cb2-12"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a>        <span class="cf">else</span>:</span>
+<span id="cb2-14"><a href="#cb2-14"></a>            <span class="va">self</span>._restaurants[restaurant.name] <span class="op">=</span> restaurant</span>
+<span id="cb2-15"><a href="#cb2-15"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a></span>
+<span id="cb2-17"><a href="#cb2-17"></a>    <span class="kw">def</span> add_customer(<span class="va">self</span>, customer: Customer) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-18"><a href="#cb2-18"></a>        <span class="co">&quot;&quot;&quot;Add the given customer to this system.</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">        Do NOT add the customer if one with the same name already exists.</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">        Return whether the customer was successfully added to this system.</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a>        <span class="co"># Similar implementation to add_restaurant</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a></span>
+<span id="cb2-26"><a href="#cb2-26"></a>    <span class="kw">def</span> add_courier(<span class="va">self</span>, courier: Courier) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-27"><a href="#cb2-27"></a>        <span class="co">&quot;&quot;&quot;Add the given courier to this system.</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="co">        Do NOT add the courier if one with the same name already exists.</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">        Return whether the courier was successfully added to this system.</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a>        <span class="co"># Similar implementation to add_restaurant</span></span></code></pre></div>
+<h3 id="placing-orders">Placing orders</h3>
+<p>The main driving force in our simulation is customer orders. When a customer places an order, a chain of events is triggered:</p>
+<ol type="1">
+<li>The order is sent to the restaurant and to the assigned courier.</li>
+<li>The courier travels to the restaurant and picks up the food, and then brings it to the customer.</li>
+<li>Once the courier has reached their destination, they indicate that the delivery has been made.</li>
+</ol>
+<p>To represent these events in our program, we need to create functions that mutate the state of the system. Where should we create these functions? We could write them as top-level functions, or as methods of one of our existing entity classes (turning that class from a data class into a general class). We have previously said that one of the roles of the <code>FoodDeliverySystem</code> is to mediate interactions between the various entities in the system, and so this makes it a natural class to add these mutating methods.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> FoodDeliverySystem:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    ...</span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="kw">def</span> place_order(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="co">&quot;&quot;&quot;Record the new given order.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">        Assign a courier to this new order (if a courier is available).</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">        Preconditions:</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">            - order not in self.orders</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    <span class="kw">def</span> complete_order(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-14"><a href="#cb3-14"></a>        <span class="co">&quot;&quot;&quot;Mark the given order as complete.</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">        Make the courier who was assigned this order available to take a new order.</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">        Preconditions:</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">            - order in self.orders</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<p>We could then place an order from a customer using <code>FoodDeliverySystem.place_order</code>, which would be responsible for both recording the order and assigning a courier to that order. <code>FoodDeliverySystem.complete_order</code> does the opposite, marking the order as complete and un-assigning the courier so that they are free to take a new order. With both <code>FoodDeliverySystem.place_order</code> and <code>FoodDeliverySystem.complete_order</code>, we can begin to see how a simulation might take place where many customers are placing orders to different restaurants that are being delivered by available couriers.</p>
+<p>Note that this discussion should make sense even though we haven’t implemented either of these methods. Questions like “How do we choose which courier to assign to a new order?” and “How do we mark an order as complete?” are about <em>implementation</em> rather than the public interface of these methods. We’ll discuss one potential implementation of these methods in lecture, but we welcome you to attempt your own implementations as an exercise.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4.3 Defining Our Own Data Types, Part 2</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">4.3 Defining Our Own Data Types, Part 2</h1>
+</header>
+<section>
+<p>In the previous section, we learned about <em>data classes</em>, a way to define our own data types in Python. In this section, we’re going to learn study some more details about defining and designing data classes in our programs, and apply what we’ve learned to simplify some of work we did with tabular data in <a href="01-tabular-data.html">4.1 Tabular Data</a>.</p>
+<p>Before we begin, please take a moment to review the <code>Person</code> data class we developed in the previous section.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="at">@dataclass</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">class</span> Person:</span>
+<span id="cb1-6"><a href="#cb1-6"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.&quot;&quot;&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    age: <span class="bu">int</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>    address: <span class="bu">str</span></span></code></pre></div>
+<h2 id="constraining-data-class-values-representation-invariants">Constraining data class values: representation invariants</h2>
+<p>In our <code>Person</code> data class definition, we specify the type of each instance attribute. By doing so, we constrain the possible values can be stored for these attributes. However, just as we saw with function type contracts, we don’t always want to allow every possible value of a given type for an attribute value.</p>
+<p>For example, the <code>age</code> attribute for <code>Person</code> has a type annotation <code>int</code>, but we certainly would not allow negative integers to be stored here! Somehow, we’d like to record a second piece of information about this attribute: that <code>age &gt;= 0</code>. This kind of constraint is called a <strong>representation invariant</strong>, since it is a predicate describing a condition on how we <em>represent</em> a person that must always be true—this condition never varies.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The term <em>invariant</em> is used in a few different contexts in computer science; we’ll explore one other kind of invariant a bit later in this chapter.</span> All attribute type annotations, like <code>age: int</code>, are representation invariants. However, we can express general representation invariants as well, by adding them to the class docstring. Whenever possible, we write this as Python expressions rather than English, for a reason we’ll see in the next section.</p>
+<p>Here is how we add non-type-annotation representation invariants in a class docstring:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="at">@dataclass</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">      - self.age &gt;= 0</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    age: <span class="bu">int</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    address: <span class="bu">str</span></span></code></pre></div>
+<p>One oddity with this definition is that we use <code>self.age</code> instead of <code>age</code> to refer to the instance attribute. This mimics how we access data type attributes using dot notation:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person(<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Liu&#39;</span>, <span class="dv">100</span>, <span class="st">&#39;40 St. George Street&#39;</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> david.age</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="dv">100</span></span></code></pre></div>
+<p>In the class docstring, we use the variable name <code>self</code> to refer to a generic instance of the data class.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Keep in mind that <code>self</code> here is used just in the class docstring. In the above example, the variable <code>david</code> would appear in our memory model, but <code>self</code> would not.</span> This use of <code>self</code> is a strong Python convention, and we’ll return to other uses of <code>self</code> later on in this course.</p>
+<h3 id="checking-representation-invariants-automatically-with-python_ta">Checking representation invariants automatically with <code>python_ta</code></h3>
+<p>Just as we saw with preconditions in <a href="../03-logic/07-function-specification.html">3.7 Function Specification</a>, representation invariants are useful pieces of documentation for how a data class should be used. Like preconditions, representation invariants are <em>assumptions</em> that we make about values of a data type; for example, we can assume that every <code>Person</code> instance has an <code>age</code> that’s greater than or equal to zero.</p>
+<p>Representation invariants are also <em>constraints</em> on how we can create a data class instance. Because it can be easy to miss or ignore a representation invariant buried in a class docstring, <code>python_ta.contracts</code> supposts checking all representation invariants, just like it does with preconditions! Let’s add a <code>check_all_contracts</code> call to our <code>Person</code> example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="at">@dataclass</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">class</span> Person:</span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="co">&quot;&quot;&quot;A person with some basic demographic information.</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">      - self.age &gt;= 0</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a>    age: <span class="bu">int</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a>    address: <span class="bu">str</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a></span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb4-18"><a href="#cb4-18"></a>    <span class="im">import</span> python_ta.contracts</span>
+<span id="cb4-19"><a href="#cb4-19"></a>    python_ta.contracts.DEBUG_CONTRACTS <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a>    python_ta.contracts.check_all_contracts()</span></code></pre></div>
+<p>If we run the above file in the Python console, we’ll obtain an error whenever we attempt to instantiate a <code>Person</code> with invalid attributes.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person(</span>
+<span id="cb5-2"><a href="#cb5-2"></a>...     given_name<span class="op">=</span><span class="st">&#39;David&#39;</span>,</span>
+<span id="cb5-3"><a href="#cb5-3"></a>...     family_name<span class="op">=</span><span class="st">&#39;Liu&#39;</span>,</span>
+<span id="cb5-4"><a href="#cb5-4"></a>...     age<span class="op">=-</span><span class="dv">100</span>,</span>
+<span id="cb5-5"><a href="#cb5-5"></a>...     address<span class="op">=</span><span class="st">&#39;40 St. George Street&#39;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a>Traceback (most recent call last):</span>
+<span id="cb5-7"><a href="#cb5-7"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>  ...</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="pp">AssertionError</span>: Representation invariant <span class="st">&quot;self.age &gt;= 0&quot;</span> violated.</span></code></pre></div>
+<p><strong>Note</strong>: currently, <code>python_ta</code> is strict with the header <code>Representation Invariants:</code>. In particular, both the “<code>Representation</code>” and “<code>Invariants</code>” must be capitalized (and spelled correctly). Please watch out for this, as otherwise any representation invariants you add will not be checked!</p>
+<h2 id="the-data-class-design-recipe">The data class design recipe</h2>
+<p>Just as how functions give us a way of organizing blocks of code to represent a computation, data classes give us a way of organizing pieces of data to represent an entity. In <a href="../02-functions/05-the-function-design-recipe.html">2.5 The Function Design Recipe</a>, we learned a structured approach to designing and implementing functions. There is an analogous <strong>Data Class Design Recipe</strong>, which you should use every time you want to create a new data type for a program.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Note the similarities between the two recipes, such as the importance of naming and documentation.</span></p>
+<div class="fullwidth">
+<table>
+<colgroup>
+<col style="width: 59%" />
+<col style="width: 40%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><p><strong>1. Write the class header.</strong></p>
+<p>The class header consists of three parts: the <code>@dataclass</code> decorator (don’t forget to import from <code>dataclasses</code>), the keyword <code>class</code>, and the name of the data class. Pick a short noun or noun phrase as the name of the class. The name of the class should use the “CamelCase” naming convention: capitalize every word of the class name, and do <em>not</em> separate the words with underscores.</p></td>
+<td><div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="at">@dataclass</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">class</span> Person:</span></code></pre></div>
+ </td>
+</tr>
+<tr class="even">
+<td><p><strong>2. Write the instance attributes for the data class.</strong></p>
+<p>Decide on what attributes you want the data class to bundle together. Remember that every instance of the data class will have <em>all</em> of these attributes.</p>
+<p>Each attribute name should be a short noun or noun phrase, using “snake_case” (like function and variable names). Write each annotation name and its type indented within the data class body. |</p></td>
+<td><div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="at">@dataclass</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb7-3"><a href="#cb7-3"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>    age: <span class="bu">int</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>    address: <span class="bu">str</span></span></code></pre></div>
+ </td>
+</tr>
+<tr class="odd">
+<td><p><strong>3. Write the data class docstring.</strong></p>
+<p>Create a class docstring using triple-quotes, using the same format as function docstrings. Inside the docstring, write a description of the class and a description for every instance attribute. The class description should start with a one-line summary, and you can add a longer description underneath if necessary.</p>
+<p>Use the header “Instance Attributes:” to mark the beginning of the attribute descriptions.</p></td>
+<td><div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="at">@dataclass</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co">&quot;&quot;&quot;A data class representing a person.</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">      - given_name: the person&#39;s given name</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">      - family_name: the person&#39;s family name</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">      - age: the person&#39;s age</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">      - address: the person&#39;s address</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a>    age: <span class="bu">int</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>    address: <span class="bu">str</span></span></code></pre></div>
+ </td>
+</tr>
+<tr class="even">
+<td><p><strong>4. Write an example instance (optional).</strong></p>
+<p>At the bottom of the class docstring, write a doctest example of a typical instance of the data class. This should be used to illustrate all of the instance attributes, which is especially important when the instance attributes are complex types.</p></td>
+<td><div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="at">@dataclass</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="co">&quot;&quot;&quot;A data class representing a person.</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">      - given_name: the person&#39;s given name</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">      - family_name: the person&#39;s family name</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">      - age: the person&#39;s age</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">      - address: the person&#39;s address</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">    &gt;&gt;&gt; david = Person(</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">    ...     &#39;David&#39;,</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">    ...     &#39;Liu&#39;,</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">    ...     40,</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">    ...     &#39;40 St. George Street&#39;</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">    ... )</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a>    age: <span class="bu">int</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a>    address: <span class="bu">str</span></span></code></pre></div>
+ </td>
+</tr>
+<tr class="odd">
+<td><p><strong>5. Document any additional representation invariants.</strong></p>
+<p>If there are representation invariants for the instance attributes beyond the type annotations, include them in the class docstring under a separate section “Representation Invariants:” in between the instance attribute descriptions and sample instance.</p>
+<p>Just as with function preconditions, each representation invariant should be a boolean expression in Python. Use <code>self.&lt;attribute&gt;</code> to refer to an instance attribute within a representation invariant.</p></td>
+<td><div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="at">@dataclass</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    <span class="co">&quot;&quot;&quot;A data class representing a person.</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">      - given_name: the person&#39;s given name</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="co">      - family_name: the person&#39;s family name</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">      - age: the person&#39;s age</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">      - address: the person&#39;s address</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">      - self.age &gt;= 0</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">    &gt;&gt;&gt; david = Person(</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">    ...     &#39;David&#39;,</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">    ...     &#39;Liu&#39;,</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">    ...     40,</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">    ...     &#39;40 St. George Street&#39;</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">    ... )</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a>    age: <span class="bu">int</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a>    address: <span class="bu">str</span></span></code></pre></div>
+ </td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="a-worked-example">A worked example</h2>
+<p>To wrap up our introduction of data classes, let’s see how to apply data classes to the marriage license data set we studied in <a href="01-tabular-data.html">4.1 Tabular Data</a>.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;"><strong>ID</strong></th>
+<th style="text-align: center;"><strong>Civic Centre</strong></th>
+<th style="text-align: center;"><strong>Marriage Licenses Issued</strong></th>
+<th style="text-align: center;"><strong>Time Period</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">1657</td>
+<td style="text-align: center;">ET</td>
+<td style="text-align: center;">80</td>
+<td style="text-align: center;">January 1, 2011</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1658</td>
+<td style="text-align: center;">NY</td>
+<td style="text-align: center;">136</td>
+<td style="text-align: center;">January 1, 2011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1659</td>
+<td style="text-align: center;">SC</td>
+<td style="text-align: center;">159</td>
+<td style="text-align: center;">January 1, 2011</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1660</td>
+<td style="text-align: center;">TO</td>
+<td style="text-align: center;">367</td>
+<td style="text-align: center;">January 1, 2011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1661</td>
+<td style="text-align: center;">ET</td>
+<td style="text-align: center;">109</td>
+<td style="text-align: center;">February 1, 2011</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1662</td>
+<td style="text-align: center;">NY</td>
+<td style="text-align: center;">150</td>
+<td style="text-align: center;">February 1, 2011</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1663</td>
+<td style="text-align: center;">SC</td>
+<td style="text-align: center;">154</td>
+<td style="text-align: center;">February 1, 2011</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1664</td>
+<td style="text-align: center;">TO</td>
+<td style="text-align: center;">383</td>
+<td style="text-align: center;">February 1, 2011</td>
+</tr>
+</tbody>
+</table>
+<p>Recall that we represented the data as a list of lists:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> marriage_data <span class="op">=</span> [</span>
+<span id="cb11-2"><a href="#cb11-2"></a>...     [<span class="dv">1657</span>, <span class="st">&#39;ET&#39;</span>, <span class="dv">80</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-3"><a href="#cb11-3"></a>...     [<span class="dv">1658</span>, <span class="st">&#39;NY&#39;</span>, <span class="dv">136</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-4"><a href="#cb11-4"></a>...     [<span class="dv">1659</span>, <span class="st">&#39;SC&#39;</span>, <span class="dv">159</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-5"><a href="#cb11-5"></a>...     [<span class="dv">1660</span>, <span class="st">&#39;TO&#39;</span>, <span class="dv">367</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-6"><a href="#cb11-6"></a>...     [<span class="dv">1661</span>, <span class="st">&#39;ET&#39;</span>, <span class="dv">109</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-7"><a href="#cb11-7"></a>...     [<span class="dv">1662</span>, <span class="st">&#39;NY&#39;</span>, <span class="dv">150</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-8"><a href="#cb11-8"></a>...     [<span class="dv">1663</span>, <span class="st">&#39;SC&#39;</span>, <span class="dv">154</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)],</span>
+<span id="cb11-9"><a href="#cb11-9"></a>...     [<span class="dv">1664</span>, <span class="st">&#39;TO&#39;</span>, <span class="dv">383</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)]</span>
+<span id="cb11-10"><a href="#cb11-10"></a>... ]</span></code></pre></div>
+<p>We implemented the following function to calculate the average number of marriage licenses issued by a particular civic centre:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> average_licenses_issued(data: <span class="bu">list</span>[<span class="bu">list</span>], civic_centre: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the average number of marriage licenses issued by civic_centre in data.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    Precondition:</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">      - all({len(row) == 4 for row in data})</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">      - any({row[1] == civic_centre for row in data})</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>    issued_by_civic_centre <span class="op">=</span> [row[<span class="dv">2</span>] <span class="cf">for</span> row <span class="kw">in</span> data <span class="cf">if</span> row[<span class="dv">1</span>] <span class="op">==</span> civic_centre]</span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a>    total <span class="op">=</span> <span class="bu">sum</span>(issued_by_civic_centre)</span>
+<span id="cb12-11"><a href="#cb12-11"></a>    count <span class="op">=</span> <span class="bu">len</span>(issued_by_civic_centre)</span>
+<span id="cb12-12"><a href="#cb12-12"></a></span>
+<span id="cb12-13"><a href="#cb12-13"></a>    <span class="cf">return</span> total <span class="op">/</span> count</span></code></pre></div>
+<p>Here is how we will use data classes to simplify this approach. Rather than storing each row in the table as a list, we can instead introduce a new data class to store this information:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="im">from</span> dataclasses <span class="im">import</span> dataclass</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="im">from</span> datetime <span class="im">import</span> date</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="at">@dataclass</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="kw">class</span> MarriageData:</span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="co">&quot;&quot;&quot;A record of the number of marriage licenses issued in a civic centre in a given month.</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">      - id: a unique identifier for the record</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">      - civic_centre: the name of the civic centre</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">      - num_licenses: the number of licenses issued</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">      - month: the month these licenses were issued</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a>    <span class="bu">id</span>: <span class="bu">int</span></span>
+<span id="cb13-16"><a href="#cb13-16"></a>    civic_centre: <span class="bu">str</span></span>
+<span id="cb13-17"><a href="#cb13-17"></a>    num_licenses: <span class="bu">int</span></span>
+<span id="cb13-18"><a href="#cb13-18"></a>    month: date</span></code></pre></div>
+<p>Then using this data class, we can represent tabular data as a list of <code>MarriageData</code> instances rather than a list of lists. Not much has changed! The values representing each entry in the table are the same, but how we “bundle” each row of data into a single entity is different.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> marriage_data <span class="op">=</span> [</span>
+<span id="cb14-2"><a href="#cb14-2"></a>...     MarriageData(<span class="dv">1657</span>, <span class="st">&#39;ET&#39;</span>, <span class="dv">80</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-3"><a href="#cb14-3"></a>...     MarriageData(<span class="dv">1658</span>, <span class="st">&#39;NY&#39;</span>, <span class="dv">136</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-4"><a href="#cb14-4"></a>...     MarriageData(<span class="dv">1659</span>, <span class="st">&#39;SC&#39;</span>, <span class="dv">159</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-5"><a href="#cb14-5"></a>...     MarriageData(<span class="dv">1660</span>, <span class="st">&#39;TO&#39;</span>, <span class="dv">367</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">1</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-6"><a href="#cb14-6"></a>...     MarriageData(<span class="dv">1661</span>, <span class="st">&#39;ET&#39;</span>, <span class="dv">109</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-7"><a href="#cb14-7"></a>...     MarriageData(<span class="dv">1662</span>, <span class="st">&#39;NY&#39;</span>, <span class="dv">150</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-8"><a href="#cb14-8"></a>...     MarriageData(<span class="dv">1663</span>, <span class="st">&#39;SC&#39;</span>, <span class="dv">154</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>)),</span>
+<span id="cb14-9"><a href="#cb14-9"></a>...     MarriageData(<span class="dv">1664</span>, <span class="st">&#39;TO&#39;</span>, <span class="dv">383</span>, datetime.date(<span class="dv">2011</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span>
+<span id="cb14-10"><a href="#cb14-10"></a>... ]</span></code></pre></div>
+<p>And here is how we could modify our <code>average_licenses_issued</code> function.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> average_licenses_issued(data: <span class="bu">list</span>[MarriageData], civic_centre: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">&quot;&quot;&quot;Return the average number of marriage licenses issued by civic_centre in data.</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">    Precondition:</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">      - any({row.civic_centre == civic_centre for row in data})</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a>    issued_by_civic_centre <span class="op">=</span> [</span>
+<span id="cb15-8"><a href="#cb15-8"></a>      row.num_licenses <span class="cf">for</span> row <span class="kw">in</span> data <span class="cf">if</span> row.civic_centre <span class="op">==</span> civic_centre</span>
+<span id="cb15-9"><a href="#cb15-9"></a>    ]</span>
+<span id="cb15-10"><a href="#cb15-10"></a></span>
+<span id="cb15-11"><a href="#cb15-11"></a>    total <span class="op">=</span> <span class="bu">sum</span>(issued_by_civic_centre)</span>
+<span id="cb15-12"><a href="#cb15-12"></a>    count <span class="op">=</span> <span class="bu">len</span>(issued_by_civic_centre)</span>
+<span id="cb15-13"><a href="#cb15-13"></a></span>
+<span id="cb15-14"><a href="#cb15-14"></a>    <span class="cf">return</span> total <span class="op">/</span> count</span></code></pre></div>
+<p>Again, not much has changed: instead of writing <code>row[1]</code> and <code>row[2]</code>, we instead write <code>row.civic_centre</code> and <code>row.num_licenses</code>. This is longer to write, but also more explicit in what attributes of the data are accessed. And to quote from the <a href="https://www.python.org/dev/peps/pep-0020/">Zen of Python</a>, <em>explicit is better than implicit</em>.</p>
+<h2 id="summary-why-data-classes">Summary: why data classes?</h2>
+<p>Earlier, we claimed that a <code>dataclass</code> is a better way of representing a bundle of data than a list. Let’s review a few reasons why:</p>
+<ol type="1">
+<li>We now access the different attributes by name rather than index in the list, which is easier to remember and understand if you’re reading the code.</li>
+<li>Similarly, software like PyCharm and <code>python_ta</code> understand data class definitions, and will warn us if we try to create <em>malformed person values</em> (e.g., wrong arguments to <code>Person</code>), or access invalid attributes.</li>
+<li>Lists are designed to be a very flexible and general data type, and support many operations (e.g. list concatenation and “element of”) that we don’t want to do for actual people or rows of marriage data. Now that we use a separate data class, we eliminate the possibility of using these list operations on a “marriage data row”, even accidentally.</li>
+</ol>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

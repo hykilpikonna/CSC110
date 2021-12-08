@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>2.6 Testing Functions I: doctest and pytest</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">2.6 Testing Functions I: <code>doctest</code> and <code>pytest</code></h1>
+</header>
+<section>
+<p>The last step of the <a href="05-the-function-design-recipe.html">Function Design Recipe</a> is to test your code—but how? In this section, we’ll discuss the different strategies for testing code that you’ll use during the term, and beyond. As you write more and more complex programs in this course, it will be vital to maintain good habits to support you in your programming. One of these habits is developing good tests that will ensure your code is correct, and—often overlooked—using good <em>tools</em> to make those tests as easy to run as possible. You want to get in the habit of writing tests early in the process of programming, and running them as often as possible to detect coding errors as soon as you make them.</p>
+<h2 id="doctests-basic-examples-in-docstrings">Doctests: basic examples in docstrings</h2>
+<p>By following the Function Design Recipe, you naturally create a few tests for each function in the form of <em>doctest examples</em>, the examples you write in the function docstring. The simplest form of testing your function is import your function into the Python console, and then manually evaluate each doctest example one at a time and compare the output with the expected output in the docstring. This is a form of <strong>manual testing</strong>, as it requires human interaction to complete. Manual testing is often tedious and error-prone, so while it may be good for a quick check, we can certainly do better.</p>
+<p>Our first improvement is to use the Python library <code>doctest</code>, which can automatically extract doctest examples from docstrings and convert them into runnable tests. To use <code>doctest</code>, you can add the following code to the very bottom of any Python file:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Don’t worry about the <code>if __name__ == '__main__'</code> part for now; we will discuss this later on.</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="im">import</span> doctest     <span class="co"># import the doctest library</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    doctest.testmod()  <span class="co"># run the tests</span></span></code></pre></div>
+<p>Then when you run the file, all of the doctest examples are automatically run, and you receive a report about which tests failed.</p>
+<p><video src="videos/doctests_passing_default_runner.webm" controls=""><a href="videos/doctests_passing_default_runner.webm">Video demo of running doctests</a></video><br />
+</p>
+<p>One warning: in order to use <code>doctest</code>, your docstring examples must be correctly formatted and valid Python code. For more information about the <code>doctest</code> module, check out <a href="../B-python-libraries/01-doctest.html">Appendix B.1 <code>doctest</code></a>.</p>
+<h2 id="creating-test-suites-with-pytest">Creating test suites with <code>pytest</code></h2>
+<p>Though <code>doctest</code> is an extremely useful module, the examples we write in docstrings are only simple cases meant to illustrate typical uses of the function. As functions get more complex, we’ll require more extensive tests to verify that they are correct. We could put all these tests into the function docstrings, but that would make the docstrings far too long.</p>
+<p>So instead, we will use another Python library, <code>pytest</code>, to write our tests in a separate file, and so include an exhaustive set of tests without cluttering our code files. Let’s illustrate this with an example. Suppose we have defined the following function in a files <code>trues.py</code>:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> We’ve not included the body of this function, as we do not need to know how a function is implemented in order to write tests for it!</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># In file trues.py</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">def</span> has_more_trues(booleans: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-4"><a href="#cb2-4"></a>    <span class="co">&quot;&quot;&quot;Return whether booleans contains more True values than False values.</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &gt;&gt;&gt; has_more_trues([True, False, True])</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">    True</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">    &gt;&gt;&gt; has_more_trues([True, False, False])</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">    False</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="co"># Function body omitted</span></span></code></pre></div>
+<p>Now, we’ll see how to write tests for this function in a new file, which we’ll call <code>test_trues.py</code>.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> By convention, all Python modules which contain tests are named with the prefix <code>test_</code>.</span> Now let us introduce some terminology. A <strong>unit test</strong> is a block of code that checks for the correct behaviour of a function for one specific input. A <strong>test suite</strong> is a collection of tests that check the behaviour of a function or (usually small) set of functions. Every test file contains a test suite.</p>
+<p>In Python, we express a unit test as a function whose name starts with the prefix <code>test_</code>. The body of the function contains an <code>assert</code> statement, which is a new form of Python statement used to check whether some boolean expression is <code>True</code> or <code>False</code>. Here are two examples of unit tests we could write that are direct translations of the doctest examples from above:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># In file test_trues.py</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> trues <span class="im">import</span> has_more_trues</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="kw">def</span> test_mixture_one_more_true() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="co">&quot;&quot;&quot;Test has_more_trues on a list with a mixture of True and False,</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">    with one more True than False.</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="cf">assert</span> has_more_trues([<span class="va">True</span>, <span class="va">False</span>, <span class="va">True</span>])</span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="kw">def</span> test_mixture_one_more_false() <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-14"><a href="#cb3-14"></a>    <span class="co">&quot;&quot;&quot;Test has_more_trues on a list with a mixture of True and False,</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">    with one more False than True.</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="cf">assert</span> <span class="kw">not</span> has_more_trues([<span class="va">True</span>, <span class="va">False</span>, <span class="va">False</span>])</span></code></pre></div>
+<p>These unit test functions are similar to the functions we’ve defined previously, with a few differences:</p>
+<ul>
+<li>Each test name and docstring documents what the test is by describing the test input.</li>
+<li>The return type of the test function is <code>None</code>, which is a special type that indicates that no value at all is returned by the function.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Python’s <code>None</code> is a bit special, and we’ll see more of this later in the course.</span> In the body of the test function, there is indeed no <code>return</code> statement—instead, there’s an <code>assert</code>.</li>
+</ul>
+<p>So what exactly does an <code>assert</code> statement do? In Python, an <code>assert</code> statement has the form <code>assert &lt;expression&gt;</code>, and when executed it does the following:</p>
+<ol type="1">
+<li><p>First, it evaluates <code>&lt;expression&gt;</code>, which should produce a boolean value.</p></li>
+<li><p>If the value is <code>True</code>, nothing else happens, and the program continues onto the next statement.</p>
+<p>But if the value is <code>False</code>, an <code>AssertionError</code> is raised. This signals to <code>pytest</code> that the test has failed.</p></li>
+</ol>
+<p>So when <code>pytest</code> “runs” a unit test, what’s actually going on is it calls a test function like <code>test_mixture_one_more_true</code>. If the function call ends without raising an <code>AssertionError</code>, the test <em>passes</em>; if the function call does raise an <code>AssertionError</code>, the test <em>fails</em>. A single unit test function can contain multiple <code>assert</code> statements; the test passes if all of the <code>assert</code> statements pass, and fails if any of the <code>assert</code> statements raise an error.</p>
+<p>Finally, how do we use <code>pytest</code> to actually run our unit test functions? Similar to <code>doctest</code>, we need to first import <code>pytest</code> and then call a specific test function.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># At the bottom of test_trues.py</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="im">import</span> pytest</span>
+<span id="cb4-5"><a href="#cb4-5"></a>    pytest.main([<span class="st">&#39;test_trues.py&#39;</span>])</span></code></pre></div>
+<p>Now if we run this file, we see that our two unit test functions are run:</p>
+<p><video src="videos/pytests_passing_pytest_runner.webm" controls=""><a href="videos/pytests_passing_pytest_runner.webm">Video demo of running pytest</a></video><br />
+</p>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Doctest (<a href="https://youtu.be/R1rDpZjfzZg">Part 1</a>, <a href="https://youtu.be/imLlb6Gyziw">Part 2</a>)</li>
+<li>CSC108 videos: Writing a ‘<code>__main__</code>’ program (<a href="https://youtu.be/7KnXMIf6Z90">Part 1</a>, <a href="https://youtu.be/k7Hr0sfYUrM">Part 2</a>) <!-- - Unittest (CSC108 videos - [Part 1](https://youtu.be/9J6-PEtwuGs), [Part 2](https://youtu.be/W1dOdRqQ-M4))  --> <!-- Note that there are also videos in "choosing test cases", but they're not linked because that section might be moved --></li>
+<li><a href="../B-python-libraries/01-doctest.html">Appendix B.1 <code>doctest</code></a></li>
+<li><a href="../B-python-libraries/02-pytest.html">Appendix B.2 <code>pytest</code></a></li>
+</ul>
+</section>
+<!-- TODO: introduce assert statement with message -->
+<!--
+ODO: move to new section
+
+## Choosing test cases
+
+
+We said earlier that keeping our tests in separate files from our source code enables us to write an exhaustive set of tests without worrying about length.
+But what exactly do we mean by "exhaustive?"
+In general, it is actually a pretty hard problem to choose test cases to verify the correctness of your program.
+You want to capture every possible scenario, while avoiding writing redundant tests.
+A good rule of thumb is to structure your tests around **properties of the inputs**.
+For example:
+
+- *integers*: 0, 1, positive, negative, "small", "large"
+- *lists*: empty, length 1, no duplicates, duplicates, sorted, unsorted
+- *strings*: empty, length 1, alphanumeric characters only, special characters like punctuation marks
+
+For functions that take in multiple inputs, we often also choose properties based on the *relationships between the inputs*.
+For example, for a function that takes two numbers as input, we might have a test for when the first is larger than the second, and another for when the second is larger than the first.
+For an input of one object and a list, we might have a test for when the object is in the list, and another for when the object isn't.
+
+And finally, keep in mind that these are rules of thumb only;
+none of these properties will always be relevant to a given function.
+For a complete set of tests, you must understand *exactly* what the function does, to be able to identify what properties of the inputs really matter. -->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

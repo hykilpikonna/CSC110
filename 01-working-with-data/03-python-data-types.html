@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>1.3 Representing Data in Python</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">1.3 Representing Data in Python</h1>
+</header>
+<section>
+<p>Data is all around us, but so are computers. If decisions must be data-driven then computers are an excellent tool for processing that data. Especially when we consider that computers are several orders of magnitude faster at computing data than a human. The problem is that computers need to be told exactly <em>how</em> to process the data, and we can do so using one of several programming languages. In this section, we see how data types are represented in Python and how we can use Python to perform operations for us. We’ll learn about some subtle, but crucial, differences between our theoretical definitions of data types from Section 1.1 and what Python can actually represent. But first, we’ll introduce some general terminology for using the interactive Python console.</p>
+<h2 id="the-python-console">The Python console</h2>
+<p>When we first start the Python console, we see the following:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span></span></code></pre></div>
+<p>The text <code>&gt;&gt;&gt;</code> is called the Python <strong>prompt</strong>: the console is “prompting” us to type in some Python code to execute. If we type in a simple arithmetic expression,</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">+</span> <span class="dv">5</span></span></code></pre></div>
+<p>and press Enter, we see the following output:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">+</span> <span class="dv">5</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dv">9</span></span></code></pre></div>
+<p>The interpreter took our bit of code, <code>4 + 5</code>, and calculated its value, <code>9</code>. A piece of Python code that produces a value is called an <strong>expression</strong>, and the act of calculating the value of an expression is called <strong>evaluating</strong> the expression.</p>
+<p>The expression <code>4 + 5</code> looks simple enough, but technically it is formed from two smaller expressions—the numbers <code>4</code> and <code>5</code> themselves. We can ask <code>Python</code> to evaluate each of these, though the result is not very interesting.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="dv">4</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">5</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="dv">5</span></span></code></pre></div>
+<p>A Python <strong>literal</strong> is the simplest kind of Python expression: it is a piece of code that represents the exact value as written. For example, <code>4</code> is an integer literal representing the number 4.</p>
+<p>To sum up,<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">The pun was not originally intended, but we are pointing it out…</span> the expression <code>4 + 5</code> consists of two smaller expressions, the literals <code>4</code> and <code>5</code>, joined together with the arithmetic operator <code>+</code>, representing addition. We’ll devote the rest of this section to exploring the different kinds of data types we can use in Python: both how to write their literals, and what operations we can perform on them.</p>
+<h2 id="numeric-data-in-python-int-float">Numeric data in Python (<code>int</code>, <code>float</code>)</h2>
+<p>Python has two data types for representing numeric data: <code>int</code> and <code>float</code>. Let’s start with <code>int</code>, which stands for “integer”, and is the data type that Python uses to represent integers.</p>
+<p>An <code>int</code> literal is simply the number as a sequence of digits with an optional <code>-</code> sign, like <code>110</code> or <code>-3421</code>.</p>
+<p>Python supports all of the arithmetic operations we discussed in Section 1.1. Here are some examples; try typing them into the Python console yourself to follow along!</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">2</span> <span class="op">+</span> <span class="dv">3</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="dv">5</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">2</span> <span class="op">-</span> <span class="dv">5</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">-</span><span class="dv">3</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">-</span><span class="dv">2</span> <span class="op">*</span> <span class="dv">10</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">-</span><span class="dv">20</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">2</span> <span class="op">**</span> <span class="dv">5</span>  <span class="co"># This is &quot;2 to the power of 5&quot;</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="dv">32</span></span></code></pre></div>
+<p>In the last prompt, we included some additional text—<code># This is "2 to the power of 5"</code>. In Python, we use the character <code>#</code> in code to begin a <strong>comment</strong>, which is code that is ignored by the Python interpreter. Comments are only meant for humans to read, and are a useful way of providing additional information about some Python code. We used it above to explain the meaning of the <code>**</code> operator in our demo.</p>
+<p>Python supports the standard precedence rules for arithmetic operations,<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">sometimes referred to as “BEDMAS” or “PEMDAS”</span> performing exponentiation before multiplication, and multiplication before addition and subtraction:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span> <span class="op">**</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">5</span>  <span class="co"># Equal to &quot;1 plus ((2 to the power of 3) times 5)&quot;</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="dv">41</span></span></code></pre></div>
+<p>Just like in mathematics, long expressions like this one can be hard to read. So Python also allows you to use parentheses to group expressions together:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="op">+</span> ((<span class="dv">2</span> <span class="op">**</span> <span class="dv">3</span>) <span class="op">*</span> <span class="dv">5</span>)  <span class="co"># Equivalent to the previous expression</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="dv">41</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;&gt;&gt;</span> (<span class="dv">1</span> <span class="op">+</span> <span class="dv">2</span>) <span class="op">**</span> (<span class="dv">3</span> <span class="op">*</span> <span class="dv">5</span>)  <span class="co"># Different grouping: &quot;(1 plus 2) to the power of (3 times 5)&quot;</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="dv">14348907</span></span></code></pre></div>
+<p>When we add, subtract, multiply, and use exponentiation on two integers, the result is always an integer, and so Python always produces an <code>int</code> value for these operations. But <em>dividing</em> two integers certainly doesn’t always produce an integer—what does Python do in this case? It turns out that Python has two different forms of division. The first is the operator <code>//</code>, and is called <strong>floor division</strong> (or sometimes <strong>integer division</strong>). For two integers <code>x</code> and <code>y</code>, the result of <code>x // y</code> is equal to the quotient <span class="math inline">\(\frac{\texttt{x}}{\texttt{y}}\)</span>, rounded down to the nearest integer. Here are some examples:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">6</span> <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="dv">3</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">15</span> <span class="op">//</span> <span class="dv">2</span>  <span class="co"># 15 ÷ 2 = 7.5, and // rounds down</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="dv">7</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="op">-</span><span class="dv">15</span> <span class="op">//</span> <span class="dv">2</span>  <span class="co"># Careful! -15 ÷ 2 = -7.5, which rounds down to -8</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="op">-</span><span class="dv">8</span></span></code></pre></div>
+<p>But what about “real” division? This is done using the division operator <code>/</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">5</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="fl">2.5</span></span></code></pre></div>
+<p>This returns <code>2.5</code>, which is a value of Python’s <code>float</code> type, which Python uses to represent arbitrary real numbers. A <code>float</code> literal is written as a sequence of digits followed by a decimal point (<code>.</code>) and then another sequence of digits. <code>2.5</code>, <code>.123</code>, and <code>1000.00000001</code> are all examples of <code>float</code> literals.</p>
+<p>All of the arithemtic operations we’ve looked at so far work with <code>float</code> values too:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">3.5</span> <span class="op">+</span> <span class="fl">2.4</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="fl">5.9</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">3.5</span> <span class="op">-</span> <span class="fl">20.9</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="op">-</span><span class="fl">17.4</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">3.5</span> <span class="op">*</span> <span class="fl">2.5</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="fl">8.75</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">3.5</span> <span class="op">/</span> <span class="fl">2.5</span></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="fl">1.4</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">2</span> <span class="op">**</span> <span class="fl">0.5</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="fl">1.4142135623730951</span></span></code></pre></div>
+<p>The last expression, <code>2 ** 0.5</code>, calculates the square root of 2. However, this actually poses a problem for Python: since <span class="math inline">\(\sqrt 2\)</span> is an irrational number, its decimal expansion is infinite, and so it cannot be represented in any finite amount of computer memory.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> More precisely, computers use a binary system where all data, including numbers, are represented as a sequence of 0s and 1s. This sequence of 0s and 1s is finite since computer memory is finite, and so cannot exactly represent <span class="math inline">\(\sqrt 2\)</span>. We will discuss this binary representation of numbers later this year.</span></p>
+<p>] The <code>float</code> value that’s produced, <code>1.4142135623730951</code>, is an approximation of <span class="math inline">\(\sqrt 2\)</span>, but is not equal to it. Let’s see what happens if we try to square it:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="fl">1.4142135623730951</span> <span class="op">*</span> <span class="fl">1.4142135623730951</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="fl">2.0000000000000004</span></span></code></pre></div>
+<p>This illustrates a fundamental limitation of <code>float</code>: this data type is used to represent real numbers, but cannot always represent them exactly. Rather, a <code>float</code> value <em>approximates</em> the value of the real number; sometimes that approximation is exact, like <code>2.5</code>, but most of the time it isn’t.</p>
+<h3 id="vs.-3.0"><code>3</code> vs. <code>3.0</code></h3>
+<p>Here’s an oddity:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">6</span> <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="dv">3</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">6</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="fl">3.0</span></span></code></pre></div>
+<p>Even though <span class="math inline">\(\frac{6}{2}\)</span> is mathematically an integer, the results of the division using <code>//</code> and <code>/</code> are subtly different in Python. When <code>x</code> and <code>y</code> are <code>int</code>s, <code>x // y</code> <em>always</em> evaluates to an <code>int</code>, and <code>x / y</code> <em>always</em> evaluates to a <code>float</code>, even if the value of <span class="math inline">\(\frac{\texttt{x}}{\texttt{y}}\)</span> is an integer! So <code>6 // 2</code> has value <code>3</code>, but <code>6 / 2</code> has value <code>3.0</code>. These two values represent the same mathematical quantity—the number 3—but are stored as different data types in Python, something we’ll explore more later in this course when we study how <code>int</code>s and <code>float</code>s actually work in Python.</p>
+<h3 id="mixing-ints-and-floats">Mixing <code>int</code>s and <code>float</code>s</h3>
+<p>So to summarize: for two <code>int</code>s <code>x</code> and <code>y</code>, <code>x + y</code>, <code>x - y</code>, <code>x * y</code>, <code>x // y</code>, and <code>x ** y</code> all produce <code>int</code>s, and <code>x / y</code> always produces a <code>float</code>. For two <code>float</code>s, it’s even simpler: all six of these arithmetic operations produce a <code>float</code>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Even <code>//</code>. Try it!</span></p>
+<p>But what happens when we mix these two types? <em>An arithmetic operation that is given one <code>int</code> and one <code>float</code> always produces a <code>float</code>.</em> You can think of a <code>float</code> as a parasite—even in long arithmetic expressions where only one value is a <code>float</code>, the whole expression will evaluate to a <code>float</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">12</span> <span class="op">-</span> <span class="dv">4</span> <span class="op">*</span> <span class="dv">5</span> <span class="op">//</span> (<span class="fl">3.0</span> <span class="op">**</span> <span class="dv">2</span>) <span class="op">+</span> <span class="dv">100</span></span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="fl">110.0</span></span></code></pre></div>
+<table>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a + b</code></td>
+<td>Returns the sum of the <code>a</code> and <code>b</code></td>
+</tr>
+<tr class="even">
+<td><code>a - b</code></td>
+<td>Returns the result of subtraction of <code>b</code> from <code>a</code></td>
+</tr>
+<tr class="odd">
+<td><code>a * b</code></td>
+<td>Returns the result of multiplying <code>a</code> by <code>b</code></td>
+</tr>
+<tr class="even">
+<td><code>a / b</code></td>
+<td>Return the result of dividing <code>a</code> by <code>b</code></td>
+</tr>
+<tr class="odd">
+<td><code>a % b</code></td>
+<td>Return the remainder when <code>a</code> is divided by <code>b</code></td>
+</tr>
+<tr class="even">
+<td><code>a ** b</code></td>
+<td>Return the result of <code>a</code> being raised to the power of <code>b</code></td>
+</tr>
+<tr class="odd">
+<td><code>a // b</code></td>
+<td>Return the floored division <code>a</code> / <code>b</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="comparison-operators">Comparison operators</h3>
+<p>Finally, the numeric comparison operators are represented in Python as follows:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>a == b</code></td>
+<td>Returns whether <code>a</code> and <code>b</code> are equal.</td>
+</tr>
+<tr class="even">
+<td><code>a != b</code></td>
+<td>Returns whether <code>a</code> and <code>b</code> are <em>not</em> equal (opposite of <code>==</code>).</td>
+</tr>
+<tr class="odd">
+<td><code>a &gt; b</code></td>
+<td>Returns whether <code>a</code> is greater than the value of <code>b</code>.</td>
+</tr>
+<tr class="even">
+<td><code>a &lt; b</code></td>
+<td>Returns whether <code>a</code> is less than the value of <code>b</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>a &gt;= b</code></td>
+<td>Returns whether <code>a</code> is greater than or equal to <code>b</code>.</td>
+</tr>
+<tr class="even">
+<td><code>a &lt;= b</code></td>
+<td>Returns whether <code>a</code> is less than or equal to the value <code>b</code>.</td>
+</tr>
+</tbody>
+</table>
+<p>Here are a few examples:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">==</span> <span class="dv">4</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="va">True</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">!=</span> <span class="dv">6</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="va">True</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">&lt;</span> <span class="dv">2</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="va">False</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">&gt;=</span> <span class="dv">1</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="va">True</span></span></code></pre></div>
+<p>And returning to our discussion earlier, we can see that even though <code>int</code>s and <code>float</code>s are different types, Python can recognize when their values represent the exact same number:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">4</span> <span class="op">==</span> <span class="fl">4.0</span></span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="va">True</span></span></code></pre></div>
+<p>In these examples, we’ve seen the values <code>True</code> and <code>False</code> produced as a result of these comparison expressions. You can probably tell exactly what they mean, but let’s take a moment to introduce them formally.</p>
+<h2 id="boolean-data-in-python-bool">Boolean data in Python (<code>bool</code>)</h2>
+<p>In Python, boolean data is represented using the data type <code>bool</code>. Unlike the broad range of numbers we just saw, there are only two literal values of type <code>bool</code>: <code>True</code> and <code>False</code>.</p>
+<p>There are three boolean operators we can perform on boolean values: <code>not</code>, <code>and</code>, and <code>or</code>.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="kw">not</span> <span class="va">True</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="va">False</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">True</span> <span class="kw">and</span> <span class="va">True</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="va">True</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">True</span> <span class="kw">and</span> <span class="va">False</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="va">False</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">False</span> <span class="kw">or</span> <span class="va">True</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="va">True</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">False</span> <span class="kw">or</span> <span class="va">False</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="va">False</span></span></code></pre></div>
+<p>One note about the <code>or</code> operator in Python is that it is the <strong>inclusive or</strong>, meaning it produces <code>True</code> when both of its operand expressions are <code>True</code>.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">True</span> <span class="kw">or</span> <span class="va">True</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="va">True</span></span></code></pre></div>
+<p>Just as we saw how arithmetic operator expressions can be nested within each other, we can combine boolean operator expressions, and even the arithmetic comparison operators:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="va">True</span> <span class="kw">and</span> (<span class="va">False</span> <span class="kw">or</span> <span class="va">True</span>)</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="va">True</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="op">&gt;&gt;&gt;</span> (<span class="dv">3</span> <span class="op">==</span> <span class="dv">4</span>) <span class="kw">or</span> (<span class="dv">5</span> <span class="op">&gt;</span> <span class="dv">10</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="va">False</span></span></code></pre></div>
+<h2 id="textual-data-in-python-str">Textual data in Python (<code>str</code>)</h2>
+<p>All Python code is text that we type into the computer, so how do we distinguish between text that’s code and text that’s data, like a person’s name? Python uses the <code>str</code> (short for “string”) data type to represent textual data. A <code>str</code> literal is a sequence of characters surrounded by single-quotes (<code>'</code>).<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Python allows string literals to be written using either single-quotes or double-qutoes (<code>"</code>). We’ll tend to use single-quotes in this course to match how Python displays strings, as we’ll see in this section.</span> For example, we could write this course’s name in Python as the string literal <code>'Foundations of Computer Science I'</code>.</p>
+<!--
+A common introductory string literal is `'Hello, World!'`.
+But what happens when we would like to use the single-quote as an apostrophe inside the string literal?
+For example, `David's Tea` cannot simply be written as `'David's Tea'` because the apostrophe would mark the end of the string literal.
+To overcome this issue we could, of course, simply use double-quotes: `"David's Tea"`.
+But another option is to use the **escape character** `\`.
+This allows us to *escape* the typical meaning of a single-quote (i.e., to mark the end of the string literal).
+Thus, we could write `David's Tea` as: `'David\'s Tea`.
+
+The combination of the escape character and the following character is called an **escape sequence**.
+There are many different kinds of escape sequences in Python that can be used with string literals.
+We will not enumerate them here, but it is useful to keep a mental note of new escape sequences you come across while reading code.
+-->
+<p>Now let’s see what kinds of operations we can perform on strings. First, we can compare strings using <code>==</code>, just like we can for <code>int</code>s and <code>float</code>s:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;David&#39;</span> <span class="op">==</span> <span class="st">&#39;David&#39;</span></span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="va">True</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;David&#39;</span> <span class="op">==</span> <span class="st">&#39;david&#39;</span>  <span class="co"># String comparisons are case-sensitive</span></span>
+<span id="cb19-4"><a href="#cb19-4"></a><span class="va">False</span></span></code></pre></div>
+<p>Python supports <strong>string indexing</strong> to extract a single character from a string.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> Remember, string indexing starts at 0. <code>s[0]</code> represents the <em>first</em> character in the string <code>s</code>.</span></p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;David&#39;</span>[<span class="dv">0</span>]</span>
+<span id="cb20-2"><a href="#cb20-2"></a><span class="co">&#39;D&#39;</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;David&#39;</span>[<span class="dv">3</span>]</span>
+<span id="cb20-4"><a href="#cb20-4"></a><span class="co">&#39;i&#39;</span></span></code></pre></div>
+<p>And Python supports <strong>concatenation</strong> using the familiar <code>+</code> operator:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;One string&#39;</span> <span class="op">+</span> <span class="st">&#39;to rule them all.&#39;</span></span>
+<span id="cb21-2"><a href="#cb21-2"></a><span class="co">&#39;One stringto rule them all.&#39;</span></span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;One string &#39;</span> <span class="op">+</span> <span class="st">&#39;to rule them all.&#39;</span>  <span class="co"># Note the extra space!</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">&#39;One string to rule them all.&#39;</span></span></code></pre></div>
+<p>One operation that we did not cover in Section 1.1 is a fun quirk of Python: string repetition.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;David&#39;</span> <span class="op">*</span> <span class="dv">3</span></span>
+<span id="cb22-2"><a href="#cb22-2"></a><span class="co">&#39;DavidDavidDavid&#39;</span></span></code></pre></div>
+<p>And of course, all of these string operation expressions can be nested within each other:</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1"></a><span class="op">&gt;&gt;&gt;</span> (<span class="st">&#39;David&#39;</span> <span class="op">+</span> <span class="st">&#39;Mario&#39;</span>) <span class="op">*</span> <span class="dv">3</span></span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">&#39;DavidMarioDavidMarioDavidMario&#39;</span></span></code></pre></div>
+<h2 id="set-data-in-python-set">Set data in Python (<code>set</code>)</h2>
+<p>Python uses the <code>set</code> data type to store set data. A <code>set</code> literal matches the notation we use in mathematics: the literal begins with a <code>{</code> and ends with a <code>}</code>, and each element of the list is written inside the braces, separated from each other by commas. For example, <code>{1, 2, 3}</code> is a set of <code>int</code>s, and <code>{1, 2.0, 'three'}</code> is a set of elements of mixed types.</p>
+<p>Like other data types, sets can be compared for equality using <code>==</code>. Remember that element order does not matter when comparing sets!</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1"></a><span class="op">&gt;&gt;&gt;</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>} <span class="op">==</span> {<span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>}</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="va">True</span></span></code></pre></div>
+<p>Python also supports the “element of” (<span class="math inline">\(\in\)</span>) set operation using the <code>in</code> operator.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="kw">in</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb25-2"><a href="#cb25-2"></a><span class="va">True</span></span>
+<span id="cb25-3"><a href="#cb25-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">10</span> <span class="kw">in</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb25-4"><a href="#cb25-4"></a><span class="va">False</span></span></code></pre></div>
+<p>Python also allows <code>not</code> and <code>in</code> to be combined to form an operator that corresponds to the set operation <span class="math inline">\(\notin\)</span>:</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="kw">not</span> <span class="kw">in</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb26-2"><a href="#cb26-2"></a><span class="va">False</span></span>
+<span id="cb26-3"><a href="#cb26-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">10</span> <span class="kw">not</span> <span class="kw">in</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}</span>
+<span id="cb26-4"><a href="#cb26-4"></a><span class="va">True</span></span></code></pre></div>
+<p>We’ll see in the next chapter how other set operations such as union and intersection are supported in Python.</p>
+<h2 id="list-data-in-python-list-tuple">List data in Python (<code>list</code>, <code>tuple</code>)</h2>
+<p>Python uses two different data types to store list data: <code>list</code> and <code>tuple</code>. <code>list</code> literals are written the same way as <code>set</code> literals, except using square brackets instead of curly braces. Lists support the same operations we saw for strings and sets earlier:</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1"></a><span class="op">&gt;&gt;&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>] <span class="op">==</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]                          <span class="co"># List equality comparison; order matters!</span></span>
+<span id="cb27-2"><a href="#cb27-2"></a><span class="va">True</span></span>
+<span id="cb27-3"><a href="#cb27-3"></a><span class="op">&gt;&gt;&gt;</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>] <span class="op">==</span> [<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>]</span>
+<span id="cb27-4"><a href="#cb27-4"></a><span class="va">False</span></span>
+<span id="cb27-5"><a href="#cb27-5"></a><span class="op">&gt;&gt;&gt;</span> ([<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>, <span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>])[<span class="dv">0</span>]  <span class="co"># List indexing</span></span>
+<span id="cb27-6"><a href="#cb27-6"></a><span class="co">&#39;David&#39;</span></span>
+<span id="cb27-7"><a href="#cb27-7"></a><span class="op">&gt;&gt;&gt;</span> [<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>] <span class="op">+</span> [<span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>]    <span class="co"># List concatenation</span></span>
+<span id="cb27-8"><a href="#cb27-8"></a>[<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>, <span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>]</span>
+<span id="cb27-9"><a href="#cb27-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="kw">in</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]                                  <span class="co"># List &quot;element of&quot; operation</span></span>
+<span id="cb27-10"><a href="#cb27-10"></a><span class="va">True</span></span></code></pre></div>
+<p><code>tuple</code> literals are written using regular parentheses instead, but otherwise support the above operations as well.</p>
+<div class="sourceCode" id="cb28"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1"></a><span class="op">&gt;&gt;&gt;</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)                        <span class="co"># Tuple equality comparison</span></span>
+<span id="cb28-2"><a href="#cb28-2"></a><span class="va">True</span></span>
+<span id="cb28-3"><a href="#cb28-3"></a><span class="op">&gt;&gt;&gt;</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>) <span class="op">==</span> (<span class="dv">3</span>, <span class="dv">2</span>, <span class="dv">1</span>)</span>
+<span id="cb28-4"><a href="#cb28-4"></a><span class="va">False</span></span>
+<span id="cb28-5"><a href="#cb28-5"></a><span class="op">&gt;&gt;&gt;</span> (<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>, <span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>)[<span class="dv">0</span>]  <span class="co"># Tuple indexing</span></span>
+<span id="cb28-6"><a href="#cb28-6"></a><span class="co">&#39;David&#39;</span></span>
+<span id="cb28-7"><a href="#cb28-7"></a><span class="op">&gt;&gt;&gt;</span> (<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>) <span class="op">+</span> (<span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>)  <span class="co"># Tuple concatenation</span></span>
+<span id="cb28-8"><a href="#cb28-8"></a>(<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Mario&#39;</span>, <span class="st">&#39;Jacqueline&#39;</span>, <span class="st">&#39;Diane&#39;</span>)</span>
+<span id="cb28-9"><a href="#cb28-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">1</span> <span class="kw">in</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)                                <span class="co"># Tuple &quot;element of&quot; operation</span></span>
+<span id="cb28-10"><a href="#cb28-10"></a><span class="va">True</span></span></code></pre></div>
+<p>So why does Python have two different data types that represent the same kind of data? There is an important technical distinction between <code>list</code> and <code>tuple</code> that we’ll learn about later in this course, but for now we’ll generally stick with <code>list</code>.</p>
+<h2 id="mapping-data-in-python-dict">Mapping data in Python (<code>dict</code>)</h2>
+<p>Python stores mapping data using a data type called <code>dict</code>, short for “dictionary”. <code>dict</code> literals are written similarly to sets, with each key-value pair separated by a colon. For example, we can represent the mapping from the previous section with the dictionary literal <code>{'fries': 5.99, 'steak': 25.99, 'soup': 8.99}</code>. In this dictionary, the keys are strings, and the values are <code>float</code>s.</p>
+<p>But if both sets and dictionaries use curly braces, then does the literal <code>{}</code> represent an empty set or an empty dictionary? The answer (for historical reasons) is an empty dictionary—Python has no literal to represent an empty set.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"> Instead, we represent an empty set with <code>set()</code>, which is syntax we haven’t yet seen and will explore later.</span></p>
+<p>Dictionaries also support equality comparison using <code>==</code>. They support key lookup using the same syntax as string and list indexing:</p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1"></a><span class="op">&gt;&gt;&gt;</span> ({<span class="st">&#39;fries&#39;</span>: <span class="fl">5.99</span>, <span class="st">&#39;steak&#39;</span>: <span class="fl">25.99</span>, <span class="st">&#39;soup&#39;</span>: <span class="fl">8.99</span>})[<span class="st">&#39;fries&#39;</span>]</span>
+<span id="cb29-2"><a href="#cb29-2"></a><span class="fl">5.99</span></span></code></pre></div>
+<p>And finally, they support checking whether a key is present in a dictionary using the <code>in</code> operator:</p>
+<div class="sourceCode" id="cb30"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="st">&#39;fries&#39;</span> <span class="kw">in</span>  {<span class="st">&#39;fries&#39;</span>: <span class="fl">5.99</span>, <span class="st">&#39;steak&#39;</span>: <span class="fl">25.99</span>, <span class="st">&#39;soup&#39;</span>: <span class="fl">8.99</span>}</span>
+<span id="cb30-2"><a href="#cb30-2"></a><span class="va">True</span></span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Python as a Calculator (<a href="https://youtu.be/E6aJGrCTlTQ">Part 1</a>, <a href="https://youtu.be/mJqjTh6Srlg">Part 2</a>, <a href="https://youtu.be/LVHjVcMug30">Part 3</a>)</li>
+<li>CSC108 videos: Type bool (<a href="https://youtu.be/pTk0QR0KhpU">Part 1</a>, <a href="https://youtu.be/ffRQyyIbyAI">Part 2</a>, <a href="https://youtu.be/U4RQx1_Z-RA">Part 3</a>, <a href="https://youtu.be/h5mocjb3SVE">Part 4</a>)</li>
+<li>CSC108 videos: Type str (<a href="https://youtu.be/eMsfkkNg3J4">Part 1</a>, <a href="https://youtu.be/QM2WtjjYgzY">Part 2</a>)</li>
+<li><a href="../A-python-builtins/02-types.html">Appendix A.2 Python Built-In Data Types Reference</a></li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4.4 Repeated Execution: For Loops</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">4.4 Repeated Execution: For Loops</h1>
+</header>
+<section>
+<p>Collections in Python can be used in many ways. We have already seen how we can use built-in aggregation functions (e.g., <code>any</code>, <code>all</code>, <code>max</code>) to perform computations across all elements of a collection (e.g., <code>list</code>, <code>set</code>).</p>
+<p>But right now, we’re limited by what aggregation functions Python makes available to us: for example, there’s a built-in <code>sum</code> function, but no <code>product</code> function.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> That’s not exactly true: there is a <code>math.product</code> function, but let’s ignore that here. :)</span> So in this section, we’ll learn about the <code>for</code> loop, a compound statement that will allow us to implement our own custom aggregation functions across different types of collection data.</p>
+<h2 id="introducing-the-problem-repeating-code">Introducing the problem: repeating code</h2>
+<p>Suppose we wanted to write a function that computes the sum of a list of numbers, without using the built-in <code>sum</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    60</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>If we knew the size of <code>numbers</code> in advance, we could write a single expression to do this. For example, here is how we could implement <code>my_sum</code> if we knew that <code>numbers</code> always contained three elements:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    60</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="cf">return</span> numbers[<span class="dv">0</span>] <span class="op">+</span> numbers[<span class="dv">1</span>] <span class="op">+</span> numbers[<span class="dv">2</span>]</span></code></pre></div>
+<p>But of course, this approach doesn’t work for general lists, when we don’t know ahead of time how many elements the input will have. We need a way to repeat the “<code>+ numbers[_]</code>” for an arbitrary number of list elements. Here is another way of writing our three-element code to pull out the exact statement that is repeated.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">    60</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">0</span>]</span>
+<span id="cb3-10"><a href="#cb3-10"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">1</span>]</span>
+<span id="cb3-11"><a href="#cb3-11"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">2</span>]</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>This implementation follows how a human might add up the numbers in the list. First, we start a counter a 0 (using a variable called <code>sum_so_far</code>). Then, we use three assignment statements to update the value of <code>sum_so_far</code> by adding another element of <code>numbers</code>. Let’s look at the first such statement:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a>sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">0</span>]</span></code></pre></div>
+<p>This looks fairly straightforward, but is actually a big leap from the assignment statements we’ve studied before! What’s unusual about it is that for the first time, we are assigning a value to a variable that has <em>already</em> been given a value. This type of assignment statement is called a <strong>variable reassignment statement</strong>. This statement is especially tricky because the variable <code>sum_so_far</code> appears on both sides of the <code>=</code>. We can make sense of this statement by reviewing the evaluation order that Python follows when executing an assignment statement:</p>
+<ul>
+<li>First, the right-hand side of the assignment statement (<code>sum_so_far + numbers[0]</code>) is evaluated.</li>
+<li>Second, the value produced by evaluating the right-hand side is stored in the variable on the left-hand side (<code>sum_so_far</code>).</li>
+</ul>
+<p>We can visualize how the three assignment statements work by tracing through an example. Let’s consider calling our doctest example, <code>my_sum([10, 20, 30])</code>. What happens to the value of <code>sum_so_far</code>?</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 22%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Statement</th>
+<th><code>sum_so_far</code> <em>after</em> executing statement</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>sum_so_far = 0</code></td>
+<td><code>0</code></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>sum_so_far = sum_so_far + numbers[0]</code></td>
+<td><code>10</code> (<code>0 + 10</code>)</td>
+<td>When evaluating the right-hand side, <code>sum_so_far</code> is <code>0</code> and <code>numbers[0]</code> is <code>10</code>.</td>
+</tr>
+<tr class="odd">
+<td><code>sum_so_far = sum_so_far + numbers[1]</code></td>
+<td><code>30</code> (<code>10 + 20</code>)</td>
+<td>When evaluating the right-hand side, <code>sum_so_far</code> is <code>10</code> and <code>numbers[1]</code> is <code>20</code>.</td>
+</tr>
+<tr class="even">
+<td><code>sum_so_far = sum_so_far + numbers[2]</code></td>
+<td><code>60</code> (<code>30 + 30</code>)</td>
+<td>When evaluating the right-hand side, <code>sum_so_far</code> is <code>30</code> and <code>numbers[2]</code> is <code>30</code>.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Now that we understand this implementation, we can see that the statement <code>sum_so_far = sum_so_far + numbers[_]</code> is exactly what needs to be repeated for every element of the input list. So now, let’s learn how to perform <em>repeated execution</em> of Python statements.</p>
+<h2 id="the-for-loop">The for loop</h2>
+<p>In Python, the <strong>for loop</strong> is a compound statement that repeats a block of code once for element in a collection. Here is the syntax of a for loop:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Notice that the syntax is very similar to a comprehension. The key difference is that a comprehension evaluates an <em>expression</em> once for each element in a collection, but a for loop evaluates a <em>sequence of statements</em> once per element.</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="cf">for</span> <span class="op">&lt;</span>loop_variable<span class="op">&gt;</span> <span class="kw">in</span> <span class="op">&lt;</span>collection<span class="op">&gt;</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="op">&lt;</span>body<span class="op">&gt;</span></span></code></pre></div>
+<p>There are three parts:</p>
+<ol type="1">
+<li><p><code>&lt;collection&gt;</code> is an expression for a Python collection (e.g., a <code>list</code> or <code>set</code>).</p></li>
+<li><p><code>&lt;loop_variable&gt;</code> is a name for the <em>loop variable</em> that will refer to an element in the colleciton.</p></li>
+<li><p><code>&lt;body&gt;</code> is a sequence of one or more statements that will be repeatedly executed. This is called the <em>body</em> of the for loop. The statements within the loop body may refer to the loop variable to access the “current” element in the collection.</p>
+<p>Just as we saw with if statements, the body of a for loop <em>must</em> be indented relative to the <code>for</code> keyword.</p></li>
+</ol>
+<p>When a for loop is executed, the following happens:</p>
+<ol type="1">
+<li><p>The loop variable is assigned to the first element in the collection.</p></li>
+<li><p>The loop body is executed, using the current value of the loop variable.</p></li>
+<li><p>Steps 1 and 2 repeat for the second element of the collection, then the third, etc. until all elements of the collection have been assigned to the loop variable exactly once.</p>
+<p>Each individual execution of the loop body is called a <strong>loop iteration</strong>.</p></li>
+</ol>
+<p>As with if statements, for loops are a control flow structure in Python because they modify the order in which statements are executed—in this case, by repeating a block of code multiple times. The reason we use the term <em>loop</em> is because after the last statement in the loop body is executed, the Python interpreter “loops back” to the beginning of the for loop, assigning the loop variable to the next element in the collection.</p>
+<!-- TODO: Add general control flow diagram for for loops -->
+<h2 id="my_sum-and-the-accumulator-pattern"><code>my_sum</code> and the accumulator pattern</h2>
+<p>Now let us see how to use a for loop to implement <code>my_sum</code>. We left off with the following block of repeated code:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">0</span>]</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">1</span>]</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">2</span>]</span></code></pre></div>
+<p>We can now move the repeated <code>sum_so_far = sum_so_far + _</code> part into a <code>for</code> loop as follows:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Notice our loop variable name! A good convention to follow is that collections have a pluralized name (<code>numbers</code>), and loop variables have the singular version of that name (<code>number</code>).</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span></code></pre></div>
+<p>One important thing to note is that we no longer need to use list indexing (<code>numbers[_]</code>) to access individual list elements. The for loop in Python handles the extracing of individual elements for us, so that our loop body can focus just on what to do with each element.</p>
+<p>With this, we can now write our complete implementation of <code>my_sum</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">    60</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb8-10"><a href="#cb8-10"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>Now, no matter how many elements <code>numbers</code> has, the loop body <code>sum_so_far = sum_so_far + number</code> will repeat once for each element. The ability to write a small amount of code that processes an arbitrary amount of data is one of the truly remarkable feats of computer science.</p>
+<h3 id="accumulators-and-tracing-through-loops">Accumulators and tracing through loops</h3>
+<p>Because of the variable reassignment, <code>sum_so_far</code> is more complex than every other variable we have used so far in this course. And because this reassignment happens inside the loop body, it happens once for each element in the collection, not just once or twice. This frequent reassignment can make loops hard to reason about, especially as our loop bodies grow more complex, and so we will take some time now to introduce a formal process you can use to reason about loops in your code.</p>
+<p>First, some terminology. We call the variable <code>sum_so_far</code> the <strong>loop accumulator</strong>. The purpose of a loop accumulator is to store an aggregated result based on the elements of the collection that have been previously visited by the loop. In the case of <code>my_sum</code>, the loop accumulator <code>sum_so_far</code> stores, well, the sum of the elements that we have seen so far in the loop. We can keep track of the execution of the different iterations of the loop in a tracing table consisting of three columms: how many iterations have occurred so far, the value of the loop variable for that iteration, and the value of the loop accumulator at the <em>end</em> of that iteration. We call this table a <strong>loop accumulation table</strong>. Here is the loop accumulation table for a call to <code>my_sum([10, 20, 30])</code>:</p>
+<div class="reference-table">
+<table>
+<thead>
+<tr class="header">
+<th>Iteration</th>
+<th>Loop variable (<code>number</code>)</th>
+<th>Loop accumulator (<code>sum_so_far</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>N/A</td>
+<td>0</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>10</td>
+<td>10</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>20</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>30</td>
+<td>60</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Almost every for loop has an accumulator variable.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Later, some might even have more than one.</span> To distinguish these from other variables, we recommend using the <code>_so_far</code> suffix in the variable name, and optionally adding a comment in your code explaining the purpose of the variable.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the numbers in numbers.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">    60</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the elements in numbers.</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb9-11"><a href="#cb9-11"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span>
+<span id="cb9-12"><a href="#cb9-12"></a></span>
+<span id="cb9-13"><a href="#cb9-13"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<h3 id="when-the-collection-is-empty">When the collection is empty</h3>
+<p>What happens if we call <code>my_sum</code> on an empty list?</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> my_sum([])</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="dv">0</span></span></code></pre></div>
+<p>Why does this happen? The key to understanding this is that when we loop over an empty collection, zero iterations occur and the loop body never executes. So when we call <code>my_sum([])</code>, first <code>sum_so_far</code> is assigned to <code>0</code>, and then the for loop does not execute any code, and so <code>0</code> is returned. A key observation here is that <em>when the collection is empty, the initial value of <code>sum_so_far</code> is returned</em>.</p>
+<h2 id="designing-loops-using-the-accumulator-pattern">Designing loops using the accumulator pattern</h2>
+<p>Our implementation of <code>my_sum</code> illustrates a more general pattern that we’ll employ when we use loops to perform an aggregation computation. Here is the <strong>accumulator pattern</strong>:</p>
+<ol type="1">
+<li>Choose a meaningful name for an accumulator variable based on what you’re computing. Use the suffix <code>_so_far</code> to remind yourself that this is an accumulator.</li>
+<li>Pick an initial value for the accumulator. This value is usually what should be returned if the collection is empty.</li>
+<li>In the loop body, update the accumulator variable based on the current value of the loop variable.</li>
+<li>After the loop ends, return the accumulator.</li>
+</ol>
+<p>Here is a <em>code template</em> to illustrate this pattern.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> <span class="op">&lt;</span>default_value<span class="op">&gt;</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="cf">for</span> element <span class="kw">in</span> <span class="op">&lt;</span>collection<span class="op">&gt;</span>:</span>
+<span id="cb11-4"><a href="#cb11-4"></a>    <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> ... <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far ... element ...  <span class="co"># Somehow combine loop variable and accumulator</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="cf">return</span> <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far</span></code></pre></div>
+<p>Code templates are helpful when learning about programming techniques, as they give you a natural starting point in your code with “places to fill in”. However, as we’ll see over the next few sections, we should not blindly follow code templates either. Part of mastering a code template is deciding when to use it and when to modify it to solve the problem at hand.</p>
+<h3 id="accumulating-the-product">Accumulating the product</h3>
+<p>Let’s use the accumulator pattern to implement the function <code>product</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> product(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the product of the given numbers.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    &gt;&gt;&gt; product([10, 20])</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">    200</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">    &gt;&gt;&gt; product([-5, 4])</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">    -20</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a>    <span class="co"># ACCUMULATOR product_so_far: keep track of the product of the</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a>    <span class="co"># elements in numbers seen so far in the loop.</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a>    product_so_far <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a></span>
+<span id="cb12-13"><a href="#cb12-13"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb12-14"><a href="#cb12-14"></a>        product_so_far <span class="op">=</span> product_so_far <span class="op">*</span> number</span>
+<span id="cb12-15"><a href="#cb12-15"></a></span>
+<span id="cb12-16"><a href="#cb12-16"></a>    <span class="cf">return</span> product_so_far</span></code></pre></div>
+<p>Notice how similar the code for <code>product</code> is to <code>my_sum</code>. In fact, disregarding the changes in variable names, the only changes are:</p>
+<ul>
+<li>the initial value of the accumulator (<code>0</code> versus <code>1</code>)</li>
+<li>the “update” operation inside the loop body (<code>+</code> versus <code>*</code>)</li>
+</ul>
+<h2 id="looping-over-sets">Looping over sets</h2>
+<p>Because sets are collections, we can use for loops to iterate through the elements of a set as well. However, because sets are unordered, we cannot assume a particular order that the for loop will visit the elements in. So for loops over sets should only be used when <em>the same result would be obtained regardless of the order of the elements</em>. The aggregation functions we’ve looked at so far like <code>sum</code> satisfy this property.</p>
+<h2 id="looping-over-strings">Looping over strings</h2>
+<p>Strings are very similar to lists because they are considered ordered sequences of data. Python treats a string as an ordered collection of characters (strings of length one), and so we can use for loops with strings to iterate over its characters one at a time.</p>
+<p>Here is an example of using a for loop to count the number of characters in a string.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> my_len(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of characters in s.</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">    &gt;&gt;&gt; my_len(&#39;David&#39;)</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">    5</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="co"># ACCUMULATOR len_so_far: keep track of the number of</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a>    <span class="co"># characters in s seen so far in the loop.</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>    len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a></span>
+<span id="cb13-11"><a href="#cb13-11"></a>    <span class="cf">for</span> character <span class="kw">in</span> s:</span>
+<span id="cb13-12"><a href="#cb13-12"></a>        len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a></span>
+<span id="cb13-14"><a href="#cb13-14"></a>    <span class="cf">return</span> len_so_far</span></code></pre></div>
+<p>Unlike <code>my_sum</code>, here we do not use the loop variable to update the accumulator <code>len_so_far</code>. This is because we don’t care what the actual value character is, we are only counting iterations. In these scenarios, we can use an underscore <code>_</code> in place of the name for the loop variable to communicate that the loop variable is not used in the body of the for loop:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> my_len(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of characters in s.</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">    &gt;&gt;&gt; my_len(&#39;David&#39;)</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">    5</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>    <span class="co"># ACCUMULATOR len_so_far: keep track of the number of</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a>    <span class="co"># characters in s seen so far in the loop.</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>    len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a>    <span class="cf">for</span> _ <span class="kw">in</span> s:</span>
+<span id="cb14-12"><a href="#cb14-12"></a>        len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a></span>
+<span id="cb14-14"><a href="#cb14-14"></a>    <span class="cf">return</span> len_so_far</span></code></pre></div>
+<h2 id="looping-over-dictionaries">Looping over dictionaries</h2>
+<p>Python dictionaries are also iterable. Just like we saw with comprehensions, when we iterate over a dictionary, the loop variable refers to the <em>key</em> of each key-value pair. But of course, we can use the key to lookup its corresponding value in the dictionary.</p>
+<p>For example, suppose we are given a dictionary mapping restaurant menu items (as strings) to their prices (as floats). Here is how we could calculate the sum of all the prices on the menu.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> total_menu_price(menu: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">&quot;&quot;&quot;Return the total price of the given menu items.</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">    &gt;&gt;&gt; total_menu_price({&#39;fries&#39;: 3.5, &#39;hamburger&#39;: 6.5})</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">    10.0</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="co"># ACCUMULATOR total_so_far: keep track of the total cost of</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>    <span class="co"># all items in the menu seen so far in the loop.</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>    total_so_far <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a></span>
+<span id="cb15-11"><a href="#cb15-11"></a>    <span class="cf">for</span> item <span class="kw">in</span> menu:</span>
+<span id="cb15-12"><a href="#cb15-12"></a>        total_so_far <span class="op">=</span> total_so_far <span class="op">+</span> menu[item]</span>
+<span id="cb15-13"><a href="#cb15-13"></a></span>
+<span id="cb15-14"><a href="#cb15-14"></a>    <span class="cf">return</span> total_so_far</span></code></pre></div>
+<p>The loop variable <code>item</code> refers to the <em>keys</em> in the dictionary, so to access the corresponding prices we need to use a key lookup expression, <code>menu[item]</code>. Here is how we can visualize this using a loop accumulation table:</p>
+<div class="reference-table">
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 34%" />
+<col style="width: 49%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Iteration</th>
+<th>Loop variable (<code>item</code>)</th>
+<th>Loop accumulator (<code>total_so_far</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td><code>0.0</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>'fries'</code></td>
+<td><code>6.5</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>'hamburger'</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>One final note: like sets, dictionaries are unordered. We chose a particular order of keys for the loop accumulation table just to understand the loop behaviour, but we should not assume that this is the guaranteed order the keys would be visited. Just as with sets, only loop over dictionaries when your computation does <em>not</em> depend on the iteration order.</p>
+<h2 id="a-new-type-annotation-iterable">A new type annotation: <code>Iterable</code></h2>
+<p>Something you might notice about the two functions <code>my_len</code> and <code>my_sum</code> we’ve developed so far is that actually work on more types than currently specified by their parameter type annotation. For example, <code>my_len</code> works just as well on lists, sets, and other collections. If we look at the function body, we don’t use the fact that <code>s</code> is a string at all—just that it can be iterated over. It would be nice if we could relax our type contract to allow for any collection argument value.</p>
+<p>We say that a Python data type is <strong>iterable</strong> when its values can be used as the “collection” of a for loop, and that a Python object is iterable when it is an instance of an iterable data type.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> You might wonder why Python doesn’t just call these “collections” instead. There is a technical reason that is beyond the scope of this course, but for our purposes, we’ll treat “iterable” and “collection” as synonymous.</span> This is equivalent to when a value can be used as the “collection” of a comprehension. We can import the <code>Iterable</code> type from <code>typing</code> to indicate that a value must be any data type that is iterable. Here’s how we would write a more general <code>my_len</code>:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="im">from</span> typing <span class="im">import</span> Iterable</span>
+<span id="cb16-2"><a href="#cb16-2"></a></span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="kw">def</span> my_len(collection: Iterable) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb16-5"><a href="#cb16-5"></a>    <span class="co">&quot;&quot;&quot;Return the number of elements in collection.</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">    &gt;&gt;&gt; my_len(&#39;David&#39;)</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">    5</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">    &gt;&gt;&gt; my_len([1, 2, 3])</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">    3</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">    &gt;&gt;&gt; my_len({&#39;a&#39;: 1000})</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="co">    1</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a>    len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a></span>
+<span id="cb16-16"><a href="#cb16-16"></a>    <span class="cf">for</span> _ <span class="kw">in</span> collection:</span>
+<span id="cb16-17"><a href="#cb16-17"></a>        len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb16-18"><a href="#cb16-18"></a></span>
+<span id="cb16-19"><a href="#cb16-19"></a>    <span class="cf">return</span> len_so_far</span></code></pre></div>
+<p>Notice that other than renaming a variable, we did not change the function body at all! This demonstrates how powerful the accumulator pattern can be; accumulators can work with any iterable object.</p>
+<h3 id="alternatives-to-for-loops">Alternatives to for loops</h3>
+<p>You may feel that several of the examples in this section are contrived. You are not wrong; we are trying to leverage your familiarity with the built-in functions to help introduce a new concept. You may also have noticed that there are other ways to solve some of the problems we’ve presented. For example, <code>average_menu_price</code> can be solved using comprehensions rather than loops:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">def</span> average_menu_price_v2(menu: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="co">&quot;&quot;&quot;Return the average price of an item from the menu.</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">    &gt;&gt;&gt; average_menu_price({&#39;fries&#39;: 4.0, &#39;hamburger&#39;: 6.0})</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co">    5.0</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>    prices <span class="op">=</span> [menu[item] <span class="cf">for</span> item <span class="kw">in</span> menu]</span>
+<span id="cb17-8"><a href="#cb17-8"></a>    <span class="cf">return</span> <span class="bu">sum</span>(prices) <span class="op">/</span> <span class="bu">len</span>(prices)</span></code></pre></div>
+<p>Indeed, you have performed remarkably complex computations up to this point using just comprehensions to filter and transform data, and Python’s built-in functions to aggregate this data. For loops provide an alternate approach to these comprehensions that offer a trade-off of <em>code complexity</em> vs. <em>flexibility</em>. Comprehensions and built-in functions are often shorter and more direct translations of a computation than for loops, but for loops allow us to customize exactly how filtering and aggregation occurs.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> A good rule of thumb to follow in this course is to use comprehensions and built-in functions when possible, and use loops when you really need a custom aggregation.</span></p>
+<p>Of course, on your journey to learning programming it is important that you learn and master both of these techniques, and be able to translate between them when possible! Just as there are many ways to visualize a sunset (a painting, a photograph, a drawing, pixel art), so too are there many ways to implement a function. So whenever you see some code for a function involving comprehensions or loops, remember that you can always turn it into an additional learning opportunity by trying to rewrite it with a different approach.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: For loop over str (<a href="https://youtu.be/4OGtBt_VNCg">Part 1</a>, <a href="https://youtu.be/WRVDP152GEI">Part 2</a>, <a href="https://youtu.be/WRVDP152GEI">Part 3</a>)</li>
+</ul>
+</section>
+<!--
+(from outline)
+
+Now let's see this in action in the PyCharm debugger.
+
+We've now seen two ways to trace through this loop: writing (in English) what happens at each loop iteration, and tracing through with the PyCharm debugger.
+The writing has the benefit that we can scan through to find each step and forces us to be very precise and detailed about analysing the code that's run, while the PyCharm debugger makes it very clear exactly what the values of the variables `sum_so_far` and `number` are and how they change over time, but we can only see one variable at a time (can't see history), and can only go forwards instead of backwards.
+
+So we introduce a third approach that combines some of the key strengths of these two approaches (but also has some limitations): the *loop accumulation table*.
+
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

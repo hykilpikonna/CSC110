@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6.5 Greatest Common Divisor</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">6.5 Greatest Common Divisor</h1>
+</header>
+<section>
+<p>In this section, we’ll take a closer look at the <em>greatest common divisor</em> of two numbers. Recall the following definitions from <a href="01-number-theory-definitions.html">6.1 An Introduction to Number Theory</a>.</p>
+<div class="definition" data-terms="common divisor, greatest common divisor">
+<p>Let <span class="math inline">\(x, y, d \in \Z\)</span>. We say that <span class="math inline">\(d\)</span> is a <strong>common divisor</strong> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> when <span class="math inline">\(d\)</span> divides <span class="math inline">\(x\)</span> and <span class="math inline">\(d\)</span> divides <span class="math inline">\(y\)</span>.</p>
+<p>We say that <span class="math inline">\(d\)</span> is the <strong>greatest common divisor</strong> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> when it is the largest number that is a common divisor of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, or 0 when <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are both 0. We can define the function <span class="math inline">\(\gcd : \Z \times \Z \to \N\)</span> as the function which takes numbers <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and returns their greatest common divisor.</p>
+</div>
+<p>To make it easier to translate this statement into symbolic form, we can restate the “maximum” part by saying that if <span class="math inline">\(e\)</span> is any number which divides <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span>, then <span class="math inline">\(e \leq d\)</span>. Let <span class="math inline">\(m, n, d \in \Z\)</span>, and suppose <span class="math inline">\(d = \gcd(m, n)\)</span>. Then <span class="math inline">\(d\)</span> satisfies the following statement:</p>
+<p><span class="math display">\[\begin{align*}
+&amp;\Big(m = 0 \land n = 0 \Rightarrow d = 0 \Big)~\land \\
+&amp;\Big(m \neq 0 \lor n \neq 0 \Rightarrow \\
+&amp; \qquad d \mid m \land d \mid n \land \big(\forall e \in \N,~e \mid m \land e \mid n \Rightarrow e \leq d\big) \Big)
+\end{align*}\]</span></p>
+<p>This expression has a few subtleties. First, because we actually have separate definitions for <span class="math inline">\(\gcd(m, n)\)</span> when both arguments are zero and when at least one of them is non-zero, these two definitions are expressed as two different implications.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> This is analogous to writing an if statement in Python. In this case, we’re saying that only one of the conclusions needs to be True, depending on which of the hypotheses are True.</span></p>
+<p>Here is an example proof which makes use of both this definition, and the definition of prime.</p>
+<div class="example">
+<p>Prove that for all integers <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>, if <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are distinct primes, then <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are <em>coprime</em>, meaning <span class="math inline">\(\gcd(p, q) = 1\)</span>.</p>
+<div class="translation">
+<p>Here is an initial translation which focuses on the structure of the above statement, but doesn’t unpack any definitions: <span class="math display">\[\forall p, q \in \Z,~\big(Prime(p) \land Prime(q) \land p \neq q\big) \IMP \gcd(p, q) = 1.\]</span> We could unpack the definitions of <span class="math inline">\(Prime\)</span> and gcd, but doing so would not add any insight at this point. While we will almost certainly end up using these definitions in the discussion and proof sections, expanding it here actually obscures the meaning of the statement.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> In general, use translation as a way of precisely specifying the <em>structure</em> of a statement; as we have seen repeatedly, the high-level structure of a statement is mimicked in the structure of its proof. And while you don’t need to expand every definition in a statement, you should <em>always</em> keep in mind that definitions referred to in the statement will require unpacking in the proof itself.</span></p>
+</div>
+<div class="discussion">
+<p>We know that primes don’t have many divisors, and that <span class="math inline">\(1\)</span> is a common divisor for any pair of numbers. So to show that <span class="math inline">\(\gcd(p, q) = 1\)</span>, we just need to make sure that neither <span class="math inline">\(p\)</span> nor <span class="math inline">\(q\)</span> divides the other (otherwise that would be a common divisor larger than <span class="math inline">\(1\)</span>).</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(p, q \in \Z\)</span>. Assume that <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> are both prime, and that <span class="math inline">\(p \neq q\)</span>. We want to prove that <span class="math inline">\(\gcd(p, q) = 1\)</span>.</p>
+<p>By the definition of prime, we know that <span class="math inline">\(p \neq 1\)</span> (since <span class="math inline">\(p &gt; 1\)</span>). Also by the definition of prime, the only positive divisors of <span class="math inline">\(q\)</span> are <span class="math inline">\(1\)</span> and <span class="math inline">\(q\)</span> itself. So then since <span class="math inline">\(p \neq q\)</span> (our assumption) and <span class="math inline">\(p \neq 1\)</span>, we know that <span class="math inline">\(p \NDIV q\)</span>.</p>
+<p>Next, we know that <span class="math inline">\(1\)</span> divides every number<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">We proved this in Section 6.2!</span>, and so <span class="math inline">\(1\)</span> is the only positive common divisor of <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span>, so <span class="math inline">\(\gcd(p, q) = 1\)</span>.</p>
+</div>
+</div>
+<p>In the above proof, we did something new in the last paragraph: we referred to a statement we had proved to justify a step in the proof. This might sound kind of funny—after all, many of our proofs so far have relied on some algebraic manipulations which are valid but are really knowledge we learned prior to this course. The subtle difference is that those algebraic laws we take for granted as “obvious” because we learned them so long ago. But in fact our proofs can consist of steps which are statements that we know are true because of an external source, even one that <em>we don’t know how to prove ourselves</em>.</p>
+<p>This is a fundamental parallel between writing proofs and writing computer programs. In programming, we start with some basic building blocks of a language—data types, control flow constructs, etc.—but we often rely on libraries as well to simplify our tasks. We can use these libraries by reading their documentation and understanding how to use them, but don’t need to understand how they are implemented. In the same way, we can use an external theorem in our proof by understanding what it means, but without knowing how to prove it.</p>
+<p>Let’s look at one example of this in action.</p>
+<h2 id="linear-combinations-and-the-greatest-common-divisor">Linear combinations and the greatest common divisor</h2>
+<p>First, a “helper” definition:</p>
+<div class="definition" data-terms="linear-combination">
+<p>Let <span class="math inline">\(m, n, a \in \Z\)</span>. We say that <span class="math inline">\(a\)</span> is a <strong>linear combination of <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span></strong> when there exist <span class="math inline">\(p, q \in \Z\)</span> such that <span class="math inline">\(a = pm + qn\)</span>.</p>
+</div>
+<p>For example, 101 is a linear combination of 5 and 3, since <span class="math inline">\(101 = 10 \cdot 5 + 17 \cdot 3\)</span>.</p>
+<p>We can use this definition to state one fairly straightforward property of divisibility, and one surprising property of the greatest common divisor.</p>
+<div id="theorem:divide_lin_comb" class="theorem">
+<p>(<em>Divisibility of Linear Combinations</em>) Let <span class="math inline">\(m, n, d \in \Z\)</span>. If <span class="math inline">\(d\)</span> divides <span class="math inline">\(m\)</span> and <span class="math inline">\(d\)</span> divides <span class="math inline">\(n\)</span>, then <span class="math inline">\(d\)</span> divides every linear combination of <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span>.</p>
+</div>
+<div id="theorem:gcd_characterization" class="theorem">
+<p>(<em>GCD Characterization</em>) Let <span class="math inline">\(m, n \in \Z\)</span>, and assume at least one of them is non-zero. Then <span class="math inline">\(\gcd(m, n)\)</span> is the smallest positive integer that is a linear combination of <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span>.</p>
+</div>
+<p>Next, we’ll see how to use these two theorems as “helpers” inside a proof of the following statement, which is yet another property of the greatest common divisor.</p>
+<div class="example">
+<p>For all <span class="math inline">\(m, n, d \in \Z\)</span>, if <span class="math inline">\(d\)</span> divides both <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> then <span class="math inline">\(d\)</span> also divides <span class="math inline">\(\gcd(m, n)\)</span>.</p>
+<div class="translation">
+<p>We can translate this statement as follows: <span class="math display">\[\forall m, n, d \in \Z,~ d \mid m \land d \mid n \Rightarrow d \mid \gcd(m, n).\]</span></p>
+</div>
+<div class="discussion">
+<p>This one is a bit tougher. All we know from the definition of gcd is that <span class="math inline">\(d \leq \gcd(m, n)\)</span>, but that doesn’t imply <span class="math inline">\(d \mid \gcd(m, n)\)</span> by any means.</p>
+<p>But given the context that we just discussed in the preceding paragraphs, I’d guess that we should also use the <a href="#theorem:gcd_characterization">GCD Characterization Theorem</a> to write <span class="math inline">\(\gcd(m, n)\)</span> as <span class="math inline">\(pm + qn\)</span>. Oh, and the theorem before that one said that any number that divides <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> will divide <span class="math inline">\(pm + qn\)</span> as well!</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(m, n, d \in \Z\)</span>. Assume that <span class="math inline">\(d \mid m\)</span> and <span class="math inline">\(d \mid n\)</span>. We want to prove that <span class="math inline">\(d \mid \gcd(m, n)\)</span>. We’ll divide our proof into two cases.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> After reading the next two cases, answer: why did we need to divide our proof into cases? Is there another way we could have written this proof?</span></p>
+<p><strong>Case 1</strong>: assume <span class="math inline">\(m = 0\)</span> and <span class="math inline">\(n = 0\)</span>.</p>
+<p>In this case, by the definition of <span class="math inline">\(\gcd\)</span> we know that <span class="math inline">\(\gcd(m, n) = 0\)</span>. So <span class="math inline">\(d \mid \gcd(m, n)\)</span>, since we assumed that <span class="math inline">\(d\)</span> divides <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span>, which are 0.</p>
+<p><strong>Case 2</strong>: assume <span class="math inline">\(m \neq 0\)</span> or <span class="math inline">\(n \neq 0\)</span>.</p>
+<p>Then By the <a href="#theorem:gcd_characterization">GCD Characterization Theorem</a>, there exist integers <span class="math inline">\(p, q \in \Z\)</span> such that <span class="math inline">\(\gcd(m, n) = pm + qn\)</span>.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">This line uses a known external fact that is an existential to <em>introduce</em> two variables <span class="math inline">\(p\)</span> and <span class="math inline">\(q\)</span> to use in our proof.</span></p>
+<p>Then by the the <a href="#theorem:divide_lin_comb">Divisibility of Linear Combinations Theorem</a>, since <span class="math inline">\(d \mid m\)</span> and <span class="math inline">\(d \mid n\)</span> (by assumption), we know that <span class="math inline">\(d \mid pm + qn\)</span>.</p>
+<p>Therefore <span class="math inline">\(d \mid \gcd(m, n)\)</span>.</p>
+</div>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A.4 Python Exceptions Reference</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">A.4 Python Exceptions Reference</h1>
+</header>
+<section>
+<p><em>Adapted from <a href="https://docs.python.org/3/library/exceptions.html" class="uri">https://docs.python.org/3/library/exceptions.html</a>.</em> Note: Not all built-in Python exceptions are shown.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Exception</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>AssertionError</code></td>
+<td>Raised when an <code>assert</code> statement fails.</td>
+</tr>
+<tr class="even">
+<td><code>AttributeError</code></td>
+<td><p>Raised when an attribute reference or assignment fails.</p>
+<p>(When an object does not support attribute references or attribute assignments at all, <code>TypeError</code> is raised.)</p></td>
+</tr>
+<tr class="odd">
+<td><code>FileNotFoundError</code></td>
+<td>Raised when a file or directory is requested but doesn’t exist.</td>
+</tr>
+<tr class="even">
+<td><code>ImportError</code></td>
+<td>Raised when the import statement has troubles trying to load a module. Also raised when the “from list” in <code>from ... import</code> has a name that cannot be found.</td>
+</tr>
+<tr class="odd">
+<td><code>ModuleNotFoundError</code></td>
+<td>A subclass of <code>ImportError</code> which is raised by <code>import</code> when a module could not be located.</td>
+</tr>
+<tr class="even">
+<td><code>IndexError</code></td>
+<td>Raised when a sequence subscript is out of range. (Slice indices are silently truncated to fall in the allowed range; if an index is not an integer, <code>TypeError</code> is raised.)</td>
+</tr>
+<tr class="odd">
+<td><code>KeyError</code></td>
+<td>Raised when a mapping (dictionary) key is not found in the set of existing keys.</td>
+</tr>
+<tr class="even">
+<td><code>NameError</code></td>
+<td>Raised when a local or global name is not found.</td>
+</tr>
+<tr class="odd">
+<td><code>NotImplementedError</code></td>
+<td>In user defined base classes, abstract methods should raise this exception when they require derived classes to override the method, or while the class is being developed to indicate that the real implementation still needs to be added.</td>
+</tr>
+<tr class="even">
+<td><code>RecursionError</code></td>
+<td>It is raised when the interpreter detects that the maximum recursion depth (see <code>sys.getrecursionlimit()</code>) is exceeded.</td>
+</tr>
+<tr class="odd">
+<td><code>SyntaxError</code></td>
+<td>Raised when the parser encounters a syntax error. This may occur in an import statement, in a call to the built-in functions <code>exec()</code> or <code>eval()</code>, or when reading the initial script or standard input (also interactively).</td>
+</tr>
+<tr class="even">
+<td><code>IndentationError</code></td>
+<td>Base class for syntax errors related to incorrect indentation.</td>
+</tr>
+<tr class="odd">
+<td><code>TabError</code></td>
+<td>Raised when indentation contains an inconsistent use of tabs and spaces.</td>
+</tr>
+<tr class="even">
+<td><code>TypeError</code></td>
+<td><p>Raised when an operation or function is applied to an object of inappropriate type. The associated value is a string giving details about the type mismatch.</p>
+<p>This exception may be raised by user code to indicate that an attempted operation on an object is not supported, and is not meant to be. If an object is meant to support a given operation but has not yet provided an implementation, <code>NotImplementedError</code> is the proper exception to raise.</p>
+<p>Passing arguments of the wrong type (e.g. passing a list when an int is expected) should result in a <code>TypeError</code>, but passing arguments with the wrong value (e.g. a number outside expected boundaries) should result in a <code>ValueError</code>.</p></td>
+</tr>
+<tr class="odd">
+<td><code>ValueError</code></td>
+<td>Raised when an operation or function receives an argument that has the right type but an inappropriate value, and the situation is not described by a more precise exception such as <code>IndexError</code>.</td>
+</tr>
+<tr class="even">
+<td><code>ZeroDivisionError</code></td>
+<td>Raised when the second argument of a division or modulo operation is zero. The associated value is a string indicating the type of the operands and the operation.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

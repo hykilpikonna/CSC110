@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.8 Defining a Shared Public Interface with Inheritance</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.8 Defining a Shared Public Interface with Inheritance</h1>
+</header>
+<section>
+<p>In this chapter, we have learned that an abstract data type can have multiple implementations, and seen this first-hand with a variety of ADTs. For example, in <a href="04-stacks.html">9.4 Stacks</a> we saw that the Stack ADT can be implemented using a Python list in two different ways, storing the top of the stack at the end of the list (<code>Stack1</code>) or the front of the list (<code>Stack2</code>). Though these two classes had different implementations, they shared the same <em>public interface</em> of the Stack ADT.</p>
+<p>One limitation of the code we wrote for these two classes is that the only way to tell that <code>Stack1</code> and <code>Stack2</code> had the same interface was from their method names and docstrings. In this section, we’ll see how to create a special kind of Python class that is used to define a public interface that can be implemented by other classes, using a Python language feature known as <em>inheritance</em>.</p>
+<h2 id="the-stack-abstract-class">The Stack abstract class</h2>
+<p>Let us begin by defining a <code>Stack</code> class that consists only of the <em>public interface</em> of the Stack ADT.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Stack:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;A last-in-first-out (LIFO) stack of items.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    This is an abstract class. Only subclasses should be instantiated.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-8"><a href="#cb1-8"></a>        <span class="co">&quot;&quot;&quot;Return whether this stack contains no items.</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a></span>
+<span id="cb1-12"><a href="#cb1-12"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-13"><a href="#cb1-13"></a>        <span class="co">&quot;&quot;&quot;Add a new element to the top of this stack.</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a></span>
+<span id="cb1-17"><a href="#cb1-17"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb1-18"><a href="#cb1-18"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">        Raise an EmptyStackError if this stack is empty.</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a></span>
+<span id="cb1-24"><a href="#cb1-24"></a></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="kw">class</span> EmptyStackError(<span class="pp">Exception</span>):</span>
+<span id="cb1-26"><a href="#cb1-26"></a>    <span class="co">&quot;&quot;&quot;Exception raised when calling pop on an empty stack.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>In Python, we mark a method as unimplemented by having its body raise a special exception, <code>NotImplementedError</code>. We say that a method is <strong>abstract</strong> when it is not implemented and raises this error; we say that a <em>class</em> is <strong>abstract</strong> when at least one of its methods is abstract (i.e., not implemented). A <strong>concrete class</strong> is a class that is not abstract; so far in this course, we’ve been dealing with concrete classes, and called them concrete data types.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The terminology here is a bit confusing because of the multiple uses of certain terms. A concrete Python class is the same as a concrete data type. However, an abstract Python class is <em>not</em> the same thing as an abstract data type; the former has a technical meaning specific to the Python programming language, while the latter is the name given to an abstract description of a data type that is programming language-independent.</span></p>
+<p>Now, you might wonder what the purpose of an abstract class is. Indeed, a programmer who creates a <code>Stack</code> object will quickly find it is useless, because calling the Stack ADT operations cause errors:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack()</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> s.push(<span class="dv">30</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>Traceback...</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="pp">NotImplementedError</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="op">&gt;&gt;&gt;</span> s.pop()</span>
+<span id="cb2-6"><a href="#cb2-6"></a>Traceback...</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="pp">NotImplementedError</span></span></code></pre></div>
+<p>If we can’t use the <code>Stack</code> object for any of the Stack ADT operations, what was the point in creating it? The answer is very much based on abstraction, hence the name abstract class. The <code>Stack</code> class we have defined is a direct translation of the Stack ADT: an <strong>interface</strong> that describes the methods that a concrete class that wants to implement the Stack ADT <em>must</em> define. Python gives us a way to describe the relationship between an abstract class and a concrete class that implements its methods directly in the code.</p>
+<h2 id="inheriting-the-stack-abstract-class">Inheriting the Stack abstract class</h2>
+<p>Earlier in this chapter, we defined two new types: <code>Stack1</code> and <code>Stack2</code>. However, despite the two types sharing the same method names, the code did not indicate that the types were related in any way. Now that we have the abstract class <code>Stack</code>, we can indicate this relationship in the code through <strong>inheritance</strong>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> Stack1(Stack):</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>        <span class="co">&quot;&quot;&quot;Initialize a new empty stack.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="va">self</span>._items <span class="op">=</span> []</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a>        <span class="cf">return</span> <span class="va">self</span>._items <span class="op">==</span> []</span>
+<span id="cb3-10"><a href="#cb3-10"></a></span>
+<span id="cb3-11"><a href="#cb3-11"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-12"><a href="#cb3-12"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a>        <span class="va">self</span>._items.append(item)</span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb3-16"><a href="#cb3-16"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>        <span class="cf">return</span> <span class="va">self</span>._items.pop()</span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="kw">class</span> Stack2(Stack):</span>
+<span id="cb3-21"><a href="#cb3-21"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-22"><a href="#cb3-22"></a>        <span class="co">&quot;&quot;&quot;Initialize a new empty stack.</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a>        <span class="va">self</span>._items <span class="op">=</span> []</span>
+<span id="cb3-25"><a href="#cb3-25"></a></span>
+<span id="cb3-26"><a href="#cb3-26"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-27"><a href="#cb3-27"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a>        <span class="cf">return</span> <span class="va">self</span>._items <span class="op">==</span> []</span>
+<span id="cb3-29"><a href="#cb3-29"></a></span>
+<span id="cb3-30"><a href="#cb3-30"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-31"><a href="#cb3-31"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a>        <span class="va">self</span>._items.insert(<span class="dv">0</span>, item)</span>
+<span id="cb3-33"><a href="#cb3-33"></a></span>
+<span id="cb3-34"><a href="#cb3-34"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb3-35"><a href="#cb3-35"></a>        <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-36"><a href="#cb3-36"></a>        <span class="cf">return</span> <span class="va">self</span>._items.pop(<span class="dv">0</span>)</span></code></pre></div>
+<p>In the class header <code>class Stack1(Stack)</code> and <code>class Stack2(Stack)</code>, the syntax <code>(Stack)</code> indicates that <code>Stack1</code> and <code>Stack2</code> inherit from <code>Stack</code>. There are specific words we use to talk about these relationships:</p>
+<ul>
+<li><code>Stack</code>: base class, superclass, and parent class are synonyms.</li>
+<li><code>Stack1</code>, <code>Stack2</code>: subclass, child class, and derived class are synonyms.</li>
+</ul>
+<p>For example, we can say that “<code>Stack</code> is the parent class of <code>Stack1</code>” or “<code>Stack2</code> is a subclass of <code>Stack</code>”.</p>
+<p><img src="images/stacks_inheritance_diagram.png" /></p>
+<p>When one class in Python inherits from another, there are two important consequences. First, the Python interpreter treats every instance of the subclass as an instance of the superclass as well.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> s1 <span class="op">=</span> Stack1()</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">isinstance</span>(s1, Stack1)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="va">True</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">isinstance</span>(s1, Stack)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="va">True</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">isinstance</span>(s1, Stack2)</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="va">False</span></span></code></pre></div>
+<p>Second, when the superclass is abstract, the subclass must implement all abstract methods from the superclass, without changing the public interface of those methods. Just like preconditions and representation invariants, inheritance serves as another form of <em>contract</em>:</p>
+<ul>
+<li>The implementor of the subclass must implement the methods from the abstract superclass.</li>
+<li>Any user of the subclass may assume that they can call the superclass methods on instances of the subclass.</li>
+</ul>
+<p>So for example, if we say that <code>Stack1</code> is a subclass of <code>Stack</code>, then any user of <code>Stack1</code> can expect to be able to call <code>push</code>, <code>pop</code>, and <code>is_empty</code> on <code>Stack1</code> instances. And of course the same applies to <code>Stack2</code> as well.</p>
+<p>It is this expectation that allows us to use inheritance in Python to express a <em>shared public interface</em> between multiples classes. In our example, because <code>Stack1</code> and <code>Stack2</code> are both subclasses of <code>Stack</code>, we expect them implement all the stack methods. They might also implement additional methods that are unique to each subclass (<em>not</em> shared), but this is not required.</p>
+<h2 id="writing-polymorphic-code-using-inheritance">Writing polymorphic code using inheritance</h2>
+<p>Suppose we are writing code that operations on a stack, like in the following function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> push_and_pop(s: ..., item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Push and pop the given item onto the stack s.&quot;&quot;&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    s.push(item)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    s.pop()</span></code></pre></div>
+<p>What type annotation would be appropriate for <code>s</code>? If we use a concrete stack implementation like <code>Stack1</code>, this would rule out other stack implementations for this function. Instead, we use the abstract class <code>Stack</code> as the type annotation, to indicate that our function <code>push_and_pop</code> can be called with <em>any</em> instance of any <code>Stack</code> subclass.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> push_and_pop(s: Stack, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Push and pop the given item onto the stack s.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    s.push(item)</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    s.pop()</span></code></pre></div>
+<p>Remember that <code>Stack</code> defines a public interface that is shared between all of its subclasses: the body of <code>push_and_pop</code> only needs to call methods from that interface (<code>pop</code> and <code>push</code>), and doesn’t worry about how those methods are implemented. This allows us to pass to the <code>push_and_pop</code> function a <code>Stack1</code> or <code>Stack2</code> object, which both inherit from <code>Stack</code>.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> s1 <span class="op">=</span> Stack1()</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;&gt;&gt;</span> push_and_pop(s1)  <span class="co"># This works!</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;&gt;&gt;</span> s2 <span class="op">=</span> Stack2()</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="op">&gt;&gt;&gt;</span> push_and_pop(s2)  <span class="co"># This also works!</span></span></code></pre></div>
+<p>You might notice that there are actually three versions of <code>push</code> in our code: <code>Stack.push</code>, <code>Stack1.push</code>, and <code>Stack2.push</code>. So which method does the Python interpreter choose when the <code>push_and_pop</code> function is called? This is how it works for <code>s.push(item)</code> (<code>s.pop()</code> is handled similarly):</p>
+<ol type="1">
+<li>When the Python interpreter evaluates <code>s.push(item)</code>, it first computes <code>type(s)</code>. The result will depend on the argument we passed in—in our above example, <code>type(s1)</code> is <code>Stack1</code>, and <code>type(s2)</code> is <code>Stack2</code>.</li>
+<li>The Python interpreter then looks in that class for a <code>push</code> method and calls it, passing in <code>s</code> for the <code>self</code> argument.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">There are instances with inheritance where a subclass might not implement a particular method from the superclass. We’ll look at some examples of this in the next section.</span></li>
+</ol>
+<p>We say that the Python interpreter <em>dynamically looks up (or resolves) the <code>s.push</code>/<code>.pop</code> method</em>, because the actual method called by <code>s.push</code>/<code>s.pop</code> changes depending on the argument passed to <code>push_and_pop</code>.</p>
+<p>We say that the <code>push_and_pop</code> function is <strong>polymorphic</strong>, meaning it can take as inputs values of different concrete data type and select a specific method based on the type of input. This support for polymorphism is also why the “object dot notation” style of method call is preferred to the “class dot notation” style we’ve been using up to this point. Consider the following two alternate implementations of <code>push_and_pop</code>:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> push_and_pop_alt1(s: Stack, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Push and pop the given item onto the stack s.&quot;&quot;&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    Stack.push(s, item)</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    Stack.pop(s)</span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="kw">def</span> push_and_pop_alt2(s: Stack, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="co">&quot;&quot;&quot;Push and pop the given item onto the stack s.&quot;&quot;&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    Stack1.push(s, item)</span>
+<span id="cb8-10"><a href="#cb8-10"></a>    Stack1.pop(s)</span></code></pre></div>
+<p>The first version (<code>alt1</code>) explicitly calls the <code>Stack.push</code> and <code>Stack.pop</code> methods, both of which are unimplemented and would raise a <code>NotImplementedError</code>. The second version (<code>alt2</code>) calls concrete methods <code>Stack1.push</code> and <code>Stack1.pop</code>, which assumes a specific stack implementation (<code>Stack1</code>), and so <code>push_and_pop</code> would only be guaranteed to work on <code>Stack1</code> instances, but not any other <code>Stack</code> subclass. This makes <code>push_and_pop</code> no longer polymorphic: the correct type annotation for <code>s</code> would be <code>Stack1</code>, not <code>Stack</code>.</p>
+<h3 id="application-running-timing-experiments-on-stack-implementation">Application: running timing experiments on stack implementation</h3>
+<p>Because both <code>Stack1</code> and <code>Stack2</code> are different implementations of the same interface, we can use polymorphism to help us measure the performance of each. Below, we time the <code>push_and_pop</code> function, first with a <code>Stack1</code> object and second with a <code>Stack2</code> object.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co"># Import the main timing function.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="im">from</span> timeit <span class="im">import</span> timeit</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="co"># The stack sizes we want to try.</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    STACK_SIZES <span class="op">=</span> [<span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">100000</span>, <span class="dv">1000000</span>, <span class="dv">10000000</span>]</span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="cf">for</span> stack_size <span class="kw">in</span> STACK_SIZES:</span>
+<span id="cb9-8"><a href="#cb9-8"></a>        stack1 <span class="op">=</span> Stack1()</span>
+<span id="cb9-9"><a href="#cb9-9"></a>        stack2 <span class="op">=</span> Stack2()</span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a>        <span class="co"># Bypass the Stack interface to create a stack of size &lt;stack_size&gt;.</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a>        <span class="co"># This speeds up the experiment, but we know this violates</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a>        <span class="co"># encapsulation!</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a>        stack1._items <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, stack_size))</span>
+<span id="cb9-15"><a href="#cb9-15"></a>        stack2._items <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">0</span>, stack_size))</span>
+<span id="cb9-16"><a href="#cb9-16"></a></span>
+<span id="cb9-17"><a href="#cb9-17"></a>        <span class="co"># Call push_and_pop(stack1) 1000 times, and store the time taken.</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a>        t1 <span class="op">=</span> timeit(<span class="st">&#39;push_and_pop(stack1, 10)&#39;</span>, number<span class="op">=</span><span class="dv">1000</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb9-19"><a href="#cb9-19"></a>        t2 <span class="op">=</span> timeit(<span class="st">&#39;push_and_pop(stack2, 10)&#39;</span>, number<span class="op">=</span><span class="dv">1000</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb9-20"><a href="#cb9-20"></a></span>
+<span id="cb9-21"><a href="#cb9-21"></a>        <span class="bu">print</span>(<span class="ss">f&#39;Stack size </span><span class="sc">{</span>stack_size<span class="sc">:&gt;8}</span><span class="ss">; Stack1 time </span><span class="sc">{t1}</span><span class="ss">; Stack2 time </span><span class="sc">{t2}</span><span class="ss">&#39;</span>)</span></code></pre></div>
+<p>If we have several implementations of an ADT, each inheriting from the same base class, then we can quickly run experiments on all of them but only need to remember a single interface. This creates a rule of thumb: when indicating the type of an object (e.g., through a type contract), choose the most generic type possible. Following this rule of thumb means that the client code is not constrained to one particular implementation (such as <code>Stack1</code>) and can readily change the underlying object so long as the new object type shares the same public interface.</p>
+<p>Many software applications follow the same principle. For example, you may have used software with “plugins”:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Like PyCharm!</span> each plugin implements a shared public interface, allowing the software to use it without knowing any of the details. For example, Adobe develops the powerful Photoshop application for image editing. David comes along and discovers a feature he really wants is missing. Rather than asking Adobe to implement the new feature, he can implement it himself as a plugin. Thus, Adobe has allowed independent developers to <em>extend the functionality</em> of their software after it has been released and without any employees of their own. Behold, the power of abstraction!</p>
+</section>
+<!--
+
+otherwise, Python next searches for `push` in the superclass of the type of `s`.^[
+And then the superclass of the superclass, etc., until it either finds a definition of `push` or it has exhausted all possibilities, in which case it raises an `AttributeError`.
+]
+
+
+This is why, if `Stack1` does not implement the `push` method, Python can still find `push` method if `Stack1.push` is called (the one inherited from `Stack` that raises a `NotImplementedError`).
+However, if `Stack1` does implement the `push` method, then its implementation **overrides** the implementation in the parent class.
+In other words, Python is following a "chain of responsibility" until it finds the person (class) responsible for the implementation.
+
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

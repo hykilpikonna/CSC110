@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>5.3 The Python Memory Model: Introduction</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">5.3 The Python Memory Model: Introduction</h1>
+</header>
+<section>
+<p>In [1.4 Storing Data in Variables], we introduced the <em>value-based memory model</em> to help keep track of variables and their values:</p>
+<div class="memory-model-values">
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>distance1</code></td>
+<td><code>1.118033988749895</code></td>
+</tr>
+<tr class="even">
+<td><code>distance2</code></td>
+<td><code>216.14809737770074</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>From this table we can surmise that there are two variables (<code>distance1</code> and <code>distance2</code>), each associated with a <code>float</code> value. However, now that we know about reassignment and mutation, a more complex memory model is needed: the <em>object-based memory model</em>, which we’ll simply call the <em>Python memory model</em>, as this is the “standard” representation Python stores data.</p>
+<h2 id="representing-objects">Representing objects</h2>
+<p>Recall that every piece of data is stored in a Python program in an <strong>object</strong>. But how are the objects themselves stored? Every computer program (whether written in Python or some other language) stores data in computer memory, which you can think of as a very long list of storage locations. Each storage location is labelled with a unique memory address. In Python, every object we use is stored in computer memory at a particular location, and it is the responsibility of the Python interpreter to keep track of which objects are stored at which memory locations.</p>
+<p>As programmers, we cannot control which memory addresses are used to store objects, but we can access a representation of this memory address using the built-in <code>id</code> function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="dv">3</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dv">1635361280</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="st">&#39;words&#39;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="dv">4297547872</span></span></code></pre></div>
+<p>Formally, we define the <strong>id</strong> of a Python object as a unique <code>int</code> identifier to refer to this object.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">The details of how Python translates memory addresses into the integers are not important to us.</span> Every object in Python has three important properties—<em>id</em>, <em>value</em>, and <em>type</em>—but of these three, only its <em>id</em> is guaranteed to be unique.</p>
+<p>In Python, a variable is not an object and so does not actually store data; variables store an id that <em>refers</em> to an object that stores data. We also say that variables <em>contain</em> the id of an object. This is the case whether the data is something very simple like an <code>int</code> or more complex like a <code>str</code>. To make this distinction between variable and objects clear, we separate them in different parts of the Python memory model.</p>
+<p>As an example, consider this code:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> word <span class="op">=</span> <span class="st">&#39;bonjour&#39;</span></span></code></pre></div>
+<p>In our value-based memory model we would have represented these variables in a table:</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>3</code></td>
+</tr>
+<tr class="even">
+<td><code>word</code></td>
+<td><code>'bonjour'</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>With the full object-based Python memory model, we instead draw one table-like structure on the left showing the mapping between variables and object ids, and then the objects on the right. Each object is represented as a box, with its id in the upper-left corner, type in the upper-right corner, and value in the middle. The actual object id reported by the <code>id</code> function has many digits, and its true value isn’t important; we just need to know that each object has a unique identifier. So for our drawings we make up short identifiers such as <code>id92</code>.</p>
+<p><img src="images/variables.png" alt="There are two variables, x and word. Each is a container holding just one thing: the id of an object. x contains the id of an int object, and that int object is a container holding the value 3. word contains the id of a str object, and that str object is a container holding the value bonjour." /><br />
+</p>
+<p>So there is no <code>3</code> inside the box for variable <code>x</code>. Instead, there is the <em>id</em> of an object whose value is 3. The same holds for variable <code>word</code>; it references an object whose value is <code>'bonjour'</code>.</p>
+<p>Notice that we didn’t draw any arrows. Programmers often draw an arrow when they want to show that one thing references another. This is great once you are very confident with a language and how references work. But in the early stages, you are much more likely to make correct predictions if you write down references (you can just make up id values) rather than arrows.</p>
+<h3 id="assignment-statements-and-evaluating-expressions">Assignment statements and evaluating expressions</h3>
+<p>You’ve written code much more complex that what’s above, but now that we have the full Python memory model, we can understand a few more details for fundamental Python operations. These details are foundational for writing and debugging the more complex code you will work on this year. So let’s pause for a moment and be explicit about two things.</p>
+<p><em>Evaluating an expression</em>. First, we said earlier that evaluating any Python expression produces a value. We now know that it is more precise to say that evaluating any Python expression produces <em>an id of an object representing the value of the expression</em>. Exactly what this object is depends on the kind of expression evaluated:</p>
+<ul>
+<li>If the expression is a literal, such as <code>176.4</code> or <code>'hello'</code>, Python creates an object of the appropriate type to hold the value.</li>
+<li>If the expression is a variable, Python looks up the variable. If the variable doesn’t exist, a <code>NameError</code> is raised. If it does exist, the expression produces the id stored in that variable.</li>
+<li>If the expression is a binary operation, such as <code>+</code> or <code>%</code>, first Python evaluates the expression’s two operands and applies the operator to the resulting values, creating a new object of the appropriate type to hold the resulting value. The expression produces the id of the new object.</li>
+<li>There are additional rules for other types of expression, but these will do for now.</li>
+</ul>
+<p><em>Assignment statements.</em> Second, we said earlier that an assignment statement is executed by first evaluating the right-hand side expression, and then storing it in the left-hand side variable. Here is a more precise version of what happens:</p>
+<ol type="1">
+<li>Evaluate the expression on the right-hand side, yielding the id of an object.</li>
+<li>If the variable on the left-hand side doesn’t already exist, create it.</li>
+<li>Store the id from the expression on the right-hand side in the variable on the left-hand side.</li>
+</ol>
+<h2 id="representing-compound-data">Representing compound data</h2>
+<p>So far, the only objects we’ve looked at in the Python memory model are instances of primitive data types. What about compound data types like collections and data classes? Now that we have our object-based memory model, we are in a position to truly understand how Python represents these data types. <em>An instance of a compound data type does not store values directly; instead, it stores the ids of other objects.</em></p>
+<p>Let’s see what this means for some familiar collection data types.</p>
+<ul>
+<li><p><em>Lists</em>. Here is an object-based memory model diagram showing the state of memory after executing <code>lst = [1, 2, 3]</code>.</p>
+<p><img src="images/list.png" style="width:100.0%" alt="List memory model diagram" /><br />
+</p>
+<p>Notice that there are four separate objects in this diagram: one for the each of the <code>int</code>s <code>1</code>, <code>2</code>, and <code>3</code>, and then one for the <code>list</code> itself.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> This illustrates one of the trade-offs with the Python memory model. It is more accurate than our value-based memory model, but that accuracy comes at the cost of having more parts and therefore more time-consuming to create. </span></p></li>
+<li><p><em>Sets</em>. Here is an object-based memory model diagram showing how Python represents the set <code>my_set = {1, 2, 3}</code>.</p>
+<p><img src="images/set.png" style="width:100.0%" alt="Set memory model diagram" /><br />
+</p></li>
+<li><p><em>Dictionaries</em>. Here is an object-based memory model diagram showing the dictionary <code>my_dict = {'a': 1, 'b': 2}</code>. There are five objects in total!</p>
+<p><img src="images/dict.png" style="width:100.0%" alt="Dictionary memory model diagram" /><br />
+</p></li>
+<li><p><em>Data classes</em>. All Python data classes are compound data types, and instances also store the ids of other objects. Unlike the collection data types we looked at above, these ids are not bundled in a collection, but instead each associated with a particular instance attribute. Here is how we represent our favourite <code>Person</code> object.</p>
+<p><img src="images/person.png" style="width:100.0%" alt="Person data class memory model diagram" /><br />
+</p></li>
+</ul>
+<p>You may have noticed one difference between how we drew the object boxes of the primitive vs. compound data types above. We will use the convention of drawing a <em>double box</em> around objects that are immutable. Think of it as signifying that you can’t get in there and change anything.</p>
+<h2 id="visualizing-variable-reassignment-and-object-mutation">Visualizing variable reassignment and object mutation</h2>
+<p>Our last topic in this section will be to use our object-based memory model to visualize variable reassignment and object mutation in Python.</p>
+<p>Consider this simple case of variable reassignment:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]</span></code></pre></div>
+<p>Here is what our memory model looks like after the first and second lines execute:</p>
+<div class="fullwidth image-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Before reassignment</th>
+<th style="text-align: left;">After reassignment</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><img src="images/reassignment1.png" alt="Before reassignment" /></td>
+<td style="text-align: left;"><img src="images/reassignment2.png" alt="After reassignment" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Using this diagram, we can see what happens when we execute the reassignment <code>s = ['a', 'b']</code>: a new <code>list</code> object <code>['a', 'b']</code> is created, and variable <code>s</code> is assigned the id of the new object. The original list object <code>[1, 2]</code> is not mutated. Variable reassignment <em>does not mutate any objects</em>; instead, it changes what a variable refers to. We can see this in the interpreter by using the <code>id</code> function to tell what object <code>s</code> refers to before and after the reassignment:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="dv">1695325453760</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>]</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="dv">1695325453248</span></span></code></pre></div>
+<p>Notice that the ids are different, indicating that <code>s</code> refers to a new object.</p>
+<p>Contrast this with using a mutating <code>list</code> method like <code>list.append</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.append(s, <span class="dv">3</span>)</span></code></pre></div>
+<div class="fullwidth image-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Before mutation</th>
+<th style="text-align: left;">After mutation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><img src="images/mutation1.png" alt="Before mutation" /></td>
+<td style="text-align: left;"><img src="images/mutation2.png" alt="After mutation" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In this case, no new <code>list</code> object is created, though a new <code>int</code> object is. Instead, the list object <code>[1, 2]</code> is mutated, and a third id is added at its end. Note that even changing the list’s size doesn’t change its id! Again, we can verify that <code>x</code> refers to the same <code>list</code> object by inspecting ids:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="dv">1695325453760</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.append(s, <span class="dv">3</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="dv">1695325453760</span></span></code></pre></div>
+<p>And finally, one last example that blends assignment and mutation: assigning to part of a compound data type. Consider this code:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">300</span></span></code></pre></div>
+<p>What happens in this case?</p>
+<div class="fullwidth image-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Before mutation</th>
+<th style="text-align: left;">After mutation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><img src="images/mutation1.png" alt="Before mutation" /></td>
+<td style="text-align: left;"><img src="images/mutation3.png" alt="After mutation" /></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The statement <code>s[1] = 300</code> is also a form of reassignment, but rather than reassigning a variable, it reassigns an id that is part of an object. This means that this statement <em>does</em> mutate an object, and doesn’t reassign any variables. We can verify that the id of <code>s</code> doesn’t change after the index assignment.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>]</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="dv">1695325453760</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">&gt;&gt;&gt;</span> s[<span class="dv">1</span>] <span class="op">=</span> <span class="dv">300</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(s)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="dv">1695325453760</span></span></code></pre></div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

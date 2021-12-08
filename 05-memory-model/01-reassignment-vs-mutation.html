@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>5.1 Variable Reassignment and Object Mutation</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">5.1 Variable Reassignment and Object Mutation</h1>
+</header>
+<section>
+<p>So far, we have largely treated objects and variables in Python as being constant over time: once an object is created or a variable is initialized, its value has not changed during the program. This property has made it easier to reason about our code: once we set the value of the variable once, we can easily look up its value at any later point in the program.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">Indeed, this is a fact that we take for granted in mathematics: if we say “let <span class="math inline">\(x\)</span> = 10” in a calculation or proof, we expect <span class="math inline">\(x\)</span> to keep that same value from start to finish!</span></p>
+<p>However, in programs it is sometimes useful to have objects and variables change value over time. We saw one example of this last week when we studied for loops, in which both the loop variable and accumulator take on multiple values over the course of running the loop. In this section, we’ll introduce two related but distinct actions in a program: <em>variable reassignment</em> and <em>object mutation</em>.</p>
+<h2 id="variable-reassignment">Variable reassignment</h2>
+<p>Recall that a statement of the form <code>___ = ___</code> is called an <em>assignment statement</em>, which takes a variable name on the left-hand side and an expression on the right-hand side, and assigns the value of the expression to the variable.</p>
+<p>A <strong>variable reassignment</strong> is a Python action that assigns a value to a variable that already refers to a value. The most common kind of variable reassignment is with an assignment statement:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>x <span class="op">=</span> <span class="dv">5</span>  <span class="co"># The variable x is reassigned on this line.</span></span></code></pre></div>
+<p>A variable reassignment <em>changes which object a variable refers to</em>. In the above example, variable <code>x</code> changes from referring to an object representing the number <code>1</code> to an object representing <code>5</code>.</p>
+<p>The loops that we studied last week all used variable reassignment to update the <em>accumulator variable</em> inside the loop.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> my_sum(nums: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="cf">for</span> num <span class="kw">in</span> nums:</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> num</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>At each iteration, the statement <code>sum_so_far = sum_so_far + num</code> did two things:</p>
+<ol type="1">
+<li>Evaluate the right-hand side (<code>sum_so_far + num</code>) using the <em>current</em> value of <code>sum_so_far</code>, obtaining a new object.</li>
+<li>Reassign <code>sum_so_far</code> to refer to that new object.</li>
+</ol>
+<p>This is the Python mechanism that causes <code>sum_so_far</code> to refer to the total sum at the end of the loop, which of course was the whole point of the loop! Indeed, updating loop accumulators is one of the most natural uses of variable reassignment.</p>
+<p>This loop actually illustrates another common form of variable reassignment: reassigning the <em>loop variable</em> to a different value at each for loop iteration. For example, when we call <code>my_sum([10, 20, 30])</code>, the loop variable <code>num</code> gets assigned to the value <code>10</code>, then the value <code>20</code>, and then the value <code>30</code>.</p>
+<h2 id="reassignment-is-independent-of-prior-uses">Reassignment is independent of prior uses</h2>
+<p>Consider the following Python code snippet:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a>x <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>y <span class="op">=</span> x <span class="op">+</span> <span class="dv">2</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>x <span class="op">=</span> <span class="dv">7</span></span></code></pre></div>
+<p>Here, the variable <code>x</code> is reassigned to <code>7</code> on line 3. But what happens to <code>y</code>? Does it now also get “reassigned” to <code>9</code> (which is <code>7 + 2</code>), or does it stay at its original value <code>3</code>?</p>
+<p>We can express Python’s behaviour here with one simple rule: <strong>variable reassignment only changes the immediate variable being reassigned, and does not change any other variables or objects, even ones that were defined using the variable being reassigned</strong>. And so in the above example, <code>y</code> still refers to the value <code>3</code>, even after <code>x</code> is reassigned to <code>7</code>.</p>
+<p>This rule might seem a bit strange at first, but is actually the simplest way that Python could execute variable reassignment: it allows programmers to reason about these assignment statements in a top-down order, without worrying that future assignment statements could affect previous ones. If we’re tracing through our code carefully and read <code>y = x + 2</code>, I can safely predict the value of <code>y</code> based on the current value of <code>x</code>, without worrying about how <code>x</code> might be reassigned later in the program.</p>
+<p>That said, there is one complication with this line of reasoning that comes up with the next form of “value change”, object mutation.</p>
+<h2 id="object-mutation">Object mutation</h2>
+<p>In <a href="../04-complex-data/07-nested-loops.html">4.7 Nested Loops</a>, we saw how <code>product</code> could help us calculate the Cartesian product by accumulating all possible pairs of elements in a list. Consider a function that also accumulates values in a list:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> squares(nums: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Return a list of the squares of the given numbers.&quot;&quot;&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    squares_so_far <span class="op">=</span> []</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a>    <span class="cf">for</span> num <span class="kw">in</span> nums:</span>
+<span id="cb4-6"><a href="#cb4-6"></a>        squares_so_far <span class="op">=</span> squares_so_far <span class="op">+</span> [num <span class="op">*</span> num]</span>
+<span id="cb4-7"><a href="#cb4-7"></a>    <span class="cf">return</span> squares_so_far</span></code></pre></div>
+<p>Both the <code>squares</code> and <code>product</code> functions work properly, but are rather inefficient.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> We’ll study what we mean by “inefficient” more precisely later in this course.</span> In <code>squares</code>, each loop iteration creates a new <code>list</code> object (a copy of the current list plus one more element at the end) and reassigns <code>squares_so_far</code> to it. It would be easier (and faster) if we could somehow reuse the same object but modify it by adding elements to it; the same applies to other collection data types like <code>set</code> and <code>dict</code> as well.</p>
+<p>In Python, <strong>object mutation</strong> (often shortened to just <strong>mutation</strong>) is an operation that changes the value of an existing object. For example, Python’s <code>list</code> data type contains several methods that <strong>mutate</strong> the given <code>list</code> object rather than create a new one. Here’s how we could improve our <code>squares</code> implementation by using <code>list.append</code>,<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Check out <a href="../A-python-builtins/02-types.html">Appendix A.2 Python Built-In Data Types Reference</a> for a list of methods, including mutating ones, for lists, sets, dictionaries, and more.</span> a method that adds a single value to the end of a list:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> squares(nums: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return a list of the squares of the given numbers.&quot;&quot;&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    squares_so_far <span class="op">=</span> []</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a>    <span class="cf">for</span> num <span class="kw">in</span> nums:</span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="bu">list</span>.append(squares_so_far, num <span class="op">*</span> num)</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    <span class="cf">return</span> squares_so_far</span></code></pre></div>
+<p>Now, <code>squares</code> runs by assigning <code>squares_so_far</code> to a single list object before the loop, and then mutating that list object at each loop iteration. The outward behaviour is the same, but this code is more efficient because a bunch of new list objects are not created. To use the terminology from before, <code>squares_so_far</code> is <em>not</em> reassigned; instead, the object that it refers to gets mutated.</p>
+<p>One final note: you might notice that the loop body calls <code>list.append</code> without an assignment statement. This is because <code>list.append</code> returns <code>None</code>, a special Python value that indicates “no value”. Just as we explored previously with the <code>print</code> function, <code>list.append</code> has a <em>side effect</em> that it mutates its <code>list</code> argument, but does not return anything.</p>
+<h2 id="mutable-and-immutable-data-types">Mutable and immutable data types</h2>
+<p>We say that a Python data type is <strong>mutable</strong> when it supports at least one kind of mutating operation, and <strong>immutable</strong> if it does not. Sets, lists, and dictionaries are all mutable data types, as are the data classes we studied in the previous chapter. All of the non-collection types we’ve studied—<code>int</code>, <code>float</code>, <code>bool</code>, and <code>str</code>—are immutable.</p>
+<p>Instances of an immutable data type cannot change their value during the execution of a Python program. So for example, if we have an object representing the number <code>3</code> in Python, that object’s value will <em>always</em> be 3. But remember, a variable that refers to this object might be reassigned to a different object later. This is why is is important that we differentiate between variables and objects!</p>
+<h2 id="list-vs.-tuple-and-whats-in-a-set"><code>list</code> vs. <code>tuple</code>, and what’s in a <code>set</code></h2>
+<p>All the way back in <a href="../01-working-with-data/03-python-data-types.html">1.3 Representing Data in Python</a>, we introduced two Python data types that could be used to represent ordered sequences, <code>list</code> and <code>tuple</code>. We’ve been using them fairly interchangeably for the past few chapters, but are now ready to discuss the difference between them. <em>In Python, a <code>list</code> is mutable, but a <code>tuple</code> is immutable.</em> For example, we can modify a <code>list</code> value by adding an element with <code>list.append</code>, but there is no equivalent <code>tuple.append</code>, nor any other mutating method on tuples.</p>
+<p>So why bother with tuples at all? Because in Python, <code>set</code>s may only contain <em>immutable</em> objects, and <code>dict</code>s may only contain <em>immutable keys</em>. So for example, we cannot have a <code>set</code> of <code>set</code>s or <code>set</code> of <code>list</code>s in Python, but we can have a <code>list</code> of <code>lists</code>, which is why studied nested lists in the last chapter.</p>
+<p>Of course, from a theoretical standpoint a set can have elements that are other sets! So this restriction is a quirk of Python’s built-in data types that we just have to live with when using this programming language.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> In case you’re curious, there is another Python data type, <code>frozenset</code>, which is an immutable version of <code>set</code>. We just won’t be using it in this course.</span></p>
+<h2 id="reasoning-about-code-with-changing-values">Reasoning about code with changing values</h2>
+<p>Variable reassignment and object mutation are distinct concepts. Reassignment will change which object a variable refers to, sometimes creating a brand new object (e.g., when we used a list accumulator in <code>squares</code>). Object mutation changes the object itself, independent of what variable(s) refer t othat object.</p>
+<p>Yet we have presented them here in the same section because they share a fundamental similarity: they both result in variables changing values over the course of a program. To illustrate this point, consider the following hypothetical function definition:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> my_function(...) <span class="op">-&gt;</span> ...:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    x <span class="op">=</span> <span class="dv">10</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>    ...  <span class="co"># Many lines of code</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="cf">return</span> x <span class="op">*</span> <span class="bu">len</span>(y) <span class="op">+</span> ...</span></code></pre></div>
+<p>We’ve included for effect a large omitted “middle” section of the function body, showing only the initialization of two local variables at the start of the function and a final return statement at the end of the function.</p>
+<p>If the omitted code does <em>not</em> contain any variable reassignment or object mutation, then we can be sure that in the return statement, <code>x</code> still refers to <code>10</code> and <code>y</code> still refers to <code>[1, 2, 3]</code>, regardless of what other computations occurred in the omitted lines! In other words, without reassignment and mutation, these assignment statements are universal across the function body: “for all points in the body of <code>my_function</code>, <code>x == 10</code> and <code>y == [1, 2, 3]</code>.” Such universal statements make our code easier to reason about, as we can determine the values of these variables from just the assignment statement that creates them.</p>
+<p>Variable reassignment and object mutation weaken this property. For example, if we reassign <code>x</code> or <code>y</code> (e.g., <code>x = 100</code>) in the middle of the function body, the return statement obtains a different value for <code>x</code> than <code>10</code>. Similarly, if we mutate <code>y</code> (e.g., <code>list.append(y, 100)</code>), the reutn statement obtains a different value for <code>y</code> than <code>[1, 2, 3]</code>. <em>Introducing reassignment and mutation makes our code harder to reason about, as we need to track all changes to variable values line by line.</em></p>
+<p>Because of this, you should avoid using variable reassignment and object mutation when possible, and use them in structured code patterns like we saw with the loop accumulator pattern. Over the course of this chapter, we’ll study other situations where reassignment and mutation are useful, and introduce a new memory model to help us keep track of changing variable values in our code.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

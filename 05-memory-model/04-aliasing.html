@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>5.4 Aliasing and “Mutation at a Distance”</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">5.4 Aliasing and “Mutation at a Distance”</h1>
+</header>
+<section>
+<p>Through our new object-based memory model, we’ve seen that the Python interpreter associates each variable with the <em>id</em> of an object. There is nothing stopping two or more variables from containing the same id, which means that two variables can refer to the same object. This causes some interesting situations when more than one variable refers to the same mutable object. In this section, we will use our memory model to better understand this specific (and common) situation.</p>
+<h2 id="aliasing">Aliasing</h2>
+<p>Let <code>v1</code> and <code>v2</code> be Python variables. We saw that <code>v1</code> and <code>v2</code> are <strong>aliases</strong> when they refer to the same object.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The word “alias” is commonly used when a person is also known under a different name. For example, we might say “Eric Blair, alias George Orwell.” We have two names for the same thing, in this case a person.</span></p>
+<p>Consider the following Python code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span></code></pre></div>
+<p><code>x</code> and <code>z</code> are aliases, as they both reference the same object. As a result, they have the same id. You should think of the assignment statement <code>z = x</code> as saying “make <code>z</code> refer to the object that <code>x</code> refers to.” After doing so, they have the same id.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(x)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="dv">4401298824</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(z)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="dv">4401298824</span></span></code></pre></div>
+<p>In contrast, <code>x</code> and <code>y</code> are not aliases. They each refer to a <code>list</code> object with <code>[1, 2, 3]</code> as its value, but they are two different list objects, stored separately in your computer’s memory. This is again reflected in their different ids.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(x)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dv">4401298824</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(y)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="dv">4404546056</span></span></code></pre></div>
+<p>Here is the state of memory after the code executes:</p>
+<div class="fullscreen">
+
+<p><img src="images/aliasing_intro.png" alt="Aliasing example. There are two different list objects. They have identical contents, but are distinct objects, each with their own id. There are three variables, x, y, and z. x and z both contain the same id, the id of one of the list objects. y contains the id of the other list object." /><br />
+</p>
+<h2 id="aliasing-and-mutation">Aliasing and mutation</h2>
+<p>Aliasing is often a source of confusion for programmers because it allows “mutation at a distance”: the modification of a variable’s value without explicitly mentioning that variable. Here’s an example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;&gt;</span> z[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">999</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="op">&gt;&gt;&gt;</span> x   <span class="co"># What is the value?</span></span></code></pre></div>
+<p>The statement <code>x[0] = -999</code> line mutates the value of <code>z</code>. But without ever mentioning <code>x</code>, it also mutates the value of <code>x</code>!</p>
+<p>Imprecise language can lead us into misunderstanding the code. We said above that “the third line mutates the value of <code>z</code>”. To be more precise, the third line mutates the object that <code>z</code> refers to. Of course we can also say that it mutates the object that <code>x</code> refers to—they are the same object.</p>
+<div class="fullwidth">
+<p><img src="images/aliasing_mutation1.png" alt="Aliasing with mutation, first example" /><br />
+</p>
+</div>
+<p>The key thing to notice about this example is that just by looking at the line of code, <code>z[0] = -999</code>, you can’t tell that <code>x</code> has changed. You need to know that on a previous line, <code>z</code> was made an alias of <code>x</code>. This is why you have to be careful when aliasing occurs.</p>
+<p>Contrast the previous code with this sequence of statements instead:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">&gt;&gt;&gt;</span> y[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">999</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;&gt;</span> x   <span class="co"># What is the value?</span></span></code></pre></div>
+<p>Can you predict the value of <code>x</code> on the last line? Here, the third line mutates the object that <code>y</code> refers to, but because it is not the same object that <code>x</code> refers to, we still see <code>[1, 2, 3]</code> if we evaluate <code>x</code>. Here’s the state of memory after these lines execute:</p>
+<div class="fullwidth">
+<p><img src="images/aliasing_mutation2.png" alt="Aliasing with mutation, second example" /><br />
+</p>
+</div>
+<h2 id="variable-reassignment-again">Variable reassignment, again</h2>
+<p>What if we did this instead?</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">40</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="op">&gt;&gt;&gt;</span> x   <span class="co"># What is the value?</span></span></code></pre></div>
+<p>Again, we have made <code>x</code> and <code>z</code> refer to the same object. So when we change <code>z</code> on the third line, does <code>x</code> also change? This time, the answer is an emphatic <strong>no</strong>, and it is because of the kind of change we make on the third line. Instead of mutating the object that <code>z</code> refers to, we reassign <code>z</code> refer to a new object. This obviously can have no effect on the object that <code>x</code> refers to (or <em>any</em> object). Even if we switched the example from using immutable tuples to using mutable lists, <code>x</code> would be unchanged.</p>
+<p>Given two aliases <code>x</code> and <code>z</code>, if we reassign <code>x</code> to a new object, that has <em>no effect</em> on <code>z</code>. We say that reassigning <code>x</code> <em>breaks the aliasing</em>, as afterwards <code>x</code> and <code>z</code> no longer refer to the same object, and so are no longer aliases.</p>
+<h2 id="aliasing-and-loop-variables">Aliasing and loop variables</h2>
+<p>In Chapter 4, we saw two types of loops: element-based and index-based for loops. With index-based loops, the loop variable referred to an integer object that could be used as an index to a collection (typically a <code>list</code>). But in element-based for loops, the loop variable is an alias to one of the objects <em>within</em> the collection. Suppose we have the following element-based for loop:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> numbers <span class="op">=</span> [<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb7-3"><a href="#cb7-3"></a>...     number <span class="op">=</span> number <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>...</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="op">&gt;&gt;&gt;</span> numbers</span>
+<span id="cb7-6"><a href="#cb7-6"></a>[<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span></code></pre></div>
+<p>Notice how the values in the list <code>numbers</code> did not change (i.e., the for loop did not mutate <code>numbers</code>). This is because the loop variable <code>number</code> is an alias for the integer objects found inside <code>numbers</code>. The assignment statement inside the for loop simply changes what the loop variable refers to, but does not change what the contents of the list <code>numbers</code> refers to. If we would like to increment each object contained in the list, we must use an index-based for loop:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> numbers</span>
+<span id="cb8-2"><a href="#cb8-2"></a>[<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>]</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(numbers)):</span>
+<span id="cb8-4"><a href="#cb8-4"></a>...     numbers[i] <span class="op">=</span> numbers[i] <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>...</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="op">&gt;&gt;&gt;</span> numbers</span>
+<span id="cb8-7"><a href="#cb8-7"></a>[<span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>]</span></code></pre></div>
+<p>The assignment statement in the index-based for loop is fundamentally different from the assignment statement in the element-based for loop. Statements of the form <code>&lt;name&gt; = _______</code> are <em>reassign</em> the variable <code>&lt;name&gt;</code> to a new value. But assignment statements of the form <code>&lt;name&gt;[&lt;index&gt;] = ______</code> <em>mutate</em> the list object that <code>&lt;name&gt;</code> currently refers to.</p>
+<h2 id="two-types-of-equality">Two types of equality</h2>
+<p>Let’s look one more time at this code:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>]</span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(x)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="dv">4401298824</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(y)</span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="dv">4404546056</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(z)</span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="dv">4401298824</span></span></code></pre></div>
+<p>What if we wanted to see whether <code>x</code> and <code>y</code>, for instance, were the same? Well, we’d need to define precisely what we mean by “the same”. Our familiar <code>==</code> operator checks whether two objects have the same <em>value</em>. This is called <strong>value equality</strong>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">==</span> y</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="va">True</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">==</span> z</span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="va">True</span></span></code></pre></div>
+<p>But there is another Python operator, <code>is</code>, which checks whether two objects have the same <em>ids</em>. This is called <strong>identity equality</strong>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">is</span> y</span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="va">False</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">is</span> z</span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="va">True</span></span></code></pre></div>
+<p>Identity equality is a <em>stronger</em> property than value equality: for all objects <code>a</code> and <code>b</code>, if <code>a is b</code> then <code>a == b</code>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> In Python it is technically possible to change the behaviour of <code>==</code> in unexpected ways (like always returning <code>False</code>), but this is a poor programming practice and we won’t consider it in this course.</span> The converse is not true, as we see in the above example: <code>a == b</code> does not imply <code>a is b</code>.</p>
+<h2 id="aliasing-with-immutable-data-types">Aliasing with immutable data types</h2>
+<p>Aliasing also exists for immutable data types, but in this case there is never any “action at a distance”, precisely because immutable values can never change. In the example below, <code>x</code> and <code>z</code> are aliases of a tuple object. It is impossible to modify <code>x</code>’s value by mutating the object <code>z</code> refers to, since we can’t mutate tuples at all.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="op">&gt;&gt;&gt;</span> z <span class="op">=</span> x</span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="op">&gt;&gt;&gt;</span> z[<span class="dv">0</span>] <span class="op">=</span> <span class="op">-</span><span class="dv">999</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>Traceback (most recent call last):</span>
+<span id="cb12-5"><a href="#cb12-5"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="pp">TypeError</span>: <span class="st">&#39;tuple&#39;</span> <span class="bu">object</span> does <span class="kw">not</span> support item assignment</span></code></pre></div>
+<h3 id="automatic-aliasing-of-some-immutable-objects">Automatic aliasing of (some) immutable objects</h3>
+<p>The above discussion actually has a very interesting implication for how we reason about variables referring to immutable objects: <em>if two variables have the same immutable value, the program’s behaviour does not depend on whether the two variables are aliases or not</em>.</p>
+<p>For example, consider the following two code snippets:</p>
+<table style="width:75%;">
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 37%" />
+</colgroup>
+<tbody>
+<tr class="odd">
+<td><div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="op">&gt;&gt;&gt;</span> my_function(x, y)</span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="dv">10</span></span></code></pre></div></td>
+<td><div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> (<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> x</span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="op">&gt;&gt;&gt;</span> my_function(x, y)</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="dv">10</span></span></code></pre></div></td>
+</tr>
+</tbody>
+</table>
+<p>These two code snippets will always behave the same way, regardless of what <code>my_function</code> actually does! Because <code>x</code> and <code>y</code> refer to immutable values, the behaviour of <code>my_function</code> depends only on the values of the object, and not their ids.</p>
+<p>This allows the Python interpreter to save a bit of computer memory by not creating new objects for some immutable values. For example, every occurrence of the boolean value <code>True</code> refers to the same object:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="va">True</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="dv">1734328640</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="va">True</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="dv">1734328640</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="dv">10</span> <span class="op">&gt;</span> <span class="dv">3</span>)</span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="dv">1734328640</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(<span class="kw">not</span> <span class="va">False</span>)</span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="dv">1734328640</span></span></code></pre></div>
+<p>A bit more surprisingly, “small” integers are automatically aliased, while “large” integers are not:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="dv">43</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a><span class="op">&gt;&gt;&gt;</span> y <span class="op">=</span> <span class="dv">43</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="op">&gt;&gt;&gt;</span> x <span class="kw">is</span> y</span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="va">True</span></span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(x)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="dv">1734453840</span></span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(y)</span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="dv">1734453840</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="op">&gt;&gt;&gt;</span> a <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="op">&gt;&gt;&gt;</span> b <span class="op">=</span> <span class="dv">1000</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="op">&gt;&gt;&gt;</span> a <span class="kw">is</span> b</span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="va">False</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(a)</span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="dv">16727840</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">id</span>(b)</span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="dv">16727856</span></span></code></pre></div>
+<p>The other immutable data type where the Python interpret takes this object creation “shortcut” is with <em>some</em> string values:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="op">&gt;&gt;&gt;</span> name1 <span class="op">=</span> <span class="st">&#39;David&#39;</span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="op">&gt;&gt;&gt;</span> name2 <span class="op">=</span> <span class="st">&#39;David&#39;</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="op">&gt;&gt;&gt;</span> name1 <span class="kw">is</span> name2</span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="va">True</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="op">&gt;&gt;&gt;</span> full_name1 <span class="op">=</span> <span class="st">&#39;David Liu&#39;</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="op">&gt;&gt;&gt;</span> full_name2 <span class="op">=</span> <span class="st">&#39;David Liu&#39;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a><span class="op">&gt;&gt;&gt;</span> full_name1 <span class="kw">is</span> full_name2</span>
+<span id="cb17-8"><a href="#cb17-8"></a><span class="va">False</span></span></code></pre></div>
+<p>The exact rules for when the Python interpreter does and does not take this shortcut are beyond the scope of this course, and actually change from one version of Python to the next. For the purpose of writing Python code and doing object comparisons, the bottom line is:</p>
+<ul>
+<li>For <em>boolean</em> values, use <code>is</code> to compare for equality.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Though also keep in mind that you should never write <code>&lt;expr&gt; is True</code> or <code>&lt;expr&gt; is False</code>, since these are equivalent to the simpler <code>&lt;expr&gt;</code> and <code>not &lt;expr&gt;</code>, respectively.</span></li>
+<li>For <em>non-boolean</em> <em>immutable</em> values, use <code>==</code> to compare for equality, as using <code>is</code> can lead to surprsing results.</li>
+<li>For <em>mutable</em> values, use <code>==</code> to compare value equality (almost always what you want).</li>
+<li>For <em>mutable</em> values, use <code>is</code> to check for aliasing (almost never what you want).</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

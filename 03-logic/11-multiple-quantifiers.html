@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.11 Working with Multiple Quantifiers</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.11 Working with Multiple Quantifiers</h1>
+</header>
+<section>
+<p>Expressions in predicate logic with a single quantifier can generally be translated into English as either “there exists an element <span class="math inline">\(x\)</span> of set <span class="math inline">\(S\)</span> that satisfies <span class="math inline">\(P(x)\)</span>” (existential quantifier) or “every element <span class="math inline">\(x\)</span> of set <span class="math inline">\(S\)</span> satisfies <span class="math inline">\(P(x)\)</span>” (universal quantifier). However, there are situations where multiple variables are quantified, and we need to pay special attention to what such statements are actually saying. Let us revisit our <span class="math inline">\(Loves\)</span> predicate from earlier this chapter. In particular, recall the following relationships regarding who loves whom:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">Sophia</th>
+<th style="text-align: left;">Thelonious</th>
+<th style="text-align: left;">Stanley</th>
+<th style="text-align: left;">Laura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Breanna</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr class="even">
+<td>Malena</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="odd">
+<td>Patrick</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr class="even">
+<td>Ella</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+</tr>
+</tbody>
+</table>
+<p>Remember that our <span class="math inline">\(Loves\)</span> predicate is binary—what if we wanted to quantify <em>both</em> of its inputs? Consider the formula: <span class="math display">\[\forall a \in A,~\forall b \in B,~Loves(a,b).\]</span></p>
+<p>We translate this as “for every person <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>, for every person <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span>, <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>.” After some thought, we notice that the order in which we quantified <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> doesn’t matter; the statement “for every person <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span>, for every person <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>, <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>” means exactly the same thing! In both cases, we are considering all possible pairs of people (one from <span class="math inline">\(A\)</span> and one from <span class="math inline">\(B\)</span>).</p>
+<p>In general, when we have two consecutive universal quantifiers the order does <em>not</em> matter. That is, the following two formulas are equivalent:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">Tip: when the domains of the two variables are the same, we typically combine the quantifications, e.g., <span class="math inline">\(\forall x \in S,~ \forall y \in S,~ P(x, y)\)</span> into <span class="math inline">\(\forall x,y \in S,~ P(x, y)\)</span>.</span></p>
+<ul>
+<li><span class="math inline">\(\forall x \in S_1,~ \forall y \in S_2,~ P(x, y)\)</span></li>
+<li><span class="math inline">\(\forall y \in S_2,~ \forall x \in S_1,~ P(x, y)\)</span></li>
+</ul>
+<p>The same is true of two consecutive existential quantifiers. Consider the statements “there exist an <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span> and <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span> such that <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>” and “there exist a <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span> and <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span> such that <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>.” Again, they mean the same thing: in this case, we only care about one particular pair of people (one from <span class="math inline">\(A\)</span> and one from <span class="math inline">\(B\)</span>), so the order in which we pick the particular <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> doesn’t matter. In general, the following two formulas are equivalent:</p>
+<ul>
+<li><span class="math inline">\(\exists x \in S_1,~ \exists y \in S_2,~ P(x, y)\)</span></li>
+<li><span class="math inline">\(\exists y \in S_2,~ \exists x \in S_1,~ P(x, y)\)</span></li>
+</ul>
+<p>But even though consecutive quantifiers of the same type behave very nicely, this is <strong>not</strong> the case for a pair of alternating quantifiers. First, consider <span class="math display">\[\forall a \in A,~ \exists b \in B,~ Loves(a,b).\]</span> This can be translated as “For every person <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>, there exists a person <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span>, such that <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>.”<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Or put a bit more naturally, “For every person <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>, <span class="math inline">\(a\)</span> loves someone in <span class="math inline">\(B\)</span>,” which can be shortened even further to “Everyone in <span class="math inline">\(A\)</span> loves someone in <span class="math inline">\(B\)</span>.”</span> This is true: every person in <span class="math inline">\(A\)</span> loves at least one person.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="math inline">\(a\)</span> (from <span class="math inline">\(A\)</span>)</th>
+<th style="text-align: left;"><span class="math inline">\(b\)</span> (a person in <span class="math inline">\(B\)</span> who <span class="math inline">\(a\)</span> loves)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Breanna</td>
+<td style="text-align: left;">Thelonious</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Malena</td>
+<td style="text-align: left;">Laura</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Patrick</td>
+<td style="text-align: left;">Stanley</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ella</td>
+<td style="text-align: left;">Stanley</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the choice of person who <span class="math inline">\(a\)</span> loves depends on <span class="math inline">\(a\)</span>: this is consistent with the latter part of the English translation, “<span class="math inline">\(a\)</span> loves someone in <span class="math inline">\(B\)</span>.”</p>
+<p>Let us contrast this with the similar-looking formula, where the order of the quantifiers has changed: <span class="math display">\[\exists b \in B,~ \forall a \in A,~ Loves(a,b).\]</span> This formula’s meaning is quite different: “there exists a person <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span>, where for every person <span class="math inline">\(a\)</span> in <span class="math inline">\(A\)</span>, <span class="math inline">\(a\)</span> loves <span class="math inline">\(b\)</span>.” Put more naturally, “there is a person <span class="math inline">\(b\)</span> in <span class="math inline">\(B\)</span> who is loved by everyone in <span class="math inline">\(A\)</span>” or “someone in <span class="math inline">\(B\)</span> is loved by everyone in <span class="math inline">\(A\)</span>”.</p>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: left;"><span class="math inline">\(b\)</span> (from <span class="math inline">\(B\)</span>)</th>
+<th style="text-align: left;">Loved by everyone in <span class="math inline">\(A\)</span>?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Sophia</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Thelonious</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Stanley</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Laura</td>
+<td style="text-align: left;">No</td>
+</tr>
+</tbody>
+</table>
+<p>This happens to be True because everyone in <span class="math inline">\(A\)</span> loves Stanley. But it would <em>not</em> be True if we, for example, removed the love connection between Malena and Stanley. In this case, Stanley would no longer be loved by everyone, and so <em>no one</em> in <span class="math inline">\(B\)</span> is loved by everyone in <span class="math inline">\(A\)</span>. But notice that even if Malena no longer loves Stanley, the previous statement (“everyone in <span class="math inline">\(A\)</span> loves someone”) remains True!</p>
+<p>So we would have a case where switching the order of quantifiers changes the meaning of a formula! In both cases, the existential quantifier <span class="math inline">\(\exists b \in B\)</span> involves making a <em>choice</em> of person from <span class="math inline">\(B\)</span>. But in the first case, this quantifier occurs after <span class="math inline">\(a\)</span> is quantified, so the choice of <span class="math inline">\(b\)</span> is allowed to depend on the choice of <span class="math inline">\(a\)</span>. In the second case, this quantifier occurs before <span class="math inline">\(a\)</span>, and so the choice of <span class="math inline">\(b\)</span> must be <em>independent</em> of the choice of <span class="math inline">\(a\)</span>.</p>
+<p>When reading a nested quantified expression, you should read it from left to right, and pay attention to the order of the quantifiers. In order to see if the statement is True, whenever you come across a universal quantifier, you must verify the statement for every single value that this variable can take on. Whenever you see an existential quantifier, you only need to exhibit <em>one</em> value for that variable such that the statement is True, and this value can depend on the variables to the left of it, but not on the variables to the right of it.</p>
+<h2 id="translating-multiple-quantifiers-into-python-code">Translating multiple quantifiers into Python code</h2>
+<p>Now let’s see how we could represent this example in Python. First, recall the table of who loves whom from above:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th style="text-align: left;">Sophia</th>
+<th style="text-align: left;">Thelonious</th>
+<th style="text-align: left;">Stanley</th>
+<th style="text-align: left;">Laura</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Breanna</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr class="even">
+<td>Malena</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+</tr>
+<tr class="odd">
+<td>Patrick</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">False</td>
+</tr>
+<tr class="even">
+<td>Ella</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">False</td>
+<td style="text-align: left;">True</td>
+<td style="text-align: left;">True</td>
+</tr>
+</tbody>
+</table>
+<p>And we can represent this table of who loves whom in Python as a <em>list of lists</em> or, more precisely, using a <code>list[list[bool]]</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>[</span>
+<span id="cb1-2"><a href="#cb1-2"></a>  [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb1-3"><a href="#cb1-3"></a>  [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>],</span>
+<span id="cb1-4"><a href="#cb1-4"></a>  [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb1-5"><a href="#cb1-5"></a>  [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>]</span>
+<span id="cb1-6"><a href="#cb1-6"></a>]</span></code></pre></div>
+<p>Our list is the same as the table above, except with the people’s names removed. Each <em>row</em> of the table represents a person from set <span class="math inline">\(A\)</span>, while each <em>column</em> in the table represents a person from set <span class="math inline">\(B\)</span>. We’ve kept the order the same; so the first row represents <span class="math inline">\(Breanna\)</span>, while the third column represents <span class="math inline">\(Stanley\)</span>.</p>
+<p>Now, how are we going to access the data from this table? For this section we’re going to put all of our work into a new file called <code>loves.py</code>, and so we’ll start by defining a new variable in this file:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># In loves.py</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a>LOVES_TABLE <span class="op">=</span> [</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb2-4"><a href="#cb2-4"></a>  [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>],</span>
+<span id="cb2-5"><a href="#cb2-5"></a>  [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb2-6"><a href="#cb2-6"></a>  [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>]</span>
+<span id="cb2-7"><a href="#cb2-7"></a>]</span></code></pre></div>
+<p>This is the first time we’ve defined a variable within a Python file (rather than the Python console) that is <em>not</em> in a function definition. Variables defined in this way are called <em>global constants</em>, to distinguish them from the local variables defined within functions.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> The term “constant” is not important right now, but will become important later in the course.</span> Global constants are called “global” because their <em>scope</em> is the entire Python module in which they are defined: they can be accessed anywhere in the file, including all function bodies. They can also be imported and used in other Python modules, and are available when we run the file in the Python console.</p>
+<h3 id="exploring-loves_table">Exploring <code>LOVES_TABLE</code></h3>
+<p>To start, let’s run our <code>loves.py</code> file in the Python console so we can play around with the <code>LOVES_TABLE</code> value. Because <code>LOVES_TABLE</code> is a list of lists, where each inner list represents a row of the table, it’s easy to access a single row with list indexing:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> LOVES_TABLE[<span class="dv">0</span>]  <span class="co"># This is the first row of the table</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>[<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>]</span></code></pre></div>
+<p>From here, we can access individual elements of the table, which represent an individual value of the <span class="math inline">\(Loves(a, b)\)</span> predicate.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> LOVES_TABLE[<span class="dv">0</span>][<span class="dv">1</span>]  <span class="co"># This is the (0, 1) entry in the table</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="va">True</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> LOVES_TABLE[<span class="dv">2</span>][<span class="dv">3</span>]  <span class="co"># This is the (2, 3) entry in the table</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="va">False</span></span></code></pre></div>
+<p>In general, <code>LOVES_TABLE[i][j]</code> evaluates to the entry in row <code>i</code> and column <code>j</code> of the table. Finally, since the data is stored by rows, accessing columns is a little more work. To access column <code>j</code>, we can use a list comprehension to access the <code>j</code>-th element in each row:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> [LOVES_TABLE[i][<span class="dv">0</span>] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">4</span>)]</span>
+<span id="cb5-2"><a href="#cb5-2"></a>[<span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>, <span class="va">False</span>]</span></code></pre></div>
+<p>Now, let’s return to our Python file <code>loves.py</code> and define a version of our <span class="math inline">\(Loves\)</span> predicate. First, we add two more constants to represent the sets <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span>, but using a dictionary to map names to their corresponding indices in <code>LOVES_TABLE</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># In loves.py</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>LOVES_TABLE <span class="op">=</span> [</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>],</span>
+<span id="cb6-5"><a href="#cb6-5"></a>    [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>]</span>
+<span id="cb6-7"><a href="#cb6-7"></a>]</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>A <span class="op">=</span> {</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="st">&#39;Breanna&#39;</span>: <span class="dv">0</span>,</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="st">&#39;Malena&#39;</span>: <span class="dv">1</span>,</span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="st">&#39;Patrick&#39;</span>: <span class="dv">2</span>,</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="st">&#39;Ella&#39;</span>: <span class="dv">3</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>}</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a>B <span class="op">=</span> {</span>
+<span id="cb6-17"><a href="#cb6-17"></a>    <span class="st">&#39;Sophia&#39;</span>: <span class="dv">0</span>,</span>
+<span id="cb6-18"><a href="#cb6-18"></a>    <span class="st">&#39;Thelonius&#39;</span>: <span class="dv">1</span>,</span>
+<span id="cb6-19"><a href="#cb6-19"></a>    <span class="st">&#39;Stanley&#39;</span>: <span class="dv">2</span>,</span>
+<span id="cb6-20"><a href="#cb6-20"></a>    <span class="st">&#39;Laura&#39;</span>: <span class="dv">3</span>,</span>
+<span id="cb6-21"><a href="#cb6-21"></a>}</span></code></pre></div>
+<p>Next, we define a <code>loves</code> predicate, which take in two strings (note the preconditions) and returns whether person <code>a</code> loves person <code>b</code>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Note that because this function is defined in the same file as <code>LOVES_TABLE</code>, it can access that global constant in its body.</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> loves(a: <span class="bu">str</span>, b: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return whether the person at index a loves the person at index b.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">      - a in A</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">      - b in B</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    &gt;&gt;&gt; loves(&#39;Breanna&#39;, &#39;Sophia&#39;)</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">    False</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>    a_index <span class="op">=</span> A[a]</span>
+<span id="cb7-12"><a href="#cb7-12"></a>    b_index <span class="op">=</span> B[b]</span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="cf">return</span> LOVES_TABLE[a_index][b_index]</span></code></pre></div>
+<p>Now that we’ve seen how to access individual entries, rows, and columns from the table, let’s turn to how we would represent the statements in predicate logic we’ve written in this section. First, we can express <span class="math inline">\(\forall a \in A,~ \forall b \in B,~ Loves(a, b)\)</span> as the expression:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">all</span>({loves(a, b) <span class="cf">for</span> a <span class="kw">in</span> A <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="va">False</span></span></code></pre></div>
+<p>And similarly, we can express <span class="math inline">\(\exists a \in A,~ \exists b \in B,~ Loves(a, b)\)</span> as the expression:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>({loves(a, b) <span class="cf">for</span> a <span class="kw">in</span> A <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="va">True</span></span></code></pre></div>
+<p>These two examples illustrate how Python’s <code>all</code> and <code>any</code> functions naturally enable us to express multiple quantifiers of the same type. But what about the expressions we looked at with alternating quantifiers? Consider <span class="math inline">\(\forall a \in A,~ \exists b \in B,~ Loves(a,b)\)</span>. It is possible to construct a nested expression that represents this one as well:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">all</span>({<span class="bu">any</span>({loves(a, b) <span class="cf">for</span> b <span class="kw">in</span> B}) <span class="cf">for</span> a <span class="kw">in</span> A})</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="va">True</span></span></code></pre></div>
+<p>Though this is structurally equivalent to the statement in predicate logic, it’s syntactically longer and a bit harder to read. In general we try to avoid lots of nesting in expressions in programming, and a rule of thumb we’ll try to follow in this course is to <em>never nest <code>all</code>/<code>any</code> calls</em>. Instead, we can pull out the inner <code>any</code> into its own function, which not only reduces the nesting but makes it clearer what’s going on:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> loves_someone(a: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="co">&quot;&quot;&quot;Return whether a loves at least one person in B.</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="co">      - a in A</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>    <span class="cf">return</span> <span class="bu">any</span>({loves(a, b) <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb11-8"><a href="#cb11-8"></a></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">all</span>({loves_someone(a) <span class="cf">for</span> a <span class="kw">in</span> A})</span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="va">True</span></span></code></pre></div>
+<p>Similarly, we can express the statement <span class="math inline">\(\exists b \in B,~ \forall a \in A,~ Loves(a,b)\)</span> in two different ways. With a nested <code>any</code>/<code>all</code>:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>({<span class="bu">all</span>({loves(a, b)} <span class="cf">for</span> a <span class="kw">in</span> A) <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="va">True</span></span></code></pre></div>
+<p>And by pulling out the inner <code>all</code> expression into a named function:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> loved_by_everyone(b: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;Return whether b is loved by everyone in A.</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">      - b in B</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">return</span> <span class="bu">all</span>({loves(a, b)} <span class="cf">for</span> a <span class="kw">in</span> A)</span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>({loved_by_everyone(b) <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="va">True</span></span></code></pre></div>
+<p>Here is our final <code>loves.py</code> file, for you to play around with:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="co"># In loves.py</span></span>
+<span id="cb14-2"><a href="#cb14-2"></a>LOVES_TABLE <span class="op">=</span> [</span>
+<span id="cb14-3"><a href="#cb14-3"></a>    [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb14-4"><a href="#cb14-4"></a>    [<span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>, <span class="va">True</span>],</span>
+<span id="cb14-5"><a href="#cb14-5"></a>    [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">False</span>],</span>
+<span id="cb14-6"><a href="#cb14-6"></a>    [<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>, <span class="va">True</span>]</span>
+<span id="cb14-7"><a href="#cb14-7"></a>]</span>
+<span id="cb14-8"><a href="#cb14-8"></a></span>
+<span id="cb14-9"><a href="#cb14-9"></a>A <span class="op">=</span> {</span>
+<span id="cb14-10"><a href="#cb14-10"></a>    <span class="st">&#39;Breanna&#39;</span>: <span class="dv">0</span>,</span>
+<span id="cb14-11"><a href="#cb14-11"></a>    <span class="st">&#39;Malena&#39;</span>: <span class="dv">1</span>,</span>
+<span id="cb14-12"><a href="#cb14-12"></a>    <span class="st">&#39;Patrick&#39;</span>: <span class="dv">2</span>,</span>
+<span id="cb14-13"><a href="#cb14-13"></a>    <span class="st">&#39;Ella&#39;</span>: <span class="dv">3</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a>}</span>
+<span id="cb14-15"><a href="#cb14-15"></a></span>
+<span id="cb14-16"><a href="#cb14-16"></a>B <span class="op">=</span> {</span>
+<span id="cb14-17"><a href="#cb14-17"></a>    <span class="st">&#39;Sophia&#39;</span>: <span class="dv">0</span>,</span>
+<span id="cb14-18"><a href="#cb14-18"></a>    <span class="st">&#39;Thelonius&#39;</span>: <span class="dv">1</span>,</span>
+<span id="cb14-19"><a href="#cb14-19"></a>    <span class="st">&#39;Stanley&#39;</span>: <span class="dv">2</span>,</span>
+<span id="cb14-20"><a href="#cb14-20"></a>    <span class="st">&#39;Laura&#39;</span>: <span class="dv">3</span>,</span>
+<span id="cb14-21"><a href="#cb14-21"></a>}</span>
+<span id="cb14-22"><a href="#cb14-22"></a></span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="kw">def</span> loves(a: <span class="bu">str</span>, b: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb14-24"><a href="#cb14-24"></a>    <span class="co">&quot;&quot;&quot;Return whether the person at index a loves the person at index b.</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">    Preconditions:</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">      - a in A</span></span>
+<span id="cb14-28"><a href="#cb14-28"></a><span class="co">      - b in B</span></span>
+<span id="cb14-29"><a href="#cb14-29"></a></span>
+<span id="cb14-30"><a href="#cb14-30"></a><span class="co">    &gt;&gt;&gt; loves(&#39;Breanna&#39;, &#39;Sophia&#39;)</span></span>
+<span id="cb14-31"><a href="#cb14-31"></a><span class="co">    False</span></span>
+<span id="cb14-32"><a href="#cb14-32"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-33"><a href="#cb14-33"></a>    a_index <span class="op">=</span> A[a]</span>
+<span id="cb14-34"><a href="#cb14-34"></a>    b_index <span class="op">=</span> B[b]</span>
+<span id="cb14-35"><a href="#cb14-35"></a>    <span class="cf">return</span> LOVES_TABLE[a_index][b_index]</span>
+<span id="cb14-36"><a href="#cb14-36"></a></span>
+<span id="cb14-37"><a href="#cb14-37"></a></span>
+<span id="cb14-38"><a href="#cb14-38"></a><span class="kw">def</span> loves_someone(a: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb14-39"><a href="#cb14-39"></a>    <span class="co">&quot;&quot;&quot;Return whether a loves at least one person in B.</span></span>
+<span id="cb14-40"><a href="#cb14-40"></a></span>
+<span id="cb14-41"><a href="#cb14-41"></a><span class="co">    Preconditions:</span></span>
+<span id="cb14-42"><a href="#cb14-42"></a><span class="co">      - a in A</span></span>
+<span id="cb14-43"><a href="#cb14-43"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-44"><a href="#cb14-44"></a>    <span class="cf">return</span> <span class="bu">any</span>({loves(a, b) <span class="cf">for</span> b <span class="kw">in</span> B})</span>
+<span id="cb14-45"><a href="#cb14-45"></a></span>
+<span id="cb14-46"><a href="#cb14-46"></a></span>
+<span id="cb14-47"><a href="#cb14-47"></a><span class="kw">def</span> loved_by_everyone(b: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb14-48"><a href="#cb14-48"></a>    <span class="co">&quot;&quot;&quot;Return whether b is loved by everyone in A.</span></span>
+<span id="cb14-49"><a href="#cb14-49"></a></span>
+<span id="cb14-50"><a href="#cb14-50"></a><span class="co">    Preconditions:</span></span>
+<span id="cb14-51"><a href="#cb14-51"></a><span class="co">      - b in B</span></span>
+<span id="cb14-52"><a href="#cb14-52"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-53"><a href="#cb14-53"></a>    <span class="cf">return</span> <span class="bu">all</span>({loves(a, b)} <span class="cf">for</span> a <span class="kw">in</span> A)</span></code></pre></div>
+<h2 id="a-famous-logical-statement">A famous logical statement</h2>
+<p>Before we wrap up, let us use our understanding of multiple quantifiers to express one of the more famous properties about prime numbers: “there are infinitely many primes.”<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Later on, we’ll actually prove this statement! </span></p>
+<p>In <a href="09-working-with-definitions.html">Section 2.9</a>, we saw how to express the fact that a single number <span class="math inline">\(p\)</span> is a prime number, but how do we capture “infinitely many”? The key idea is that because primes are natural numbers, if there are infinitely many of them, then they have to keep growing bigger and bigger.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> Another way to think about this is to consider the statement “every prime number is less than 9000. If this statement were True, then there could only be at most 8999 primes.” </span> So we can express the original statement as “every natural number has a prime number larger than it,” or in the symbolic notation: <span class="math display">\[\forall n \in \N,~ \exists p \in \N,~ p &gt; n \land IsPrime(p).\]</span></p>
+<p>If we wanted to express this statement without either the <span class="math inline">\(IsPrime\)</span> or divisibility predicates, we would end up with an extremely cumbersome statement: <span class="math display">\[\forall n \in \N,~ \exists p \IN \N,~
+p &gt; n \land
+p &gt; 1 \land \Big( \forall d \in \N,~ \left(\exists k \in \Z,~ p = kd\right) \Rightarrow d = 1 \OR d = p \Big).\]</span></p>
+<p>This statement is terribly ugly, which is why we define our own predicates! Keep this in mind throughout the course: when you are given a statement to express, make sure you are aware of all of the relevant definitions, and make use of them to simplify your expression.</p>
+<h2 id="looking-ahead">Looking Ahead</h2>
+<p>In this section, we’ve introduced the notion of lists within lists to represent tables of values for binary predicates. In the next chapter, we’ll start looking at tabular data and other forms of nested collections of data in more detail, and see how these more complex structures can be used to represent real-world data for our programs.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

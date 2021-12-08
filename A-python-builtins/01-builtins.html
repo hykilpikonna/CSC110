@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A.1 Python Built-In Function Reference</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">A.1 Python Built-In Function Reference</h1>
+</header>
+<section>
+<p><em>Adapted from <a href="https://docs.python.org/3/library/functions.html" class="uri">https://docs.python.org/3/library/functions.html</a>.</em> Note that not all built-in functions are shown.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 15%" />
+<col style="width: 84%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Built-in Function</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>abs(x)</code></td>
+<td>Return the absolute value of a number. The argument may be an integer or a floating point number.</td>
+</tr>
+<tr class="even">
+<td><code>all(iterable)</code></td>
+<td>Return <code>True</code> if all elements of the <code>iterable</code> are true (or if the <code>iterable</code> is empty).</td>
+</tr>
+<tr class="odd">
+<td><code>any(iterable)</code></td>
+<td>Return <code>True</code> if any element of the <code>iterable</code> is true. If the <code>iterable</code> is empty, return <code>False</code>.</td>
+</tr>
+<tr class="even">
+<td><code>chr(i)</code></td>
+<td><p>Return the string representing a character whose Unicode code point is the integer <em>i</em>. For example, <code>chr(97)</code> returns the string <code>'a'</code>, while <code>chr(8364)</code> returns the string <code>'€'</code>. This is the inverse of <code>ord()</code>.</p>
+<p>The valid range for the argument is from 0 through 1,114,111. <code>ValueError</code> will be raised if <em>i</em> is outside that range.</p></td>
+</tr>
+<tr class="odd">
+<td><code>divmod(a, b)</code></td>
+<td>Take two (non complex) numbers as arguments and return a pair of numbers consisting of their quotient and remainder when using integer division. For integers, the result is the same as <code>(a // b, a % b)</code>.</td>
+</tr>
+<tr class="even">
+<td><pre><code>filter(
+  function,
+  iterable
+)</code></pre></td>
+<td>Construct an iterator from those elements of <code>iterable</code> for which <code>function</code> returns <code>True</code>. <code>iterable</code> may be either a sequence, a container which supports iteration, or an iterator.</td>
+</tr>
+<tr class="odd">
+<td><code>id(object)</code></td>
+<td>Return the “identity” of an object. This is an integer which is guaranteed to be unique and constant for this object during its lifetime.</td>
+</tr>
+<tr class="even">
+<td><code>input([prompt])</code></td>
+<td><p>If the <code>prompt</code> argument is present, it is written to standard output without a trailing newline. The function then reads a line from input, converts it to a string (stripping a trailing newline), and returns that. Example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> <span class="bu">input</span>(<span class="st">&#39;Type in a word: &#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>Type <span class="kw">in</span> a word: Python  <span class="co"># &quot;Python&quot; is user input</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;&gt;&gt;</span> s</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">&#39;Python&#39;</span></span></code></pre></div></td>
+</tr>
+<tr class="odd">
+<td><pre><code>isinstance(
+  object,
+  classinfo
+)</code></pre></td>
+<td>Return <code>True</code> if the <code>object</code> argument is an instance of the <code>classinfo</code> argument, or of a subclass thereof. If <code>object</code> is not an object of the given type, the function always returns <code>False</code>.</td>
+</tr>
+<tr class="even">
+<td><code>len(s)</code></td>
+<td>Return the length (the number of items) of an object.</td>
+</tr>
+<tr class="odd">
+<td><pre><code># Form 1
+
+max(
+  iterable,
+ *
+  [, key,
+  default]
+)
+
+
+# Form 2
+
+max(
+  arg1,
+  arg2,
+  *args,
+  [key]
+)</code></pre></td>
+<td><p>Return the largest item in an <code>iterable</code> or the largest of two or more arguments.</p>
+<p>If one positional argument is provided, it should be an iterable. The largest item in the iterable is returned. If two or more positional arguments are provided, the largest of the positional arguments is returned.</p>
+<p>There are two optional keyword-only arguments. The <code>key</code> argument specifies a one-argument ordering function like that used for <code>list.sort()</code>.</p>
+<p>The <code>default</code> argument specifies an object to return if the provided iterable is empty. If the iterable is empty and <code>default</code> is not provided, a <code>ValueError</code> is raised. If multiple items are maximal, the function returns the first one encountered.</p></td>
+</tr>
+<tr class="even">
+<td><pre><code># Form 1
+
+min(
+  iterable, *
+  [, key,
+  default]
+)
+
+# Form 2
+
+min(
+  arg1,
+  arg2,
+  *args,
+  [key]
+)</code></pre></td>
+<td><p>Return the smallest item in an <code>iterable</code> or the smallest of two or more arguments.</p>
+<p>If one positional argument is provided, it should be an iterable. The smallest item in the iterable is returned. If two or more positional arguments are provided, the smallest of the positional arguments is returned.</p>
+<p>There are two optional keyword-only arguments. The <code>key</code> argument specifies a one-argument ordering function like that used for <code>list.sort()</code>.</p>
+<p>The <code>default</code> argument specifies an object to return if the provided iterable is empty. If the iterable is empty and <code>default</code> is not provided, a <code>ValueError</code> is raised. If multiple items are minimal, the function returns the first one encountered.</p></td>
+</tr>
+<tr class="odd">
+<td><pre><code>open(
+  file,
+  mode=&#39;r&#39;
+)</code></pre></td>
+<td><p>Open <code>file</code> and return a corresponding file object. If the file cannot be opened, an <code>OSError</code> is raised.</p>
+<p><code>file</code> is a path-like object giving the pathname (absolute or relative to the current working directory) of the file to be opened.</p>
+<p><code>mode</code> is an optional string that specifies the mode in which the file is opened. It defaults to ‘r’ which means open for reading in text mode. Other common values are ‘w’ for writing (truncating the file if it already exists), ‘x’ for exclusive creation and ‘a’ for appending.</p></td>
+</tr>
+<tr class="even">
+<td><code>ord(c)</code></td>
+<td>Given a string representing one Unicode character, return an integer representing the Unicode code point of that character. For example, <code>ord('a')</code> returns the integer <code>97</code> and <code>ord('€')</code> (Euro sign) returns <code>8364</code>. This is the inverse of <code>chr()</code>.</td>
+</tr>
+<tr class="odd">
+<td><pre><code>pow(
+  base, exp
+  [, mod]
+)</code></pre></td>
+<td>Return <code>base</code> to the power <code>exp</code>; if <code>mod</code> is present, return <code>base</code> to the power <code>exp</code>, modulo <code>mod</code> (computed more efficiently than <code>pow(base, exp) % mod</code>). The two-argument form <code>pow(base, exp)</code> is equivalent to using the power operator: <code>base ** exp</code>.</td>
+</tr>
+<tr class="even">
+<td><pre><code>print(
+  *objects,
+  sep=&#39; &#39;,
+  end=&#39;\&#39;
+)</code></pre></td>
+<td><p>Print <code>objects</code> to standard output, separated by <code>sep</code> and followed by <code>end</code>. <code>sep</code> and <code>end</code>, if present, must be given as keyword arguments.</p>
+<p>Both <code>sep</code> and <code>end</code> must be strings; they can also be <code>None</code>, which means to use the default values.</p></td>
+</tr>
+<tr class="odd">
+<td><code>reversed(seq)</code></td>
+<td>Return a reverse iterator.</td>
+</tr>
+<tr class="even">
+<td><pre><code>round(
+  number
+  [, ndigits]
+)</code></pre></td>
+<td><p>Return <code>number</code> rounded to <code>ndigits</code> precision after the decimal point. If <code>ndigits</code> is omitted or is <code>None</code>, it returns the nearest integer to its input.</p>
+<p>For the built-in types supporting <code>round()</code>, values are rounded to the closest multiple of 10 to the power minus <em>ndigits</em>; if two multiples are equally close, rounding is done toward the even choice (so, for example, both <code>round(0.5)</code> and <code>round(-0.5)</code> are <code>0</code>, and <code>round(1.5)</code> is 2).</p>
+<p>Any integer value is valid for <em>ndigits</em> (positive, zero, or negative). The return value is an integer if ndigits is omitted or None. Otherwise the return value has the same type as number. <em>Note</em>: The behavior of <code>round()</code> for floats can be surprising: for example, <code>round(2.675, 2)</code> gives <code>2.67</code> instead of the expected <code>2.68</code>. This is not a bug: it’s a result of the fact that most decimal fractions can’t be represented exactly as a float. See <a href="https://docs.python.org/3/tutorial/floatingpoint.html#tut-fp-issues">Floating Point Arithmetic: Issues and Limitations</a> for more information.</p></td>
+</tr>
+<tr class="odd">
+<td><pre><code>sorted(
+  iterable, *,
+  key=None,
+  reverse=False
+)</code></pre></td>
+<td><p>Return a new sorted list from the items in <code>iterable</code>.</p>
+<p>Has two optional arguments which must be specified as keyword arguments.</p>
+<p><code>key</code> specifies a function of one argument that is used to extract a comparison key from each element in iterable<code>(for example,</code>key=str.lower<code>). The default value is</code>None<code>(compare the elements directly).</code>reverse<code>is a boolean value. If set to</code>True`, then the list elements are sorted as if each comparison were reversed.</p></td>
+</tr>
+<tr class="even">
+<td><pre><code>sum(
+  iterable,
+  /,
+  start=0
+)</code></pre></td>
+<td>Sums <code>start</code> and the items of an <code>iterable</code> from left to right and returns the total.</td>
+</tr>
+<tr class="odd">
+<td><code>type(object)</code></td>
+<td><p>Return the type of an <code>object</code>.</p>
+<p>The <code>isinstance()</code> built-in function is recommended for testing the type of an object, because it takes subclasses into account.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

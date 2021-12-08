@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>8.2 Comparing Asymptotic Function Growth with Big-O</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">8.2 Comparing Asymptotic Function Growth with Big-O</h1>
+</header>
+<section>
+<p>In the previous section, we began our study of program running time with a few simple examples to guide our intuition. One question that emerged from these examples was how we define what “basic operations” we actually count when analysing a program’s running time—or better yet, how we can ignore small differences in counts that result from slighly different definitions of “basic operation”. This question grows even more important as we study more complex algorithms consisting of many lines of code.</p>
+<p>Over the next two sections, we’ll develop a powerful mathematical tool for comparing function growth rates. This will formalize the idea of “linear”, “quadratic”, “logarithmic”, and “constant” running times from the previous section, and extend these categories to all types of functions.</p>
+<h2 id="four-kinds-of-dominance">Four kinds of dominance</h2>
+<p>Here is a quick reminder about function notation. When we write <span class="math inline">\(f : A \to B\)</span>, we say that <span class="math inline">\(f\)</span> is a function which maps elements of <span class="math inline">\(A\)</span> to elements of <span class="math inline">\(B\)</span>. In this chapter, we will mainly be concerned about functions mapping the natural numbers to the nonnegative real numbers,<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">These are the domain and codomain which arise in algorithm analysis—an algorithm can’t take “negative” time to run, after all.</span> i.e., functions <span class="math inline">\(f: \N \to \R^{\geq 0}\)</span>. Though there are many different properties of functions that mathematicians study, we are only going to look at one such property: describing the long-term (i.e., <strong>asymptotic</strong>) growth of a function. We will proceed by building up a few different definitions of comparing function growth, which will eventually lead into one which is robust enough to be used in practice.</p>
+<div class="definition" data-terms="dominates (absolute)">
+<p>Let <span class="math inline">\(f, g : \N \to \R^{\ge 0}\)</span>. We say that <span class="math inline">\(g\)</span> is <strong>absolutely dominated by</strong> <span class="math inline">\(f\)</span> when for all <span class="math inline">\(n \in \N\)</span>, <span class="math inline">\(g(n) \leq f(n)\)</span>.</p>
+</div>
+<div class="example">
+<p>Let <span class="math inline">\(f(n) = n^2\)</span> and <span class="math inline">\(g(n) = n\)</span>. Prove that <span class="math inline">\(g\)</span> is absolutely dominated by <span class="math inline">\(f\)</span>.</p>
+<div class="translation">
+<p>This is a straightforward unpacking of a definition, which you should be very comfortable with by now: <span class="math inline">\(\forall n \in \N,~ g(n) \leq f(n)\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Note that we aren’t quantifying over <span class="math inline">\(f\)</span> and <span class="math inline">\(g\)</span>; the “let” in the example defines concrete functions that we want to prove something about.</span></p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(n \in \N\)</span>. We want to show that <span class="math inline">\(n \leq n^2\)</span>.</p>
+<p><strong>Case 1</strong>: Assume <span class="math inline">\(n = 0\)</span>. In this case, <span class="math inline">\(n^2 = n = 0\)</span>, so the inequality holds.</p>
+<p><strong>Case 2</strong>: Assume <span class="math inline">\(n \geq 1\)</span>. In this case, we take the inequality <span class="math inline">\(n \geq 1\)</span> and multiply both sides by <span class="math inline">\(n\)</span> to get <span class="math inline">\(n^2 \geq n\)</span>, or equivalently <span class="math inline">\(n \leq n^2.\)</span></p>
+</div>
+</div>
+<p>Unfortunately, absolute dominance is too strict for our purposes: if <span class="math inline">\(g(n) \leq f(n)\)</span> for every natural number except <span class="math inline">\(5\)</span>, then we can’t say that <span class="math inline">\(g\)</span> is absolutely dominated by <span class="math inline">\(f\)</span>. For example, the function <span class="math inline">\(g(n) = 2n\)</span> is not absolutely dominated by <span class="math inline">\(f(n) = n^2\)</span>, even though <span class="math inline">\(g(n) \leq f(n)\)</span> everywhere except <span class="math inline">\(n = 1\)</span>. Graphically:</p>
+<p><img src="images/LinearQuadratic.png" alt="Linear vs. Quadratic Runtime" /><br />
+</p>
+<p>Here is another definition which is a bit more flexible than absolute dominance.</p>
+<div class="definition" data-terms="dominates (up to a constant factor)">
+<p>Let <span class="math inline">\(f, g : \N \to \R^{\ge 0}\)</span>. We say that <span class="math inline">\(g\)</span> <strong>is dominated by <span class="math inline">\(f\)</span> up to a constant factor</strong> when there exists a positive real number <span class="math inline">\(c\)</span> such that for all <span class="math inline">\(n \in \N\)</span>, <span class="math inline">\(g(n) \leq c \cdot f(n)\)</span>.</p>
+</div>
+<div class="example">
+<p>Let <span class="math inline">\(f(n) = n^2\)</span> and <span class="math inline">\(g(n) = 2n\)</span>. Prove that <span class="math inline">\(g\)</span> is dominated by <span class="math inline">\(f\)</span> up to a constant factor.</p>
+<div class="translation">
+<p>Once again, the translation is a simple unpacking of the previous definition:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Remember: the order of quantifiers matters! The choice of <span class="math inline">\(c\)</span> is <em>not</em> allowed to depend on <span class="math inline">\(n\)</span>.</span></p>
+<p><span class="math display">\[\exists c \in \R^+,~ \forall n \in \N,~ g(n) \leq c \cdot f(n).\]</span></p>
+</div>
+<div class="discussion">
+<p>The term “constant factor” is revealing. We already saw that <span class="math inline">\(n\)</span> is absolutely dominated by <span class="math inline">\(n^2\)</span>, so if the <span class="math inline">\(n\)</span> is multiplied by <span class="math inline">\(2\)</span>, then we should be able to multiply <span class="math inline">\(n^2\)</span> by <span class="math inline">\(2\)</span> as well to get the calculation to work out.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(c = 2\)</span>, and let <span class="math inline">\(n \in \N\)</span>. We want to prove that <span class="math inline">\(g(n) \leq c \cdot f(n)\)</span>, or in other words, <span class="math inline">\(2n \leq 2n^2\)</span>.</p>
+<p><strong>Case 1</strong>: Assume <span class="math inline">\(n = 0\)</span>. In this case, <span class="math inline">\(2n = 0\)</span> and <span class="math inline">\(2n^2 = 0\)</span>, so the inequality holds.</p>
+<p><strong>Case 2</strong>: Assume <span class="math inline">\(n \geq 1\)</span>. Taking the assumed inequality <span class="math inline">\(n \geq 1\)</span> and multiplying both sides by <span class="math inline">\(2n\)</span> yields <span class="math inline">\(2n^2 \geq 2n\)</span>, or equivalently <span class="math inline">\(2n \leq 2n^2\)</span>.</p>
+</div>
+</div>
+<p>Intuitively, “dominated by up to a constant factor” allows us to ignore multiplicative constants in our functions. This will be very useful in our running time analysis because it frees us from worrying about the exact constants used to represent numbers of basic operations: <span class="math inline">\(n\)</span>, <span class="math inline">\(2n\)</span>, and <span class="math inline">\(11n\)</span> are all <em>equivalent</em> in the sense that each one dominates the other two up to a constant factor.</p>
+<p>However, this second definition is still a little too restrictive, as the inequality must hold for every value of <span class="math inline">\(n\)</span>. Consider the functions <span class="math inline">\(f(n) = n^2\)</span> and <span class="math inline">\(g(n) = n + 90\)</span>. No matter how much we scale up <span class="math inline">\(f\)</span> by multiplying it by a constant, <span class="math inline">\(f(0)\)</span> will always be less than <span class="math inline">\(g(0)\)</span>, so we cannot say that <span class="math inline">\(g\)</span> is dominated by <span class="math inline">\(f\)</span> up to a constant factor. And again this is silly: it is certainly possible to find a constant <span class="math inline">\(c\)</span> such that <span class="math inline">\(g(n) \leq cf(n)\)</span> for every value except <span class="math inline">\(n = 0\)</span>. So we want some way of omitting the value <span class="math inline">\(n = 0\)</span> from consideration; this is precisely what our third definition gives us.</p>
+<div class="definition" data-terms="dominates (eventually)">
+<p>Let <span class="math inline">\(f, g : \N \to \R^{\ge 0}\)</span>. We say that <span class="math inline">\(g\)</span> <strong>is eventually dominated by</strong> <span class="math inline">\(f\)</span> when there exists <span class="math inline">\(n_0 \in \R^+\)</span> such that <span class="math inline">\(\forall n \in \N\)</span>, if <span class="math inline">\(n \geq n_0\)</span> then <span class="math inline">\(g(n) \leq f(n)\)</span>.</p>
+</div>
+<div class="example">
+<p>Let <span class="math inline">\(f(n) = n^2\)</span> and <span class="math inline">\(g(n) = n + 90\)</span>. Prove that <span class="math inline">\(g\)</span> is eventually dominated by <span class="math inline">\(f\)</span>.</p>
+<div class="translation">
+<p><span class="math display">\[\exists n_0 \in \R^+,~ \forall n \in \N,~ n \geq n_0 \IMP g(n) \leq f(n).\]</span></p>
+</div>
+<div class="discussion">
+<p>Okay, so rather than finding a constant to scale up <span class="math inline">\(f\)</span>, we need to argue that for “large enough” values of <span class="math inline">\(n\)</span>, <span class="math inline">\(n + 90 \leq n^2\)</span>. How do we know that value of <span class="math inline">\(n\)</span> is “large enough?”</p>
+<p>Since this is a quadratic inequality, it is actually possible to solve it directly using factoring or the quadratic formula. But that’s not really the point of this example, so instead we’ll take advantage of the fact that <em>we</em> get to choose the value of <span class="math inline">\(n_0\)</span> to pick one which is large enough.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(n_0 = 90\)</span>, let <span class="math inline">\(n \in \N\)</span>, and assume <span class="math inline">\(n \geq n_0\)</span>. We want to prove that <span class="math inline">\(n + 90 \leq n^2\)</span>.</p>
+<p>We will start with the left-hand side and obtain a chain of inequalities that lead to the right-hand side. <span class="math display">\[\begin{align*}
+n + 90 &amp;\leq n + n \tag{since $n \geq 90$} \\
+&amp;= 2n \\
+&amp;\leq n \cdot n \tag{since $n \geq 2$} \\
+&amp;= n^2
+\end{align*}\]</span></p>
+</div>
+</div>
+<p>Intuitively, this definition allows us to ignore “small” values of <span class="math inline">\(n\)</span> and focus on the long term, or asymptotic, behaviour of the function. This is particularly important for ignoring the influence of slow-growing terms in a function, which may affect the function values for “small” <span class="math inline">\(n\)</span>, but eventually are overshadowed by the faster-growing terms. In the above example, we knew that <span class="math inline">\(n^2\)</span> grows faster than <span class="math inline">\(n\)</span>, but because an extra <span class="math inline">\(+ 90\)</span> was added to the latter function, it took a while for the faster growth rate of <span class="math inline">\(n^2\)</span> to “catch up” to <span class="math inline">\(n + 90\)</span>.</p>
+<p>Our final definition combines both of the previous ones, enabling us to ignore both <em>constant factors</em> and <em>small values of <span class="math inline">\(n\)</span></em> when comparing functions.</p>
+<div class="definition" data-terms="Big-O">
+<p>Let <span class="math inline">\(f, g: \N \to \R^{\ge 0}\)</span>. We say that <span class="math inline">\(g\)</span> <strong>is eventually dominated by <span class="math inline">\(f\)</span> up to a constant factor</strong> when there exist <span class="math inline">\(c, n_0 \in \R^+\)</span>, such that for all <span class="math inline">\(n \in \N\)</span>, if <span class="math inline">\(n \geq n_0\)</span> then <span class="math inline">\(g(n) \leq c \cdot f(n)\)</span>.</p>
+<p>In this case, we also say that <strong><span class="math inline">\(g\)</span> is Big-O of <span class="math inline">\(f\)</span></strong>, and write <span class="math inline">\(g \in \cO(f)\)</span>.</p>
+<p>We use the notation “<span class="math inline">\(\in \cO(f)\)</span>” here because we formally define <span class="math inline">\(\cO(f)\)</span> to be the <em>set</em> of functions that are eventually dominated by <span class="math inline">\(f\)</span> up to a constant factor: <span class="math display">\[\cO(f) = \{g \mid g: \N \to \R^{\ge 0},~\text{and}~\exists c, n_0 \in \R^+,~ \forall n \in \N,~ n \geq n_0 \IMP g(n) \leq c \cdot f(n)\}.\]</span></p>
+</div>
+<div class="example">
+<p>Let <span class="math inline">\(f(n) = n^3\)</span> and <span class="math inline">\(g(n) = n^3 + 100n + 5000\)</span>. Prove that <span class="math inline">\(g \in \cO(f)\)</span>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">We can also express this statement as “<span class="math inline">\(n^3 + 100n + 5000 \in \cO(n^3)\)</span>”.</span></p>
+<div class="translation">
+<p><span class="math display">\[\exists c, n_0 \in \R^+,~ \forall n \in \N,~ n \geq n_0 \IMP n^3 + 100n + 5000 \leq c n^3.\]</span></p>
+</div>
+<div class="discussion">
+<p>It’s worth pointing out that in this case, <span class="math inline">\(g\)</span> is neither eventually dominated by <span class="math inline">\(f\)</span> nor dominated by <span class="math inline">\(f\)</span> up to a constant factor.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Exercise: prove this!</span> So we’ll really need to make use of both constants <span class="math inline">\(c\)</span> and <span class="math inline">\(n_0\)</span>. They’re both existentially-quantified, so we have a lot of freedom in how to choose them!</p>
+<p>Here’s an idea: let’s split up the inequality <span class="math inline">\(n^3 + 100n + 5000 \leq c n^3\)</span> into three simpler ones: <span class="math display">\[\begin{align*}
+n^3 &amp;\leq c_1 n^3 \\
+100n &amp;\leq c_2 n^3 \\
+5000 &amp;\leq c_3 n^3
+\end{align*}\]</span></p>
+<p>If we can make these three inequalities true, adding them together will give us our desired result (setting <span class="math inline">\(c = c_1 + c_2 + c_3\)</span>). Each of these inequalities is simple enough that we can “solve” them by inspection. Moreover, because we have freedom in how we choose <span class="math inline">\(n_0\)</span> and <span class="math inline">\(c\)</span>, there are many different ways to satisfy these inequalities! To illustrate this, we’ll look at two different approaches here.</p>
+<p><strong>Approach 1</strong>: focus on choosing <span class="math inline">\(n_0\)</span>.</p>
+<p>It turns out we can satisfy the three inequalities even if <span class="math inline">\(c_1 = c_2 = c_3 = 1\)</span>:</p>
+<ul>
+<li><span class="math inline">\(n^3 \leq n^3\)</span> is always true (so for all <span class="math inline">\(n \geq 0\)</span>).</li>
+<li><span class="math inline">\(100n \leq n^3\)</span> when <span class="math inline">\(n \geq 10\)</span>.</li>
+<li><span class="math inline">\(5000 \leq n^3\)</span> when <span class="math inline">\(n \geq \sqrt[3]{5000} \approx 17.1\)</span></li>
+</ul>
+<p>We can pick <span class="math inline">\(n_0\)</span> to be the largest of the lower bounds on <span class="math inline">\(n\)</span>, <span class="math inline">\(\sqrt[3]{5000}\)</span>, and then these three inequalities will be satisfied!</p>
+<p><strong>Approach 2</strong>: focus on choosing <span class="math inline">\(c\)</span>.</p>
+<p>Another approach is to pick <span class="math inline">\(c_1\)</span>, <span class="math inline">\(c_2\)</span>, and <span class="math inline">\(c_3\)</span> to make the right-hand sides large enough to satisfy the inequalities.</p>
+<ul>
+<li><span class="math inline">\(n^3 \leq c_1 n^3\)</span> when <span class="math inline">\(c_1 = 1\)</span>.</li>
+<li><span class="math inline">\(100n \leq c_2 n^3\)</span> when <span class="math inline">\(c_2 = 100\)</span>.</li>
+<li><span class="math inline">\(5000 \leq c_3 n^3\)</span> when <span class="math inline">\(c_3 = 5000\)</span>, <em>as long as <span class="math inline">\(n \geq 1\)</span></em>.</li>
+</ul>
+</div>
+<div class="proof">
+<p>(<em>Using Approach 1</em>) Let <span class="math inline">\(c = 3\)</span> and <span class="math inline">\(n_0 = \sqrt[3]{5000}\)</span>. Let <span class="math inline">\(n \in \N\)</span>, and assume that <span class="math inline">\(n \geq n_0\)</span>. We want to show that <span class="math inline">\(n^3 + 100n + 5000 \leq c n^3\)</span>.</p>
+<p>First, we prove three simpler inequalities:</p>
+<ul>
+<li><span class="math inline">\(n^3 \leq n^3\)</span> (since the two quantities are equal).</li>
+<li>Since <span class="math inline">\(n \geq n_0 \geq 10\)</span>, we know that <span class="math inline">\(n^2 \geq 100\)</span>, and so <span class="math inline">\(n^3 \geq 100n\)</span>.</li>
+<li>Since <span class="math inline">\(n \geq n_0\)</span>, we know that <span class="math inline">\(n^3 \geq n_0^3 = 5000\)</span>.</li>
+</ul>
+<p>Adding these three inequalities gives us: <span class="math display">\[n^3 + 100n + 5000 \leq n^3 + n^3 + n^3 = c n^3.\]</span></p>
+</div>
+<div class="proof">
+<p>(<em>Using Approach 2</em>) Let <span class="math inline">\(c = 5101\)</span> and <span class="math inline">\(n_0 = 1\)</span>. Let <span class="math inline">\(n \in \N\)</span>, and assume that <span class="math inline">\(n \geq n_0\)</span>. We want to show that <span class="math inline">\(n^3 + 100n + 5000 \leq c n^3\)</span>.</p>
+<p>First, we prove three simpler inequalities:</p>
+<ul>
+<li><span class="math inline">\(n^3 \leq n^3\)</span> (since the two quantities are equal).</li>
+<li>Since <span class="math inline">\(n \in \N\)</span>, we know that <span class="math inline">\(n \leq n^3\)</span>, and so <span class="math inline">\(100n \leq 100n^3\)</span>.</li>
+<li>Since <span class="math inline">\(1 \leq n\)</span>, we know that <span class="math inline">\(1 \leq n^3\)</span>, and then multiplying both sides by 5000 gives us <span class="math inline">\(5000 \leq 5000n^3\)</span>.</li>
+</ul>
+<p>Adding these three inequalities gives us: <span class="math display">\[n^3 + 100n + 5000 \leq n^3 + 100n^3 + 5000n^3 = 5101 n^3 = c n^3.\]</span></p>
+</div>
+</div>
+<!--div exercise>
+<div questions data-series="chapter5">
+\item
+Let $f: \N \to \R^{\ge 0}$, and let $y \in \R^+$ be an arbitrary positive real
+number.
+Prove that if $f \in \cO(y)$, then $f \in \cO(1)$ (this is why we write
+$\cO(1)$ and usually never see $\cO(2)$ or $\cO(110)$).
+</div>
+</div-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

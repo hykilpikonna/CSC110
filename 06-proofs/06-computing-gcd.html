@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6.6 Proofs and Algorithms II: Computing the Greatest Common Divisor</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">6.6 Proofs and Algorithms II: Computing the Greatest Common Divisor</h1>
+</header>
+<section>
+<p>In the previous section, we studied some mathematical properties of the greatest common divisor. Now in this section, we’ll look at how to implement algorithms for calculating the greatest common divisor, and introduce a new form of Python loops along the way.</p>
+<h2 id="naively-searching-for-the-gcd">Naively searching for the gcd</h2>
+<p>In this chapter we have used the divides predicate (e.g., <span class="math inline">\(d \mid n\)</span>) liberally. In <a href="../03-logic/09-working-with-definitions.html">Section 3.9</a>, we saw a possible implementation of the predicate as a function called <code>divides</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> divides(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return whether d divides n.&quot;&quot;&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">if</span> d <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="cf">return</span> n <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="cf">return</span> n <span class="op">%</span> d <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>With this function in hand, we can implement a <code>gcd</code> function as follows:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> In this implementation, we use <code>abs</code> because <code>m</code> and/or <code>n</code> might be negative.</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> naive_gcd(m: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return the gcd of m and n.&quot;&quot;&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="cf">if</span> m <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="cf">return</span> <span class="bu">abs</span>(n)</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="cf">elif</span> n <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb2-6"><a href="#cb2-6"></a>        <span class="cf">return</span> <span class="bu">abs</span>(m)</span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="cf">else</span>:</span>
+<span id="cb2-8"><a href="#cb2-8"></a>        possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, <span class="bu">min</span>(<span class="bu">abs</span>(m), <span class="bu">abs</span>(n)) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb2-9"><a href="#cb2-9"></a>        <span class="cf">return</span> <span class="bu">max</span>({d <span class="cf">for</span> d <span class="kw">in</span> possible_divisors <span class="cf">if</span> divides(d, m) <span class="kw">and</span> divides(d, n)})</span></code></pre></div>
+<h2 id="gcd-and-remainders">GCD and remainders</h2>
+<p>Here is the Quotient-Remainder Theorem we saw earlier in this chapter, slightly modified to allow for negative divisors as well.</p>
+<div id="Quotient-Remainder Theorem" class="theorem">
+<p>(Quotient-Remainder Theorem) For all <span class="math inline">\(n \in \Z\)</span> and <span class="math inline">\(d \in \Z\)</span>, if <span class="math inline">\(d \neq 0\)</span> then there exist <span class="math inline">\(q \in \Z\)</span> and <span class="math inline">\(r \in \N\)</span> such that <span class="math inline">\(n = qd + r\)</span> and <span class="math inline">\(0 \leq r &lt; |d|\)</span>. Moreover, these <span class="math inline">\(q\)</span> and <span class="math inline">\(r\)</span> are <em>unique</em> for a given <span class="math inline">\(n\)</span> and <span class="math inline">\(d\)</span>.</p>
+<p>We say that <span class="math inline">\(q\)</span> is the <strong>quotient</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>, and that <span class="math inline">\(r\)</span> is the <strong>remainder</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>, and write <span class="math inline">\(r = n~\%~d\)</span>.</p>
+</div>
+<p>We can use this theorem to improve our algorithm by breaking down the problem into a smaller one. The key idea is the following theorem.</p>
+<div class="theorem">
+<p>For all <span class="math inline">\(a, b \in \Z\)</span> where <span class="math inline">\(b \neq 0\)</span>, <span class="math inline">\(\gcd(a, b) = \gcd(b, a~\%~b)\)</span>.</p>
+</div>
+<div class="translation">
+<p><span class="math inline">\(\forall a, b \in \Z,~ b \neq 0 \Rightarrow \gcd(a, b) = \gcd(b, a~\%~b)\)</span>.</p>
+</div>
+<div class="discussion">
+<p>Before we try to prove this statement, let’s consider an example using the two numbers <span class="math inline">\(a = 24\)</span> and <span class="math inline">\(b = 16\)</span>. We know that <span class="math inline">\(\gcd(24, 16) = 8\)</span>. Also, the remainder when 24 is divided by 16 is 8, and <span class="math inline">\(\gcd(16, 8) = 8\)</span> as well.</p>
+<p>Before we get to a formal proof, let’s preview the main idea. We’ll define the variable <span class="math inline">\(d = \gcd(b, a~\%~b)\)</span>, and prove that <span class="math inline">\(d = \gcd(a, b)\)</span> as well. To do so, we’ll need to prove that <span class="math inline">\(d\)</span> divides both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>, and that it is greater than every other common divisor of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span>. Watch for this structure in our actual proof below!</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(a, b \in \Z\)</span> and assume <span class="math inline">\(b \neq 0\)</span>. Also let <span class="math inline">\(r = a~\%~b\)</span> (the remainder when <span class="math inline">\(a\)</span> is divided by <span class="math inline">\(b\)</span>). We need to prove that <span class="math inline">\(\gcd(a, b) = \gcd(b, r)\)</span>.</p>
+<p>To do this, let <span class="math inline">\(d = \gcd(b, r)\)</span>. We’ll prove that <span class="math inline">\(d = \gcd(a, b)\)</span> as well, by proving three things: that <span class="math inline">\(d \mid a\)</span>, that <span class="math inline">\(d \mid b\)</span>, and that every common divisor of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> is <span class="math inline">\(\leq d\)</span>.</p>
+<p><strong>Part 1</strong>: proving that <span class="math inline">\(d \mid a\)</span>.</p>
+<p>By our definition of <span class="math inline">\(r\)</span> and the Quotient-Remainder Theorem, we know that there exists <span class="math inline">\(q \in Z\)</span> such that <span class="math inline">\(a = qb + r\)</span>. Since <span class="math inline">\(d = \gcd(b, r)\)</span>, we know that <span class="math inline">\(d\)</span> divides both <span class="math inline">\(b\)</span> and <span class="math inline">\(r\)</span>. And so by the <a href="05-greatest-common-divisor.html##theorem:divide_lin_comb">Divisibility of Linear Combinations Theorem</a>, we know that <span class="math inline">\(d \mid qb + r\)</span>, and so <span class="math inline">\(d \mid a\)</span>.</p>
+<p><strong>Part 2</strong>: proving that <span class="math inline">\(d \mid b\)</span>.</p>
+<p>Since we defined <span class="math inline">\(d = \gcd(b, r)\)</span>, it must divide <span class="math inline">\(b\)</span> (by the definition of <span class="math inline">\(\gcd\)</span>).</p>
+<p><strong>Part 3</strong>: proving that every common divisor of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> is <span class="math inline">\(\leq d\)</span>.</p>
+<p>Let <span class="math inline">\(d_1 \in \Z\)</span> and assume that <span class="math inline">\(d_1 \mid a\)</span> and <span class="math inline">\(d_1 \mid b\)</span>. We’ll prove that <span class="math inline">\(d_1 \leq d\)</span>.</p>
+<p>First, we’ll prove that <span class="math inline">\(d_1 \mid r\)</span>. We can rewrite the equation <span class="math inline">\(a = qb + r\)</span> (from the Quotient-Remainder Theorem) to obtain <span class="math inline">\(r = a - qb\)</span>. Then using our assumption that <span class="math inline">\(d_1\)</span> is a common divisor of <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> and <a href="05-greatest-common-divisor.html##theorem:divide_lin_comb">Divisibility of Linear Combinations Theorem</a> again, we can conclude that <span class="math inline">\(d_1 \mid r\)</span>.</p>
+<p>So then <span class="math inline">\(d_1 \mid b\)</span> (by our assumption), and <span class="math inline">\(d_1 \mid r\)</span>, and so it is a common divisor of <span class="math inline">\(b\)</span> and <span class="math inline">\(r\)</span>. Therefore by the definition of <span class="math inline">\(\gcd\)</span>, we know that <span class="math inline">\(d_1 \leq \gcd(b, r) = d\)</span>.</p>
+</div>
+<h2 id="gcd-remainders-and-a-new-algorithm">GCD, remainders, and a new algorithm</h2>
+<p>The theorem we just proved suggests a possible way of computing the gcd of two numbers in an iterative (repeated) fashion. Let’s again use 24 and 16 as our example.</p>
+<ul>
+<li>Since the remainder <span class="math inline">\(24~\%~16\)</span> is 8, we know that <span class="math inline">\(\gcd(24, 16) = \gcd(16, 8)\)</span>.</li>
+<li>Also, the remainder <span class="math inline">\(16~\%~8\)</span> is 0, and so we know that <span class="math inline">\(\gcd(16, 8) = \gcd(8, 0)\)</span>.</li>
+<li>But the gcd of any positive integer <span class="math inline">\(n\)</span> and 0 is simply <span class="math inline">\(n\)</span> itself,<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Exercise: prove this using the definition of gcd!</span> and so we know <span class="math inline">\(\gcd(8, 0) = 8\)</span>.</li>
+<li>This tells use that <span class="math inline">\(\gcd(24, 16) = 8\)</span> as well!</li>
+</ul>
+<p>Let’s formalize this in a high-level description of an algorithm before we write the code. This algorithm for computing the gcd of two numbers is known as the <em>Euclidean algorithm</em>.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> This is named after the Greek mathematician Euclid, although he originally developed the algorithm using subtraction (<span class="math inline">\(a - b\)</span>) rather than remainders (<span class="math inline">\(a~\%~b\)</span>).</span></p>
+<div class="framed">
+<p><strong>Euclidean Algorithm</strong></p>
+<p><em>Given</em>: integers <code>a</code> and <code>b</code>. <em>Returns</em>: <code>gcd(a, b)</code>.</p>
+<ol type="1">
+<li>Initialize two variables <code>x</code>, <code>y</code> to the given numbers <code>a</code> and <code>b</code>.</li>
+<li>Let <code>r</code> be the remainder when <code>x</code> is divided by <code>y</code>.</li>
+<li>Reassign <code>x</code> and <code>y</code> to <code>y</code> and <code>r</code>, respectively.</li>
+<li>Repeat steps 2 and 3 until <code>y</code> is 0.</li>
+<li>At this point, <code>x</code> refers to the gcd of <code>a</code> and <code>b</code>.</li>
+</ol>
+</div>
+<p>Here is how we can visualize the changing values of <code>x</code> and <code>y</code> for the given 24 and 6 in our previous example:<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Note the similarity between this and the <em>loop accumulation tables</em> of Chapter 4.</span></p>
+<div class="reference-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Iteration</th>
+<th style="text-align: center;"><code>x</code></th>
+<th style="text-align: center;"><code>y</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The main question for us in implementing this algorithm in Python is how we achieve step 4: repeating the two previous steps until some condition (“<code>y</code> is 0”) is satisfied. We know how to use for loops to iterate over a collection of values. This allowed us to repeat a sequence of statements (i.e., the body of the for loop) on every iteration. Naturally, the for loop ends when the statements have been repeated for all elements in a collection or range.</p>
+<p>But in the case of step 4, we would like to repeat code based on some condition: “Repeat steps 2 and 3 until the remainder is 0”. In these scenarios, we must use a different kind of loop in Python: the <strong>while loop</strong>.</p>
+<h2 id="the-while-loop">The while loop</h2>
+<p>A while loop looks very similar to an if statement:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="cf">while</span> <span class="op">&lt;</span>condition<span class="op">&gt;</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="op">&lt;</span>statement<span class="op">&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    ...</span></code></pre></div>
+<p>Unlike an if statement, after executing its body the while loop will check the condition again. If the condition still evaluates to <code>True</code>, then the body is repeated. Let’s try an example:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> numbers <span class="op">=</span> []</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> number <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="cf">while</span> number <span class="op">&lt;</span> <span class="dv">100</span>:</span>
+<span id="cb4-4"><a href="#cb4-4"></a>...     numbers.append(number)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>...     number <span class="op">=</span> number <span class="op">*</span> <span class="dv">2</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>...</span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="op">&gt;&gt;&gt;</span> numbers</span>
+<span id="cb4-8"><a href="#cb4-8"></a>[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">8</span>, <span class="dv">16</span>, <span class="dv">32</span>, <span class="dv">64</span>]</span></code></pre></div>
+<p>Notice how <code>number</code> appears in both the while loop’s body and its condition. In the loop body, <code>number</code> is increasing at each iteration (we accumulated the values in the list <code>numbers</code>). Eventually, <code>number</code> refers to the value <code>128</code> and the while loop is done because <code>128 &lt; 100</code> evaluates to <code>False</code>. Note that the number of iterations of our while loop is dependent on the initial value of <code>number</code>. Had we started with a value of, for example, <code>10</code>, the loop would have only 4 iterations (not 6, as when <code>number</code> started with <code>2</code>). Similarly, if <code>number</code> was initially some value greater than or equal to <code>100</code>, then the while loop would never have executed its body (just as a for loop does not execute its body if given an empty collection).</p>
+<h2 id="implementing-the-euclidean-algorithm">Implementing the Euclidean Algorithm</h2>
+<p>Here is our (first) implementation of the Euclidean algorithm for computing the gcd of two numbers.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> euclidean_gcd(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return the gcd of a and b.&quot;&quot;&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="co"># Step 1: initialize x and y</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>    x <span class="op">=</span> a</span>
+<span id="cb5-5"><a href="#cb5-5"></a>    y <span class="op">=</span> b</span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="cf">while</span> y <span class="op">!=</span> <span class="dv">0</span>:  <span class="co"># Step 4: repeat Steps 2 and 3 until y is 0</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>        <span class="co"># Step 2: calculate the remainder of x divided by y</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a>        r <span class="op">=</span> x <span class="op">%</span> y</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a>        <span class="co"># Step 3: reassign x and y</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>        x <span class="op">=</span> y</span>
+<span id="cb5-12"><a href="#cb5-12"></a>        y <span class="op">=</span> r</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a>    <span class="co"># Step 5: x now refers to the gcd of a and b</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="cf">return</span> x</span></code></pre></div>
+<p>How does this loop work? To understand it better, let’s see how this maps onto our original algorithm.</p>
+<ul>
+<li>Step 1, initializing <code>x</code> and <code>y</code>, occurs in the code before the while loop begins.</li>
+<li>Steps 2 and 3 are performed inside the loop body.</li>
+<li>Step 4, the repetition, is achieved by the while loop. One subtlety is that our original algorithm specified a <em>stopping condition</em>, “repeat until X”. When writing Python <code>while</code> loops, however, we must write a <em>continuing condition</em>, which is the negation of the stopping condition. So “until <span class="math inline">\(y = 0\)</span>” becomes <code>while y != 0</code>.</li>
+<li>Step 5, the return value, is exactly what is specified by the algorithm.</li>
+</ul>
+<p>Let’s see an example trace of the <code>euclidean_gcd</code> loop for the sample call <code>euclidean_gcd(24, 16)</code>:</p>
+<div class="reference-table">
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: center;">Iteration</th>
+<th style="text-align: center;"><code>x</code></th>
+<th style="text-align: center;"><code>y</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">24</td>
+<td style="text-align: center;">16</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">16</td>
+<td style="text-align: center;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">2</td>
+<td style="text-align: center;">8</td>
+<td style="text-align: center;">0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In our implementation, we don’t have a typical accumulator pattern. Instead, both <code>x</code> and <code>y</code> are <em>loop variables</em> for the while loop, which illustrates one major difference between while loops and for loops. In a for loop, the loop variable is initialized and reassigned automatically by the Python interpreter to each element of the collection being looped over. In a while loop, the loop variable(s) must be initialized and reassigned explicitly in code that we write.</p>
+<p>This difference makes while loops more flexible than for loops, as the programmer has full control over exactly how the loop variable changes. This is both a strength and a weakness! While loops can be used to express algorithms that are cumbersome or impossible to express with for loops, but at the cost of requiring the programmer to write more code to keep track of loop variables.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Remember: the more code you write, the more potential there is for error.</span> So a good rule of thumb is to use for loops where possible (when you have an explicit collection to loop over), and reserve while loops for situations that can’t be easily implemented with a for loop.</p>
+<h3 id="parallel-assignment">Parallel assignment</h3>
+<p>One subtlety of our loop body is the order in which the loop variables are updated. Suppose we had swapped the last two lines of the loop body:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a>    <span class="cf">while</span> y <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>        r <span class="op">=</span> x <span class="op">%</span> y</span>
+<span id="cb6-3"><a href="#cb6-3"></a>        y <span class="op">=</span> r</span>
+<span id="cb6-4"><a href="#cb6-4"></a>        x <span class="op">=</span> y</span></code></pre></div>
+<p>This is a really easy change to make, but also incorrect: because the statement <code>y = r</code> is executed first, the next statement <code>x = y</code> assigns <code>x</code> to the <em>new</em> value of <code>y</code> rather than its old one!</p>
+<p>When performing reassignment of multiple variables, where the new variable values depend on the old ones, it is important to keep track of the reassignment order so that you don’t accidentally lose previous variable values. To avoid this problem altogether, Python has a neat feature called <em>parallel assignment</em>, in which multiple variables can be assigned in the same statment.</p>
+<p>Here is how we can rewrite the loop body using parallel assignment:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a>    <span class="cf">while</span> y <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>        r <span class="op">=</span> x <span class="op">%</span> y</span>
+<span id="cb7-3"><a href="#cb7-3"></a>        x, y <span class="op">=</span> y, r</span></code></pre></div>
+<p>The assignment statement <code>x, y = y, r</code> is evaluated as follows:</p>
+<ul>
+<li>First, the right-hand side <code>y, r</code> is evaluated, producing two objects.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Or more precisely, the <em>ids</em> of two objects.</span></li>
+<li>Then, each object is assigned to the corresponding variable on the left-hand side.</li>
+</ul>
+<p>In parallel assignment, the right-hand side is fully evaluated before any variable reassignment occurs. This means that the assignment statement <code>x, y = y, r</code> has the <em>same effect</em> as <code>y, x = r, y</code>—order doesn’t matter, and so we can think of each variable assignment happening in parallel, without one affecting the other.</p>
+<p>Parallel is a very useful tool when reassigning variables, so please take advantage of it to help simplify your code and avoid the “update order” problem of variable reassignment. Here is how we can rewrite the <code>euclidean_gcd</code> using parallel assignment:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> euclidean_gcd(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Return the gcd of a and b.&quot;&quot;&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    x, y <span class="op">=</span> a, b</span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">while</span> y <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb8-5"><a href="#cb8-5"></a>        r <span class="op">=</span> x <span class="op">%</span> y</span>
+<span id="cb8-6"><a href="#cb8-6"></a>        x, y <span class="op">=</span> y, r</span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a>    <span class="cf">return</span> x</span></code></pre></div>
+<h3 id="documenting-loop-properties-loop-invariants">Documenting loop properties: loop invariants</h3>
+<p>Our implementation of <code>euclidean_gcd</code> doesn’t follow a typical pattern of code we’ve seen so far. If we didn’t know anything about the algorithm and were simply looking at the code, it would be quite mysterious why it works. To improve the readability of this code, we want some way of documenting what we know about the loop variables <code>x</code> and <code>y</code> inside the loop body.</p>
+<p>Recall that the Euclidean Algorithm relies on one key property, that <code>gcd(x, y) == gcd(y, x % y)</code>. At each loop iteration, <code>x</code> and <code>y</code> are updated so that <code>x = y</code> and <code>y = x % y</code>. The key property that we want to capture is that <em>even though <code>x</code> and <code>y</code> change, their gcd doesn’t</em>. Since <code>x</code> and <code>y</code> are initialized to <code>a</code> and <code>b</code>, another way to express this is that at every loop iteration, <code>gcd(x, y) == gcd(a, b)</code>. We call this statement a <strong>loop invariant</strong>, which is a property about loop variables that must be true at the start and end of each loop iteration.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"> This is similar to representation invariants, which are properties of instance attributes that must be true for every instance of a given data class.</span></p>
+<p>By convention, we document loop invariants at the top of a loop body using an assert statement.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> euclidean_gcd(a: <span class="bu">int</span>, b: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return the gcd of a and b.&quot;&quot;&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    x, y <span class="op">=</span> a, b</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="cf">while</span> y <span class="op">!=</span> <span class="dv">0</span>:</span>
+<span id="cb9-6"><a href="#cb9-6"></a>        <span class="co"># Loop invariant (we use naive_gcd to check that the gcd are correct)</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>        <span class="cf">assert</span> naive_gcd(x, y) <span class="op">==</span> naive_gcd(a, b)</span>
+<span id="cb9-8"><a href="#cb9-8"></a></span>
+<span id="cb9-9"><a href="#cb9-9"></a>        r <span class="op">=</span> x <span class="op">%</span> y</span>
+<span id="cb9-10"><a href="#cb9-10"></a>        x, y <span class="op">=</span> y, r</span>
+<span id="cb9-11"><a href="#cb9-11"></a></span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="cf">return</span> x</span></code></pre></div>
+<p>Because this loop invariant must be true at the start and end of each loop iteration, it is also true after the loop stops (i.e., when <code>y == 0</code>). In this case, the loop invariant tells us that <code>gcd(x, 0) == gcd(a, b)</code>, and so we know that <code>x == gcd(a, b)</code>, which is why <code>x</code> is returned.</p>
+<p>Loop invariants are a powerful way to document properties of our code, to better enable us to reason about our code. But remember that loop invariants by themselves are just statements; the only way to know for sure whether a loop invariant is correct is to do a proof, much like the one we did at the beginning of this section.</p>
+<!-- ## The Extended Euclidean Algorithm
+
+Recall the *GCD characterization theorem* from the previous section, which said that $\gcd(a, b)$ is the smallest positive integer that can be written as a linear combination of $a$ and $b$.
+
+How would we go about proving such a statement?
+Our previous proofs of existential statements were all *constructive*: we pick values for the existentially-quantified variables and show that those variables satisfy the rest of the statement we're trying to prove.
+
+First, we're going to see a non-constructive proof: a proof that shows the existence of values, but doesn't necessarily give explicit expressions for them.
+
+<div class="proof">
+Let $x, y \in Z$, and assume $x \neq 0$ or $y \neq 0$.
+We define the set $S = \{ px + qy \mid p, q \in \Z \land px + qy > 0 \}$,
+and let $d = \min(S)$.
+We'll prove that $d = \gcd(x, y)$.
+This proof uses a new technique to show equality: first, we show $d \geq \gcd(x, y)$, and then $d \leq \gcd(x, y)$, so that the only possibility is that $d$ in fact equals $\gcd(x, y)$.
+
+**Part 1**: proving that $d \geq \gcd(x, y)$.
+
+Since $\gcd(x, y)$ divides both $x$ and $y$, by Theorem TODO, we know that it divides any linear combination of $x$ and $y$.
+And so $\gcd(x, y) \mid d$; since both numbers are positive, this implies that $\gcd(x, y) \leq d$.
+
+**Part 2**: proving that $d \leq \gcd(x, y)$.
+
+First, we'll prove that $d \mid x$.
+By the Quotient-Remainder Theorem, we write $x = dq + r$, where $q, r \in Z$ and $0 \leq r < d$.
+We can rearrange this equation to obtain $r = x - dq$, which means $r$ is a linear combination of $x$ and $y$ (since $d$ is a linear combination of $x$ and $y$).
+But since we know $r < d$ and $d = \min(S)$, this implies $r \notin S$, which is only possible when $r = 0$.
+So $d \mid x$.
+
+Similarly, $d \mid y$, and so $d$ is a common divisor of $x$ and $y$.
+By the definition of $\gcd$, we can conclude that $d \leq \gcd(x, y)$.
+</div>
+
+This proof is technically correct, and interesting because it shows a new technique for proving existentials.
+But it is also a bit unsatisfying in that it proves the existence of some values (coefficients of the linear combination) without showing how to find them.
+It turns out that a variation of the Euclidean Algorithm called the *Extended Euclidean Algorithm* can be used to not just find the gcd of two numbers, but find the coefficients of the linear combination that equals that gcd.
+
+You'll explore this more on an exercise a bit later in this course.
+
+</section> -->
+<!--
+
+Recall that the implementation relies on a *property* of divisibility to restrict the set of numbers to quantify over:
+when $n \neq 0$, every number that divides $n$ must lie in the range ${- |n|, -|n| + 1, \dots, |n| - 1, |n|}$.
+We can use `divides` in another function that searches for the gcd.
+In this scenario, it makes sense to start from the end of the `possible_divisors` range and work our way backwards.
+For example, for two numbers `x = 16` and `y = 24`:
+
+```python
+>>> x = 16
+>>> y = 24
+>>> range(min(abs(y), abs(x)), 0, -1)
+range(16, 0, -1)
+>>> list(range(min(abs(y), abs(x)), 0, -1))
+[16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+```
+
+In this scenario, we asked range to start at a value greater than its stop (i.e., `16` > `0`, recall that the stop is not included).
+In addition, we provided range with a step value of `-1`.
+We can now test if, for each `d` in the range above, `d` divides evenly into both `x` and `y`:
+
+```python
+def gcd(x: int, y: int) -> int:
+    """Return the greatest common divisor of x and y."""
+    for d in range(min(abs(y), abs(x)), 0, -1):
+        if divides(d, x) and divides(d, y):
+            return d
+
+    return 0
+```
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

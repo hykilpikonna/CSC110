@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6.1 An Introduction to Number Theory</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">6.1 An Introduction to Number Theory</h1>
+</header>
+<section>
+<p>We’ve spent the first five chapters of this course studying programming in Python. We’ve been mainly focused on how we represent data and designing functions to operate on this data. Up to this point, the <em>ideas</em> behind the functions that we’ve written have been relatively straight-forward, and the challenge has been in implementing these ideas correctly using various programming techniques. Over the next two chapters, we are going to study algorithms where the ideas themselves will be more complex. It won’t be “obvious” how or why these algorithms work, and so to convince ourselves that these algorithms are correct, we’ll study the formal mathematics behind them.</p>
+<p>Our first large example of this is one that will take us the next two chapters to develop: the RSA cryptosystem, consisting of a pair of algorithms that are central to modern Internet security. If you haven’t heard about RSA, cryptosystems, or ever thought about security, don’t worry, we’ll be building all of these concepts from the ground up over the course of this chapter and the next. What will set this apart from the kind of work we’ve done so far is that to understand what these algorithms do and why they work, we’ll need to step away from code and into the realm of <em>number theory</em>, the branch of mathematics concerned with properties of integers.</p>
+<p>We’ll start our journey here with a few key definitions, some of which you’ve seen before defined formally in this course, and others that you might have heard about before, but not seen a formal definition.</p>
+<h2 id="divisibility-primality-and-the-greatest-common-divisor">Divisibility, primality, and the greatest common divisor</h2>
+<p>Here are our first two definitions; these are repeated from <a href="../03-logic/09-working-with-definitions.html">3.9 Working with Definitions</a>.</p>
+<div class="definition" data-terms="divides, divisible, factor, multiple">
+<p>Let <span class="math inline">\(n, d \in \Z\)</span>. We say that <span class="math inline">\(d\)</span> <strong>divides</strong> <span class="math inline">\(n\)</span> when there exists a <span class="math inline">\(k \in \Z\)</span> such that <span class="math inline">\(n = dk\)</span>. We use the notation <span class="math inline">\(d \mid n\)</span> to represent the statement “<span class="math inline">\(d\)</span> divides <span class="math inline">\(n\)</span>”.</p>
+<p>The following phrases are synonymous with “<span class="math inline">\(d\)</span> divides <span class="math inline">\(n\)</span>”:</p>
+<ul>
+<li><span class="math inline">\(n\)</span> <strong>is divisible by</strong> <span class="math inline">\(d\)</span></li>
+<li><span class="math inline">\(d\)</span> is a <strong>factor</strong> of <span class="math inline">\(n\)</span></li>
+<li><span class="math inline">\(n\)</span> is a <strong>multiple</strong> of <span class="math inline">\(d\)</span></li>
+</ul>
+</div>
+<div class="definition" data-terms="prime">
+<p>Let <span class="math inline">\(p \in \Z\)</span>. We say <span class="math inline">\(p\)</span> is <strong>prime</strong> when it is greater than 1 and the only natural numbers that divide it are 1 and itself.</p>
+</div>
+<p>The next few definitions introduce and expand on the notion of common divisors between two numbers.</p>
+<div class="definition" data-terms="common divisor, greatest common divisor">
+<p>Let <span class="math inline">\(x, y, d \in \Z\)</span>. We say that <span class="math inline">\(d\)</span> is a <strong>common divisor</strong> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> when <span class="math inline">\(d\)</span> divides <span class="math inline">\(x\)</span> and <span class="math inline">\(d\)</span> divides <span class="math inline">\(y\)</span>.</p>
+<p>We say that <span class="math inline">\(d\)</span> is the <strong>greatest common divisor</strong> of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> when it the largest number that is a common divisor of <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, or 0 when <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span> are both 0.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">According to this definition, what is <span class="math inline">\(\gcd(0, n)\)</span> when <span class="math inline">\(n &gt; 0\)</span>?</span> We can define the function <span class="math inline">\(\gcd : \Z \times \Z \to \N\)</span> as the function which takes numbers <span class="math inline">\(x\)</span> and <span class="math inline">\(y\)</span>, and returns their greatest common divisor.</p>
+</div>
+<p>You might wonder whether this definition makes sense in all cases: is it possible for two numbers to have no divisors in common? One of the statements we will prove later in this chapter is that <span class="math inline">\(1\)</span> divides every natural number. So at the very least, <span class="math inline">\(1\)</span> is a common divisor between any two natural numbers. There is a special case, when <span class="math inline">\(1\)</span> is the <em>only</em> positive divisor between two numbers.</p>
+<div class="definition" data-terms="coprime">
+<p>Let <span class="math inline">\(m, n \in \Z\)</span>. We say that <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span> are <strong>coprime</strong> when <span class="math inline">\(\gcd(m, n) = 1\)</span>.</p>
+</div>
+<h2 id="quotients-and-remainders">Quotients and remainders</h2>
+<p>The next definitions are introduced through a fundamental theorem in number theory, which extends the relationship of divisibility to that of remainders.</p>
+<div id="Quotient-Remainder Theorem" class="theorem">
+<p>(Quotient-Remainder Theorem) For all <span class="math inline">\(n \in \Z\)</span> and <span class="math inline">\(d \in \Z^+\)</span>, there exist <span class="math inline">\(q \in \Z\)</span> and <span class="math inline">\(r \in \N\)</span> such that <span class="math inline">\(n = qd + r\)</span> and <span class="math inline">\(0 \leq r &lt; d\)</span>. Moreover, these <span class="math inline">\(q\)</span> and <span class="math inline">\(r\)</span> are <em>unique</em> for a given <span class="math inline">\(n\)</span> and <span class="math inline">\(d\)</span>.</p>
+<p>We say that <span class="math inline">\(q\)</span> is the <strong>quotient</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>, and that <span class="math inline">\(r\)</span> is the <strong>remainder</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>.</p>
+</div>
+<p>In Python, for given integers <code>n</code> and <code>d</code>, we can compute their quotient using <code>//</code>, their remainder using <code>%</code>, and both at the same time using the built-in function <code>divmod</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">9</span> <span class="op">//</span> <span class="dv">2</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dv">4</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="dv">9</span> <span class="op">%</span> <span class="dv">2</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="dv">1</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">divmod</span>(<span class="dv">9</span>, <span class="dv">2</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a>(<span class="dv">4</span>, <span class="dv">1</span>)</span></code></pre></div>
+<h2 id="modular-arithmetic">Modular arithmetic</h2>
+<p>The final definition in this section introduces some notation that is extremely commonplace in number theory, and by extension in many areas of computer science. Often when we are dealing with relationships between numbers, divisibility is too coarse a relationship: as a predicate, it is constrained by the binary nature of its output. Instead, we often care about the <em>remainder</em> when we divide a number by another.</p>
+<div class="definition" data-terms="modular equivalence">
+<p>Let <span class="math inline">\(a, b, n \in \Z\)</span> and assume <span class="math inline">\(n \neq 0\)</span>. We say that <span class="math inline">\(a\)</span> is <strong>equivalent to <span class="math inline">\(b\)</span> modulo <span class="math inline">\(n\)</span></strong> when <span class="math inline">\(n \mid a - b\)</span>. In this case, we write <span class="math inline">\(a \equiv b \pmod n\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">One warning: the notation <span class="math inline">\(a \equiv b \MOD n\)</span> is not exactly the same as <code>mod</code> or <code>%</code> operator you are familiar with from programming; here, both <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> could be much larger than <span class="math inline">\(n\)</span>, or even negative.</span></p>
+</div>
+<p>There are two related reasons why this notation is so useful in number theory. The first is that modular equivalence can be used to divide up numbers based on their remainders when divided by <span class="math inline">\(n\)</span>:</p>
+<div class="theorem">
+<p>Let <span class="math inline">\(a, b, n \in \Z\)</span> with <span class="math inline">\(n \neq 0\)</span>. Then <span class="math inline">\(a \equiv b \pmod n\)</span> if and only if <span class="math inline">\(a\)</span> and <span class="math inline">\(b\)</span> have the same remainder when divided by <span class="math inline">\(n\)</span>.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> In Python, we could represent this as the expression <code>a % n == b % n</code>.</span></p>
+</div>
+<p>The second reason this is so useful is that almost all of the “standard” intuitions we have about equality transfer over this new notation as well, making it pretty easy to work with right at the very start.</p>
+<div class="theorem">
+<p>Let <span class="math inline">\(a, b, c, n \in \Z\)</span> with <span class="math inline">\(n \neq 0\)</span>. Then the following hold:</p>
+<ol type="1">
+<li><span class="math inline">\(a \equiv a \pmod n\)</span>.</li>
+<li>If <span class="math inline">\(a \equiv b \pmod n\)</span> then <span class="math inline">\(b \equiv a \pmod n\)</span>.</li>
+<li>If <span class="math inline">\(a \equiv b \pmod n\)</span> and <span class="math inline">\(b \equiv c \pmod n\)</span> then <span class="math inline">\(a \equiv c \pmod n\)</span>.</li>
+</ol>
+</div>
+<div class="theorem">
+<p>Let <span class="math inline">\(a, b, c, d, n \in \Z\)</span> with <span class="math inline">\(n \neq 0\)</span>. If <span class="math inline">\(a \equiv c \pmod n\)</span> and <span class="math inline">\(b \equiv d \pmod n\)</span>, then the following hold:</p>
+<ol type="1">
+<li><span class="math inline">\(a + b \equiv c + d \pmod n\)</span>.</li>
+<li><span class="math inline">\(a - b \equiv c - d \pmod n\)</span>.</li>
+<li><span class="math inline">\(a b \equiv c d \pmod n\)</span>.</li>
+</ol>
+</div>
+<p>Note that this second theorem shows that the familiar addition, subtraction, and multiplication operations preserve modular equivalence relationships. However, as we’ll study further in this chapter, this is <em>not</em> the case with division!</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

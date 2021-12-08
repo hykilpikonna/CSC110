@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10.4 Food Delivery Events</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">10.4 Food Delivery Events</h1>
+</header>
+<section>
+<p>In the previous two sections, we discussed the key classes we can use to represent a food delivery system: data classes <code>Restaurant</code>, <code>Customer</code>, <code>Courier</code>, and <code>Order</code> to represent individual entities, and a <code>FoodDeliverySystem</code> class to manage all of them. But even though the <code>FoodDeliverySystem</code> class has methods that allow us to <em>mutate</em> the state of the system, you might wonder: who is responsible for actually calling these methods?</p>
+<p>If we were building a “real-world” app, we would need to write code that explicitly connects user actions (e.g., pressing a button on a mobile app) to these methods, and almost certainly rely on an existing software framework to do much of the “connecting” for us.</p>
+<p>The approach we’re taking in this chapter is a bit different. Instead of writing the code necessary to respond to real-world actions, we are going to create a <em>simulation</em> that uses a combination of preset and random data to simulate these kinds of real-world actions. The driving force of our simulation will be <em>events</em> that cause our system to mutate. For example, a “new order” event for when a customer places an order, and a “complete order” event for when a courier has delivered an order to a customer.</p>
+<h2 id="the-event-interface">The <code>Event</code> interface</h2>
+<p>There are many other events we might add to the simulation, but they clearly have something in common: they are events that cause the state of the simulation to change. In <a href="../09-abstraction/08-common-interfaces.html">9.8 Defining a Shared Public Interface with Inheritance</a>, we learned how to define an abstract class to represent a shared public interface, and used inheritance to relate this abstract class to concrete subclasses that must adhere to this interface. In our case, we’ll define abstract <code>Event</code> class with subclasses <code>NewOrderEvent</code> and <code>CompleteOrderEvent</code> to represent different kinds of events.</p>
+<p>Here is an initial definition of this <code>Event</code> interface. The class has one abstract method, <code>handle_event</code>, which is how we connect each event to a change in the food delivery system.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Event:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;An abstract class representing an event in a food delivery simulation.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="co">&quot;&quot;&quot;Mutate the given food delivery system to process this event.&quot;&quot;&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code></pre></div>
+<p>Each <code>Event</code> subclass is responsible for implementing <code>handle_event</code> based on the type of change the subclass represents. For example, the <code>NewOrderEvent.handle_event</code> method should, well, add a new order to the system. In order to implement <code>handle_event</code>, each subclass will probably need its own set of instance attributes to represent the details of the event (e.g., what order to add in a <code>NewOrderEvent</code>).</p>
+<p>But before we discuss these subclass-specific attributes, we’ll take a brief detour we’ll introduce another feature of inheritance: shared instance attributes. Specifically, our simulation will need to know exactly <em>when</em> every event should happen, which every event object needs to keep track of.</p>
+<h2 id="common-instance-attributes">Common instance attributes</h2>
+<p>We have seen that an abstract superclass declare methods that all its subclasses need to have in common, establishing a shared public interface. A superclass can also declare <em>public instance attributes</em> that its subclasses must have in common. For our <code>Event</code> class, we can establish that all event subclasses will have a timestamp indicating when the event took place. This <code>timestamp</code> attribute becomes part of the shared public interface of each subclass.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="im">import</span> datetime</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">class</span> Event:</span>
+<span id="cb2-5"><a href="#cb2-5"></a>    <span class="co">&quot;&quot;&quot;An abstract class representing an event in a food delivery simulation.</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">        - timestamp: the start time of the event</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    timestamp: datetime.datetime</span></code></pre></div>
+<p>Even though abstract classes should not be instantiated directly, we provide an initializer to initialize the common attributes (namely, <code>timestamp</code>):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="im">import</span> datetime</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">class</span> Event:</span>
+<span id="cb3-5"><a href="#cb3-5"></a>    <span class="co">&quot;&quot;&quot;An abstract class representing an event in a food delivery simulation.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">        - timestamp: the start time of the event</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    timestamp: datetime.datetime</span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, timestamp: datetime.datetime) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-13"><a href="#cb3-13"></a>        <span class="co">&quot;&quot;&quot;Initialize this event with the given timestamp.&quot;&quot;&quot;</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a>        <span class="va">self</span>.timestamp <span class="op">=</span> timestamp</span></code></pre></div>
+<p>Now let’s create a new class that inherits from <code>Event</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;An event where a customer places an order for a restaurant.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>Remember that subclasses will inherit all the methods from their superclass. So when we attempt to initialize a <code>NewOrderEvent</code>, the Python interpreter will call <code>Event.__init__</code> (because <code>NewOrderEvent</code> did not override the parent’s <code>__init__</code> method). This means we <em>must</em> provide a <code>datetime.datetime</code> object as the first argument when creating a new <code>NewOrderEvent</code> object:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> e <span class="op">=</span> NewOrderEvent()</span>
+<span id="cb5-2"><a href="#cb5-2"></a>Traceback (most recent call last):</span>
+<span id="cb5-3"><a href="#cb5-3"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="pp">TypeError</span>: <span class="fu">__init__</span>() missing <span class="dv">1</span> required positional argument: <span class="st">&#39;timestamp&#39;</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;&gt;</span> e <span class="op">=</span> NewOrderEvent(datetime.datetime(<span class="dv">2020</span>, <span class="dv">9</span>, <span class="dv">8</span>))</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="op">&gt;&gt;&gt;</span> e.timestamp</span>
+<span id="cb5-7"><a href="#cb5-7"></a>datetime.datetime(<span class="dv">2020</span>, <span class="dv">7</span>, <span class="dv">20</span>, <span class="dv">0</span>, <span class="dv">0</span>)</span></code></pre></div>
+<h2 id="subclass-specific-attributes">Subclass-specific attributes</h2>
+<p>It is possible that subclasses need their own attributes in addition to the ones that are common through the base class. In these scenarios, we should document our new attributes in the subclass itself. We often make these attributes private, to avoid changing the public interface declared by the abstract superclass. We do <em>not</em> need to repeat the documentation for the <code>timestamp</code> attribute; our expectation is that users should read the documentation of both the <code>NewOrderEvent</code> and <code>Event</code> classes to get the full picture of how <code>NewOrderEvent</code> is used.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;An event representing a when a customer places an order at a restaurant.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="co">#   _order: the new order to be added to the FoodDeliverySystem</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    _order: Order</span></code></pre></div>
+<p>To initialize this new attribute, we must define a separate initializer for <code>NewOrderEvent</code>. Here is our first attempt:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;An event representing a when a customer places an order at a restaurant.&quot;&quot;&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="co">#   _order: the new order to be added to the FoodDeliverySystem</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>    _order: Order</span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-8"><a href="#cb7-8"></a>        <span class="co">&quot;&quot;&quot;Initialize a NewOrderEvent for the given order.&quot;&quot;&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>        <span class="va">self</span>._order <span class="op">=</span> order</span></code></pre></div>
+<p>This code looks correct, but has a subtle bug. By defining our own initializer for <code>NewOrderEvent</code>, we have overridden the <code>Event.__init__</code> method. Python will no longer call <code>Event.__init__</code> when creating a new <code>NewOrderEvent</code> object. However, this is problematic because <strong>subclasses inherit methods, not attributes.</strong> This means that the public instance attribute <code>timestamp</code> is missing from our <code>NewOrderEvent</code> object:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> order <span class="op">=</span> ... <span class="co"># Assume we&#39;ve defined an Order object here</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> event <span class="op">=</span> NewOrderEvent(order)</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> event.timestamp</span>
+<span id="cb8-4"><a href="#cb8-4"></a>Traceback (most recent call last):</span>
+<span id="cb8-5"><a href="#cb8-5"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="pp">AttributeError</span>: <span class="st">&#39;NewOrderEvent&#39;</span> <span class="bu">object</span> has no attribute <span class="st">&#39;timestamp&#39;</span></span></code></pre></div>
+<p>So how do we make <code>NewOrderEvent</code> have both an <code>_order</code> and <code>timestamp</code> attribute? We need to modify its initializer, since it is the responsibility of the initializer to give values to all instance attributes.</p>
+<p>First, what <em>should</em> the value of the event’s <code>timestamp</code> be? A natural choice is that it should be the time that the order was placed—its <code>start_time</code> attribute. Here is our second attempt at the <code>NewOrderEvent.__init__</code> method:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb9-3"><a href="#cb9-3"></a>        <span class="va">self</span>.timestamp <span class="op">=</span> order.start_time</span>
+<span id="cb9-4"><a href="#cb9-4"></a>        <span class="va">self</span>._order <span class="op">=</span> order</span></code></pre></div>
+<p>However, initializing the <code>timestamp</code> attribute directly in the subclass is bad design; code has been duplicated and that makes <a href="https://en.wikipedia.org/wiki/Code_smell">our code smell bad</a>. Every time we modify the <code>Event</code> class to include new shared attributes, we’d also need to modify <code>NewOrderEvent.__init__</code> (and the initializers of every other subclass) to initialize those attributes.</p>
+<p>So instead, we modify <code>NewOrderEvent.__init__</code> so that it directly calls <code>Event.__init__</code>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Remember that when we call a method using the <code>&lt;Class&gt;.&lt;method&gt;</code> name, we need to pass in the <code>self</code> argument explicitly.</span> Here is our third and final version of this initializer:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="co">&quot;&quot;&quot;An event where a customer places an order for a restaurant.&quot;&quot;&quot;</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>    _order: Order</span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb10-6"><a href="#cb10-6"></a>        Event.<span class="fu">__init__</span>(<span class="va">self</span>, order.start_time)</span>
+<span id="cb10-7"><a href="#cb10-7"></a>        <span class="va">self</span>._order <span class="op">=</span> order</span></code></pre></div>
+<p>Now, whenever we call <code>NewOrderEvent.__init__</code>, Python also calls <code>Event.__init__</code>. This causes all shared instance attributes from <code>Event</code> to be “inherited” by the <code>NewOrderEvent</code> subclass.</p>
+<p>To summarize, we must follow two rules when inheriting from a class that defines its own initializer:</p>
+<ol type="1">
+<li>The initializer of a subclass must call the initializer of its superclass to initialize all common attributes.</li>
+<li>The initializer of a subclass is responsible for initializing any additional attributes that are specific to that subclass.</li>
+</ol>
+<h2 id="implementing-neworderevent.handle_event">Implementing <code>NewOrderEvent.handle_event</code></h2>
+<p>Next, we’ll show how to complete the implementation of <code>NewOrderEvent</code> by implementing its <code>handle_event</code> method. Our first attempt is quite simple, taking advantage of the methods we defined in <a href="03-manager-class.html">10.3 A “Manager” Class</a>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="co">&quot;&quot;&quot;An event where a customer places an order for a restaurant.&quot;&quot;&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>    _order: Order</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb11-6"><a href="#cb11-6"></a>        Event.<span class="fu">__init__</span>(<span class="va">self</span>, timestamp)</span>
+<span id="cb11-7"><a href="#cb11-7"></a>        <span class="va">self</span>._order <span class="op">=</span> order</span>
+<span id="cb11-8"><a href="#cb11-8"></a></span>
+<span id="cb11-9"><a href="#cb11-9"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb11-10"><a href="#cb11-10"></a>        <span class="co">&quot;&quot;&quot;Mutate system by placing an order.&quot;&quot;&quot;</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a>        system.place_order(<span class="va">self</span>._order)</span></code></pre></div>
+<p>Now, there’s a subtle problem with this method that we’ll return to at the end of this section. A good exercise is to pause here and try to think about what the problem might be.</p>
+<h2 id="implementing-other-event-subclass">Implementing other <code>Event</code> subclass</h2>
+<p>Below, we’ve shown the implementation of our <code>CompleteOrderEvent</code>, which is quite similar to <code>newOrderEvent</code>. The major difference is that its initializer takes an explicit <code>datetime.datetime</code> argument to represent when the given order is completed.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> By convention, the <code>timestamp</code> parameter is the first parameter, so that the subsequent parameters are seen as additional parameters needed by <code>NewOrderEvent</code> rather than <code>Event</code>. This example shows that initializers of subclasses can have different signatures than the initializer of their parent class.</span></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">class</span> CompleteOrderEvent(Event):</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;When an order is delivered to a customer by a courier.&quot;&quot;&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>    <span class="co">#   _order: the order to be completed by this event</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a>    _order: Order</span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, timestamp: datetime.datetime, order: Order) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb12-8"><a href="#cb12-8"></a>        Event.<span class="fu">__init__</span>(<span class="va">self</span>, timestamp)</span>
+<span id="cb12-9"><a href="#cb12-9"></a>        <span class="va">self</span>._order <span class="op">=</span> order</span>
+<span id="cb12-10"><a href="#cb12-10"></a></span>
+<span id="cb12-11"><a href="#cb12-11"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb12-12"><a href="#cb12-12"></a>        <span class="co">&quot;&quot;&quot;Mutate the system by recording that the order has been delivered to the customer.&quot;&quot;&quot;</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a>        system.complete_order(<span class="va">self</span>._order, <span class="va">self</span>.timestamp)</span></code></pre></div>
+<h2 id="event-generation">Event generation</h2>
+<p>We started off this section by asking, “when are the <code>FoodDeliverySystem</code> methods called”? We said that our simulation would have <code>Event</code> instances that would be responsible for calling these methods. But this really just changes the direction of our original question—it now becomes, “when are the <code>Event</code> instances created?”</p>
+<p>One possible approach is to randomly create a whole set of events at the start of our simulation, and then process each of those events (in order of their <code>timestamp</code>). This approach works when the events are fairly simple and can be predictably generated all at once. However, one key feature of events in general is that <em>processing one event can cause other events to occur</em>. For example, when we process a <code>NewOrderEvent</code>, we expect that at some point in the future, a corresponding <code>CompleteOrderEvent</code> will occur.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Once the delivery is started, it completes. This doesn’t necessarily always happen in real life, but we’ll assume it does for the purposes of this case study.</span></p>
+<p>To model this behaviour, we change the return type of <code>handle_event</code> from <code>None</code> to <code>list[Event]</code>, where the return value is a list of the events <em>caused</em> by the current event.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">class</span> Event:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    ...</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="bu">list</span>[Event]:</span>
+<span id="cb13-5"><a href="#cb13-5"></a>        <span class="co">&quot;&quot;&quot;Mutate the given food delivery system to process this event.</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">        Return a new list of new events created by processing this event.</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>        <span class="cf">raise</span> <span class="pp">NotImplementedError</span></span></code></pre></div>
+<p>Here’s how we might change the <code>NewOrderEvent</code> to return a <code>CompleteOrderEvent</code> at some point in the future.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    ...</span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="bu">list</span>[Event]:</span>
+<span id="cb14-5"><a href="#cb14-5"></a>        <span class="co">&quot;&quot;&quot;Mutate system by placing an order.&quot;&quot;&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a>        system.place_order(<span class="va">self</span>._order)</span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a>        <span class="co"># Create a new CompleteOrderEvent. Right now the completion time is</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>        <span class="co"># hard-coded as 10 minutes from the order creation.</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a>        <span class="co"># How could be make this more realistic by taking into account the</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a>        <span class="co"># positions of the courier, customer, and restaurant?</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a>        completion_time <span class="op">=</span> <span class="va">self</span>.timestamp <span class="op">+</span> datetime.timedelta(minutes<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb14-13"><a href="#cb14-13"></a>        <span class="cf">return</span> [CompleteOrderEvent(completion_time, <span class="va">self</span>._order)]</span></code></pre></div>
+<p>So for every <code>NewOrderEvent</code> that is handled by our simulation, a subsequent <code>CompleteOrderEvent</code> will be handled at some point in the future.</p>
+<p><em>Now here’s where the problem we mentioned earlier comes in!</em> Remember our docstring for <code>FoodDeliverySystem.place_order</code>: we cannot place an order if there are no available couriers! So what should this event do if <code>system.place_order</code> returns <code>False</code>? At the very least, in this case no <code>CompleteOrderEvent</code> should be returned.</p>
+<p>One approach we might take is a <em>polling technique</em>, where we return a duplicate of the event to try again a little bit later. Here is our second version of this method:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">class</span> NewOrderEvent(Event):</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    ...</span>
+<span id="cb15-3"><a href="#cb15-3"></a></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="bu">list</span>[Event]:</span>
+<span id="cb15-5"><a href="#cb15-5"></a>        <span class="co">&quot;&quot;&quot;Mutate system by placing an order.&quot;&quot;&quot;</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a>        success <span class="op">=</span> system.place_order(<span class="va">self</span>._order)</span>
+<span id="cb15-7"><a href="#cb15-7"></a></span>
+<span id="cb15-8"><a href="#cb15-8"></a>        <span class="cf">if</span> success:</span>
+<span id="cb15-9"><a href="#cb15-9"></a>            completion_time <span class="op">=</span> <span class="va">self</span>.timestamp <span class="op">+</span> datetime.timedelta(minutes<span class="op">=</span><span class="dv">10</span>)</span>
+<span id="cb15-10"><a href="#cb15-10"></a>            <span class="cf">return</span> [CompleteOrderEvent(completion_time, <span class="va">self</span>._order)]</span>
+<span id="cb15-11"><a href="#cb15-11"></a>        <span class="cf">else</span>:</span>
+<span id="cb15-12"><a href="#cb15-12"></a>            <span class="va">self</span>._order.start_time <span class="op">=</span> <span class="va">self</span>.timestamp <span class="op">+</span> datetime.timedelta(minutes<span class="op">=</span><span class="dv">5</span>)</span>
+<span id="cb15-13"><a href="#cb15-13"></a>            <span class="cf">return</span> [NewOrderEvent(<span class="va">self</span>._order)]</span></code></pre></div>
+<h3 id="returning-no-events">Returning no events</h3>
+<p>Our <code>CompleteOrderEvent</code> does not cause any new events to happen:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">class</span> CompleteOrderEvent(Event):</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    ...</span>
+<span id="cb16-3"><a href="#cb16-3"></a></span>
+<span id="cb16-4"><a href="#cb16-4"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="bu">list</span>[Event]:</span>
+<span id="cb16-5"><a href="#cb16-5"></a>        <span class="co">&quot;&quot;&quot;Mutate the system by recording that the order has been delivered to the customer.&quot;&quot;&quot;</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>        system.complete_order(<span class="va">self</span>._order, <span class="va">self</span>._timestamp)</span>
+<span id="cb16-7"><a href="#cb16-7"></a>        <span class="cf">return</span> []</span></code></pre></div>
+<h3 id="a-new-event-type">A new event type</h3>
+<p>Lastly, we’ll sketch one new type of event which is more conceptual, but that illustrates the power of this <code>Event</code> interface. This event type will represent a <em>random generation of new orders over a given time period</em>, which we’ll use to drive our simulation.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">class</span> GenerateOrdersEvent(Event):</span>
+<span id="cb17-2"><a href="#cb17-2"></a>    <span class="co">&quot;&quot;&quot;An event that causes a random generation of new orders.</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="co">    Private Representation Invariants:</span></span>
+<span id="cb17-5"><a href="#cb17-5"></a><span class="co">        - self._duration &gt; 0</span></span>
+<span id="cb17-6"><a href="#cb17-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-7"><a href="#cb17-7"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb17-8"><a href="#cb17-8"></a>    <span class="co">#   - _duration: the number of hours to generate orders for</span></span>
+<span id="cb17-9"><a href="#cb17-9"></a>    _duration: <span class="bu">int</span></span>
+<span id="cb17-10"><a href="#cb17-10"></a></span>
+<span id="cb17-11"><a href="#cb17-11"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, timestamp: datetime.datetime, duration: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb17-12"><a href="#cb17-12"></a>        <span class="co">&quot;&quot;&quot;Initialize this event with timestamp and the duration in hours.</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co">        Preconditions:</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="co">            - duration &gt; 0</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb17-17"><a href="#cb17-17"></a></span>
+<span id="cb17-18"><a href="#cb17-18"></a>    <span class="kw">def</span> handle_event(<span class="va">self</span>, system: FoodDeliverySystem) <span class="op">-&gt;</span> <span class="bu">list</span>[Event]:</span>
+<span id="cb17-19"><a href="#cb17-19"></a>        <span class="co">&quot;&quot;&quot;Generate new orders for this event&#39;s timestamp and duration.&quot;&quot;&quot;</span></span>
+<span id="cb17-20"><a href="#cb17-20"></a>        events <span class="op">=</span> []</span>
+<span id="cb17-21"><a href="#cb17-21"></a></span>
+<span id="cb17-22"><a href="#cb17-22"></a>        <span class="cf">while</span> ...:</span>
+<span id="cb17-23"><a href="#cb17-23"></a></span>
+<span id="cb17-24"><a href="#cb17-24"></a>            new_order_event <span class="op">=</span> ...  <span class="co"># Create a randomly-generated NewOrderEvent</span></span>
+<span id="cb17-25"><a href="#cb17-25"></a>            events.append(new_order_event)</span>
+<span id="cb17-26"><a href="#cb17-26"></a></span>
+<span id="cb17-27"><a href="#cb17-27"></a>        <span class="cf">return</span> events</span></code></pre></div>
+<p>We’ll discuss how we might implement this class in lecture, but it’s a good exercise to try to implement it yourself. There’s many ways to randomly generate new events, so don’t be afraid to experiment!</p>
+<h2 id="from-events-to-a-simulation">From events to a simulation</h2>
+<p>In this section, we focused only on defining individual <code>Event</code> classes to represent different events in our simulation. In the next section, we’ll put together everything we’ve covered up to this point to finally get a full simulation up and running, so keep reading!</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>C.1 Summations and Products</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">C.1 Summations and Products</h1>
+</header>
+<section>
+<p>When performing calculations, we’ll often end up writing sums of terms, where each term follows a pattern. For example: <span class="math display">\[\frac{1 + 1^2}{3 + 1} +
+\frac{2 + 2^2}{3 + 2} +
+\frac{3 + 3^2}{3 + 3} +
+\cdots +
+\frac{100 + 100^2}{3 + 100}\]</span></p>
+<p>We will often use <em>summation notation</em> to express such sums concisely. We could rewrite the previous example simply as: <span class="math display">\[\sum_{i=1}^{100} \frac{i + i^2}{3 + i}.\]</span></p>
+<p>In this example, <span class="math inline">\(i\)</span> is called the <em>index of summation</em>, and <span class="math inline">\(1\)</span> and <span class="math inline">\(100\)</span> are the <em>lower</em> and <em>upper bounds</em> of the summation, respectively. A bit more generally, for any pair of integers <span class="math inline">\(j\)</span> and <span class="math inline">\(k\)</span>, and any function <span class="math inline">\(f : \Z \to \R\)</span>, we can use summation notation in the following way: <span class="math display">\[\sum_{i=j}^k f(i) = f(j) + f(j+1) + f(j+2) + \dots + f(k).\]</span></p>
+<p>We can similarly use <em>product notation</em> to abbreviate multiplication:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">Fun fact: the Greek letter <span class="math inline">\(\Sigma\)</span> (sigma) corresponds to the first letter of “sum,” and the Greek letter <span class="math inline">\(\Pi\)</span> (pi) corresponds to the first letter of “product.”</span> <span class="math display">\[\prod_{i=j}^k f(i) = f(j) \times f(j+1) \times f(j+2) \times \dots \times f(k).\]</span></p>
+<p>It is sometimes useful (e.g., in certain formulas) to allow a summation or product’s lower bound to be greater than its upper bound. In this case, we say the summation or product is <em>empty</em>, and define their values as follows:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">These particular values are chosen so that adding an empty summation and multiplying by an empty product do not change the value of an expression.</span></p>
+<ul>
+<li>When <span class="math inline">\(j &gt; k\)</span>, <span class="math inline">\(\sum_{i=j}^k f(i) = 0\)</span>.</li>
+<li>When <span class="math inline">\(j &gt; k\)</span>, <span class="math inline">\(\prod_{i=j}^k f(i) = 1\)</span>.</li>
+</ul>
+<p>Finally, we’ll end off this section with a few formulas for common summation formulas, and a few laws governing how expressions using summation and product notation can be simplified.</p>
+<div id="theorem:summation_formulas" class="theorem">
+<p>For all <span class="math inline">\(n \in \N\)</span>, the following formulas hold:</p>
+<ol type="1">
+<li>For all <span class="math inline">\(c \in \R\)</span>, <span class="math inline">\(\sum_{i=1}^{n} c = c \cdot n\)</span> (sum with constant terms).</li>
+<li><span class="math inline">\(\sum_{i=0}^{n} i = \frac{n(n+1)}{2}\)</span> (sum of consecutive numbers).</li>
+<li><span class="math inline">\(\sum_{i=0}^{n} i^2 = \frac{n(n+1)(2n+1)}{6}\)</span> (sum of consecutive squares).</li>
+<li>For all <span class="math inline">\(r \in \R\)</span>, if <span class="math inline">\(r \neq 1\)</span> then <span class="math inline">\(\sum_{i=0}^{n-1} r^i = \frac{r^n - 1}{r - 1}\)</span> (sum of powers).</li>
+<li>For all <span class="math inline">\(r \in \R\)</span>, if <span class="math inline">\(r \neq 1\)</span> then <span class="math inline">\(\sum_{i=0}^{n-1} i \cdot r^i = \frac{n \cdot r^n}{r - 1} - \frac{r(r^n - 1)}{(r - 1)^2}\)</span> (arithmetico-geometric series).</li>
+</ol>
+</div>
+<div id="theorem:summation_product_laws" class="theorem">
+<p>For all <span class="math inline">\(m, n \in \Z\)</span>, the following formulas hold:</p>
+<ol type="1">
+<li><p><span class="math inline">\(\sum_{i=m}^{n} (a_i + b_i) = \left( \sum_{i=m}^{n} a_i \right) + \left(\sum_{i=m}^{n} b_i \right)\)</span> (separating sums)</p></li>
+<li><p><span class="math inline">\(\prod_{i=m}^{n} (a_i \cdot b_i) = \left( \prod_{i=m}^{n} a_i \right) \cdot \left (\prod_{i=m}^{n} b_i \right)\)</span> (separating products)</p></li>
+<li><p><span class="math inline">\(\sum_{i=m}^{n} c \cdot a_i = c \cdot \left( \sum_{i=m}^{n} a_i \right)\)</span> (factoring out constants, sums)</p></li>
+<li><p><span class="math inline">\(\prod_{i=m}^{n} c \cdot a_i = c^{n - m + 1} \cdot \left( \prod_{i=m}^{n} a_i \right)\)</span> (factoring out constants, products)</p></li>
+<li><p><span class="math inline">\(\sum_{i=m}^{n} a_i = \sum_{i&#39;=0}^{n-m} a_{i&#39;+m}\)</span> (change of index <span class="math inline">\(i&#39; = i - m\)</span>)</p></li>
+<li><p><span class="math inline">\(\prod_{i=m}^{n} a_i = \prod_{i&#39;=0}^{n-m} a_{i&#39;+m}\)</span> (change of index <span class="math inline">\(i&#39; = i - m\)</span>)</p></li>
+</ol>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

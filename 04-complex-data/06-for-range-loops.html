@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4.6 Index-Based For Loops</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">4.6 Index-Based For Loops</h1>
+</header>
+<section>
+<p>We have learned a lot about collections so far:</p>
+<ol type="1">
+<li>We can access the elements of a collection via indexing (e.g., for lists and strings) or key lookups (e.g., for dictionaries).</li>
+<li>We can evaluate an expression for each element of a collection with comprehensions to produce a new collection.</li>
+<li>We can execute a set of statements for each element of a collection with a for loop.</li>
+</ol>
+<p>The loops we have worked with so far are element-based, meaning the loop variable refers to a specific element in the collection. Though these loops are powerful, they have one limitation: they process each element of the collection independent of where they appear in the collection. In this section, we’ll see how we can loop through elements of index-based collections while keeping track of the current index. Looping by index enables us to solve more problems than looping by element alone, because we’ll be able to take into account <em>where</em> a particular element is in a collection in the loop body.</p>
+<p>As in the previous section, before proceeding please take a moment to review the basic loop accumulator pattern:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> <span class="op">&lt;</span>default_value<span class="op">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="cf">for</span> element <span class="kw">in</span> <span class="op">&lt;</span>collection<span class="op">&gt;</span>:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> ... <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far ... element ...  <span class="co"># Somehow combine loop variable and accumulator</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="cf">return</span> <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far</span></code></pre></div>
+<h2 id="remembering-the-problem-repeating-code">Remembering the problem: repeating code</h2>
+<p>When we introduced for loops, we presented a <code>my_sum</code> implementation that showed the exact statement that is repeated:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    60</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">0</span>]</span>
+<span id="cb2-10"><a href="#cb2-10"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">1</span>]</span>
+<span id="cb2-11"><a href="#cb2-11"></a>    sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[<span class="dv">2</span>]</span>
+<span id="cb2-12"><a href="#cb2-12"></a></span>
+<span id="cb2-13"><a href="#cb2-13"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>Our eventual solution to the <code>my_sum</code> function used a loop variable, <code>number</code>, in place of the <code>numbers[_]</code> in the body. There is another solution if we observe that the indexes being used start at <code>0</code> and increase by one on each iteration of the loop. On the last iteration, the index should be: <code>len(numbers) - 1</code>. This sequence of numbers can be expressed using the <code>range</code> data type: <code>range(0, len(numbers))</code> Based on this, let us use a different kind of for loop to implement <code>my_sum</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">    &gt;&gt;&gt; my_sum([10, 20, 30])</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">    60</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the elements in numbers.</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb3-11"><a href="#cb3-11"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>    <span class="cf">return</span> sum_so_far</span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="kw">def</span> my_sum_v2(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="co">&quot;&quot;&quot;Return the sum of the given numbers.</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">    &gt;&gt;&gt; my_sum_v2([10, 20, 30])</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">    60</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the elements in numbers.</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a></span>
+<span id="cb3-25"><a href="#cb3-25"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(numbers)):</span>
+<span id="cb3-26"><a href="#cb3-26"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> numbers[i]</span>
+<span id="cb3-27"><a href="#cb3-27"></a></span>
+<span id="cb3-28"><a href="#cb3-28"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>Both <code>my_sum</code> and <code>my_sum_v2</code> use the accumulator pattern, and in fact initialize and update the accumulator in the exact same way. But there are some key differences in how their loops are structured:</p>
+<ul>
+<li>Loop variable <code>number</code> vs. <code>i</code>: <code>number</code> refers to an element of the list <code>numbers</code> (starting with the first element); <code>i</code> refers to an integer (starting at 0).</li>
+<li>Looping over a <code>list</code> vs. a <code>range</code>: <code>for number in numbers</code> causes the loop body to execute once for each element in <code>numbers</code>. <code>for i in range(0, len(numbers))</code> causes the loop body to execute once for each integer in <code>range(0, len(numbers))</code>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Because the range “stop” argument is exclusive, these two versions both cause the same number of iterations, equal to the number of elements in <code>numbers</code>.</span></li>
+<li>Updating the accumulator: since <code>number</code> refers to a list element, we can add it directly to the accumulator. Since <code>i</code> refers to <em>where</em> we are in the list, we access the corresponding list element using list indexing to add it to the accumulator.</li>
+</ul>
+<p>In the case of <code>my_sum</code>, both our element-based and index-based implementations are correct. However, our next example illustrates a situation where the loop <em>must</em> know the index of the current element in order to solve the given problem.</p>
+<h2 id="when-location-matters">When location matters</h2>
+<p>Consider the following problem: given a string, count the number of times in the string two adjacent characters are equal. For example, the string <code>'look'</code> has two adjacent <code>'o'</code>’s, and the string <code>'David'</code> has no repeated adjacent characters. The location of the characters matters; even though the string <code>'canal'</code> has two <code>'a'</code> characters, they are not adjacent</p>
+<p>Let’s use these examples to design our function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> count_adjacent_repeats(string: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of times in the given string that two adjacent characters are equal.</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;look&#39;)</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">    1</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;David&#39;)</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    0</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;canal&#39;)</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">    0</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>Before we try to implement this function, let’s reason about how we might approach the problem. First, as this is a “counting” problem, a natural fit would be to use an accumulator variable <code>repeats_so_far</code> that starts at 0 and increases by 1 every time two adjacent repeated characters are found. We don’t know where the characters in the string may be repeated, so we must start at the beginning and continue to the end. In addition, we are comparing adjacent characters, so we need two indices every loop iteration:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Comparison</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>string[0] == string[1]</code></td>
+</tr>
+<tr class="even">
+<td><code>string[1] == string[2]</code></td>
+</tr>
+<tr class="odd">
+<td><code>string[2] == string[3]</code></td>
+</tr>
+<tr class="even">
+<td>…</td>
+</tr>
+</tbody>
+</table>
+<p>Notice that the indices to the left of the <code>==</code> operator start at 0 and increase by 1. Similarly, the indices to the right of the <code>==</code> operator start at 1 and increase by 1. Does this mean we need to use two for loops and two <code>range</code>s? No. We should also notice that the index to the right of <code>==</code> is always larger than the left by 1, so we have a way of calculating the right index from the left index. Here is out first attempt.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> count_adjacent_repeats(string: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of repeated adjacent characters in string.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;look&#39;)</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">    1</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;David&#39;)</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">    0</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;canal&#39;)</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">    0</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="co"># ACCUMULATOR repeats_so_far: keep track of the number of adjacent</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a>    <span class="co"># characters that are identical</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a>    repeats_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(string)):</span>
+<span id="cb5-16"><a href="#cb5-16"></a>        <span class="cf">if</span> string[i] <span class="op">==</span> string[i <span class="op">+</span> <span class="dv">1</span>]:</span>
+<span id="cb5-17"><a href="#cb5-17"></a>            repeats_so_far <span class="op">=</span> repeats_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a>    <span class="cf">return</span> repeats_so_far</span></code></pre></div>
+<p>Unfortunately, if we attempt to run our doctest examples above, we don’t get the expected values. Instead, we get 3 <code>IndexError</code>s, one for each example. Here is the error for the first failed example:</p>
+<pre><code>Failed example:
+    count_adjacent_repeats(&#39;look&#39;)
+Exception raised:
+    Traceback (most recent call last):
+      File &quot;path\to\Python\Python38\lib\doctest.py&quot;, line 1329, in __run
+        exec(compile(example.source, filename, &quot;single&quot;,
+      File &quot;&lt;doctest __main__.count_adjacent_repeats[0]&gt;&quot;, line 1, in &lt;module&gt;
+        count_adjacent_repeats(&#39;look&#39;)
+      File &quot;path/to/functions.py&quot;, line 74, in count_adjacent_repeats
+        if string[i] == string[i + 1]:
+    IndexError: string index out of range</code></pre>
+<p>Conveniently, the error tells us what the problem is (<code>'string index out of range'</code>). It even tells us the line where the error occurs: <code>if string[i] == string[i + 1]:</code>. It is now our job to figure out why the line is causing an <code>IndexError</code>. The line indexes the parameter <code>string</code> using <code>i</code> and <code>i + 1</code>, so one of them must be causing the error.</p>
+<p>Remember that given a string of length <code>n</code>, the valid indices are from <code>0</code> to <code>n - 1</code>. Now let’s look at our use of <code>range</code>: <code>for i in range(0, len(string))</code>. This means that <code>i</code> can take on the values <code>0</code> to <code>n - 1</code>, which seems to be in the correct bounds. But don’t forget, we also are indexing using <code>i + 1</code>! This is the problem: <code>i + 1</code> can take on the values <code>1</code> to <code>n</code>, and <code>n</code> is not a valid index.</p>
+<p>We can solve this bug by remembering our goal: to compare adjacent pairs of characters. For a string of length <code>n</code>, the last pair of characters is <code>(string[n - 2], string[n - 1])</code>, so our loop variable <code>i</code> only needs to go up to <code>n - 2</code>, not <code>n - 1</code>. Let’s look at the final solution:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> count_adjacent_repeats(string: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of repeated adjacent characters in string.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;look&#39;)</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">    1</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;David&#39;)</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    0</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    &gt;&gt;&gt; count_adjacent_repeats(&#39;canal&#39;)</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">    0</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a>    <span class="co"># ACCUMULATOR repeats_so_far: keep track of the number of adjacent</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a>    <span class="co"># characters that are identical</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>    repeats_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a></span>
+<span id="cb7-15"><a href="#cb7-15"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(string) <span class="op">-</span> <span class="dv">1</span>):</span>
+<span id="cb7-16"><a href="#cb7-16"></a>        <span class="cf">if</span> string[i] <span class="op">==</span> string[i <span class="op">+</span> <span class="dv">1</span>]:</span>
+<span id="cb7-17"><a href="#cb7-17"></a>            repeats_so_far <span class="op">=</span> repeats_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a></span>
+<span id="cb7-19"><a href="#cb7-19"></a>    <span class="cf">return</span> repeats_so_far</span></code></pre></div>
+<p>Notice that we could not have implemented this function using an element-based for loop. Having <code>for char in string</code> would let us access the current character (<code>char</code>), but <em>not</em> the next character adjacent to <code>char</code>. To summarize, when we want to write a loop body that compares the current element with another based on their positions, we must use an index-based loop to keep track of the current index in the loop.</p>
+<h2 id="two-lists-one-loop">Two lists, one loop</h2>
+<p>Index-based for loops can also be used to iterate over two collections in parallel using a single for loop. Consider the common mathematical problem: sum of products.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> In your linear algebra course you’ll learn about the <em>inner product</em> operation, which formalizes this idea.</span></p>
+<p>For example, suppose we have two nickels, four dimes, and three quarters in our pocket. How much money do we have in total? To solve this, we must know the value of nickels, dimes, and quarters. Then we can use sum of products:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> money_so_far <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> money_so_far <span class="op">=</span> money_so_far <span class="op">+</span> <span class="dv">2</span> <span class="op">*</span> <span class="fl">0.05</span>  <span class="co"># Two nickels</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> money_so_far <span class="op">=</span> money_so_far <span class="op">+</span> <span class="dv">4</span> <span class="op">*</span> <span class="fl">0.10</span>  <span class="co"># Four dimes</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">&gt;&gt;&gt;</span> money_so_far <span class="op">=</span> money_so_far <span class="op">+</span> <span class="dv">3</span> <span class="op">*</span> <span class="fl">0.25</span>  <span class="co"># Three quarters</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;&gt;&gt;</span> money_so_far</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="fl">1.25</span></span></code></pre></div>
+<p>This looks very similar to our <code>sum_so_far</code> exploration from earlier. The main difference is that this time we are accumulating products using the <code>*</code> operator. To the left of the <code>*</code> operator, we have a count (e.g., the number of nickels, an <code>int</code>). To the right of the <code>*</code> operator, we have a cent value (e.g., how much a nickel is worth in cents, a <code>float</code>). We can store this information in two same-sized lists. Let’s design a function that uses these two lists to tell us how much money we have:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> count_money(counts: <span class="bu">list</span>[<span class="bu">int</span>], denoms: <span class="bu">list</span>[<span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return the total amount of money for the given coin counts and denominations.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">    counts stores the number of coins of each type, and denominations stores the</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">    value of each coin type. Each element in counts corresponds to the element at</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    the same index in denoms.</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">    Preconditions:</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">      - len(counts) == len(values)</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">    &gt;&gt;&gt; count_money([2, 4, 3], [0.05, 0.10, 0.25])</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">    1.25</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>Before using a loop, let’s investigate how we would implement this using a comprehension. We need to multiply each corresponding element of <code>counts</code> and <code>denoms</code>, and add the results:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>(counts[<span class="dv">0</span>] <span class="op">*</span> denoms[<span class="dv">0</span>]) <span class="op">+</span> (counts[<span class="dv">1</span>] <span class="op">*</span> denoms[<span class="dv">1</span>]) <span class="op">+</span> (counts[<span class="dv">2</span>] <span class="op">*</span> denoms[<span class="dv">2</span>]) <span class="op">+</span> ...</span></code></pre></div>
+<p>We can generate each of these products by using <code>range</code>:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> We used <code>len(counts)</code>, but could have used <code>len(denoms)</code> as well because of the function’s precondition.</span></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>[counts[i] <span class="op">*</span> denoms[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(counts))]</span></code></pre></div>
+<p>And we can then compute the sum of this expression by using the builtin Python function:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> count_money(counts: <span class="bu">list</span>[<span class="bu">int</span>], denoms: <span class="bu">list</span>[<span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the total amount of money for the given coin counts and denominations.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    counts stores the number of coins of each type, and denominations stores the</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">    value of each coin type. Each element in counts corresponds to the element at</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">    the same index in denoms.</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">    Preconditions:</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">      - len(counts) == len(values)</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a></span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="co">    &gt;&gt;&gt; count_money([2, 4, 3], [0.05, 0.10, 0.25])</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co">    1.25</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a>    <span class="cf">return</span> <span class="bu">sum</span>([counts[i] <span class="op">*</span> denoms[i] <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(counts))])</span></code></pre></div>
+<p>This implementation of <code>count_money</code> has all the necessary ingredients that would appear in an equivalent for loop. Here is our alternate implementation of <code>count_money</code> using a for loop, but the same structure as <code>my_sum</code> from <a href="04-for-loops.html">4.4 Repeated Execution: For Loops</a>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> count_money(counts: <span class="bu">list</span>[<span class="bu">int</span>], values: <span class="bu">list</span>[<span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;...</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a>    <span class="co"># ACCUMULATOR money_so_far: keep track of the total money so far.</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a>    money_so_far <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(counts)):</span>
+<span id="cb13-8"><a href="#cb13-8"></a>        money_so_far <span class="op">=</span> money_so_far <span class="op">+</span> counts[i] <span class="op">*</span> values[i]</span>
+<span id="cb13-9"><a href="#cb13-9"></a></span>
+<span id="cb13-10"><a href="#cb13-10"></a>    <span class="cf">return</span> money_so_far</span></code></pre></div>
+<h2 id="choosing-the-right-for-loop">Choosing the right for loop</h2>
+<p>We have seen two forms of for loops. The first version, the element-based for loop, takes the form <code>for &lt;loop_variable&gt; in &lt;collection&gt;</code>. This is useful when we want to process each element in the collection without knowing about its position in the collection. The second version, the index-based for loops, takes the form <code>for &lt;loop_variable&gt; in &lt;range&gt;</code>. In index-based for loops, the <code>range</code> must belong to the set of valid indices for the collection we wish to loop over. We have seen two situations where this is useful:<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> We’ll see one more example use of index-based loops later this chapter.</span></p>
+<ol type="1">
+<li>When the location of elements in the collection matters (as in <code>count_adjacent_repeats</code>).</li>
+<li>When we want to loop through more than one list at a time (as in <code>count_money</code>), using the same index for both lists.</li>
+</ol>
+<p>You might have noticed from our <code>my_sum</code> example that index-based for loops are <em>more powerful</em> than element-based for loops: given the current index, we can always access the current collection element, but not vice versa. So why don’t we just always use index-based for loops? Two reasons: first, not all collections can be indexed (think <code>set</code> and <code>dict</code>); and second, index-based for loops introduce a level of <em>indirection</em> to our code. In our <code>my_sum_v2</code> example, we had to access the current element using list indexing (<code>numbers[i]</code>), while in <code>my_sum</code>, we could directly access the element by using the loop variable (<code>number</code>)`. So it’s important to understand when we can use element-based for loops vs. index-based for loops, as the former makes our code easier to write and understand.</p>
+<h1 id="references">References</h1>
+<ul>
+<li>CSC108 videos: For loops over indices (<a href="https://youtu.be/tLnWFnnZ6sA">Part 1</a> only)</li>
+<li>CSC108 videos: Parallel Lists and Strings (<a href="https://youtu.be/RpWIaXNiob0">Part 1</a>, <a href="https://youtu.be/t7RWk6VygwE">Part 2</a>)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

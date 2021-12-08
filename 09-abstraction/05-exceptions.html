@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.5 Exceptions as a Part of the Public Interface</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.5 Exceptions as a Part of the Public Interface</h1>
+</header>
+<section>
+<p>The stack implementations we studied in the previous section included a precondition on their <code>pop</code> method specifying that the stack must not be empty. Preconditions are used to rule out erroneous situations like attempting to remove an item from an empty stack, but they come with one drawback: every precondition we add increases the complexity of the function’s interface. A precondition becomes the responsibility of the <em>user</em> of the function to check, for example, with code like</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="cf">if</span> <span class="kw">not</span> my_stack.is_empty():</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    top_item <span class="op">=</span> my_stack.pop()</span></code></pre></div>
+<p>Sometimes these checks are straightforward, but depending on the preconditions we specify, they can be onerous as well. In this section, we’ll introduce an alternate mechanism for signaling an erroneous state from within a function call.</p>
+<h2 id="warm-up-letting-an-error-happen">Warm-up: letting an error happen</h2>
+<p>Consider this version of <code>Stack.pop</code>, which removes the precondition but keeps the same implementation:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>        <span class="cf">return</span> <span class="va">self</span>._items.pop()</span></code></pre></div>
+<p>When we call <code>pop</code> on an empty stack, we encounter the following error:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack()</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> s.pop()</span>
+<span id="cb3-3"><a href="#cb3-3"></a>Traceback (most recent call last):</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  File <span class="st">&quot;...&quot;</span>, line <span class="dv">58</span>, <span class="kw">in</span> pop</span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="cf">return</span> <span class="va">self</span>._items.pop()</span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="pp">IndexError</span>: pop <span class="im">from</span> empty <span class="bu">list</span></span></code></pre></div>
+<p>As we saw earlier in the course, when an exception is raised Python stops the normal control flow of the currently running program. From the perspective of the client code, it is good to see an exception to know that something has gone wrong, but bad that the exceptions report refers to a list (<code>IndexError: pop from empty list</code>) and a private attribute (<code>self._items</code>) that the client code should have no knowledge of.</p>
+<h2 id="custom-exceptions">Custom exceptions</h2>
+<p>A better solution is to raise a custom exception that is descriptive, yet does not reveal any implementation details. We can achieve this very easily in Python: we define our own type of error by defining a new class:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">class</span> EmptyStackError(<span class="pp">Exception</span>):</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Exception raised when calling pop on an empty stack.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>There is some slightly new syntax here: the <code>(Exception)</code> that follows the class name. For now, it is enough to know that this will properly create a new type of exception. The technical mechanism used, <em>inheritance</em>, is one we’ll cover later in this chapter.</p>
+<p>Here’s how we’ll use <code>EmptyStackError</code> in our <code>pop</code> method:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">        Raise an EmptyStackError if this stack is empty.</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="cf">if</span> <span class="va">self</span>.is_empty():</span>
+<span id="cb5-7"><a href="#cb5-7"></a>            <span class="cf">raise</span> EmptyStackError</span>
+<span id="cb5-8"><a href="#cb5-8"></a>        <span class="cf">else</span>:</span>
+<span id="cb5-9"><a href="#cb5-9"></a>            <span class="cf">return</span> <span class="va">self</span>._items.pop()</span></code></pre></div>
+<p>There are two important changes in this version of <code>pop</code>. First, in the method docstring there is a new sentence which names both the type of exception and the scenario that will cause that exception to be raised. This exception is now part of the <em>public interface</em> of <code>Stack.pop</code>, meaning users of this class will be expected to take note of this exception. Second, this implementation now uses a new Python keyword, <code>raise</code>, which unsurprisingly raises an exception.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Even though we’re using our custom exception class here, <code>raise</code> works with any exception type, such as <code>IndexError</code> and <code>AttributeError</code>.</span> A raise statement can be used anywhere in our code to raise exceptions, even ones that we’ve defined ourselves. Let’s see what happens now when we call <code>pop</code> on an empty stack:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack()</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="op">&gt;&gt;&gt;</span> s.pop()</span>
+<span id="cb6-3"><a href="#cb6-3"></a>Traceback (most recent call last):</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>  File <span class="st">&quot;...&quot;</span>, line <span class="dv">60</span>, <span class="kw">in</span> pop</span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">raise</span> EmptyStackError</span>
+<span id="cb6-7"><a href="#cb6-7"></a>EmptyStackError</span></code></pre></div>
+<p>As before, an exception is raised. But now the line shown is just this simple <code>raise</code> statement; it doesn’t mention any implementation details of the class. And it specifies that an <code>EmptyStackError</code> was the problem, as was documented in the method docstring.</p>
+<h3 id="custom-exception-messages">Custom exception messages</h3>
+<p>One current limitation of the above approach is that simply the name of the exception class does not convey a lot of meaning. To provide a custom exception message, we can define a new special method with the name <code>__str__</code> in our exception class:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Like <code>__init__</code>, the name <code>__str__</code> has special meaning in Python. We’ll study it and more methods like it later in the course.</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">class</span> EmptyStackError(<span class="pp">Exception</span>):</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Exception raised when calling pop on an empty stack.&quot;&quot;&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a>    <span class="kw">def</span> <span class="fu">__str__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb7-5"><a href="#cb7-5"></a>        <span class="co">&quot;&quot;&quot;Return a string representation of this error.&quot;&quot;&quot;</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>        <span class="cf">return</span> <span class="st">&#39;pop may not be called on an empty stack&#39;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack()</span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="op">&gt;&gt;&gt;</span> s.pop()</span>
+<span id="cb7-11"><a href="#cb7-11"></a>Traceback (most recent call last):</span>
+<span id="cb7-12"><a href="#cb7-12"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>  File <span class="st">&quot;...&quot;</span>, line <span class="dv">60</span>, <span class="kw">in</span> pop</span>
+<span id="cb7-14"><a href="#cb7-14"></a>    <span class="cf">raise</span> EmptyStackError</span>
+<span id="cb7-15"><a href="#cb7-15"></a>EmptyStackError: pop may <span class="kw">not</span> be called on an empty stack</span></code></pre></div>
+<h2 id="testing-exceptions">Testing exceptions</h2>
+<p>Because we include <code>EmptyStackError</code> as part of the public interface of the <code>Stack.pop</code> method, we should write tests to check that this behaviour occurs as expected. But unlike the tests we’ve written so far, we cannot simply call <code>pop</code> on an empty stack and check the return value or the state of the stack after <code>pop</code> returns. Raising an error interrupts the regular control flow of a Python program—and this includes test cases!</p>
+<p>The <code>pytest</code> module<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> It is also possible to write doctests that check for exceptions. See <a href="../B-Python-libraries/01-doctest.html">Appendix B.1</a> for details.</span> allows us to write tests that expects an exception to occur using a function <code>pytest.raises</code> together with the <code>with</code> keyword: Here is an example of a test case to check that calling <code>Stack.pop</code> on an empty stack raises an <code>EmptyStackError</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># Assuming our stack implementation is contained in a file stack.py.</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="im">from</span> stack <span class="im">import</span> Stack, EmptyStackError</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="im">import</span> pytest</span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">def</span> test_empty_stack_error():</span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="co">&quot;&quot;&quot;Test that popping from an empty stack raises an exception.&quot;&quot;&quot;</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>    s <span class="op">=</span> Stack()</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    <span class="cf">with</span> pytest.raises(EmptyStackError):</span>
+<span id="cb8-11"><a href="#cb8-11"></a>        s.pop()</span></code></pre></div>
+<p>The <code>with</code> keyword acts as an assertion, expecting an <code>EmptyStackError</code> to be raised by the body of the <code>with</code> block, the function call <code>s.pop()</code>. The test <em>passes</em> when that exception is raised, and <em>fails</em> when that exception is not raised (this includes the case when a different exception is raised instead of the expected one).</p>
+<h2 id="handling-exceptions">Handling exceptions</h2>
+<p>We’ve said repeatedly that when an exception is raised, the normal execution of the program is stopped, and the exception is reported to the user. However, <code>pytest.raises</code> seems to circumvent this: after an <code>EmptyStackError</code> is raised in our test, the test simply <em>passes</em> and execution proceeds to the next test. How does <code>pytest.raises</code> achieve this?</p>
+<p>Python provides a compound statement, the <strong>try-except</strong> statement, to execute a block of code and handle a case where one or more pre-specified exceptions are raised in that block. Here is the simplest form of a try-except statement:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="cf">try</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="op">&lt;</span>statement<span class="op">&gt;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    ...</span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="cf">except</span> <span class="op">&lt;</span>ExceptionClass<span class="op">&gt;</span>:</span>
+<span id="cb9-5"><a href="#cb9-5"></a>    <span class="op">&lt;</span>statement<span class="op">&gt;</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    ...</span></code></pre></div>
+<p>When a try-except statement is executed:</p>
+<ol type="1">
+<li><p>First, the block of code indented within the <code>try</code> is executed.</p></li>
+<li><p>If no exception occurs when executing this block, the <code>except</code> part is skipped, and the Python interpreter continues to the next statement after the try-except.</p></li>
+<li><p>If an exception occurs when executing this block:</p>
+<ul>
+<li><p>If the exception has type <code>&lt;ExceptionClass&gt;</code>, the block under the <code>except</code> is executed, and then after that the Python interpreter continues executing the next statement after the try-except.</p>
+<p>Importantly, in this case the program does <em>not</em> immediately halt!</p></li>
+<li><p>However, if the exception is a different type, this does stop the normal program execution.</p></li>
+</ul></li>
+</ol>
+<p>In practice, client code often uses try-except statements to call functions that may raise an error as part of their public interface. This shields users from seeing errors that they should never see, and allows the rest of the program to continue.</p>
+<p>For example, here is how we could implement a function that takes a stack and returns the second item from the top of the stack.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">def</span> second_from_top(s: Stack) <span class="op">-&gt;</span> Optional[<span class="bu">str</span>]:</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    <span class="co">&quot;&quot;&quot;Return the item that is second from the top of s.</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">    If there is no such item in the Stack, returns None.</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-7"><a href="#cb10-7"></a>        hold1 <span class="op">=</span> s.pop()</span>
+<span id="cb10-8"><a href="#cb10-8"></a>    <span class="cf">except</span> EmptyStackError:</span>
+<span id="cb10-9"><a href="#cb10-9"></a>        <span class="co"># In this case, s is empty. We can return None.</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a>    <span class="cf">try</span>:</span>
+<span id="cb10-13"><a href="#cb10-13"></a>        hold2 <span class="op">=</span> s.pop()</span>
+<span id="cb10-14"><a href="#cb10-14"></a>    <span class="cf">except</span> EmptyStackError:</span>
+<span id="cb10-15"><a href="#cb10-15"></a>        <span class="co"># In this case, s had only one element.</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a>        <span class="co"># We restore s to its original state and return None.</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a>        s.push(hold1)</span>
+<span id="cb10-18"><a href="#cb10-18"></a>        <span class="cf">return</span> <span class="va">None</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a></span>
+<span id="cb10-20"><a href="#cb10-20"></a>    <span class="co"># If we reach this point, both of the previous s.pop() calls succeeded.</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a>    <span class="co"># In this case, we restore s to its original state and return the second item.</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a>    s.push(hold2)</span>
+<span id="cb10-23"><a href="#cb10-23"></a>    s.push(hold1)</span>
+<span id="cb10-24"><a href="#cb10-24"></a></span>
+<span id="cb10-25"><a href="#cb10-25"></a>    <span class="cf">return</span> hold2</span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Exceptions (<a href="https://youtu.be/mhsu6mRKRdE?list=PLfMGJf6SEIv4qYogjAyLyfv3h_NUEKbWd">video</a>)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

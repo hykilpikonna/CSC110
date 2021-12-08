@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.5 Simplifying If Statements</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.5 Simplifying If Statements</h1>
+</header>
+<section>
+<p>In the last section we introduced if statements, a powerful Python structure that allowed us to perform conditional execution of blocks of code. But as we’ll see again and again in this course, expressive power comes with a cost: as our toolkit gets larger and the programming language features we use get more advanced, our programs also get larger and more complex; harder to read and reason about.</p>
+<p>So every time we introduce a new part of the Python programming language, we’ll also take some time to discuss not just what it can do, but also how to use it in structured ways that minimize the complexity we create by using it, and how to reason about its behaviour formally using tools from mathematical logic.</p>
+<h2 id="computing-booleans-when-if-statements-arent-necessary">Computing booleans: when if statements aren’t necessary</h2>
+<p>As our first example, consider the following function:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> is_even(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return whether n is even (divisible by 2).&quot;&quot;&quot;</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>        <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    <span class="cf">else</span>:</span>
+<span id="cb1-6"><a href="#cb1-6"></a>        <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<p>When we first learn about if statements, it is tempting to use them whenever we think of different “cases” of inputs, like even vs. odd numbers in this example. But remember that if statements are fundamentally about taking boolean values and conditionally executing code (usually to generate other values). In cases where all we need is a boolean value, <em>it is often simpler to write an expression to calculate the value directly, rather than using if statements</em>.</p>
+<p>In our example, the if statement is redundant and can be simplified just by returning the value of the condition:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> is_even(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return whether n is even (divisible by 2).&quot;&quot;&quot;</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="cf">return</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>Indeed, our earlier study of propositional logic should make us comfortable with the idea of treating booleans just like any other kind of value, and we should make full use of Python’s logical operators <code>and</code>, <code>or</code>, and <code>not</code> to combine them.</p>
+<p>Consider this more complex example with nested if statements:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode numberSource python numberLines"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> mystery(x: lst, y: lst) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="cf">if</span> x <span class="op">==</span> []:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>        <span class="cf">if</span> y <span class="op">==</span> []:</span>
+<span id="cb3-4"><a href="#cb3-4"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-6"><a href="#cb3-6"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="cf">else</span>:</span>
+<span id="cb3-8"><a href="#cb3-8"></a>        <span class="cf">if</span> y <span class="op">==</span> []:</span>
+<span id="cb3-9"><a href="#cb3-9"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-11"><a href="#cb3-11"></a>            <span class="cf">return</span> <span class="va">True</span></span></code></pre></div>
+<p>Here is a control flow diagram for this function, showing the four different possible execution paths.</p>
+<p><img src="images/mystery.png" alt="mystery function control flow diagram" /><br />
+</p>
+<p>To simplify this, we start with the first inner if statement on lines 3-6. This follows the same structure as our first example, and can be simplified to just <code>return y == []</code>.</p>
+<p>The second inner if statement on lines 8-11 follows a similar structure, except that now the boolean that’s returned is the negation of the if condition. So we can simplify this as <code>return not y == []</code>, which we can simplify further using the <code>!=</code> operator: <code>return y != []</code>.</p>
+<p>So now we have this simplification of the function body:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> mystery(x: lst, y: lst) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="cf">if</span> x <span class="op">==</span> []:</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        <span class="cf">return</span> y <span class="op">==</span> []</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    <span class="cf">else</span>:</span>
+<span id="cb4-5"><a href="#cb4-5"></a>        <span class="cf">return</span> y <span class="op">!=</span> []</span></code></pre></div>
+<p>But now how do we simplify this further? The idea here is to focus on the possible ways that <code>mystery</code> could return <code>True</code>. The if statement divides the inputs into two cases: when <code>x == []</code> and the if branch executes, and when <code>x != []</code> and the else branch executes. In the first case, when <code>x == []</code>, <code>mystery</code> returns the value of <code>y == []</code>. So one case for <code>mystery</code> returning <code>True</code> is when <code>x == [] and y == []</code>. Similarly, in the second case, when <code>x != []</code>, <code>mystery</code> returns <code>y != []</code>, and so the other case for <code>mystery</code> returning <code>True</code> is <code>x != [] and y != []</code>.</p>
+<p>How should we combine these two cases? Because these are different cases, either one of them could occur, but we don’t expect both of them to occur (since <code>x == []</code> and <code>x != []</code> can’t both be true), and so we combine them using <code>or</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> mystery(x: lst, y: lst) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="cf">return</span> (x <span class="op">==</span> [] <span class="kw">and</span> y <span class="op">==</span> []) <span class="kw">or</span> (x <span class="op">!=</span> [] <span class="kw">and</span> y <span class="op">!=</span> [])</span></code></pre></div>
+<p>This simplification took a bit of work, but as a result we have a clearer picture of what this function does. We can illustrate this further by breaking up the nested expression using local variables with meaningful names.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> mystery(x: lst, y: lst) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    both_empty <span class="op">=</span> x <span class="op">==</span> [] <span class="kw">and</span> y <span class="op">==</span> []</span>
+<span id="cb6-3"><a href="#cb6-3"></a>    both_non_empty <span class="op">=</span> x <span class="op">!=</span> [] <span class="kw">and</span> y <span class="op">!=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="cf">return</span> both_empty <span class="kw">or</span> both_non_empty</span></code></pre></div>
+<p>To check your understanding, try writing a docstring description for this function. You’ll probably find it at least a little easier to do for this version than the original. And while this is still a relatively small example, the same principle will often apply in the future, and so be on the lookout for if statements that you can simplify in this way.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> That said, this simplification won’t always apply or be appropriate, depending on the complexity of the branches of the statement. We’ll discuss this in more detail later.</span></p>
+<h2 id="using-if-statements">Using if statements</h2>
+<p><code>if</code> statements create branches in our code, allowing us to create more advanced functions. But more branches means more complexity because there are many possible paths that our function could take when called. To mitigate the complexity that comes with branching, we recommend two principles when working with if statements:</p>
+<ol type="1">
+<li>Prefer using a sequence of <code>elif</code>s rather than nested <code>if</code> statements. Overuse of nesting makes your code harder to understand, and can make the visual structure of your code more complex than necessary.</li>
+<li>Write your conditions from most specific to most general. Order matters for these conditions, since they are checked one at a time in top-down order.</li>
+</ol>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

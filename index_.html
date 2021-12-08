@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="David Liu and Mario Badr" />
+  <title>CSC110 Course Notes</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="./tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">CSC110 Course Notes</h1>
+<p class="author">David Liu and Mario Badr</p>
+</header>
+<section>
+<h2 class="unnumbered" id="working-with-data">1. Working with Data</h2>
+<p><a href="01-working-with-data/01-data-types.html">1.1 The Different Types of Data</a> <br/> <a href="01-working-with-data/02-python-language.html">1.2 Introducing the Python Programming Language</a> <br/> <a href="01-working-with-data/03-python-data-types.html">1.3 Representing Data in Python</a> <br/> <a href="01-working-with-data/04-variables.html">1.4 Storing Data in Variables</a> <br/> <a href="01-working-with-data/05-comprehensions.html">1.5 Building Up Data with Comprehensions</a> <br/> <a href="01-working-with-data/06-representing-colour.html">1.6 Application: Representing Colour</a> <br/></p>
+<h2 class="unnumbered" id="functions">2. Functions</h2>
+<p><a href="02-functions/01-builtin-functions.html">2.1 Python’s Built-In Functions</a> <br/> <a href="02-functions/02-defining-functions.html">2.2 Defining Our Own Functions</a> <br/> <a href="02-functions/03-function-scope.html">2.3 Local Variables and Function Scope</a> <br/> <a href="02-functions/04-importing-modules.html">2.4 Importing Modules</a> <br/> <a href="02-functions/05-the-function-design-recipe.html">2.5 The Function Design Recipe</a> <br/> <a href="02-functions/06-testing-functions-1.html">2.6 Testing Functions I: <code>doctest</code> and <code>pytest</code></a> <br/> <a href="02-functions/07-type-conversions.html">2.7 Type Conversion Functions</a> <br/> <a href="02-functions/08-representing-text.html">2.8 Application: Representing Text</a> <br/></p>
+<h2 class="unnumbered" id="formal-logic-in-computer-science">3. Formal Logic in Computer Science</h2>
+<p><a href="03-logic/01-propositional-logic.html">3.1 Propositional Logic</a> <br/> <a href="03-logic/02-predicate-logic.html">3.2 Predicate Logic</a> <br/> <a href="03-logic/03-filtering-collections.html">3.3 Filtering Collections</a> <br/> <a href="03-logic/04-if-statements.html">3.4 Conditional Execution</a> <br/> <a href="03-logic/05-simplifying-if-statements.html">3.5 Simplifying If Statements</a> <br/> <a href="03-logic/06-main-block.html">3.6 <code>if __name__ == '__main__'</code></a> <br/> <a href="03-logic/07-function-specification.html">3.7 Function Specification</a> <br/> <a href="03-logic/08-type-annotations.html">3.8 Richer Type Annotations</a> <br/> <a href="03-logic/09-working-with-definitions.html">3.9 Working With Definitions</a> <br/> <a href="03-logic/10-testing-functions-2.html">3.10 Testing Functions II: <code>hypothesis</code></a> <br/> <a href="03-logic/11-multiple-quantifiers.html">3.11 Working with Multiple Quantifiers</a> <br/></p>
+<h2 class="unnumbered" id="working-with-complex-data">4. Working with Complex Data</h2>
+<p><a href="04-complex-data/01-tabular-data.html">4.1 Tabular Data</a> <br/> <a href="04-complex-data/02-data-classes-1.html">4.2 Defining Our Own Data Types, Part 1</a> <br/> <a href="04-complex-data/03-data-classes-2.html">4.3 Defining Our Own Data Types, Part 2</a> <br/> <a href="04-complex-data/04-for-loops.html">4.4 Repeated Execution: Loops</a> <br/> <a href="04-complex-data/05-more-for-loops.html">4.5 For Loop Variations</a> <br/> <a href="04-complex-data/06-for-range-loops.html">4.6 Index-Based For loops</a> <br/> <a href="04-complex-data/07-nested-loops.html">4.7 Nested For Loops</a> <br/></p>
+<!--
+[4.8 Testing Functions III: Code Coverage](04-complex-data/08-testing-functions-3.html) -->
+<h2 class="unnumbered" id="modifying-values-and-variables">5. Modifying Values and Variables</h2>
+<p><a href="05-memory-model/01-reassignment-vs-mutation.html">5.1 Variable Reassignment and Object Mutation</a> <br/> <a href="05-memory-model/02-mutable-data-types.html">5.2 Operations on Mutable Data Types</a> <br/> <a href="05-memory-model/03-python-memory-model-1.html">5.3 The Full Python Memory Model: Introduction</a> <br/> <a href="05-memory-model/04-aliasing.html">5.4 Aliasing and “Mutation at a Distance”</a> <br/> <a href="05-memory-model/05-python-memory-model-2.html">5.5 The Full Python Memory Model: Function Calls</a> <br/> <a href="05-memory-model/06-testing-functions-3.html">5.6 Testing Functions III: Testing Mutation</a> <br/></p>
+<h2 class="unnumbered" id="formal-proofs">6. Formal Proofs</h2>
+<p><a href="06-proofs/01-number-theory-definitions.html">6.1 An Introduction to Number Theory</a> <br/> <a href="06-proofs/02-number-theory-proofs.html">6.2 Proofs with Number Theory</a> <br/> <a href="06-proofs/03-primality-testing.html">6.3 Proofs and Algorithms I: Primality Testing</a> <br/> <a href="06-proofs/04-more-proofs.html">6.4 Proof by Cases and Disproofs</a> <br/> <a href="06-proofs/05-greatest-common-divisor.html">6.5 Greatest Common Divisor</a> <br/> <a href="06-proofs/06-computing-gcd.html">6.6 Proofs and Algorithms II: Computing the Greatest Common Divisor</a> <br/> <a href="06-proofs/07-modular-arithmetic.html">6.7 Modular Arithmetic</a> <br/></p>
+<h2 class="unnumbered" id="case-study-cryptography">7. Case Study: Cryptography</h2>
+<p><a href="07-cryptography/01-intro-to-cryptography.html">7.1 Introduction to Cryptography</a> <br/> <a href="07-cryptography/02-one-time-pad.html">7.2 The One-Time Pad and Perfect Secrecy</a> <br/> <a href="07-cryptography/03-key-exchange.html">7.3 Computing Shared Secret Keys</a> <br/> <a href="07-cryptography/04-rsa-cryptosystem.html">7.4 The RSA Cryptosystem</a> <br/> <a href="07-cryptography/05-rsa-cryptosystem-implementation.html">7.5 Implementing RSA in Python</a> <br/> <a href="07-cryptography/06-online-communications.html">7.6 Application: Securing Online Communications</a> <br/></p>
+<h2 class="unnumbered" id="analyzing-algorithm-running-time">8. Analyzing Algorithm Running Time</h2>
+<p><a href="08-runtime/01-introduction.html">8.1 An Introduction to Running Time</a> <br/> <a href="08-runtime/02-big-o-notation.html">8.2 Comparing Asymptotic Function Growth with Big-O</a> <br/> <a href="08-runtime/03-asymptotic-notation.html">8.3 Big-O, Omega, Theta</a> <br/> <a href="08-runtime/04-basic-algorithm-analysis.html">8.4 Analyzing Algorithm Running Time</a> <br/> <a href="08-runtime/05-more-runtime.html">8.5 Analyzing Comprehensions and While Loops</a> <br/> <a href="08-runtime/06-data-types-runtime.html">8.6 Analyzing Built-In Data Type Operations</a> <br/> <a href="08-runtime/07-worst-case.html">8.7 Worst-Case Running Time Analysis</a> <br/> <a href="08-runtime/08-testing-functions-4.html">8.8 Testing Functions IV: Efficiency</a> <br/></p>
+<!--
+[8.5 Revisting Cryptographic Algorithms](08-runtime/05-crypto-algorithm-analysis.html) <br/>
+-->
+<h2 class="unnumbered" id="abstraction-classes-and-software-design">9. Abstraction, Classes, and Software Design</h2>
+<p><a href="09-abstraction/01-introduction.html">9.1 An Introduction to Abstraction</a> <br/> <a href="09-abstraction/02-classes.html">9.2 Defining Our Own Data Types, Part 3</a> <br/> <a href="09-abstraction/03-abstract-data-types.html">9.3 Data Types, Abstract and Concrete</a> <br/> <a href="09-abstraction/04-stacks.html">9.4 Stacks</a> <br/> <a href="09-abstraction/05-exceptions.html">9.5 Exceptions as a Part of the Public Interface</a> <br/> <a href="09-abstraction/06-queues.html">9.6 Queues</a> <br/> <a href="09-abstraction/07-priority-queues.html">9.7 Priority Queues</a> <br/> <a href="09-abstraction/08-common-interfaces.html">9.8 Defining a Shared Public Interface with Inheritance</a> <br/> <a href="09-abstraction/09-object-class.html">9.9 The <code>object</code> Superclass</a> <br/></p>
+<h2 class="unnumbered" id="case-study-building-a-simulation">10. Case Study: Building a Simulation</h2>
+<p><a href="10-simulation/01-problem-domain.html">10.1 The Problem Domain: Food Delivery Networks</a> <br/> <a href="10-simulation/02-modelling-classes.html">10.2 Object-Oriented Modelling of Our Problem Domain</a> <br/> <a href="10-simulation/03-manager-class.html">10.3 A “Manager” Class</a> <br/> <a href="10-simulation/04-events.html">10.4 Food Delivery Events</a> <br/> <a href="10-simulation/05-simulation.html">10.5 Creating a Discrete-Event Simulation</a> <br/></p>
+<h2 id="appendix-a.-python-reference">Appendix A. Python Reference</h2>
+<p><a href="A-python-builtins/01-builtins.html">A.1 Python Built-In Function Reference</a> <br/> <a href="A-python-builtins/02-types.html">A.2 Python Built-In Data Types Reference</a> <br/> <a href="A-python-builtins/03-special-methods.html">A.3 Python Special Method Reference</a> <br/> <a href="A-python-builtins/04-exceptions.html">A.4 Python Exceptions Reference</a> <br/> <a href="A-python-builtins/05-syntax-diagrams.html">A.5 Python Syntax Diagrams</a> <br/></p>
+<h2 id="appendix-b.-python-libraries">Appendix B. Python Libraries</h2>
+<p><a href="B-python-libraries/01-doctest.html">B.1 <code>doctest</code></a> <br/> <a href="B-python-libraries/02-pytest.html">B.2 <code>pytest</code></a> <br/> <a href="B-python-libraries/03-python-ta.html">B.3 <code>python-ta</code></a> <br/> <a href="B-python-libraries/04-typing.html">B.4 <code>typing</code></a> <br/> <a href="B-python-libraries/05-pdb.html">B.5 <code>pdb</code></a> <br/></p>
+<!-- [B.3 `hypothesis`](B-python-libraries/03-hypothesis.html) <br/> -->
+<h2 id="appendix-c.-math-reference">Appendix C. Math Reference</h2>
+<p><a href="C-math-reference/01-summations-products.html">C.1 Summations and Products</a> <br/> <a href="C-math-reference/02-inequalities.html">C.2 Inequalities</a> <br/></p>
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p><span class="marginnote"> <img src="images/logo.png" width="200" alt="CSC110 logo artwork" /><br />
+</span></p>
+<p>These notes draw heavily from existing videos from <em>CSC108 Introduction to Computer Programming</em> (made by Jen Campbell and Paul Gries), course notes from <em>CSC148 Introduction to Computer Science</em> (co-authored by Diane Horton and David Liu) and <em>CSC165 Mathematical Expression and Reasoning for Computer Science</em> (co-authored by Toniann Pitassi and David Liu). We have linked to related CSC108 videos throughout the sections in these notes.</p>
+<p>We were also assisted by a team of undergraduate students: Shannon Komguem, Oleksandr Kozin, Callum Cassidy-Nolan, Amy Peng, and Evan Kanter.</p>
+<p>Cover artwork by Clémence Koh.</p>
+<h2 id="errata">Errata</h2>
+<p>If you encounter any typos or errors in these notes, please let us know by email at csc110-2020-09@cs.toronto.edu.</p>
+</section>
+<footer>
+<a href="www.teach.cs.toronto.edu/-csc110y/fall/notes/index.html">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

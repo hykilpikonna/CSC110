@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4.7 Nested For Loops</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">4.7 Nested For Loops</h1>
+</header>
+<section>
+<p>When we introduced for loops, we said that the loop body consists of one of more statements. We saw in <a href="05-more-for-loops.html">4.5 For Loop Variations</a> that we could put if statements inside loop bodies. In this section, we’ll see that a for loop body can itself contain another for loop, since for loops are themselves statements. We’ll study uses of these <em>nested for loops</em>, and also draw comparisons between them and comprehensions from the previous chapter.</p>
+<h2 id="nested-loops-and-nested-data">Nested loops and nested data</h2>
+<p>Nested loops are particularly useful when dealing with nested data. As a first example, suppose we have a list of lists of integers:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> lists_of_numbers <span class="op">=</span> [[<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>], [<span class="dv">10</span>, <span class="op">-</span><span class="dv">5</span>], [<span class="dv">100</span>]]</span></code></pre></div>
+<p>Our goal is to compute the sum of all of the elements of this list:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> sum_all(lists_of_numbers: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return the sum of all the numbers in the given lists_of_numbers.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">    &gt;&gt;&gt; sum_all([[1, 2, 3], [10, -5], [100]])</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    111</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>We can start with our basic loop accumulator pattern:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> sum_all(lists_of_numbers: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the numbers.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    <span class="cf">for</span> ... <span class="kw">in</span> lists_of_numbers:</span>
+<span id="cb3-7"><a href="#cb3-7"></a>        sum_so_far <span class="op">=</span> ...</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>The difference between this function and in <a href="04-for-loops.html"><code>my_sum</code> from 4.4</a> is that here our loop variable in <code>for ... in lists_of_numbers</code> does not refer to a single number, but rather a list of numbers:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> sum_all(lists_of_numbers: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the numbers.</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a>    <span class="cf">for</span> numbers <span class="kw">in</span> lists_of_numbers:  <span class="co"># numbers is a list of numbers, not a single number!</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a>        sum_so_far <span class="op">=</span> ...</span>
+<span id="cb4-8"><a href="#cb4-8"></a></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>So here is one way of completing this function, by using the builtin <code>sum</code> function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> sum_all(lists_of_numbers: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the numbers.</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a>    <span class="cf">for</span> numbers <span class="kw">in</span> lists_of_numbers:  <span class="co"># numbers is a list of numbers, not a single number!</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> <span class="bu">sum</span>(numbers)</span>
+<span id="cb5-8"><a href="#cb5-8"></a></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>This implementation is structurally similar to the <code>my_sum</code> implementation we had in Section 4.4. But how would we implement this function <em>without</em> using <code>sum</code>? For this we need another for loop:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> sum_all(lists_of_numbers: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="co"># ACCUMULATOR sum_so_far: keep track of the running sum of the numbers.</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>    <span class="cf">for</span> numbers <span class="kw">in</span> lists_of_numbers:  <span class="co"># numbers is a list of numbers, not a single number!</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>        <span class="cf">for</span> number <span class="kw">in</span> numbers:        <span class="co"># number is a single number</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>            sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span>
+<span id="cb6-9"><a href="#cb6-9"></a></span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<p>We say that the <code>for number in numbers</code> loops is <em>nested</em> within the <code>for numbers in lists_of_numbers</code>. What happens when we call our doctest example, <code>sum_all([[1, 2, 3], [10, -5], [100]])</code>? Let’s break this down step by step.</p>
+<ol type="1">
+<li><p>First, the assignment statement <code>sum_so_far = 0</code> executes, creating our accumulator variable.</p></li>
+<li><p>The outer loop is reached.</p>
+<ul>
+<li><p>The loop variable <code>list_of_numbers</code> is assigned the first element in <code>lists_of_numbers</code>, which is <code>[1, 2, 3]</code>.</p></li>
+<li><p>Then, the body of the outer loop is executed. Its body is just one statement: the inner for loop, <code>for number in numbers</code>.</p>
+<ul>
+<li><p>The inner loop variable <code>number</code> is assigned the first value in <code>numbers</code>, which is <code>1</code>.</p></li>
+<li><p>The inner loop body gets executed, updating the accumulator. <code>sum_so_far</code> is reassigned to <code>1</code> (since <code>0 + 1 == 1</code>).</p></li>
+<li><p>The inner loop iterates twice more, for <code>number = 2</code> and <code>number = 3</code>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Notice that <code>numbers</code> is the *same value (<code>[1, 2, 3]</code>) for this entire part. </span> At each iteration, the accumulator is updated, first by adding <code>2</code> and then <code>3</code>. At this point, <code>sum_so_far = 6</code> (<code>0 + 1 + 2 + 3</code>).</p></li>
+<li><p>After all three iterations of the inner loop occur, the inner loop stops. The Python interpreter is done executing this statement.</p></li>
+</ul></li>
+<li><p>The next iteration of the <em>outer loop</em> occurs; <code>numbers</code> is assigned to the list <code>[10, -5]</code>.</p></li>
+<li><p>Again, the body of the outer loop occurs.</p>
+<ul>
+<li>The inner loop now iterates twice: for <code>number = 10</code> and <code>number = -5</code>. <code>sum_so_far</code> is reassigned twice more, with a final value of <code>11</code> (<code>6 + 10 + -5</code>).</li>
+</ul></li>
+<li><p>The outer loop iterates one more time, for <code>numbers = [100]</code>.</p></li>
+<li><p>Again, the body of the outer loop occurs.</p>
+<ul>
+<li>The inner loop iterates once, for <code>number = 100</code>. <code>sum_so_far</code> is reassigned to <code>111</code> (<code>11 + 100</code>).</li>
+</ul></li>
+<li><p>At last, there are no more iterations of the outer loop, and so it stops.</p></li>
+</ul></li>
+<li><p>After the outer loop is done, the <code>return</code> statement executes, returning the value of <code>sum_so_far</code>, which is <code>111</code>.</p></li>
+</ol>
+<p>Whew, that’s a lot of writing! We can summarize the above behaviour by creating a <em>loop accumulation table</em>. Note that the table below has the same structure as the ones we’ve seen before, but is more complex because its columns include both the outer and inner loop variables and iterations. The <code>accumulator</code> column shows the value of <code>sum_so_far</code> at the <em>end</em> of the iteration of the inner loop. Pay close attention to the <em>order</em> of the rows, as this matches the order of execution we described above.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 20%" />
+<col style="width: 21%" />
+<col style="width: 20%" />
+<col style="width: 15%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outer loop iteration</th>
+<th>Outer loop variable (<code>list_of_numbers</code>)</th>
+<th>Inner loop iteration</th>
+<th>Inner loop variable (<code>number</code>)</th>
+<th>Accumulator (<code>sum_so_far</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>0</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>[1, 2, 3]</code></td>
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>[1, 2, 3]</code></td>
+<td>1</td>
+<td><code>1</code></td>
+<td><code>1</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>[1, 2, 3]</code></td>
+<td>2</td>
+<td><code>2</code></td>
+<td><code>3</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>[1, 2, 3]</code></td>
+<td>3</td>
+<td><code>3</code></td>
+<td><code>6</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>[10, -5]</code></td>
+<td>0</td>
+<td></td>
+<td><code>6</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>[10, -5]</code></td>
+<td>1</td>
+<td><code>10</code></td>
+<td><code>16</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>[10, -5]</code></td>
+<td>2</td>
+<td><code>-5</code></td>
+<td><code>11</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>[100]</code></td>
+<td>0</td>
+<td></td>
+<td><code>11</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>[100]</code></td>
+<td>1</td>
+<td><code>100</code></td>
+<td><code>111</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="the-cartesian-product">The Cartesian product</h2>
+<p>Our next example illustrates how to use nested loops on two different collections, obtaining all pairs of possible values from each collection. If that sounds familiar, well, it should be!</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> product(set1: <span class="bu">set</span>, set2: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">tuple</span>]:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return the Cartesian product of set1 and set2.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    &gt;&gt;&gt; result = product({10, 11}, {5, 6, 7})</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">    &gt;&gt;&gt; result == {(10, 5), (10, 6), (10, 7), (11, 5), (11, 6), (11, 7)}</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    True</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>Before we get to writing any loops at all, let’s remind ourselves how we would write a comprehension to compute the Cartesian product:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> set1 <span class="op">=</span> {<span class="dv">10</span>, <span class="dv">11</span>}</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> set2 <span class="op">=</span> {<span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>}</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> {(x, y) <span class="cf">for</span> x <span class="kw">in</span> set1 <span class="cf">for</span> y <span class="kw">in</span> set2}</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">==</span> {(<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">7</span>), (<span class="dv">11</span>, <span class="dv">5</span>), (<span class="dv">11</span>, <span class="dv">6</span>), (<span class="dv">11</span>, <span class="dv">7</span>)}</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="va">True</span></span></code></pre></div>
+<p>Now we’ll see how to write this using nested for loop:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> cartesian_product(set1: <span class="bu">set</span>, set2: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">set</span>[<span class="bu">tuple</span>]:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return the Cartesian product of set1 and set2.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">    &gt;&gt;&gt; result = cartesian_product({10, 11}, {5, 6, 7})</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">    &gt;&gt;&gt; result == {(10, 5), (10, 6), (10, 7), (11, 5), (11, 6), (11, 7)}</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    True</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="co"># ACCUMULATOR product_so_far: keep track of the tuples from the pairs</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a>    <span class="co"># of elements visited so far.</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>    product_so_far <span class="op">=</span> <span class="bu">set</span>()</span>
+<span id="cb9-11"><a href="#cb9-11"></a></span>
+<span id="cb9-12"><a href="#cb9-12"></a>    <span class="cf">for</span> x <span class="kw">in</span> set1:</span>
+<span id="cb9-13"><a href="#cb9-13"></a>        <span class="cf">for</span> y <span class="kw">in</span> set2:</span>
+<span id="cb9-14"><a href="#cb9-14"></a>            product_so_far <span class="op">=</span> <span class="bu">set</span>.union(product_so_far, {(x, y)})</span>
+<span id="cb9-15"><a href="#cb9-15"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a>    <span class="cf">return</span> product_so_far</span></code></pre></div>
+<p>As we saw in our first example, here the inner loop <code>for y in set2</code> iterates through every element of <code>set2</code> for every element of <code>x</code> in <code>set1</code>. You can visualize this in the following loop accumulation table:</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 16%" />
+<col style="width: 12%" />
+<col style="width: 42%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outer loop iteration</th>
+<th>Outer loop var (<code>x</code>)</th>
+<th>Inner loop iteration</th>
+<th>Inner loop var (<code>y</code>)</th>
+<th>Accumulator (<code>product_so_far</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>set()</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>10</code></td>
+<td>0</td>
+<td></td>
+<td><code>set()</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>10</code></td>
+<td>1</td>
+<td><code>5</code></td>
+<td><code>{(10, 5)}</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>10</code></td>
+<td>2</td>
+<td><code>6</code></td>
+<td><code>{(10, 5), (10, 6)}</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>10</code></td>
+<td>3</td>
+<td><code>7</code></td>
+<td><code>{(10, 5), (10, 6), (10, 7)}</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>11</code></td>
+<td>0</td>
+<td></td>
+<td><code>{(10, 5), (10, 6), (10, 7)}</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>11</code></td>
+<td>1</td>
+<td><code>5</code></td>
+<td><code>{(10, 5), (10, 6), (10, 7), (11, 5)}</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>11</code></td>
+<td>2</td>
+<td><code>6</code></td>
+<td><code>{(10, 5), (10, 6), (10, 7), (11, 5), (11, 6)}</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>11</code></td>
+<td>3</td>
+<td><code>7</code></td>
+<td><code>{(10, 5), (10, 6), (10, 7), (11, 5), (11, 6), (11, 7)}</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Another way of visualizing the return value is:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>{</span>
+<span id="cb10-2"><a href="#cb10-2"></a>    (<span class="dv">10</span>, <span class="dv">5</span>), (<span class="dv">10</span>, <span class="dv">6</span>), (<span class="dv">10</span>, <span class="dv">7</span>),  <span class="co"># First three tuples are from the first iteration of the outer loop</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a>    (<span class="dv">11</span>, <span class="dv">5</span>), (<span class="dv">11</span>, <span class="dv">6</span>), (<span class="dv">11</span>, <span class="dv">7</span>)   <span class="co"># Next three tuples are from the second iteration of the outer loop</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>}</span></code></pre></div>
+<h2 id="outer-and-inner-accumulators">Outer and inner accumulators</h2>
+<p>Both the <code>sum_all</code> and <code>cartesian_product</code> examples we’ve seen so far have used a single accumulator that is updated inside the inner loop body. However, <em>each loop</em> can have its own accumulator (and in fact, more than one accumulator). This is more complex, but offers more flexibilty than a single accumulator does alone.</p>
+<p>As an example, suppose we have a list of lists of integers called <code>grades</code>. Each element of <code>grades</code> corresponds to a course and contains a list of grades obtained in that course. Let’s see an example of the data:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> grades <span class="op">=</span> [</span>
+<span id="cb11-2"><a href="#cb11-2"></a>...     [<span class="dv">70</span>, <span class="dv">75</span>, <span class="dv">80</span>],       <span class="co"># ENG196</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>...     [<span class="dv">70</span>, <span class="dv">80</span>, <span class="dv">90</span>, <span class="dv">100</span>],  <span class="co"># CSC110</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>...     [<span class="dv">80</span>, <span class="dv">100</span>]           <span class="co"># MAT137</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>... ]</span></code></pre></div>
+<p>Notice how the list of grades for course ENG196 does not have the same length as CSC110 or MAT137. Our goal is to return a new list containing the <em>average grade</em> of each course. We saw in Section 4.5 how to use loops to calculate the average of a collection of numbers:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> average(numbers: Iterable[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the average of a collection of integers.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">        - len(numbers) &gt; 0</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="co"># ACCUMULATOR len_so_far: keep track of the number of elements seen so far in the loop.</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>    len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a>    <span class="co"># ACCUMULATOR total_so_far: keep track of the total of the elements seen so far in the loop.</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a>    total_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb12-13"><a href="#cb12-13"></a>        len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a>        total_so_far <span class="op">=</span> total_so_far <span class="op">+</span> number</span>
+<span id="cb12-15"><a href="#cb12-15"></a></span>
+<span id="cb12-16"><a href="#cb12-16"></a>    <span class="cf">return</span> total_so_far <span class="op">/</span> len_so_far</span></code></pre></div>
+<p>We can calculate a list of averages for each course using a comprehension:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Exercise: write a precondition expression to guarantee there are no empty lists in <code>grades</code>.</span></p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> course_averages_v1(grades: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">float</span>]:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;Return a new list for which each element is the average of the grades</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a><span class="co">    in the inner list at the corresponding position of grades.</span></span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a><span class="co">    &gt;&gt;&gt; course_averages_v1([[70, 75, 80], [70, 80, 90, 100], [80, 100]])</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">    [75.0, 85.0, 90.0]</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a>    <span class="cf">return</span> [average(course_grades) <span class="cf">for</span> course_grades <span class="kw">in</span> grades]</span></code></pre></div>
+<p>We can translate this into a for loop using a list accumulator variable and list concatenation for the update:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> course_averages_v2(grades: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">float</span>]:</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">&quot;&quot;&quot;Return a new list for which each element is the average of the grades</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">    in the inner list at the corresponding position of grades.</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">    &gt;&gt;&gt; course_averages_v2([[70, 75, 80], [70, 80, 90, 100], [80, 100]])</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">    [75.0, 85.0, 90.0]</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-8"><a href="#cb14-8"></a>    <span class="co"># ACCUMULATOR averages_so_far: keep track of the averages of the lists</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>    <span class="co"># visited so far in grades.</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a>    averages_so_far <span class="op">=</span> []</span>
+<span id="cb14-11"><a href="#cb14-11"></a></span>
+<span id="cb14-12"><a href="#cb14-12"></a>    <span class="cf">for</span> course_grades <span class="kw">in</span> grades:</span>
+<span id="cb14-13"><a href="#cb14-13"></a>        course_average <span class="op">=</span> average(course_grades)</span>
+<span id="cb14-14"><a href="#cb14-14"></a>        averages_so_far <span class="op">=</span> averages_so_far <span class="op">+</span> [course_average]</span>
+<span id="cb14-15"><a href="#cb14-15"></a></span>
+<span id="cb14-16"><a href="#cb14-16"></a>    <span class="cf">return</span> averages_so_far</span></code></pre></div>
+<p>Now let’s see how to calculate the <code>course_average</code> variable for each course by using an inner loop instead of the <code>average</code> function. We can do this by <em>expanding the definition of <code>average</code></em> directly in the loop body, with just a few minor tweaks:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> course_averages_v3(grades: <span class="bu">list</span>[<span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">float</span>]:</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">&quot;&quot;&quot;Return a new list for which each element is the average of the grades</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">    in the inner list at the corresponding position of grades.</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">    &gt;&gt;&gt; course_averages_v3([[70, 75, 80], [70, 80, 90, 100], [80, 100]])</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">    [75.0, 85.0, 90.0]</span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a>    <span class="co"># ACCUMULATOR averages_so_far: keep track of the averages of the lists</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a>    <span class="co"># visited so far in grades.</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a>    averages_so_far <span class="op">=</span> []</span>
+<span id="cb15-11"><a href="#cb15-11"></a></span>
+<span id="cb15-12"><a href="#cb15-12"></a>    <span class="cf">for</span> course_grades <span class="kw">in</span> grades:</span>
+<span id="cb15-13"><a href="#cb15-13"></a>        <span class="co"># ACCUMULATOR len_so_far: keep track of the number of elements seen so far in course_grades.</span></span>
+<span id="cb15-14"><a href="#cb15-14"></a>        len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a>        <span class="co"># ACCUMULATOR total_so_far: keep track of the total of the elements seen so far in course_grades.</span></span>
+<span id="cb15-16"><a href="#cb15-16"></a>        total_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a></span>
+<span id="cb15-18"><a href="#cb15-18"></a>        <span class="cf">for</span> grade <span class="kw">in</span> course_grades:</span>
+<span id="cb15-19"><a href="#cb15-19"></a>            len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a>            total_so_far <span class="op">=</span> total_so_far <span class="op">+</span> grade</span>
+<span id="cb15-21"><a href="#cb15-21"></a></span>
+<span id="cb15-22"><a href="#cb15-22"></a>        course_average <span class="op">=</span> total_so_far <span class="op">/</span> len_so_far</span>
+<span id="cb15-23"><a href="#cb15-23"></a></span>
+<span id="cb15-24"><a href="#cb15-24"></a>        averages_so_far <span class="op">=</span> averages_so_far <span class="op">+</span> [course_average]</span>
+<span id="cb15-25"><a href="#cb15-25"></a></span>
+<span id="cb15-26"><a href="#cb15-26"></a>    <span class="cf">return</span> averages_so_far</span></code></pre></div>
+<p>It may be surprising to you that we can do this! Just as how in the last chapter we saw that we can take a predicate and expand it into its definition, we can do the same thing for Python functions with multiple statements in their body. The only change we needed to make was the return statement of <code>average</code>. The original function had the statement <code>return total_so_far / len_so_far</code>. Because our loop assigned this return value to <code>course_average</code>, we changed the code to:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a>course_average <span class="op">=</span> total_so_far <span class="op">/</span> len_so_far</span></code></pre></div>
+<p>One important note about the structure of this nested loop is that the inner loop accumulators are assigned to <em>inside</em> the body of the outer loop*, rather than at the top of the function body. This is because the accumulators <code>len_so_far</code> and <code>total_so_far</code> are specific to <code>course_grades</code>, which changes at each iteration of the outer loop. The statements <code>len_so_far = 0</code> and <code>total_so_far = 0</code> act to “reset” these accumulators for each new <code>course_grades</code> list.</p>
+<p>Let’s take a look at our final loop accumulation table in this section, which illustrates the execution of <code>course_averages_v3([[70, 75, 80], [70, 80, 90, 100], [80, 100]])</code> and how each loop variable and accumulator changes. Please take your time studying this table carefully—it isn’t designed to be a “quick read”, but to really deepen your understand of what’s going on!</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 9%" />
+<col style="width: 16%" />
+<col style="width: 9%" />
+<col style="width: 16%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Outer loop iteration</th>
+<th>Outer loop variable (<code>course_grades</code>)</th>
+<th>Inner loop iteration</th>
+<th>Inner loop variable (<code>grade</code>)</th>
+<th>Inner accumulator (<code>len_so_far</code>)</th>
+<th>Inner accumulator (<code>total_so_far</code>)</th>
+<th>Outer accumulator (<code>averages_so_far</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td><code>[]</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>[70, 75, 80]</code></td>
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+<td><code>0</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>[70, 75, 80]</code></td>
+<td>1</td>
+<td><code>70</code></td>
+<td><code>1</code></td>
+<td><code>70</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>[70, 75, 80]</code></td>
+<td>2</td>
+<td><code>75</code></td>
+<td><code>2</code></td>
+<td><code>145</code></td>
+<td><code>[]</code></td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td><code>[70, 75, 80]</code></td>
+<td>3</td>
+<td><code>80</code></td>
+<td><code>3</code></td>
+<td><code>225</code></td>
+<td><code>[75.0]</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>[70, 80, 90, 100]</code></td>
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+<td><code>0</code></td>
+<td><code>[75.0]</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>[70, 80, 90, 100]</code></td>
+<td>1</td>
+<td><code>70</code></td>
+<td><code>1</code></td>
+<td><code>70</code></td>
+<td><code>[75.0]</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>[70, 80, 90, 100]</code></td>
+<td>2</td>
+<td><code>80</code></td>
+<td><code>2</code></td>
+<td><code>150</code></td>
+<td><code>[75.0]</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>[70, 80, 90, 100]</code></td>
+<td>3</td>
+<td><code>90</code></td>
+<td><code>3</code></td>
+<td><code>240</code></td>
+<td><code>[75.0]</code></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>[70, 80, 90, 100]</code></td>
+<td>4</td>
+<td><code>100</code></td>
+<td><code>4</code></td>
+<td><code>340</code></td>
+<td><code>[75.0, 85.0]</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>[80, 100]</code></td>
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+<td><code>0</code></td>
+<td><code>[75.0, 85.0]</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>[80, 100]</code></td>
+<td>1</td>
+<td><code>80</code></td>
+<td><code>1</code></td>
+<td><code>80</code></td>
+<td><code>[75.0, 85.0]</code></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><code>[80, 100]</code></td>
+<td>2</td>
+<td><code>100</code></td>
+<td><code>2</code></td>
+<td><code>180</code></td>
+<td><code>[75.0, 85.0, 90.0]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="summary-understanding-and-simplifying-nested-for-loops">Summary: understanding and simplifying nested for loops</h2>
+<p>Nested for loops are a powerful tool in our understanding of the Python programming language, but they are by far the most complex and most error-prone that we’ve studied so far. Just as we saw with nested expressions and nested if statements, nested loops have the potential to greatly increase the size and complexity of our code. Contrast the implementation of <code>course_averages_v3</code> against <code>course_averages_v2</code> (or <code>course_averages_v1</code>), for example.</p>
+<p>While nested loops are sometimes inevitable or convenient, we recommend following these guidelines to simplify your use of nested loops to help you better understand your code:</p>
+<ol type="1">
+<li>Use nested loops when you have a single accumulator that can be initialized just once before the nested loop (e.g., <code>sum_all</code> and <code>cartesian_product</code>).</li>
+<li>If you have a nested loop where the inner loop can be replaced by a built-in aggregation function (e.g., <code>sum</code> or <code>len</code>), use the built-in function instead.</li>
+<li>If you have a nested loop where the inner loop has a separate accumulator that is assigned inside the outer loop (e.g., <code>course_averages_v3</code>), move the accumulator and inner loop into a new function, and call that function from within the original outer loop.</li>
+</ol>
+<!-- ## From nested quantifiers to nested for loops
+
+Recall once again our example of who loves whom:
+
+```python
+>>> LOVES = [
+...   [False, True, True, False],
+...   [False, True, True, True],
+...   [False, False, True, False],
+...   [False, False, False, True]
+... ]
+```
+
+We used this data to discover that everyone is loved by someone else:^[
+    This is actually [not unusual](https://www.youtube.com/watch?v=Vc_BU87ZDfg).
+]
+
+```python
+>>> A = range(0, 4)  # We'll represent the people as indexes from 0 to 3,
+>>> B = range(0, 4)  # for both A and B. We use the same variable names for clarity.
+``` -->
+<!-- TODO Not sure which example you'd like to do here? Are we looking at alternating qualifiers? Or multiple, non-alternating qualifiers? -->
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Nested loops (<a href="https://youtu.be/IW4J0lwc8zE">Part 1</a>, <a href="https://youtu.be/3oSEWc2avns">Part 2</a>)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

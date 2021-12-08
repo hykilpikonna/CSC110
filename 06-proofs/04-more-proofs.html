@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6.4 Proof by Cases and Disproofs</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">6.4 Proof by Cases and Disproofs</h1>
+</header>
+<section>
+<p>In the last proof of the previous section, we did something interesting: having concluded that <span class="math inline">\(d_1 &lt; 2\)</span> or <span class="math inline">\(d_1 &gt; \sqrt p\)</span>, we proceeded to split up our proof into two cases, one where we assumed that each part of the OR was true. This is a proof technique known as <strong>proof by cases</strong>.</p>
+<h2 id="proof-by-cases">Proof by cases</h2>
+<p>Remember that for a universal proof, we typically let a variable be an arbitrary element of the domain, and then make an argument in the proof body to prove our goal statement. However, even when the goal statement is True for all elements of the domain, it isn’t always easy to construct a single argument that works for all of those elements! Sometimes, different arguments are required for different elements. In this case, we divide the domain into different parts, and then write a separate argument for each part.</p>
+<p>A bit more formally, we pick a set of unary predicates <span class="math inline">\(P_1\)</span>, <span class="math inline">\(P_2\)</span>, …, <span class="math inline">\(P_k\)</span> (for some positive integer <span class="math inline">\(k\)</span>), such that for every element <span class="math inline">\(x\)</span> in the domain, <span class="math inline">\(x\)</span> satisfies at least one of the predicates (we say that these predicates are <em>exhaustive</em>). Note that the domain can be narrowed based on additional assumptions or conclusions made earlier in the proof. In our previous example, we started with a domain “<span class="math inline">\(d_1 \in \N\)</span>”, and then narrowed this to “<span class="math inline">\(d_1 \in \N\)</span> and <span class="math inline">\((d_1 &lt; 2 \lor d_1 &gt; \sqrt p)\)</span>”, leading to the following predicates for our cases: <span class="math display">\[P_1(d_1): d_1 &lt; 2, \qquad P_2(d_1): d_1 &gt; \sqrt p.\]</span></p>
+<p>Then, we divide the proof body into cases, where in each case we <em>assume</em> that one of the predicates is True, and use that assumption to construct a proof that specifically works under that assumption.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Recall that there’s an equivalence between predicates and sets. Another way of looking at a proof by cases is that we divide the domain into subsets <span class="math inline">\(S_1, S_2, \dots S_k\)</span>, and then prove the desired statement separately for each of these subsets.</span></p>
+<div class="framed">
+<p><strong>A typical proof by cases.</strong></p>
+<p>Given statement to prove: <span class="math inline">\(\forall x \in S, P(x).\)</span> Pick a set of exhaustive predicates <span class="math inline">\(P_1, \dots, P_k\)</span> of <span class="math inline">\(S\)</span>.</p>
+<div class="proof">
+<p>Let <span class="math inline">\(x \in S\)</span>. We will use a proof by cases.</p>
+<p><strong>Case 1</strong>. <em>Assume</em> <span class="math inline">\(P_1(x)\)</span> is True.</p>
+<p>[Proof that <span class="math inline">\(P(x)\)</span> is True, assuming <span class="math inline">\(P_1(x)\)</span>.]</p>
+<p><strong>Case 2</strong>. <em>Assume</em> <span class="math inline">\(P_2(x)\)</span> is True.</p>
+<p>[Proof that <span class="math inline">\(P(x)\)</span> is True, assuming <span class="math inline">\(P_2(x)\)</span>.]</p>
+<p><span class="math inline">\(\vdots\)</span></p>
+<p><strong>Case <span class="math inline">\(k\)</span></strong>. <em>Assume</em> <span class="math inline">\(P_k(x)\)</span> is True.</p>
+<p>[Proof that <span class="math inline">\(P(x)\)</span> is True, assuming <span class="math inline">\(P_k(x)\)</span>.]</p>
+</div>
+</div>
+<p>Proof by cases is a very versatile proof technique, since it allows the combining of simpler proofs together to form a whole proof. Often it is easier to prove a property about some (or even most) elements of the domain than it is to prove that same property about all the elements. But do keep in mind that if you can find a <em>simple</em> proof which works for all elements of the domain, that’s generally preferable than combining multiple proofs together in a proof by cases.</p>
+<h2 id="cases-and-the-quotient-remainder-theorem">Cases and the Quotient-Remainder Theorem</h2>
+<p>One natural use of proof by cases in number theory is to apply the Quotient-Remainder Theorem that we introduced in <a href="01-number-theory-definitions.html">Section 6.1</a>.</p>
+<div id="Quotient-Remainder Theorem" class="theorem">
+<p>(Quotient-Remainder Theorem) For all <span class="math inline">\(n \in \Z\)</span> and <span class="math inline">\(d \in \Z^+\)</span>, there exist <span class="math inline">\(q \in \Z\)</span> and <span class="math inline">\(r \in \N\)</span> such that <span class="math inline">\(n = qd + r\)</span> and <span class="math inline">\(0 \leq r &lt; d\)</span>. Moreover, these <span class="math inline">\(q\)</span> and <span class="math inline">\(r\)</span> are <em>unique</em> for a given <span class="math inline">\(n\)</span> and <span class="math inline">\(d\)</span>.</p>
+<p>We say that <span class="math inline">\(q\)</span> is the <strong>quotient</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>, and that <span class="math inline">\(r\)</span> is the <strong>remainder</strong> when <span class="math inline">\(n\)</span> is divided by <span class="math inline">\(d\)</span>.</p>
+</div>
+<p>The reason this theorem is powerful is that it tells us that for any non-zero divisor <span class="math inline">\(d \in \Z^+\)</span>, we can separate all possible integers into <span class="math inline">\(d\)</span> different groups, corresponding to their possible remainders (between <span class="math inline">\(0\)</span> and <span class="math inline">\(d-1\)</span>) when divided by <span class="math inline">\(d\)</span>. Let’s see this how to use this fact to perform a proof by cases.</p>
+<div class="example">
+<p>Prove that for all integers <span class="math inline">\(x\)</span>, <span class="math inline">\(2 \DIV x^2 + 3x\)</span>.</p>
+<div class="translation">
+<p>Using the divisibility predicate: <span class="math inline">\(\forall x \in \Z,~ 2 \DIV x^2 + 3x\)</span>. Or expanding the definition of divisibility: <span class="math display">\[\forall x \in \Z,~ \exists k \in \Z,~ x^2 + 3x = 2k.\]</span></p>
+</div>
+<div class="discussion">
+<p>We want to “factor out a <span class="math inline">\(2\)</span>” from the expression <span class="math inline">\(x^2 + 3x\)</span>, but this only works if <span class="math inline">\(x\)</span> is even. If <span class="math inline">\(x\)</span> is odd, though, then both <span class="math inline">\(x^2\)</span> and <span class="math inline">\(3x\)</span> will be odd, and adding two odd numbers together produces an even number.</p>
+<p>But how do we “know” that every number has to be either even or odd? And how can we formalize the algebraic operations of “factoring out a <span class="math inline">\(2\)</span>” or “adding two odd numbers together”? This is where the Quotient-Remainder Theorem comes in.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(x \in \Z\)</span>. By the Quotient-Remainder Theorem, we know that when <span class="math inline">\(x\)</span> is divided by <span class="math inline">\(2\)</span>, the two possible remainders are <span class="math inline">\(0\)</span> and <span class="math inline">\(1\)</span>. We will divide up the proof into two cases based on these remainders.</p>
+<p><strong>Case 1</strong>: assume the remainder when <span class="math inline">\(x\)</span> is divided by <span class="math inline">\(2\)</span> is <span class="math inline">\(0\)</span>. That is, we assume there exists <span class="math inline">\(q \in \Z\)</span> such that <span class="math inline">\(x = 2q + 0\)</span>. We will show that there exists <span class="math inline">\(k \in \Z\)</span> such that <span class="math inline">\(x^2 + 3x = 2k\)</span>.</p>
+<p>We have: <span class="math display">\[\begin{align*}
+x^2 + 3x &amp;= (2q)^2 + 3(2q) \\
+&amp;= 4q^2 + 6q \\
+&amp;= 2(2q^2 + 3q)
+\end{align*}\]</span></p>
+<p>So let <span class="math inline">\(k = 2q^2 + 3q\)</span>. Then <span class="math inline">\(x^2 + 3x = 2k\)</span>.</p>
+<p><strong>Case 2</strong>: assume the remainder when <span class="math inline">\(x\)</span> is divided by 2 is <span class="math inline">\(1\)</span>. That is, we assume there exists <span class="math inline">\(q \in \Z\)</span> such that <span class="math inline">\(x = 2q + 1\)</span>. We will show that there exists <span class="math inline">\(k \in \Z\)</span> such that <span class="math inline">\(x^2 + 3x = 2k\)</span>.</p>
+<p>We have: <span class="math display">\[\begin{align*}
+x^2 + 3x &amp;= (2q+1)^2 + 3(2q+1) \\
+&amp;= 4q^2 + 4q + 1 + 6q + 3 \\
+&amp;= 2(2q^2 + 5q + 2)
+\end{align*}\]</span></p>
+<p>So let <span class="math inline">\(k = 2q^2 + 5q + 2\)</span>. Then <span class="math inline">\(x^2 + 3x = 2k\)</span>.</p>
+</div>
+</div>
+<h2 id="false-statements-and-disproofs">False statements and disproofs</h2>
+<p>Suppose we have a friend who is trying to convince us that a certain statement <span class="math inline">\(X\)</span> is False. If they tell you that statement <span class="math inline">\(X\)</span> is false because they tried really hard to come up with a proof of it and failed, you might believe them, or you might wonder if maybe they just missed a crucial idea leading to a correct proof.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">Maybe they skipped all their CSC110 classes.</span> An absence of proof is not enough to convince us that the statement is False.</p>
+<p>Instead, we must see a <strong>disproof</strong>, which is simply a proof that the <em>negation</em> of the statement is True.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">In other words, if we can prove that <span class="math inline">\(\NOT X\)</span> is True, then <span class="math inline">\(X\)</span> must be False.</span> For this section, we’ll be using the simplification rules from <a href="../03-logic/02-predicate-logic.html">Section 3.2</a> to make negations of statements easier to work with.</p>
+<div class="example">
+<p>Disprove the following statement: every natural number divides 360.</p>
+<div class="translation">
+<p>This statement can be written as <span class="math inline">\(\forall n \in \N,~n \DIV 360\)</span>. However, we want to prove that it is False, so we really need to study its negation. <span class="math display">\[\begin{align*}
+\NOT \big(\forall n \in \N,~n \DIV 360 \big) \\
+\exists n \in \N,~ n \NDIV 360
+\end{align*}\]</span></p>
+</div>
+<div class="discussion">
+<p>The original statement is obviously not True: the number 7 doesn’t divide 360, for instance. Is that a proof? We wrote the negation of the statement in symbolic form above, and if we translate it back into English, we get “there exists a natural number which does not divide 360.” So, yes. That’s enough for a proof.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(n = 7\)</span>.</p>
+<p>Then <span class="math inline">\(n \NDIV 360\)</span>, since <span class="math inline">\(\frac{360}{7} = 51.428\dots\)</span> is not an integer.</p>
+</div>
+</div>
+<p>When we want disprove a universally-quantified statement (“every element of <span class="math inline">\(S\)</span> satisfies predicate <span class="math inline">\(P\)</span>”), the negation of that statement becomes an existentially-quantified one (“there exists an element of <span class="math inline">\(S\)</span> that doesn’t satisfy predicate <span class="math inline">\(P\)</span>”). Since proofs of existential quantification involve just finding one value, the disproof of the original statement involves finding such a value which causes the predicate to be False (or alternatively, causes the negation of the predicate to be True). We call this value a <strong>counterexample</strong> for the original statement. In the previous example, we would say that 7 is a counterexample of the given statement.</p>
+<div class="framed">
+<p><strong>A typical disproof of a universal (counterexample).</strong></p>
+<p>Given statement to <em>disprove</em>: <span class="math inline">\(\forall x \in S,~P(x)\)</span>.</p>
+<div class="proof">
+<p>We prove the negation, <span class="math inline">\(\exists x \in S,~\NOT P(x)\)</span>. Let <span class="math inline">\(x=\)</span> <code>_______</code>.</p>
+<p>[Proof that <span class="math inline">\(\NOT P\)</span>(<code>_______</code>) is True.]</p>
+</div>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>A.3 Python Special Method Reference</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">A.3 Python Special Method Reference</h1>
+</header>
+<section>
+<p><em>Adapted from <a href="https://docs.python.org/3/reference/datamodel.html#special-method-names" class="uri">https://docs.python.org/3/reference/datamodel.html#special-method-names</a>.</em> Note that not all special methods are shown.</p>
+<p>A class can implement certain operations that are invoked by special syntax (such as arithmetic operations or subscripting and slicing) by defining methods with special names. This is Python’s approach to operator overloading, allowing classes to define their own behavior with respect to language operators. For instance, if a class defines a method named <code>__getitem__()</code>, and <code>x</code> is an instance of this class, then <code>x[i]</code> is roughly equivalent to <code>type(x).__getitem__(x, i)</code>.</p>
+<h2 id="basic-customization">Basic customization</h2>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>object.__init__(self[, ...])</code></td>
+<td><p>Called after the instance has been created, but before it is returned to the caller.</p>
+<p>The arguments are those passed to the class constructor expression.</p>
+<p>If a base class has an <code>__init__()</code> method, the derived class’s <code>__init__()</code> method, if any, must explicitly call it to ensure proper initialization of the base class part of the instance.</p></td>
+</tr>
+<tr class="even">
+<td><code>object.__str__(self)</code></td>
+<td>Called by <code>str(object)</code> and the built-in functions <code>format()</code> and <code>print()</code> to compute the “informal” or nicely printable string representation of an object. The return value must be a string object.</td>
+</tr>
+<tr class="odd">
+<td><code>object.__lt__(self, other)</code> <code>object.__le__(self, other)</code> <code>object.__eq__(self, other)</code> <code>object.__ne__(self, other)</code> <code>object.__gt__(self, other)</code> <code>object.__ge__(self, other)</code></td>
+<td><p>These are the so-called “rich comparison” methods.</p>
+<p>The correspondence between operator symbols and method names is as follows:</p>
+<ul>
+<li><code>x &lt; y</code> calls <code>x.__lt__(y)</code></li>
+<li><code>x &lt;= y</code> calls <code>x.__le__(y)</code></li>
+<li><code>x == y</code> calls <code>x.__eq__(y)</code></li>
+<li><code>x != y</code> calls <code>x.__ne__(y)</code></li>
+<li><code>x &gt; y</code> calls <code>x.__gt__(y)</code></li>
+<li><code>x &gt;= y</code> calls <code>x.__ge__(y)</code></li>
+</ul></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="emulating-container-types">Emulating container types</h2>
+<p>The following methods can be defined to implement container objects. Containers usually are sequences (such as lists or tuples) or mappings (like dictionaries), but can represent other containers as well.</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 69%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Method</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>object.__len__(self)</code></td>
+<td>Called to implement the built-in function <code>len()</code>. Should return the length of the object, an integer <code>&gt;=</code> 0.</td>
+</tr>
+<tr class="even">
+<td><code>object.__getitem__(self, key)</code></td>
+<td><p>Called to implement evaluation of <code>self[key]</code>.</p>
+<p>For sequence types, the accepted keys should be integers and slice objects. Note that the special interpretation of negative indexes (if the class wishes to emulate a sequence type) is up to the <code>__getitem__()</code> method.</p>
+<p>If key is of an inappropriate type, <code>TypeError</code> may be raised; if of a value outside the set of indexes for the sequence (after any special interpretation of negative values), <code>IndexError</code> should be raised. For mapping types, if key is missing (not in the container), <code>KeyError</code> should be raised.</p></td>
+</tr>
+<tr class="odd">
+<td><code>object.__setitem__(self, key, value)</code></td>
+<td><p>Called to implement assignment to <code>self[key]</code>.</p>
+<p>Same note as for <code>__getitem__()</code>.</p>
+<p>This should only be implemented for mappings if the objects support changes to the values for keys, or if new keys can be added, or for sequences if elements can be replaced.</p>
+<p>The same exceptions should be raised for improper key values as for the <code>__getitem__()</code> method.</p></td>
+</tr>
+<tr class="even">
+<td><code>object.__contains__(self, item)</code></td>
+<td><p>Called to implement membership test operators (<code>in</code> and <code>not in</code>). Should return <code>True</code> if <code>item</code> is in <code>self</code>, <code>False</code> otherwise.</p>
+<p>For mapping objects, this should consider the keys of the mapping rather than the values or the key-item pairs.</p></td>
+</tr>
+<tr class="odd">
+<td><code>object.__iter__(self)</code></td>
+<td><p>This method is called when an iterator is required for a container. This method should return a new iterator object that can iterate over all the objects in the container.</p>
+<p>For mappings, it should iterate over the keys of the container.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

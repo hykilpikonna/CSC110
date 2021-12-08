@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>8.1 An Introduction to Running Time</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">8.1 An Introduction to Running Time</h1>
+</header>
+<section>
+<p>So far in this course, when we have studied programming concepts, we have focused on the <em>correctness</em> of our code. In Chapters 1–5, we learned about different programming constructs, understanding what to do, how to combine them into larger programs, and how to test these programs to make sure they are correct. In Chapters 6 and 7, we learned about mathematical proof, and applied this skill to proving the correctness of various algorithms, including every part of the RSA cryptosystem.</p>
+<p>Yet when it comes to evaluating programs, correctness is not the only important measure. As we alluded to in Chapter 7, the amount of time a program takes to run, or program <em>running time</em>, is a critical consideration.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Running time is often shortened to “runtime”, and is also know as the “efficiency” or “performance” of a program.</span> In this chapter, we’ll study a formal approach to analysing the running time of a program. This section will introduce the topic, and then in future sections we’ll build up some mathematical theory about comparing rates of function growth, and then apply this theory to real program code.</p>
+<h2 id="how-do-we-measure-running-time">How do we measure running time?</h2>
+<p>Consider the following function, which prints out the first <code>n</code> natural numbers:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> print_integers(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n):</span>
+<span id="cb1-3"><a href="#cb1-3"></a>        <span class="bu">print</span>(i)</span></code></pre></div>
+<p>What can we say about the running time of this function? An empirical approach would be to measure the time it takes for this function to run on a bunch of different inputs, and then take the average of these times to come up with some sort of estimate of the “average” running time.</p>
+<p>But of course, given that this algorithm performs an action for every natural number between <code>0</code> and <code>n - 1</code>, we expect it to take longer as <code>n</code> gets larger, so taking an average of a bunch of running times loses important information about the inputs.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">This is like doing a random poll of how many birthday cakes people have eaten without taking into account how old the respondents are.</span></p>
+<p>How about choosing one particular input, calling the function multiple times on that input, and averaging those running times? This seems better, but even here there are some problems. For one, the computer’s hardware can affect running time; for another, computers all are running multiple programs at the same time, so what else is currently running on your computer also affects running time. So even running this experiment on one computer wouldn’t necessarily be indicative of how long the function would take on a different computer, nor even how long it would take on the same computer running a different number of other programs.</p>
+<p>While these sorts of timing experiments are actually done in practice for evaluating particular hardware or extremely low-level (close to hardware) programs, these details are often not helpful for most software developers, as they do not have control over the machine on which their software will be run.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> That said, these timing experiments can provide an intuitive understanding of the efficiency of our programs. We will explore how to conduct basic timing experiments at the end of this chapter.</span></p>
+<p>So rather than use an empirical measurement of runtime, what we do instead is use an abstract representation of runtime: the number of “basic operations” an algorithm executes. This means that we can analyze functions without needing a computer, and our analysis theoretically applies to any computer system. However, there is a good reason “basic operation” is in quotation marks—this vague term raises a whole slew of questions:</p>
+<ul>
+<li>What counts as a “basic operation”?</li>
+<li>How do we tell which “basic operations” are used by an algorithm?</li>
+<li>Do all “basic operations” take the same amount of time?</li>
+</ul>
+<p>The answers to these questions can depend on the hardware being used, as well as what programming language the algorithm is written in. Of course, these are precisely the details we wish to avoid thinking about. In this section, we will count only the calls to <code>print</code> as basic operations, and study <code>print_integers</code> and some variations to establish some intuition and terminology.</p>
+<h2 id="linear-running-time">Linear running time</h2>
+<p>First, let’s return to <code>print_integers</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> print_integers(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n):</span>
+<span id="cb2-3"><a href="#cb2-3"></a>        <span class="bu">print</span>(i)</span></code></pre></div>
+<p>From Chapter 4, we know that the for loop will call <code>print</code> once per iteration. We also know that this loop iterates <span class="math inline">\(n\)</span> times (with <code>i</code> taking on the values 0, 1, 2, …, <span class="math inline">\(n - 1\)</span>):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> print_integers(<span class="dv">2</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="dv">1</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;&gt;&gt;</span> print_integers(<span class="dv">4</span>)</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="dv">0</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="dv">1</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="dv">2</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="dv">3</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="op">&gt;&gt;&gt;</span> print_integers(<span class="dv">8</span>)</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="dv">0</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="dv">1</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="dv">2</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="dv">3</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="dv">4</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="dv">5</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="dv">6</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="dv">7</span></span></code></pre></div>
+<p>So then for an input <span class="math inline">\(n\)</span>, there are <span class="math inline">\(n\)</span> calls to <code>print</code>. We say that the running time of <code>print_integers</code> on input <span class="math inline">\(n\)</span> is <span class="math inline">\(n\)</span> basic operations. If we plot <span class="math inline">\(n\)</span> against this measure running time, we obtain a line:</p>
+<p>We say that <code>print_integers</code> has a <strong>linear</strong> running time, as the number of basic operations is a linear function of the input <span class="math inline">\(n\)</span>.</p>
+<p><img src="images/Linear.png" /></p>
+<h2 id="quadratic-running-time">Quadratic running time</h2>
+<p>Let us now consider a function that prints all combinations of pairs of integers:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> print_pairs(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Print all combinations of pairs of the first n natural numbers.&quot;&quot;&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n):</span>
+<span id="cb4-4"><a href="#cb4-4"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, n):</span>
+<span id="cb4-5"><a href="#cb4-5"></a>            <span class="bu">print</span>(i, j)</span></code></pre></div>
+<p>What is the running time of this function? Similar to our previous example, there is a for loop that calls <code>print</code> <span class="math inline">\(n\)</span> times, but now this loop is nested inside another for loop. Let’s see some examples of this function being called:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> print_pairs(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="dv">0</span> <span class="dv">0</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> print_pairs(<span class="dv">2</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="dv">0</span> <span class="dv">0</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="dv">0</span> <span class="dv">1</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="dv">1</span> <span class="dv">0</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="dv">1</span> <span class="dv">1</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="op">&gt;&gt;&gt;</span> print_pairs(<span class="dv">3</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="dv">0</span> <span class="dv">0</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="dv">0</span> <span class="dv">1</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="dv">0</span> <span class="dv">2</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="dv">1</span> <span class="dv">0</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="dv">1</span> <span class="dv">1</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="dv">1</span> <span class="dv">2</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="dv">2</span> <span class="dv">0</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="dv">2</span> <span class="dv">1</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="dv">2</span> <span class="dv">2</span></span></code></pre></div>
+<p>If we look at the outer loop (loop variable <code>i</code>), we see that it repeats its body <span class="math inline">\(n\)</span> times. But its body is another loop, which repeats <em>its</em> body <span class="math inline">\(n\)</span> times. So the inner loop takes <span class="math inline">\(n\)</span> calls to print each time it is executed, and it is executed <span class="math inline">\(n\)</span> times in total. This means <code>print</code> is called <span class="math inline">\(n^2\)</span> times in total.</p>
+<p>We say that <code>print_pairs</code> has a <strong>quadratic</strong> running time, as the number of basic operations is a quadratic function of the input <span class="math inline">\(n\)</span>.</p>
+<p><img src="images/Quadratic.png" /></p>
+<h2 id="logarithmic-running-time">Logarithmic running time</h2>
+<p>Now let’s consider the following function, which prints out the powers of two that are less than a positive integer <span class="math inline">\(n\)</span>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> These numbers are of the form <span class="math inline">\(2^i\)</span>, where <span class="math inline">\(i\)</span> can range from 0 to <span class="math inline">\(\ceil{\log_2(n)} - 1\)</span>. For example, when <span class="math inline">\(n = 16\)</span>, <span class="math inline">\(\ceil{\log_2(n)} = 4\)</span>, and <span class="math inline">\(i\)</span> ranges from 0 to 3. When <span class="math inline">\(n = 7\)</span>, <span class="math inline">\(\ceil{\log_2(n)} = 3\)</span>, and <span class="math inline">\(i\)</span> ranges from 0 to 2.</span></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> print_powers_of_two(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Print the powers of two that are less than n.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">        - n &gt; 0</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, math.ceil(math.log2(n))):</span>
+<span id="cb6-8"><a href="#cb6-8"></a>        <span class="bu">print</span>(<span class="dv">2</span> <span class="op">**</span> i)</span></code></pre></div>
+<p>In this case, the number of calls to <code>print</code> is <span class="math inline">\(\ceil{\log_2(n)}\)</span>. So the running time of <code>print_powers_of_two</code> is <em>approximately</em>, but not exactly, <span class="math inline">\(\log_2(n)\)</span>. Yet in this case we still say that <code>print_powers_of_two</code> has a <strong>logarithmic</strong> running time.</p>
+<p><img src="images/Logarithmic.png" /></p>
+<h2 id="constant-running-time">Constant running time</h2>
+<p>Our final example in this section is a bit unusual.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> print_ten(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Print n ten times.&quot;&quot;&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">10</span>):</span>
+<span id="cb7-4"><a href="#cb7-4"></a>        <span class="bu">print</span>(n)</span></code></pre></div>
+<p>How many times is <code>print</code> called here? We can again tell from the header of the for loop: this loop iterates 10 times, and so <code>print</code> is called 10 times, <em>regardless of what <span class="math inline">\(n\)</span> is</em>!</p>
+<p>We say that <code>print_ten</code> has a <strong>constant</strong> running time, as the number of basic operations is independent to the input size.</p>
+<p><img src="images/Constant.png" /></p>
+<h2 id="basic-operations">Basic operations</h2>
+<p>In the past four examples, we have seen examples of functions that have linear, quadratic, logarithmic, and constant running times. While these labels are not precise, they do give us intuition about the relative size of each function.</p>
+<!-- ![](images/AllRuntime.png) -->
+<p>Functions with linear running time are faster than ones with quadratic running time, and slower than ones with logarithmic running time. Functions with a constant running time are the fastest of all.</p>
+<p>But all of our informal analyses in the previous section relied on defining a “basic operation” to be a call to <code>print</code>. We said, for example, that the running time of <code>print_integers</code> had a running time of <span class="math inline">\(n\)</span>. But what if we had a friend comes along and say, “No wait, the variable <code>i</code> must be assigned a new value at every loop iteration, and that counts as a basic operation.” Okay, so then we would say that there are <span class="math inline">\(n\)</span> <code>print</code> calls and <span class="math inline">\(n\)</span> assignments to <code>i</code>, for a total running time of <span class="math inline">\(2n\)</span> basic operations for an input <span class="math inline">\(n\)</span>.</p>
+<p>But then another friend chimes in, saying “But <code>print</code> calls take longer than variable assignments, since they need to change pixels on your monitor, so you should count each <code>print</code> call as <span class="math inline">\(10\)</span> basic operations.” Okay, so then there are <span class="math inline">\(n\)</span> print calls worth <span class="math inline">\(10n\)</span> basic operations, plus the assignments to <code>i</code>, for a total of <span class="math inline">\(11n\)</span> basic operations for an input <span class="math inline">\(n\)</span>.</p>
+<p>And then another friend joins in: “But you need to factor in an overhead of calling the function as a first step before the body executes, which counts as <span class="math inline">\(1.5\)</span> basic operations (slower than assignment, faster than <code>print</code>).” So then we now have a running time of <span class="math inline">\(11n + 1.5\)</span> basic operations for an input <span class="math inline">\(n\)</span>.</p>
+<p>And then another friend starts to speak, but you cut them off and say “That’s it! This is getting way too complicated. I’m going back to timing experiments, which may be inaccurate but at least I won’t have to listen to these increasing levels of fussiness.”</p>
+<p>The expressions <span class="math inline">\(n\)</span>, <span class="math inline">\(2n\)</span>, <span class="math inline">\(11n\)</span>, and <span class="math inline">\(11n + 1.5\)</span> may be different mathematically, but they share a common qualitative type of growth: they are all <em>linear</em>. And so we know, at least intuitively, that they are all faster than quadratic running times and slower than logarithmic running times. What we will study in the next section is how to make this observation precise, and thus avoid the tedium of trying to exactly quantify our “basic operations”, and instead measure the overall rate of growth in the number of operations.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: <a href="https://www.youtube.com/watch?v=2QgtAWzBVuk&amp;list=PLfMGJf6SEIv7uysvvsaoknnzfrCCMMk5r">Algorithm Analysis</a></li>
+</ul>
+</section>
+<!--
+Let us now consider a very similar function, `print_odd_integers`:
+
+```python
+def print_odd_integers(n: int) -> None:
+    """Print the odd integers from 1 to n, inclusive.
+    """
+    for i in range(1, n + 1, 2):
+        print(i)
+```
+
+As the name implies, this function will only print odd integers up to n:
+
+```python
+>>> print_odd_integers(2)
+1
+>>> print_odd_integers(4)
+1
+3
+>>> print_odd_integers(8)
+1
+3
+5
+7
+```
+
+For `print_integers`, the loop repeats $n$ times.
+But for `print_odd_integers`, the loop repeats roughly $n / 2$ times.
+Despite this difference, we say that both functions have **linear** runtime scaling.
+That is, while the slopes of the lines may be different, the lines themselves still grow proportionally with the size of $n$. -->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

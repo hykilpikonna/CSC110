@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.3 Filtering Collections</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.3 Filtering Collections</h1>
+</header>
+<section>
+<p>Now we’re going to take a look at one of the most common steps in expressing statements in predicate logic and in processing large collections of data. At first glance these two might not appear that related, after going through this section you should be able to appreciate this elegant connection between predicate logic and data processing.</p>
+<h2 id="expressing-conditions-in-predicate-logic">Expressing conditions in predicate logic</h2>
+<p>We saw in the last section that the universal quantifier <span class="math inline">\(\forall\)</span> is used to express a statement of the form “every element of set <span class="math inline">\(S\)</span> satisfies ____”. This works well when we use a predefined set for <span class="math inline">\(S\)</span> (like the numeric sets <span class="math inline">\(\N\)</span> or <span class="math inline">\(\R\)</span>), but does not work well when we want to narrow the scope of our statement to a smaller set.</p>
+<p>For example, consider the following statement: “Every natural number <span class="math inline">\(n\)</span> greater than 3 satisfies the inequality <span class="math inline">\(n^2 + n \geq 20\)</span>.” The phrase “greater than 3” is a <em>condition</em> that modifies the statement, limiting the original domain of <span class="math inline">\(n\)</span> (the natural numbers) to a smaller subset (the natural numbers greater than 3).</p>
+<p>There are two ways we can represent such conditions in predicate logic. The first is to define a new set; for example, we could define a set <span class="math inline">\(S_1 = \{n \mid n \in \N \text{ and } n &gt; 3\}\)</span>, and then simply write <span class="math inline">\(\forall n \in S_1,~ n^2 + n \geq 20\)</span>.</p>
+<p>The second approach is to use an implication to express the condition. To see how this works, first we can rewrite the original statement using an “if … then …” structure as follows: “For every natural number <span class="math inline">\(n\)</span>, if <span class="math inline">\(n\)</span> is greater than 3 then <span class="math inline">\(n\)</span> satisfies the inequality <span class="math inline">\(n^2 + n \geq 20\)</span>.” We can translate this into predicate logic as <span class="math inline">\(\forall n \in \N,~ n &gt; 3 \Rightarrow n^2 + n \geq 20\)</span>.</p>
+<p>This works because the <span class="math inline">\(n &gt; 3 \Rightarrow\)</span> has a filtering effect, due to the <em>vacuous truth</em> case of implication. For the values <span class="math inline">\(n \in \{0, 1, 2\}\)</span>, the hypothesis of the implication, <span class="math inline">\(n &gt; 3\)</span> is False, and so for these values the implication itself is True. And then since the overall statement is universally quantified, these vacuous truth cases don’t affect the truth value of the statement.</p>
+<p>The “forall-implies” structure is one of the most common forms of statements we’ll encounter in this course. They arise naturally any time a statement is universally quantified, but there are conditions that limit the domain that the statement applies to.</p>
+<h2 id="filtering-collections-in-python">Filtering collections in Python</h2>
+<p>Now let’s turn our attention back to Python. Last chapter, we learned about several aggregation functions (like <code>sum</code>, <code>max</code>), and we’ve just learned about two more, <code>any</code> and <code>all</code>. Sometimes, however, we want to limit the scope of one of these functions to certain values in the input collection. For example, “find the sum of only the even numbers in a collection of numbers”, or “find the length of the longest string in a collection that starts with a <code>'D'</code>”. For these problems, we can quickly identify which aggregation function is necessary, but the problem is in choosing the right argument to pass in.</p>
+<p>This is where filtering appears. In programming, a <strong>filter operation</strong> is an operation that takes a collection of data and returns a new collection consisting of the elements in the original collection that satisfy some predicate (which can vary from one filter operation to the next).</p>
+<p>There are different ways of accomplishing a filter operation in Python. The simplest one builds on what we’ve learned so far by adding a syntactic variation to comprehensions. We’ll use as our example a set comprehension here, but what we’ll discuss applies to list and dictionary comprehensions as well.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a>{<span class="op">&lt;</span>expression<span class="op">&gt;</span> <span class="cf">for</span> <span class="op">&lt;</span>variable<span class="op">&gt;</span> <span class="kw">in</span> <span class="op">&lt;</span>collection<span class="op">&gt;</span> <span class="cf">if</span> <span class="op">&lt;</span>condition<span class="op">&gt;</span>}</span></code></pre></div>
+<p>The new part, <code>if &lt;condition&gt;</code>, is a boolean expression involving the <code>&lt;variable&gt;</code>. This form of set comprehension behaves the same way as the ones we studied last chapter, except that <code>&lt;expression&gt;</code> only gets evaluated for the values of the variable that make the condition evaluate to <code>True</code>. Here are some examples to illustrate this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> numbers <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>}  <span class="co"># Initial collection</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> {n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">3</span>}  <span class="co"># Pure filtering: only keep elements &gt; 3</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>{<span class="dv">4</span>, <span class="dv">5</span>}</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="op">&gt;&gt;&gt;</span> {n <span class="op">*</span> n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">3</span>}  <span class="co"># Filtering with a data transformation</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a>{<span class="dv">16</span>, <span class="dv">25</span>}</span></code></pre></div>
+<p>By combining these filtering comprehensions with aggregation functions, we can now achieve our goal of limiting the scope of an aggregation.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> numbers <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>}</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">sum</span>({n <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span>})  <span class="co"># Sum of only the even numbers</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="dv">6</span></span></code></pre></div>
+<p>The keyword <code>if</code> used in this syntax for filtering comprehensions is directly connected to our use of implication above. Just as we used the hypothesis <span class="math inline">\(n &gt; 3 \Rightarrow\)</span> to limit the scope of the universal quantifier to a subset of the natural numbers, here we use <code>if n % 2 == 0</code> to limit the scope of the <code>sum</code> to just a subset of <code>numbers</code>.</p>
+<p>Our final example in this section should make this connection even more explicit. Here’s how we could translate the statement <span class="math inline">\(\forall n \in S,~ n &gt; 3 \Rightarrow n^2 + n \geq 20\)</span> into a Python expression:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> numbers <span class="op">=</span> {<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">6</span>, <span class="dv">7</span>, <span class="dv">8</span>}</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">all</span>({n <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> n <span class="op">&gt;=</span> <span class="dv">20</span> <span class="cf">for</span> n <span class="kw">in</span> numbers <span class="cf">if</span> n <span class="op">&gt;</span> <span class="dv">3</span>})</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="va">True</span></span></code></pre></div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

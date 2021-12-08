@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10.1 The Problem Domain: Food Delivery Networks</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">10.1 The Problem Domain: Food Delivery Networks</h1>
+</header>
+<section>
+<p>We do not write software in a vacuum; we study computer science to learn how to use vast computational power to solve real-world problems. As professionals in industry and academia, the programs we create serve a purpose, whether to satisfy a need from a client, to improve individual lives and society, or to advance human knowledge and technology. In the previous chapters of these course notes, we have learned about the fundamentals of programming, mathematical proof, and algorithm analysis. We have focused on developed the knowledge and skills required to create and analyse programs.</p>
+<p>In this final chapter of the course, we will take what we’ve learned and apply it to design and implement a large program to solve a real-world problem. As a first step to this, we’ll learn about how to approach a new domain to understand how we can apply computer science techniques to both represent and solve problems in that domain.</p>
+<h2 id="what-is-a-problem-domain">What is a problem domain?</h2>
+<p>A <strong>problem domain</strong> is collection of knowledge<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> We use the term <em>domain-specific</em> knowledge to refer to knowledge about a particular domain. Society often uses the term <em>domain experts</em> to refer to people who have a great deal of knowledge in a particular domain.</span> about a specific field, phenomenon, or discipline, and an understanding of the goals, problems, deficiencies, and/or desired improvements within that area. Each problem domains encompass many different kinds of knowledge, including terminology and definitions, concepts and skills, and context and history. Through your lectures, tutorials, and assignments, you’ve touched on a wide array of problem domains, such as tracking marriage records in the City of Toronto, modelling the spread of infectious diseases, generating course timetables as U of T students, and cryptography.</p>
+<p>Let’s unpack how we explored the domain of cryptography in Chapter 7. We first introduced the key scenario of two people communicating securely so that their messages could not be deciphered by an eavesdropper. As we dove into cryptography, we learned about:</p>
+<ul>
+<li>terminology and definitions (e.g., symmetric-key and public-key cryptosystems, encryption and decryption, various existing cryptosystems)</li>
+<li>concepts and skills (e.g., proving that a cryptosystem is correct; justifying the security of a cryptosystem based on the presumed hardness of mathematical problems like Integer Factorization)</li>
+<li>the context and history (e.g., ancient cryptosystems, how cryptography is applied to Internet communciations)</li>
+</ul>
+<p>Our previous study of programming enabled us to write programs, but we had to learn all about the domain of cryptography before being able to implement cryptographic algorithms ourselves. Our knowledge of Python programming alone might have been sufficient to explain what operations are performed on what data in, for example, <code>rsa_generate_key</code>, <code>rsa_encrypt</code>, and <code>rsa_decrypt</code>. But it was the domain-specific knowledge we learned that explained <em>how</em> we came up with these algorithms and why they are correct.</p>
+<h2 id="introducing-hercules">Introducing Hercules</h2>
+<p>Now, we’ll introduce a new problem domain that we will spend the rest of this chapter studying.</p>
+<p>Consider a person or household self-quarantining during the pandemic. One of the main logistical challenges they have to face is how to arrange for food during their quarantine. To help address this need, you have founded <em>Hercules Ltd.</em>, a non-profit organization that allows people under quarantine to order groceries and meals from grocery stores and restaurants, and arranges for couriers to make deliveries right to their front doors. You are incredibly excited and can’t wait to launch a Hercules app. Your friend is a bit more cautious, and wonders how many couriers will be needed to make grocery and meal deliveries in a timely manner, which of course will depend on how many people use the app. You and your friend decide to put the computational skills you’ve learned in this course to help answer this question.</p>
+<p>This problem domain is likely a familiar one; the idea of having food delivered to your doorstep has existed for a long time. The preceding paragraph uses some familiar terminology, such as couriers and deliveries. You may even be familiar with existing apps that already do this, such as <em>UberEats</em>, <em>Skip the Dishes</em>, or <em>Instacart</em>. When thinking about designing and implementing this app, you are probably considering:</p>
+<ul>
+<li>how restaurants will register with the app and post menus</li>
+<li>how customers will register with the app to browse restaurants and place orders</li>
+<li>how couriers will register with the app to claim orders and deliver them from restaurants to customers</li>
+<li>…and more</li>
+</ul>
+<h3 id="food-delivery-as-a-system">Food delivery as a system</h3>
+<p>We can view food delivery in Toronto as a <strong>system</strong>, which is a group of entities (or agents) that interact with each other over time. Systems modeling is frequently used to conceptualize how an organization operates. The first part of creating a computational model for such a system is to design and implement the various entities in the system—in the case of the Hercules Ltd., these are entities like couriers and the customers placing orders.</p>
+<p>The entities in a system are not static; they change over time. New people sign up and place food orders; couriers pick up meals from restaurants and deliver them to clients. For a live app, these events are driven by real humans interacting with the app in real-time. In this chapter, however, we’re going to look at another way of driving change in our food delivery system over time. The second part of our computational model is a <em>simulation</em> that uses randomness to generate events that cause the system to change over time. For example, our food delivery simulation will specify how often customers place an order, taking into account that some times of day are busier than others.</p>
+<p>Computational simulations are a powerful tool because they harness the speed and reliability of your computer to perform complex calculations and produce results that can be analysed and visualized. But simulations are reliant on the accuracy of their underlying mathematical models, and are ultimately approximations of the real world. A well-designed simulation allows the programmer to start with a simple model and extend and tweak it in response to new domain-specific knowledge.</p>
+<h3 id="chapter-roadmap">Chapter roadmap</h3>
+<p>Over the course of this chapter, we’ll study how to design and implement both of these parts of a computational model for our food delivery platform, Hercules. This case study will also give us an opportunity to explore the design of a relatively complex software system. We’ll use what we’ve learned about classes to model the entities in a food delivery network, and study a specific kind of simulation known as the <em>discrete-event simulation</em>. We hope you’re excited. Hercules is counting on you!</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.3 Data Types, Abstract and Concrete</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.3 Data Types, Abstract and Concrete</h1>
+</header>
+<section>
+<p>So far in this course, we’ve used the term <em>data type</em> to actually mean two different things. Most of the time, we use it to mean a data type in the Python programming language, like <code>int</code> or <code>list</code> or a data class we’ve defined. When we use the term “data type” in this way, it is synonymous with the term <em>Python class</em>, which is the name the Python language gives to all of its data types. We’ll now call refer to these Python classes as <strong>concrete data types</strong>, since they have a concrete implementation in Python code. This is true for both built-in data types, data classes that we define, and the more general classes we learned about in <a href="02-classes.html">Section 9.2</a>.</p>
+<p>However, there’s another way we’ve used the term “data type” that goes all the way back to <a href="../01-working-with-data/01-data-types.html">1.1 The Different Types of Data</a>: as abstract representations of data that transcend any one specific programming language. For example, the Python <code>list</code> class is implemented differently than the Java <code>ArrayList</code> or JavaScript <code>Array</code>, but all three share some common expectations of what list operations they support. We can describe these common, language-independent list operations by defining an <strong>abstract data type (ADT)</strong>, which defines an entity that stores some kind of data and the operations that can be performed on it. Using the terminology from [Section 9.1], an abstract data type is a pure interface it is concerned only with the <em>what</em>—what data is stored, what we can do with this data—and not the <em>how</em>—how a computer actually stores this data or implements these operations.</p>
+<h2 id="familiar-abstract-data-types">Familiar abstract data types</h2>
+<p>Let’s take a moment here to review some of the collection-based abstract data types we’ve seen already in this course.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> One caveat with this list: while computer scientists generally agree on what the “main” abstract data types are, they often disagree on what operations each one actually supports. You’ll notice here that we’ve taken a fairly conservative approach for specifying operations, limiting ourselves to the most basic ones.</span></p>
+<ul>
+<li><p><strong>Set</strong></p>
+<ul>
+<li>Data: a collection of unique elements</li>
+<li>Operations: get size, insert a value (without introducing duplicates), remove a specified value, check membership in the set.</li>
+</ul></li>
+<li><p><strong>List</strong></p>
+<ul>
+<li>Data: an ordered sequence of elements (which may or may not be unique)</li>
+<li>Operations: get size, access element by index, insert a value at a given index, remove a value at a given index</li>
+</ul></li>
+<li><p><strong>Mapping</strong></p>
+<ul>
+<li>Data: a collection of key-value pairs, where each key is unique and associated with a single value</li>
+<li>Operations: get size, lookup a value for a given key, insert a new key-value pair, remove a key-value pair, update the value associated with a given key</li>
+</ul></li>
+<li><p><strong>Iterable</strong></p>
+<ul>
+<li>Data: a collection of values (may or may not be unique)</li>
+<li>Operations: iterate through the elements of the collection one at a time.</li>
+</ul></li>
+</ul>
+<p>There are a few more foundational abstract data types in computer science that we’ll cover in this chapter, and in future courses. We have discussed many of these throughout the semester so far, and have used many in Python. But the true power of ADTs is that they are abstract enough to transcend any individual program or even programming languages. ADTs like lists, sets, and maps form a common vocabulary that is necessary to being a professional computer scientist.</p>
+<h2 id="abstract-vs.-concrete-data-types">Abstract vs. concrete data types</h2>
+<p>Abstract data types form a high-level interface between a computer scientist and how the computer stores program data. A concrete data type is an implementation of an abstract data type: unlike abstract data types, they <em>are</em> actually concerned with how the data is stored and how their operations are implemented. The creators of the Python programming language took various abstract data types and created a set of built-in concrete data types (classes), making careful decisions about how each class would store its data and implement its methods. Indeed, as Python programmers we benefit from all the work they’ve put in to create classes that not just support common ADTs, but to make their implementations extremely fast using clever programming techniques.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> You’ll learn about some of these techniques in CSC263/265!</span></p>
+<p>So a <code>dict</code>, for instance, is not itself an abstract data type. But the <code>dict</code> data type is an obvious implementation of the Mapping ADT. However, <em>there is NOT a one-to-one correspondence between abstract data types and concrete data types</em>, in Python or any other programming language. A single abstract data type can be implemented by many different concrete data types. For example, although the Python <code>dict</code> is a natural implementation of the Mapping ADT, we could implement the Mapping ADT instead with a <code>list</code>, where each element is a tuple storing a key-value pair:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># A Map using a Python dict</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a>{<span class="dv">0</span>: <span class="st">&#39;hello&#39;</span>, <span class="dv">1</span>: <span class="dv">42</span>, <span class="dv">2</span>: <span class="st">&#39;goodbye&#39;</span>}</span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co"># A Map using a Python list</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>[(<span class="dv">0</span>, <span class="st">&#39;hello&#39;</span>), (<span class="dv">1</span>, <span class="dv">42</span>), (<span class="dv">2</span>, <span class="st">&#39;goodbye&#39;</span>)]</span></code></pre></div>
+<p>Conversely, every concrete data type can be used to implement multiple ADTs. The Python <code>list</code> can be used to implement not just the List ADT, but each of the other above ADTs as well. For instance, think about how you would implement the Set ADT with a <code>list</code>, and in particular, how you would avoid duplicates.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Though just because something is possible doesn’t mean it is a good idea in practice. Beginning Python programmers often implement use a <code>list</code> when all they need is the Set ADT’s operations. As we discussed in <a href="../08-runtime/09-data-types-runtime.html">Section 8.6</a>, this leads to slower programs, and so should be avoided.</span> A <code>dict</code> could also implement any of the ADTs above, and the same is true of the new data structures you will learn in this course.</p>
+<p>You might be wondering what is the point of making this distinction—so what if <code>list</code>s can implement the Mapping ADT, we’d never use this in “real” Python code when we have a <code>dict</code> instead. And that’s true! But what this distinction reminds us is that we always have <em>choices</em> when implementing an interface. Rather than saying “it’s not possible to implement a Map using <code>list</code>”, we instead say “it is possible to implement a Map using <code>list</code>, but this choice is worse than using <code>dict</code>”.</p>
+<p>Any idea why is a <code>dict</code> better than <code>list</code> at implementing the Mapping ADT? If we ignore the fact that we’ve been using <code>dict</code> for this purpose all along, the answer is not obvious! It comes down to <em>efficiency</em>: though <code>dict</code> and <code>list</code> can both be used to implement the Map ADT, the implementation of <code>dict</code> makes the Mapping operations much faster than how we would (straightforwardly) implement the Mapping ADT using a <code>list</code>. As we’ll see a few times this chapter, running time analysis is one of the key ways to evaluate and compare different implementations of an ADT.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

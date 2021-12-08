@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.9 Working with Definitions</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.9 Working with Definitions</h1>
+</header>
+<section>
+<p>Throughout this course, we will study various mathematical objects that play key roles in computer science. As these objects become more complex, so too will our statements about them, to the point where if we try to write out everything using just basic set and arithmetic operations, our formulas won’t fit on a single line! To avoid this problem, we create <em>definitions</em>, which we can use to express a long idea using a single term.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">This is analogous to using local variables or helper functions in programming to express <em>part</em> of an overall value or computation.</span></p>
+<p>In this section, we’ll look at one extended example of defining our own predicates mathematically and in Python, and using them in our statements. Let us take some familiar terminology and make it precise using the languages of predicate logic and Python.</p>
+<div class="definition" data-terms="divisibility">
+<p>Let <span class="math inline">\(n, d \in \Z\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">You may be used to defining divisibility for just the natural numbers, but it will be helpful to allow for negative numbers in our work.</span> We say that <strong><span class="math inline">\(d\)</span> divides <span class="math inline">\(n\)</span></strong>, or <strong><span class="math inline">\(n\)</span> is divisible by <span class="math inline">\(d\)</span></strong>, when there exists a <span class="math inline">\(k \in \Z\)</span> such that <span class="math inline">\(n = dk\)</span>. In this case, we use the notation <span class="math inline">\(d \DIV n\)</span> to represent “<span class="math inline">\(d\)</span> divides <span class="math inline">\(n\)</span>.”</p>
+<p>Note that just like the equals sign <span class="math inline">\(=\)</span> is a binary predicate, so too is <span class="math inline">\(\DIV\)</span>. For example, the statement <span class="math inline">\(3 \DIV 6\)</span> is True, while the statement <span class="math inline">\(4 \DIV 10\)</span> is False.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Students often confuse the divisibility predicate with the horizontal fraction bar. The former is a <em>predicate</em> that returns a boolean; the latter is a function that returns a number. So <span class="math inline">\(4 \DIV 10\)</span> is <span class="math inline">\(False\)</span>, while <span class="math inline">\(\frac{10}{4}\)</span> is <span class="math inline">\(2.5\)</span>.</span></p>
+<p>This definition also permits <span class="math inline">\(d = 0\)</span>, which may be a bit surprising! According to this definition, <span class="math inline">\(0 \mid 0\)</span>, and for any non-zero <span class="math inline">\(n \in \Z\)</span>, <span class="math inline">\(0 \nmid n\)</span>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">Exercise: why are these two statements true?</span> In other words, when <span class="math inline">\(d = 0\)</span>, <span class="math inline">\(d \mid n\)</span> <em>if and only if</em> <span class="math inline">\(n = 0\)</span>.</p>
+</div>
+<div class="example">
+<p>Let’s express the statement “For every integer <span class="math inline">\(x\)</span>, if <span class="math inline">\(x\)</span> divides 10, then it also divides 100” in two ways: with the divisibility predicate <span class="math inline">\(d \DIV n\)</span>, and without it.</p>
+<ul>
+<li><p><strong>With the predicate</strong>: this is a universal quantification over all possible integers, and contains a logical implication. So we can write <span class="math display">\[\forall x \in \Z,~ x \DIV 10 \IMP x \DIV 100.\]</span></p></li>
+<li><p><strong>Without the predicate</strong>: the same structure is there, except we <em>unpack the definition</em> of divisibility, replacing every instance of <span class="math inline">\(d \DIV n\)</span> with <span class="math inline">\(\exists k \in \Z,~ n = dk\)</span>. <span class="math display">\[\forall x \in \Z,~ \big(\exists k \in \Z,~ 10 = kx\big) \IMP \big(\exists k \in \Z,~ 100 = kx\big).\]</span></p>
+<p>Note that each subformula in the parentheses has its own <span class="math inline">\(k\)</span> variable, whose scope is limited by the parentheses.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">That is, the <span class="math inline">\(k\)</span> in the hypothesis of the implication is different from the <span class="math inline">\(k\)</span> in the conclusion: they can take on different values, though they can also take on the same value.</span> However, even though this technically correct, it’s often confusing for beginners. So instead, we’ll tweak the variable names to emphasize their distinctness: <span class="math display">\[\forall x \in \Z,~ \big(\exists k_1 \in \Z,~ 10 = k_1x\big) \IMP \big(\exists k_2 \in \Z,~ 100 = k_2x\big).\]</span></p></li>
+</ul>
+</div>
+<p>As you can see, using this new predicate makes our formula quite a bit more concise! But the usefulness of our definitions doesn’t stop here: we can, of course, use our terms and predicates in further definitions.</p>
+<div class="definition" data-terms="prime">
+<p>Let <span class="math inline">\(p \in \Z\)</span>. We say <span class="math inline">\(p\)</span> is <strong>prime</strong> when it is greater than <span class="math inline">\(1\)</span> and the only natural numbers that divide it are <span class="math inline">\(1\)</span> and itself.</p>
+</div>
+<div class="example">
+<p>Let’s define a predicate <span class="math inline">\(IsPrime(p)\)</span> to express the statement that “<span class="math inline">\(p\)</span> is a prime number,” with and without using the divisibility predicate.</p>
+<p>The first part of the definition, “greater than <span class="math inline">\(1\)</span>,” is straightforward. The second part is a bit trickier, but a good insight is that we can enforce constraints on values through implication: <em>if a number <span class="math inline">\(d\)</span> divides <span class="math inline">\(p\)</span>, then <span class="math inline">\(d = 1\)</span> or <span class="math inline">\(d = p\)</span></em>. We can put these two ideas together to create a formula: <span class="math display">\[IsPrime(p): p &gt; 1 \AND \big( \forall d \in \N,~ d \DIV p \IMP d = 1 \OR d = p \big), \qquad \text{where $p \in \Z$}.\]</span></p>
+<p>To express this idea without using divisibility predicate, we substitute in the definition of divisibility. The underline shows the changed part. <span class="math display">\[IsPrime(p): p &gt; 1 \AND \big( \forall d \in \N,~ \underline{\left(\exists k \in \Z,~ p = kd\right)} \IMP d = 1 \OR d = p \big), \quad \text{where $p \in \Z$}.\]</span></p>
+</div>
+<h2 id="expressing-definitions-in-programs">Expressing definitions in programs</h2>
+<p>As we just saw, in mathematics we can often express definitions as predicates, where an element of the domain (e.g., an integer) satisfies the predicate if it fits the definition. Because predicates are just functions, we can express these in programs as well. For example, let’s consider the divisibility predicate <span class="math inline">\(\mid\)</span>, where <span class="math inline">\(d \mid n\)</span> means <span class="math inline">\(\exists k \in \Z,~ n = kd\)</span> (for <span class="math inline">\(d, n \in \Z\)</span>). Here is the start of a function design in Python:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> divides(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return whether d divides n.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>While we can use the modulo operator <code>%</code> to implement this function (more on this later), we’ll stick to remaining faithful to the mathematical definition as much as possible. Unfortunately, there is one challenge with translating the mathematical definition of divisibility precisely into a Python function. In mathematics we have no trouble at all representing an infinite set of numbers with the symbol <span class="math inline">\(\Z\)</span>; but in a computer program, we cannot represent infinite sets in the same way. Instead, we’ll use a <em>property</em> of divisibility to restrict the set of numbers to quantify over: when <span class="math inline">\(n \neq 0\)</span>, every number that divides <span class="math inline">\(n\)</span> must lie in the range <span class="math inline">\(\{-|n|, -|n| + 1, \dots, |n| - 1, |n|\}\)</span>.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> We’ll actually <em>prove</em> this property later on!</span></p>
+<p>But the next question is, how do we represent the set <span class="math inline">\(\{-|n|, -|n| + 1, \dots, |n| - 1, |n|\}\)</span> in Python, when the <span class="math inline">\(n\)</span> is given as a parameter? We can use the <code>range</code> data type:<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"> Remember the asymmetry here: the <code>start</code> argument is inclusive, but the <code>end</code> argument is exclusive.</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="op">-</span><span class="bu">abs</span>(n), <span class="bu">abs</span>(n) <span class="op">+</span> <span class="dv">1</span>)</span></code></pre></div>
+<p>And then we can replace <span class="math inline">\(\Z\)</span> by this variable in the definition of divisibility to obtain <span class="math inline">\(\exists k \in possible\_divisors,~ n = kd\)</span>. We can now translate this directly into Python code using what we learned earlier this chapter:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> divides(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Return whether d divides n.&quot;&quot;&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="op">-</span> <span class="bu">abs</span>(n), <span class="bu">abs</span>(n) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="cf">return</span> <span class="bu">any</span>({n <span class="op">==</span> k <span class="op">*</span> d <span class="cf">for</span> k <span class="kw">in</span> possible_divisors})</span></code></pre></div>
+<!-- TODO: Could ask the students, does this definition work when n = 0? When d = 0? -->
+<p>Now let’s turn our attention to the definition of <span class="math inline">\(\mathit{IsPrime}\)</span>:</p>
+<p><span class="math display">\[\mathit{IsPrime}(p): p &gt; 1 \AND \big( \forall d \in \N,~ d \DIV p \IMP d = 1 \OR d = p \big), \qquad \text{where $p \in \Z$}.\]</span></p>
+<p>Here’s a start for translating this definition into a Python function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> is_prime(p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Return whether p is prime.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>Once again, we have a problem of an infinite set: <span class="math inline">\(\forall d \in \N\)</span>. We can use the same property of divisibility as above and note that the possible natural numbers that are divisors of <code>p</code> are in the set <span class="math inline">\(\{1, 2, \dots, p\}\)</span>.<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote"> This is simpler than the version above because <span class="math inline">\(p \geq 1\)</span>.</span> The quantified statement is a bit harder to translate because it contains an implication, so here we recall what we discussed in <a href="03-filtering-collections.html">3.3 Filtering Collections</a> to use the <code>if</code> keyword in a comprehension to model implications. Here is our complete implementation of <code>is_prime</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> is_prime(p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return whether p is prime.&quot;&quot;&quot;</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>    possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, p <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a>    <span class="cf">return</span> (</span>
+<span id="cb5-5"><a href="#cb5-5"></a>        p <span class="op">&gt;</span> <span class="dv">1</span> <span class="kw">and</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>        <span class="bu">all</span>({d <span class="op">==</span> <span class="dv">1</span> <span class="kw">or</span> d <span class="op">==</span> p <span class="cf">for</span> d <span class="kw">in</span> possible_divisors <span class="cf">if</span> divides(d, p)})</span>
+<span id="cb5-7"><a href="#cb5-7"></a>    )</span></code></pre></div>
+<p>Notice that just like the mathematical definition, in Python our implementation of <code>is_prime</code> uses the <code>divides</code> function. This is a great example of how useful it can be to divide our work into functions that build on each other, rather than writing all of our code in a single function. As we learn about more complex domains in this course, we’ll see this pattern repeat itself: definitions will build on top of one another, and you should expect that your functions will build on one another as well.</p>
+<h2 id="divisibility-and-the-remainder-operation">Divisibility and the remainder operation</h2>
+<p>You might have noticed that our definition of <code>divides</code>, though faithful to the mathematical definition, is not the same as how we’ve previously determined whether a number is divisible by 2 (i.e., is even).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> is_even(n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Return whether n is even.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="cf">return</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>In this case, we check whether <code>n</code> is divisible by 2 by checking whether the remainder when <code>n</code> is divided by 2 is 0 or not. It turns out that for <em>non-zero</em> <span class="math inline">\(d \in Z\)</span>, checking remainders is equivalent to the original definition of divisibility:</p>
+<p><span class="math display">\[\forall n, d \in \Z,~ d \neq 0 \Rightarrow (d \mid n \Leftrightarrow n~\%~d = 0).\]</span></p>
+<p>Note that when <span class="math inline">\(d = 0\)</span>, the remainder <span class="math inline">\(n~\%~d\)</span> is undefined, and so we really do need the <span class="math inline">\(d \neq 0\)</span> condition in the above statement.</p>
+<p>We can use this observation to write an alternate implementation of the <code>divides</code> function:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> divides2(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return whether d divides n.&quot;&quot;&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    <span class="cf">if</span> d <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb7-4"><a href="#cb7-4"></a>        <span class="co"># This is the original definition.</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a>        possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="op">-</span><span class="bu">abs</span>(n), <span class="bu">abs</span>(n) <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a>        <span class="cf">return</span> <span class="bu">any</span>({n <span class="op">==</span> k <span class="op">*</span> d <span class="cf">for</span> k <span class="kw">in</span> possible_divisors})</span>
+<span id="cb7-7"><a href="#cb7-7"></a>    <span class="cf">else</span>:</span>
+<span id="cb7-8"><a href="#cb7-8"></a>        <span class="co"># This is a new but equivalent check.</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>        <span class="cf">return</span> n <span class="op">%</span> d <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>You might also notice that the <code>d == 0</code> case is quite special: according to our definition of divisibility, when <code>d == 0</code> we know that <code>d</code> divides <code>n</code> if and only if <code>n == 0</code>:</p>
+<p><span class="math display">\[\forall n, d \in \Z,~ d = 0 \Rightarrow (d \mid n \Leftrightarrow n = 0)\]</span></p>
+<p>We can use this to greatly simplify the if branch in our <code>divides2</code> function:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> divides3(d: <span class="bu">int</span>, n: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Return whether d divides n.&quot;&quot;&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="cf">if</span> d <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb8-4"><a href="#cb8-4"></a>        <span class="co"># This is another new, equivalent check.</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>        <span class="cf">return</span> n <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-7"><a href="#cb8-7"></a>        <span class="co"># This is a new but equivalent check.</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a>        <span class="cf">return</span> n <span class="op">%</span> d <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>Our implementation in <code>divides3</code> meets the same function specification as the original <code>divides</code>, but has a much simpler implementation! It is also much more <em>efficient</em> than the original <code>divides</code>, meaning it performs fewer calculations (or computational “steps”) and takes less time to compute its result. Intuitively, this is because the original <code>divides</code> function used the value <code>range(-abs(n), abs(n) + 1)</code> in a comprehension, and so the number of expressions evaluated gets larger as <code>n</code> grows. This is not the case for <code>divides3</code>, which does not use a single <code>range</code> or comprehension in its body!</p>
+<p>What this also means is that we can speed up our implementation of <code>is_prime</code> simply by calling <code>divides3</code> instead of <code>divides</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> is_prime(p: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return whether p is prime.&quot;&quot;&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    possible_divisors <span class="op">=</span> <span class="bu">range</span>(<span class="dv">1</span>, p <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="cf">return</span> (</span>
+<span id="cb9-5"><a href="#cb9-5"></a>        p <span class="op">&gt;</span> <span class="dv">1</span> <span class="kw">and</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>        <span class="bu">all</span>({d <span class="op">==</span> <span class="dv">1</span> <span class="kw">or</span> d <span class="op">==</span> p <span class="cf">for</span> d <span class="kw">in</span> possible_divisors <span class="cf">if</span> divides3(d, p)})  <span class="co"># &lt;-- Note the &quot;divides3&quot;</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    )</span></code></pre></div>
+<p>This is a very powerful idea: we started out with one implementation of the divisibility predicate (<code>divides</code>), and then through some mathematical reasoning wrote a second implementation (<code>divides3</code>) that was logically equivalent to the first, but simpler and faster. But because <code>divides</code> and <code>divides3</code> were logically equivalent, we could safe replace <code>divides</code> with <code>divides3</code> in the implementation of <code>is_prime</code> to make it run faster, without worrying about introducing new errors!</p>
+<p>The idea of <em>swapping out implementations</em> will come up again and again in this course. As the functions and programs you write grows larger, efficiency will be an important consideration for your code, and so it will be common to start with one function implementation and eventually replace it with another. We’re only touching on these idea here with a relatively simple example, but we will talk formally about program efficiency in a later chapter.</p>
+<!-- ### A note about efficiency
+
+The combination of our `is_prime` and `divides` code is actually extremely inefficient.
+To understand why, let us use the example function call `is_prime(5)`.
+How many `possible_divisors` will we have?
+
+```python
+>>> p = 5
+>>> possible_divisors = range(1, p + 1)
+>>> list(possible_divisors)
+[1, 2, 3, 4, 5]
+```
+
+Now let's consider the set comprehension in `is_prime`.
+The filtering condition, `if divides(d, p)`, will check every integer in `possible_divisors`.
+This means that our `divides` function will be called five times (`len(possible_divisors)`).
+But `divides` has its own set of `possible_divisors`, too!^[
+    Remember: `range(- abs(n), abs(n) + 1)`.
+    ]
+Let's track this with a table:
+
+  `is_prime` calls to `divides` `possible_divisors` in `divides`
+  ----------------------------- --------------------------------
+  `divides(1, 5)`               `range(-abs(5), abs(5) + 1)`
+  `divides(2, 5)`               `range(-abs(5), abs(5) + 1)`
+  `divides(3, 5)`               `range(-abs(5), abs(5) + 1)`
+  `divides(4, 5)`               `range(-abs(5), abs(5) + 1)`
+  `divides(5, 5)`               `range(-abs(5), abs(5) + 1)`
+
+There are two take-aways from this table.
+First, the number of rows in the table is equal to the integer (i.e., $p$) we pass to `is_prime` (here, we showed `5`, but imagine if we checked `143512`).
+Second, the range of `possible_divisors` in `divides` is roughly twice the integer we past to `is_prime`.
+Together, this means that Python is performing around $p \times 2 \times p$ calculations for any prime number we want to check.
+As a comparison, how many calculations would you need to do without Python to see if $5$ is prime?
+Is it less than $5 \times 2 \times 5 = 50$?
+Efficiency is an important part of computer science that we will talk about formally in a later chapter. -->
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

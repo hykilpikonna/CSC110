@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>10.2 Object-Oriented Modelling of Our Problem Domain</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">10.2 Object-Oriented Modelling of Our Problem Domain</h1>
+</header>
+<section>
+<p>In the previous section, we said that a system is a collection of entities that interact with each other over time. In this section, we will explore what data should be a part of our problem domain—a food delivery system—and how that data might change over time. We’ll introduce an object-oriented approach to modelling this data in Python, using both data classes and general classes to represent different entities.</p>
+<p>One thing to keep in mind as we proceed through this section (and the rest of the chapter) is that just like in the “real world”, the scope of our problem domain is not fixed and can change over time. We are interested in the minimum set of data needed for our system to be meaningful, keeping the scope small at first with the potential to expand over time. Throughout this section, we’ll point out places where we make <em>simplifying assumptions</em> that reduce the complexity of our system, which can serve as potential avenues for your own independent explorations after working through this chapter.</p>
+<h2 id="entities-in-a-food-delivery-system">Entities in a food delivery system</h2>
+<p>A good first step in modelling our problem domain is to identify the relevant entities in the domain. Here is our initial description of <em>Hercules</em> from the previous section:</p>
+<blockquote>
+<p>Consider a person or household doing a self-quarantine during the pandemic. One of the main logistical challenges they have to face is how to arrange for food during their quarantine. To help address this need, you have founded <em>Hercules Ltd.</em>, a non-profit organization that allows people under quarantine to order groceries and meals from grocery stores and restaurants, and arranges for couriers to make deliveries right to their front doors.</p>
+</blockquote>
+<p>We use two strategies for picking out relevant entities from an English description like this one:</p>
+<ol type="1">
+<li>Identify different roles that people/groups play in the domain. Each “role” is likely an entity: e.g., <em>customer</em>, <em>courier</em>, and <em>restaurant</em> are three distinct roles in the system.</li>
+<li>Identify a bundle of data that makes sense as a logical unit. Each “bundle” is likely an entity: e.g., an <em>order</em> is a bundle of related information about a user’s food request.</li>
+</ol>
+<p>In an object-oriented design, a standard approach is to create a class to represent each of these entities. Should we make a data class or a general class for each one? There are no easy answers to this question, but a good strategy to use is to <em>start</em> with a data class, since data classes are easier to create, and turn it into a general class if we need a more complex design (e.g., to add methods, including the initializer, or mark attributes as private).</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="at">@dataclass</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">class</span> Restaurant:</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="co">&quot;&quot;&quot;A place that serves food.&quot;&quot;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="at">@dataclass</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">class</span> Customer:</span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="co">&quot;&quot;&quot;A person who orders food.&quot;&quot;&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="at">@dataclass</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="kw">class</span> Courier:</span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="co">&quot;&quot;&quot;A person who delivers food orders from restaurants to customers.&quot;&quot;&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="at">@dataclass</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="kw">class</span> Order:</span>
+<span id="cb1-15"><a href="#cb1-15"></a>    <span class="co">&quot;&quot;&quot;A food order from a customer.&quot;&quot;&quot;</span></span></code></pre></div>
+<p>Once we have identified the classes representing the entities in the system, we now dive into the details of the system to identify appropriate <em>attributes</em> for each of these data classes. We’ll discuss our process for two of these data classes in this section, and leave the other two to lecture this week.</p>
+<h2 id="designing-the-restaurant-data-class">Designing the <code>Restaurant</code> data class</h2>
+<p>Let us consider how we might design a restaurant data class. What would a restaurant need to have stored as data? It is useful to envision how a user might interact with the app. A user might want to browse a list of restaurants available, and so we need a way to identify each restaurant: its <em>name</em>. After selecting a restaurant, a user needs to see what food is available to order, so we need to store a <em>food menu</em> for each restaurant. Finally, couriers need to know where restaurants are in order to pick up food orders, and so we need to store a <em>location</em> for each restaurant.</p>
+<p>Each of these three pieces of information—restaurant name, food menu, and location—are appropriate <em>attributes</em> for the restaurant. Now we have to decide what data types to use to represent this data. You have much practice doing this, stretching back to all the way to the beginning of this course! Yet as we’ll see, there are design decisions to be made even when choosing individual attributes.</p>
+<ul>
+<li><p>The restaurant <em>name</em> is fairly straightforward: we’ll use a <code>str</code> to represent it.</p></li>
+<li><p>The restaurant <em>menu</em> has a few different options. For this section, we’ll use a <code>dict</code> that maps the names of dishes (<code>str</code>s) to their price (<code>float</code>s).</p></li>
+<li><p>There are many ways to represent a restaurant’s location. For example, we could store its address, as a <code>str</code>. Or we could improve the precision of our data and store the latitude and longitude (a tuple of <code>float</code>s), which would be useful for displaying restaurants on maps.</p>
+<p>For now, we’ll store both address and latitude/longitude information for each restaurant. It may be that both representations are useful, and should be stored by our application.</p></li>
+</ul>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="at">@dataclass</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">class</span> Restaurant:</span>
+<span id="cb2-3"><a href="#cb2-3"></a>    <span class="co">&quot;&quot;&quot;A place that serves food.</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">      - name: the name of the restaurant</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">      - address: the address of the restaurant</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">      - menu: the menu of the restaurant with the name of the dish mapping to</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">        the price</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">      - location: the location of the restaurant as (latitude, longitude)</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">      - all(self.menu[item] &gt;= 0 for item in self.menu)</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">      - -90 &lt;= self.location[0] &lt;= 90</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">      - -180 &lt;= self.location[1] &lt;= 180</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a>    name: <span class="bu">str</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a>    address: <span class="bu">str</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a>    menu: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]</span>
+<span id="cb2-20"><a href="#cb2-20"></a>    location: <span class="bu">tuple</span>[<span class="bu">float</span>, <span class="bu">float</span>]</span></code></pre></div>
+<p>There is one other subtlety with this design before we move on. The menu is a compound data type, and we chose to represent it using one of Python’s built-in data structures. But another approach would have been to create a completely separate <code>Menu</code> data class. That is certainly a viable option, but we were wary of falling into the trap of creating too many classes in our simulation. Each new class we create introduces a little more complexity into our program, and for a relatively simple class for a menu, we did not think this additional complexity was worth it.</p>
+<p>On the flip side, we could have used a dictionary to represent a restaurant instead of a <code>Restaurant</code> data class. This would have reduced on area of complexity (the number of classes to keep track of), but introduced another (the “valid” keys of a dictionary used to represent a restaurant). There is always a trade-off in design, and when evaluating trade-offs one should never forget cognitive load on the programmer.</p>
+<h2 id="designing-the-order-data-class">Designing the <code>Order</code> data class</h2>
+<p>Now let’s discuss a data class that’s a bit more abstract: a single order. An order must track the <em>customer</em> who placed the order, the <em>restaurant</em> where the food is being ordered from, and the <em>food items</em> that are being ordered. We can also imagine that an order should have an associated courier who has been assigned to deliver the order. We’ll also keep track of when the order was created, and when the order is completed.</p>
+<p>There’s one subtlety with two of these attributes: the associated courier and the time when the order is completed might only be assigned values after the order has been created. So we use a default value <code>None</code> to assign to these two instance attributes when an <code>Order</code> is first created. We could implement this by converting the data class to a general class and writing our own <code>__init__</code> method, but instead we’ll take advantage of a new feature with data classes: the ability to specify default values for an instance attribute after the type annotation.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="at">@dataclass</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">class</span> Order:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">&quot;&quot;&quot;A food order from a customer.</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">    Attributes:</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">      - customer: the name of the customer who placed this order</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">      - restaurant: the name of the restaurant the order is placed for</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">      - food_items: a mapping from names of food to the quantity being ordered</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">      - start_time: the time the order was placed</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">      - courier: the courier assigned to this order (initially None)</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">      - end_time: the time the order was completed by the courier (initially None)</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">    Representation Invariants:</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">      - self.food_items != []</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">      - all(self.food_items[i][1] &gt; 0 for i in range(len(self.food_items)))</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>    customer: Customer</span>
+<span id="cb3-18"><a href="#cb3-18"></a>    restaurant: Restaurant</span>
+<span id="cb3-19"><a href="#cb3-19"></a>    food_items: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">int</span>]</span>
+<span id="cb3-20"><a href="#cb3-20"></a>    start_time: datetime.datetime</span>
+<span id="cb3-21"><a href="#cb3-21"></a>    courier: Optional[Courier] <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    end_time: Optional[datetime.datetime] <span class="op">=</span> <span class="va">None</span></span></code></pre></div>
+<p>The line <code>courier: Optional[Courier] = None</code> is how we define an instance attribute <code>Courier</code> with a default value of <code>None</code>. The type annotation <code>Optional[Courier]</code> means that this attribute can either be <code>None</code> or a <code>Courier</code> instance. Similarly, the <code>end_time</code> attribute must be either <code>None</code> (its initial value) or a <code>datetime.datetime</code> value.</p>
+<p>Here is how we could use this class (note that <code>Customer</code> is currently an empty data class, and so is instantiated simply as <code>Customer()</code>):</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Customer()</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> mcdonalds <span class="op">=</span> Restaurant(name<span class="op">=</span><span class="st">&#39;McDonalds&#39;</span>, address<span class="op">=</span><span class="st">&#39;160 Spadina Ave&#39;</span>,</span>
+<span id="cb4-3"><a href="#cb4-3"></a>...                        menu<span class="op">=</span>{<span class="st">&#39;fries&#39;</span>: <span class="fl">4.5</span>}, location<span class="op">=</span>(<span class="fl">43.649</span>, <span class="op">-</span><span class="fl">79.397</span>))</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="op">&gt;&gt;&gt;</span> order <span class="op">=</span> Order(customer<span class="op">=</span>david, restaurant<span class="op">=</span>mcdonalds,</span>
+<span id="cb4-5"><a href="#cb4-5"></a>...               food_items<span class="op">=</span>{<span class="st">&#39;fries&#39;</span>: <span class="dv">10</span>},</span>
+<span id="cb4-6"><a href="#cb4-6"></a>...               start_time<span class="op">=</span>datetime.datetime(<span class="dv">2020</span>, <span class="dv">11</span>, <span class="dv">5</span>, <span class="dv">11</span>, <span class="dv">30</span>))</span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="op">&gt;&gt;&gt;</span> order.courier <span class="kw">is</span> <span class="va">None</span>  <span class="co"># Illustrating default values</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="va">True</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="op">&gt;&gt;&gt;</span> order.end_time <span class="kw">is</span> <span class="va">None</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="va">True</span></span></code></pre></div>
+<h2 id="class-composition">Class composition</h2>
+<p>Just as we saw earlier in the course that built-in collection types like lists can be nested within each other, classes can also be “nested” within each other through their instance attributes. Our above <code>Order</code> data class has attributes which are instances of other classes we have defined (<code>Customer</code>, <code>Restaurant</code>, and <code>Courier</code>).</p>
+<p>The relationship between <code>Order</code> and these other classes is called <strong>class composition</strong>, and is a fundamental to object-oriented design. When we create classes for a computational model, these classes don’t exist in isolation. They can interact with each other in several ways, one of which is composition. We use class composition to represent a “has a” relationship between two classes (we say that “an <code>Order</code> has a <code>Customer</code>”).<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> This is in contrast to inheritance, which defines an “is a” relationships between two classes, e.g. “<code>Stack1</code> is a <code>Stack</code>”.</span></p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

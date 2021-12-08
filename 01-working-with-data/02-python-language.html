@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>1.2 Introducing the Python Programming Language</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">1.2 Introducing the Python Programming Language</h1>
+</header>
+<section>
+<p>For the thousands of years of human history before the mid-twentieth century, humans collected, analysed, and created data by hand. Digital computers were a revolution not just in technology but in civilization because of their ability to store more data than could fit on all the sheets of paper in the world, and to perform computations on this data faster and more reliably than an army of humans. Today, we rely on complex computer programs to operate on data in a variety of ways, from sending messages back and forth with loved ones, organizing data in documents and media, to running simulations of physical, social, and biological systems.</p>
+<p>Yet for all their computation power, computers have one fundamental limitation: they have no agency, no inherent ability to make decisions about what to do. All they can do is take a set of (possibly very complex!) instructions, what we call a <em>computer program</em>, and execute them—no more, and no less. And so if we, as computer scientists, want to harness the awesome power of computers, we need to learn how give these instructions in a way that a computer understands. We need to learn how to speak to a computer.</p>
+<h2 id="what-is-a-programming-language">What is a programming language?</h2>
+<p>A <strong>programming language</strong> is a way of communicating a set of instructions to a computer. Like human languages such as English, a programming language consists of a set of allowed words and the rules for putting those words together to form phrases with a coherent meaning.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> In your past learning of a (human) language, you’ve likely referred to these rules as the <em>grammar</em> of a language.</span> Unlike human languages, a programming language must be precise enough to be understood by a computer, and so operates with a relatively small set of words and very structured rules for putting them together. Learning a programming language can be frustrating at first, because even a slight deviation from these rules results in the computer being unable to comprehend what we’ve written. But our time and efforts spent mastering the rules of a programming language yield a wonderful reward: the computer will not just understand what we’re saying, but faithfully execute them.</p>
+<p>A <strong>program</strong> is simply the text of the instructions we wish to instruct the computer to execute; we call this text program <strong>code</strong> to differentiate it from other forms of text. To write programs in a particular language, we need to understand two key properties of the language. The first is the <strong>syntax</strong> of a programming language, which is the name we give to the rules governing what constitutes a valid program in the language. Before a computer can execute a program, it must read the instructions for the program; the syntax of the programming language specifies the format of these instructions. The second concept is the <strong>semantics</strong> of a programming language, which refers to the rules governing the <em>meaning</em> of different instructions in the language. Once the computer has read the instructions in a program, it begins executing them. The language semantics specifies what the computer should do for each instruction.</p>
+<h2 id="the-python-programming-language">The Python programming language</h2>
+<p>Just as there are thousands of human languages in the world today, each with their own vocabulary, grammar, and stylistic conventions, so too is there a plethora of programming languages that we can choose from. In this course, we’ll use the Python programming language, which offers a simple, beginner-friendly syntax and a set of language instructions whose semantics are both powerful and accessible.</p>
+<p>Now, neither our computer hardware nor operating system understand the Python programming language. Instead, the creators of the Python language developed a program called the <strong>Python interpreter</strong>, whose job is to take programs written in the Python language and execute the instructions.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> So when you “download Python”, what you’re actually downloading and installing is this Python interpreter software.</span> You can think of the Python interpreter as a mediator between you the programmer, writing communicating in Python, and the computer hardware that actually executes instructions.</p>
+<p>There are two ways of writing code in the Python language to be understood by the interpreter. The first is to write full programs in the Python language, saving them as text files,<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Python programs use the <code>.py</code> file extension to distinguish them from other text files.</span> and then running them through the Python interpreter. This is the standard way of writing programs: write the instructions, and then run them with the interpreter. The second way is to run the Python interpreter in an interactive mode, which we call the <strong>Python console</strong> or <strong>Python shell</strong>. In this mode, we can write small fragments of Python code and ask the Python interpreter to execute each fragment one at a time. The Python console is useful for experimenting and exploring the language, as you get feedback after every single instruction. The drawback is that interactions with the interpreter in the Python console are ephemeral, lost every time you restart the console. So we’ll use the following approach through the course: <em>use the Python console to learn about and experiment with the Python language, and write full programs in <code>.py</code> files</em>.</p>
+<div class="fullwidth">
+<p><video src="videos/python_console_demo.webm" autoplay="true" muted="true" loop="true" controls=""><a href="videos/python_console_demo.webm">Python console Demo</a></video><br />
+</p>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.8 Richer Type Annotations</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.8 Richer Type Annotations</h1>
+</header>
+<section>
+<p>Recall our definition of <code>max_length</code> from the previous section:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">      - len(strings) &gt; 0</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>Let us introduce another issue:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> max_length({<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>})</span>
+<span id="cb2-2"><a href="#cb2-2"></a>Traceback (most recent call last):</span>
+<span id="cb2-3"><a href="#cb2-3"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>setcomp<span class="op">&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="pp">TypeError</span>: <span class="bu">object</span> of <span class="bu">type</span> <span class="st">&#39;int&#39;</span> has no <span class="bu">len</span>()</span></code></pre></div>
+<p>Once again, our specification of valid inputs has failed us. The parameter type for <code>max_length</code> is <code>set</code>, and in Python <code>set</code>s can contain the values of many different types. It is not until the function description that we see that the parameter is not just <em>any</em> set, but specifically a set of strings. We could make this requirement more explicit by introducing another precondition, but there is a better approach. In this section, we’ll learn how to use Python’s <code>typing</code> module to increase the specificity of our type annotations.</p>
+<h2 id="the-types-in-a-collection">The types in a collection</h2>
+<p>There are four collection types that have seen so far: <code>set</code>, <code>list</code>, <code>tuple</code>, and <code>dict</code>. These are analogous to the data types we’ve been using so far, with one key exception: we can specify the types of the values they can contained by writing them in square brackets. The table below shows these types and some examples; note that <code>T</code>, <code>T1</code>, etc. are variables that could be replaced with any data type.</p>
+<div class="fullwidth" style="font-size: 0.9em;">
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 75%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>set[T]</code></td>
+<td>A set whose elements all have type <code>T</code></td>
+</tr>
+<tr class="even">
+<td><code>list[T]</code></td>
+<td>A list whose elements all have type <code>T</code></td>
+</tr>
+<tr class="odd">
+<td><code>tuple[T1, T2, ...]</code></td>
+<td>A tuple whose first element has type <code>T1</code>, second element has type <code>T2</code>, etc.</td>
+</tr>
+<tr class="even">
+<td><code>dict[T1, T2]</code></td>
+<td>A dictionary whose keys are of type <code>T1</code> and whose values are of type <code>T2</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example:</p>
+<ul>
+<li><code>{'hi', 'bye'}</code> has type <code>set[str]</code></li>
+<li><code>[1, 2, 3]</code> has type <code>list[int]</code></li>
+<li><code>('hello', True, 3.4)</code> has type <code>tuple[str, bool, float]</code></li>
+<li><code>{'a': 1, 'b': 2, 'c': 3}</code> has type <code>dict[str, int]</code></li>
+</ul>
+<p>Here is how we can improve the type contract for <code>max_length</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> max_length(strings: <span class="bu">set</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum length of a string in the set of strings.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">      - len(strings) &gt; 0</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="cf">return</span> <span class="bu">max</span>({<span class="bu">len</span>(s) <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<h3 id="general-collections">General collections</h3>
+<p>Though indicating the type of the values inside a collection is useful, it is not always necessary. Sometimes we <em>want</em> to be flexible and say that a value must be a list, but we don’t care what’s in the list (could be a list of strings, a list of integers, or a list of strings mixed with integers). Or, we might want a list (or other collection) with elements of different types. In such cases, we will continue using the built-in types <code>set</code>, <code>list</code>, <code>tuple</code>, and <code>dict</code>, for these types annotations <em>without</em> additional information.</p>
+<h2 id="applying-what-weve-learned">Applying what we’ve learned</h2>
+<p>Let us revisit a function we designed when discussing if statements:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> get_status_v3(scheduled: <span class="bu">int</span>, estimated: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Return the flight status for the given scheduled and estimated departure times.</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">    The times are given as integers between 0 and 23 inclusive, representing</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">    the hour of the day.</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    The status is &#39;On time&#39;, &#39;Delayed&#39;, or &#39;Cancelled&#39;.</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>How can we improve the specification of this function? Looking at the type annotations we see that, since none are collection types, we cannot make them any more specific than they already are. Next, looking at the docstring we see that there is the potential for some preconditions:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> We kept the English description of what the times represent, but moved the Python-checkable part into formal preconditions.</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> get_status_v3(scheduled: <span class="bu">int</span>, estimated: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return the flight status for the given scheduled and estimated departure times.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">    The times given represent the hour of the day.</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    Preconditions:</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">      - 0 &lt;= scheduled &lt;= 23</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">      - 0 &lt;= estimated &lt;= 23</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>Next let us revisit the <code>count_cancelled</code> function we designed:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> count_cancelled(flights: <span class="bu">dict</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of cancelled flights for the given flight data.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">    flights is a dictionary where each key is a flight ID,</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">    and whose corresponding value is a list of two numbers, where the first is</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">    the scheduled departure time and the second is the estimated departure time.</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">    &gt;&gt;&gt; count_cancelled({&#39;AC110&#39;: [10, 12], &#39;AC321&#39;: [12, 19], &#39;AC999&#39;: [1, 1]})</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">    1</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>    cancelled_flights <span class="op">=</span> {<span class="bu">id</span> <span class="cf">for</span> <span class="bu">id</span> <span class="kw">in</span> flights</span>
+<span id="cb6-12"><a href="#cb6-12"></a>                         <span class="cf">if</span> get_status2(flights[<span class="bu">id</span>][<span class="dv">0</span>], flights[<span class="bu">id</span>][<span class="dv">1</span>]) <span class="op">==</span> <span class="st">&#39;Cancelled&#39;</span>}</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="cf">return</span> <span class="bu">len</span>(cancelled_flights)</span></code></pre></div>
+<p>Here we can improve the type annotations. The first parameter is not just a <code>dict</code>, but a <code>dict[str, list[int]]</code>—that is, its keys are strings (the flight IDs), and the corresponding value is a list of integers. Does this type annotation mean that now the documentation describing the dictionary is irrelevant? No: while the type annotation gives some insight on the structure of the data, it does not provide domain-specific context, like the fact that the <code>str</code> keys represent flight IDs, or that the list values represent scheduled and estimated arrival departure times.</p>
+<p>There is one more precondition that we can formalize, though: the length of each list in our dictionary. <em>Every</em> list should have length two, which translates naturally into a use of Python’s <code>all</code> function:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> count_cancelled(flights: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">list</span>[<span class="bu">int</span>]]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of cancelled flights for the given flight data.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    flights is a dictionary where each key is a flight ID,</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">    and whose corresponding value is a list of two numbers, where the first is</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    the scheduled departure time and the second is the estimated departure time.</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    Precondition:</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">      - all(len(flights[k]) == 2 for k in flights)</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">    &gt;&gt;&gt; count_cancelled({&#39;AC110&#39;: [10, 12], &#39;AC321&#39;: [12, 19], &#39;AC999&#39;: [1, 1]})</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">    1</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a>    cancelled_flights <span class="op">=</span> {<span class="bu">id</span> <span class="cf">for</span> <span class="bu">id</span> <span class="kw">in</span> flights</span>
+<span id="cb7-15"><a href="#cb7-15"></a>                         <span class="cf">if</span> get_status2(flights[<span class="bu">id</span>][<span class="dv">0</span>], flights[<span class="bu">id</span>][<span class="dv">1</span>]) <span class="op">==</span> <span class="st">&#39;Cancelled&#39;</span>}</span>
+<span id="cb7-16"><a href="#cb7-16"></a>    <span class="cf">return</span> <span class="bu">len</span>(cancelled_flights)</span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li><a href="../B-python-libraries/04-typing.html">B.4 <code>typing</code></a></li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

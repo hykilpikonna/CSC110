@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.4 Stacks</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.4 Stacks</h1>
+</header>
+<section>
+<p>Over the next few sections of this chapter, we’ll learn about three new abstract data types: Stack, Queue, and Priority Queue. All three of these ADTs store a collection of items, and support operations to add an item and remove an item. However, unlike a Set or List, in which users may specify which item to remove (by value or by index, respectively), these three ADTs remove and return their items in a fixed order—client code is allowed no choice. This might seem restrictive and simplistic, but you’ll soon learn how the power of these ADTs lies in their simplicity. Once you learn about them, you’ll start seeing them everywhere, and be able to effectively communicate about these ADTs to any other computer scientist.</p>
+<h2 id="the-stack-adt">The Stack ADT</h2>
+<p>The <strong>Stack</strong> ADT is very simple. A stack contains zero or more items. When you add an item, it goes “on the top” of the stack (we call this “pushing” onto the stack) and when you remove an item, it is removed from the top also (we call this “popping” from the stack).<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> The name “stack” is a deliberate metaphor for a stack of books on a table.</span> The net effect is that the first item added to the stack is the last item removed. We call this <em>Last-In-First-Out (LIFO)</em> behaviour. To summarize:</p>
+<ul>
+<li><p><strong>Stack</strong></p>
+<ul>
+<li>Data: a collection of items</li>
+<li>Operations: determine whether the stack is empty, add an item (<em>push</em>), remove the most recently-added item (<em>pop</em>)</li>
+</ul></li>
+</ul>
+<p>In code:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">class</span> Stack:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;A last-in-first-out (LIFO) stack of items.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    Stores data in last-in, first-out order. When removing an item from the</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    stack, the most recently-added item is the one that is removed.</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    Sample usage:</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">    &gt;&gt;&gt; s = Stack()</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">    True</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;hello&#39;)</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">    False</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;goodbye&#39;)</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">    &gt;&gt;&gt; s.pop()</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">    &#39;goodbye&#39;</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-20"><a href="#cb1-20"></a>        <span class="co">&quot;&quot;&quot;Initialize a new empty stack.&quot;&quot;&quot;</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a></span>
+<span id="cb1-22"><a href="#cb1-22"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-23"><a href="#cb1-23"></a>        <span class="co">&quot;&quot;&quot;Return whether this stack contains no items.</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a></span>
+<span id="cb1-26"><a href="#cb1-26"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-27"><a href="#cb1-27"></a>        <span class="co">&quot;&quot;&quot;Add a new element to the top of this stack.</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a></span>
+<span id="cb1-30"><a href="#cb1-30"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb1-31"><a href="#cb1-31"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="co">        Preconditions:</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="co">            - not self.is_empty()</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a><span class="co">        &quot;&quot;&quot;</span></span></code></pre></div>
+<p>At this point, you may be wondering how we fill in the method bodies, picturing perhaps a <code>list</code> instance attribute to store the items in the stack. But remember, thinking about implementation is irrelevant when you are using an ADT. At this point, you should picture a pile of objects stacked on top of each other—this is enough to understand each of the doctest examples in the above code. Abstraction allows us to separate our understanding of what the Stack ADT is from how it is implemented.</p>
+<h2 id="applications-of-stacks">Applications of stacks</h2>
+<p>Because they have so few methods, it may seem like stacks are not that powerful. But in fact, stacks are useful for many things. For instance, they can be used to check for balanced parentheses in a mathematical expression. And consider the execution of a Python program. We have talked about frames that store the names available at a given moment in its execution. What happens when <code>f</code> calls <code>g</code>, which calls <code>h</code>? When <code>h</code> is over, we go back to <code>g</code> and when <code>g</code> is over we go back to <code>f</code>. To make this happen, our frames go on a stack! Hence the names <em>call stack</em> and <em>stack frame</em> from our memory model.</p>
+<p>As a more “real world” example, consider the undo feature in many different applications. When we perform an action by mistake and want to undo it, we want to undo <em>the most recent</em> action, and so the Stack ADT is the perfect abstract data type for keeping track of the history of our actions so that we can undo them. A similar application lies in how web browsers store page visits so that we can go back to the most recently-visited page.</p>
+<h2 id="implementing-the-stack-adt-using-lists">Implementing the Stack ADT using lists</h2>
+<p>Next, we’ll now implement the Stack ADT using a built-in Python data structure: the <code>list</code>. We’ve chosen to use the <em>end</em> of the list to represent the top of the stack.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python fullwidth"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">class</span> Stack1:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;A last-in-first-out (LIFO) stack of items.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">    Stores data in first-in, last-out order. When removing an item from the</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    stack, the most recently-added item is the one that is removed.</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">    Instance Attributes:</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">        - items: The items stored in the stack. The end of the list represents</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">          the top of the stack.</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">    &gt;&gt;&gt; s = Stack1()</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">    True</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;hello&#39;)</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">    False</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;goodbye&#39;)</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">    &gt;&gt;&gt; s.pop()</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">    &#39;goodbye&#39;</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a>    items: <span class="bu">list</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a></span>
+<span id="cb2-23"><a href="#cb2-23"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-24"><a href="#cb2-24"></a>        <span class="co">&quot;&quot;&quot;Initialize a new empty stack.</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a>        <span class="va">self</span>.items <span class="op">=</span> []</span>
+<span id="cb2-27"><a href="#cb2-27"></a></span>
+<span id="cb2-28"><a href="#cb2-28"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb2-29"><a href="#cb2-29"></a>        <span class="co">&quot;&quot;&quot;Return whether this stack contains no items.</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a>        <span class="cf">return</span> <span class="va">self</span>.items <span class="op">==</span> []</span>
+<span id="cb2-32"><a href="#cb2-32"></a></span>
+<span id="cb2-33"><a href="#cb2-33"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-34"><a href="#cb2-34"></a>        <span class="co">&quot;&quot;&quot;Add a new element to the top of this stack.</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a>        <span class="va">self</span>.items.append(item)</span>
+<span id="cb2-37"><a href="#cb2-37"></a></span>
+<span id="cb2-38"><a href="#cb2-38"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb2-39"><a href="#cb2-39"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="co">        Preconditions:</span></span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="co">            - not self.is_empty()</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a>        <span class="cf">return</span> <span class="va">self</span>.items.pop()</span></code></pre></div>
+<h2 id="attributes-and-the-class-interface">Attributes and the class interface</h2>
+<p>Our current <code>Stack1</code> class is correct, but has one subtle difference with the Stack ADT it is supposed to implement. While a user can create a new <code>Stack1</code> object and call its methods <code>push</code> and <code>pop</code> to interact with it, they can also do one more thing: access the <code>items</code> instance attribute. This means that any user of a <code>Stack1</code> object can access any item in the stack at any time, or even mutate <code>items</code> to modify the contents of the stack in unexpected ways.</p>
+<p>You might wonder why this is an issue—if a user wants to change the <code>items</code> attribute, let them! And indeed this is a common and valid approach in programming, particularly in favour with many Python developers. However, it is not the only approach. Another school of thought is that a data type’s interface should communicate not just how to use it, but also how <em>not</em> to use it. For our current <code>Stack1</code> implementation, the instance attribute <code>items</code> is part of the class’ interface, and so all users can reasonably expect to use it.</p>
+<p>To make an instance attribute that <em>isn’t</em> part of a class’ interface, we prefix its name with an underscore <code>_</code>. We refer to attributes whose names begin with an underscore as <strong>private instance attributes</strong>, and those without the underscore (all the attributes we’ve seen so far) as <strong>public instance attributes</strong>. These names suggest how they’re interpreted when it comes to a class interface: all public instance attributes are part of the interface, and all private ones aren’t.</p>
+<p>Here’s how we could modify our <code>Stack1</code> implementation to make <code>items</code> a private attribute instead.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python fullwidth"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">class</span> Stack1:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;A last-in-first-out (LIFO) stack of items.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">    Stores data in first-in, last-out order. When removing an item from the</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">    stack, the most recently-added item is the one that is removed.</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">    &gt;&gt;&gt; s = Stack1()</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">    True</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;hello&#39;)</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">    &gt;&gt;&gt; s.is_empty()</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">    False</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">    &gt;&gt;&gt; s.push(&#39;goodbye&#39;)</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">    &gt;&gt;&gt; s.pop()</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">    &#39;goodbye&#39;</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a>    <span class="co"># Private Instance Attributes:</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a>    <span class="co">#   - _items: The items stored in the stack. The end of the list represents</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a>    <span class="co">#     the top of the stack.</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a>    _items: <span class="bu">list</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a></span>
+<span id="cb3-22"><a href="#cb3-22"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-23"><a href="#cb3-23"></a>        <span class="co">&quot;&quot;&quot;Initialize a new empty stack.</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a>        <span class="va">self</span>._items <span class="op">=</span> []</span>
+<span id="cb3-26"><a href="#cb3-26"></a></span>
+<span id="cb3-27"><a href="#cb3-27"></a>    <span class="kw">def</span> is_empty(<span class="va">self</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb3-28"><a href="#cb3-28"></a>        <span class="co">&quot;&quot;&quot;Return whether this stack contains no items.</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a>        <span class="cf">return</span> <span class="va">self</span>._items <span class="op">==</span> []</span>
+<span id="cb3-31"><a href="#cb3-31"></a></span>
+<span id="cb3-32"><a href="#cb3-32"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-33"><a href="#cb3-33"></a>        <span class="co">&quot;&quot;&quot;Add a new element to the top of this stack.</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-35"><a href="#cb3-35"></a>        <span class="va">self</span>._items.append(item)</span>
+<span id="cb3-36"><a href="#cb3-36"></a></span>
+<span id="cb3-37"><a href="#cb3-37"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb3-38"><a href="#cb3-38"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb3-39"><a href="#cb3-39"></a></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="co">        Preconditions:</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="co">            - not self.is_empty()</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a>        <span class="cf">return</span> <span class="va">self</span>._items.pop()</span></code></pre></div>
+<p>Other than renaming the attribute from <code>items</code> to <code>_items</code>, the only change is in how we document this attribute. We’ve kept the same format, but now moved the description from the class docstring to comments in the class body. By doing so, there is now no mention of this attribute when we call <code>help</code> on our class:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">help</span>(Stack1)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="kw">class</span> Stack1(builtins.<span class="bu">object</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a> <span class="op">|</span>  Stack1() <span class="op">-&gt;</span> <span class="va">None</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a> <span class="op">|</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a> <span class="op">|</span>  A last<span class="op">-</span><span class="kw">in</span><span class="op">-</span>first<span class="op">-</span>out (LIFO) stack of items.</span>
+<span id="cb4-6"><a href="#cb4-6"></a> <span class="op">|</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a> <span class="op">|</span>  Stores data <span class="kw">in</span> a last<span class="op">-</span><span class="kw">in</span>, first<span class="op">-</span>out order. When removing an item <span class="im">from</span> the</span>
+<span id="cb4-8"><a href="#cb4-8"></a> <span class="op">|</span>  stack, the most recently<span class="op">-</span>added item <span class="kw">is</span> the one that <span class="kw">is</span> removed.</span>
+<span id="cb4-9"><a href="#cb4-9"></a> <span class="op">|</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack1()</span>
+<span id="cb4-11"><a href="#cb4-11"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s.is_empty()</span>
+<span id="cb4-12"><a href="#cb4-12"></a> <span class="op">|</span>  <span class="va">True</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s.push(<span class="st">&#39;hello&#39;</span>)</span>
+<span id="cb4-14"><a href="#cb4-14"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s.is_empty()</span>
+<span id="cb4-15"><a href="#cb4-15"></a> <span class="op">|</span>  <span class="va">False</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s.push(<span class="st">&#39;goodbye&#39;</span>)</span>
+<span id="cb4-17"><a href="#cb4-17"></a> <span class="op">|</span>  <span class="op">&gt;&gt;&gt;</span> s.pop()</span>
+<span id="cb4-18"><a href="#cb4-18"></a> <span class="op">|</span>  <span class="st">&#39;goodbye&#39;</span></span>
+<span id="cb4-19"><a href="#cb4-19"></a> <span class="op">|</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a> <span class="op">|</span>  [The rest <span class="kw">is</span> omitted]</span>
+<span id="cb4-21"><a href="#cb4-21"></a> <span class="op">|</span></span></code></pre></div>
+<h3 id="warning-private-attributes-can-be-accessed">Warning: private attributes can be accessed!</h3>
+<p>One of the distinctive features of Python that separates it from many other programming languages is that private instance attributes can still be accessed from outside the class.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> s <span class="op">=</span> Stack1()</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> s.push(<span class="dv">10</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> s.push(<span class="dv">20</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="op">&gt;&gt;&gt;</span> s._items</span>
+<span id="cb5-5"><a href="#cb5-5"></a>[<span class="dv">10</span>, <span class="dv">20</span>]</span></code></pre></div>
+<p>This is a design choice made by the creators of the Python programming language to prefer <em>flexibility</em> over <em>restriction</em> when it comes to accessing attributes. But does this mean private attributes are meaningless? <em>No!</em> By making an instance attribute private, we are communicating that client code should <em>not</em> access this attribute: it is not an expected way of interacting with this class. As a result, we reduce the cognitive load on the client (one less attribute to think about when using the class), and also give flexibility to the designer of the class to change or even remove a private attribute if they want to update their implementation of the class, without affecting the class’ public interface.</p>
+<h2 id="analyzing-efficiency">Analyzing efficiency</h2>
+<p>We implemented <code>Stack1</code> using the back of the <code>_items</code> list to represent the top of the stack. You might wonder why we didn’t use the front of <code>_items</code> instead. Indeed, the implemention wouldn’t have to change much:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> Stack2:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co"># Duplicated code from Stack1 omitted. Only push and pop are different.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    <span class="kw">def</span> push(<span class="va">self</span>, item: Any) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-5"><a href="#cb6-5"></a>        <span class="co">&quot;&quot;&quot;Add a new element to the top of this stack.</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a>        <span class="va">self</span>._items.insert(<span class="dv">0</span>, item)</span>
+<span id="cb6-8"><a href="#cb6-8"></a></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    <span class="kw">def</span> pop(<span class="va">self</span>) <span class="op">-&gt;</span> Any:</span>
+<span id="cb6-10"><a href="#cb6-10"></a>        <span class="co">&quot;&quot;&quot;Remove and return the element at the top of this stack.</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">        Preconditions:</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">            - not self.is_empty()</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a>        <span class="cf">return</span> <span class="va">self</span>._items.pop(<span class="dv">0</span>)</span></code></pre></div>
+<p>The key difference between <code>Stack1</code> and <code>Stack2</code> is not their code complexity but their <em>efficiency</em>. In Chapter 8, we learned that Python uses an array-based implementation for lists. Because of this, the <code>list.append</code> operation for an array-based list is <span class="math inline">\(\Theta(1)\)</span>, therefore <code>Stack1.push</code> is also <span class="math inline">\(\Theta(1)\)</span>. In contrast, <code>list.insert</code> has complexity <span class="math inline">\(\Theta(n - i)\)</span>, where <span class="math inline">\(i\)</span> is the index argument passed to <code>list.insert</code>. In <code>Stack2.push</code>, <span class="math inline">\(i = 0\)</span> and so the method has complexity <span class="math inline">\(\Theta(n)\)</span>. So the <code>push</code> operation for stacks is more efficient when we treat the end of an array-based list as the top of the stack.</p>
+<p>Similarly, removing the last element of an array-based list using <code>list.pop</code> is also <span class="math inline">\(\Theta(1)\)</span>, and so the running time of <code>Stack1.pop</code> is <span class="math inline">\(\Theta(1)\)</span>. However, <code>Stack2.pop</code> uses passes an index of 0 to <code>list.pop</code>, which causes the method to have a <span class="math inline">\(\Theta(n)\)</span> running time.</p>
+<p>The decision of which implementation has superior efficiency is clear: <code>Stack1</code> will always be more efficient than <code>Stack2</code>. Having such a clear-cut winner is actually quite rare. There are almost always trade-offs associated with choosing one implementation over another. We will see one such trade-off when we introduce our next ADT: queues.</p>
+</section>
+<!--
+If a client creates a `Stack` object in their code, they know
+there are exactly three operations that can be performed on it:
+checking whether it's empty, pushing an item onto it, and popping an item from it.
+This reduces cognitive load for the programmer dramatically.
+Modern, complex software would be impossible otherwise.
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

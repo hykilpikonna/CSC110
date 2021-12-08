@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>4.5 For Loop Variations</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">4.5 For Loop Variations</h1>
+</header>
+<section>
+<p>In the last section we introduced for loops and the accumulator pattern. The examples we used all had very similar code, with some differences in the type of collection we iterated over and how we initialized and updated our accumulator variable. In this section, we’ll study two variations of the basic loop accumulator pattern: having multiple accumulator variables for the same loop, and using if statements to perform a <em>conditional update</em> of loop accumulators.</p>
+<p>Before proceeding, please take moment to review the loop accumulator pattern:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> <span class="op">&lt;</span>default_value<span class="op">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="cf">for</span> element <span class="kw">in</span> <span class="op">&lt;</span>collection<span class="op">&gt;</span>:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far <span class="op">=</span> ... <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far ... element ...  <span class="co"># Somehow combine loop variable and accumulator</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="cf">return</span> <span class="op">&lt;</span>x<span class="op">&gt;</span>_so_far</span></code></pre></div>
+<h2 id="multiple-accumulators">Multiple accumulators</h2>
+<p>In each example from the last section we used only one accumulator. The pattern can be extended to use multiple accumulators. For example, given a dictionary mapping menu items to prices, how can we get the average price? Remember that an average requires both the sum and the number of elements. We can create two accumulators to accomplish this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> average_menu_price(menu: <span class="bu">dict</span>[<span class="bu">str</span>, <span class="bu">float</span>]) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="co">&quot;&quot;&quot;Return the average price of an item from the menu.</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">    &gt;&gt;&gt; average_menu_price({&#39;fries&#39;: 3.5, &#39;hamburger&#39;: 6.5})</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">    5.0</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="co"># ACCUMULATOR len_so_far: keep track of the number of</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a>    <span class="co"># items in the menu seen so far in the loop.</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a>    len_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a>    <span class="co"># ACCUMULATOR total_so_far: keep track of the cost of</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a>    <span class="co"># all items in the menu seen so far in the loop.</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a>    total_so_far <span class="op">=</span> <span class="fl">0.0</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a>    <span class="cf">for</span> item <span class="kw">in</span> menu:</span>
+<span id="cb2-15"><a href="#cb2-15"></a>        len_so_far <span class="op">=</span> len_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a>        total_so_far <span class="op">=</span> total_so_far <span class="op">+</span> menu[item]</span>
+<span id="cb2-17"><a href="#cb2-17"></a></span>
+<span id="cb2-18"><a href="#cb2-18"></a>    <span class="cf">return</span> total_so_far <span class="op">/</span> len_so_far</span></code></pre></div>
+<p>Here is how we could write a loop accumulation table for this example:</p>
+<div class="fullwidth reference-table">
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 26%" />
+<col style="width: 29%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Iteration</th>
+<th>Loop variable (<code>item</code>)</th>
+<th>Accumulator <code>len_so_far</code></th>
+<th>Accumulator <code>total_so_far</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+<td><code>0.0</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>'fries'</code></td>
+<td><code>1</code></td>
+<td><code>6.5</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>'hamburger'</code></td>
+<td><code>2</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="conditional-execution-of-the-accumulator">Conditional execution of the accumulator</h2>
+<p>Consider the following problem: given a string, count the number of vowels in the string.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> count_vowels(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of vowels in s.</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;aeiou&#39;)</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">    5</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;David&#39;)</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">    2</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>We saw in <a href="04-for-loops.html">4.4 Repeated Execution: For Loops</a> that we could count <em>every</em> character in a given string by using an accumulator that increased by 1 for every loop iteration. We can use the same idea for counting just vowels, but we need to increase the accumulator only when the current character is a vowel.</p>
+<p>In Chapter 3, we learned how to control execution of whole blocks of code using if statements. By nesting an if statement inside a for loop, we can adapt our accumulator pattern to only update the accumulator when certain conditions are met.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> count_vowels(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of vowels in s.</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;aeiou&#39;)</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">    5</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;David&#39;)</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">    2</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>    <span class="co"># ACCUMULATOR vowels_so_far: keep track of the number of vowels</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="co"># seen so far in the loop.</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    vowels_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb4-12"><a href="#cb4-12"></a></span>
+<span id="cb4-13"><a href="#cb4-13"></a>    <span class="cf">for</span> letter <span class="kw">in</span> s:</span>
+<span id="cb4-14"><a href="#cb4-14"></a>        <span class="cf">if</span> letter <span class="kw">in</span> <span class="st">&#39;aeiou&#39;</span>:</span>
+<span id="cb4-15"><a href="#cb4-15"></a>            vowels_so_far <span class="op">=</span> vowels_so_far <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a></span>
+<span id="cb4-17"><a href="#cb4-17"></a>    <span class="cf">return</span> vowels_so_far</span></code></pre></div>
+<p>If <code>word</code> is the empty string, the for loop will not iterate once and the value 0 is returned. This tells us that we have initialized our accumulator correctly. What about the loop body? There are two cases to consider:</p>
+<ol type="1">
+<li>When <code>letter</code> is a vowel, the reassignment <code>vowels_so_far = vowels_so_far + 1</code> increases the number of vowels seen so far by 1.</li>
+<li>When <code>letter</code> is not a vowel, nothing else happens in the current iteration because this if statement has no else branch. The vowel count remains the same.</li>
+</ol>
+<p>Here’s our loop accumulation table for <code>count_vowels('David')</code>. At each iteration, the accumulator either stays the same (when <code>letter</code> is not a vowel) or increases by 1 (when <code>letter</code> is a vowel).</p>
+<div class="reference-table">
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 34%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Loop Iteration</th>
+<th>Loop Variable <code>letter</code></th>
+<th>Accumulator <code>vowels_so_far</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td><code>0</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>'D'</code></td>
+<td><code>0</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>'a'</code></td>
+<td><code>1</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>'v'</code></td>
+<td><code>1</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>'i'</code></td>
+<td><code>2</code></td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td><code>'d'</code></td>
+<td><code>2</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- TODO: Add general control flow diagram of `count_vowels`-->
+<p>We can also contrast this function to an equivalent implementation using a filtering comprehension:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> count_vowels(s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="co">&quot;&quot;&quot;Return the number of vowels in s.</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;aeiou&#39;)</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">    5</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">    &gt;&gt;&gt; count_vowels(&#39;David&#39;)</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">    2</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a>    <span class="cf">return</span> <span class="bu">len</span>([letter <span class="cf">for</span> letter <span class="kw">in</span> s <span class="cf">if</span> letter <span class="kw">in</span> <span class="st">&#39;aeiou&#39;</span>])</span></code></pre></div>
+<p>This version hopefully makes clear that the <code>if letter in 'aeiou</code> in the loop version acts as a <em>filter</em> on the string <code>s</code>, causing the loop accumulator to only be updated for the vowels. In this version, the actual accumulation (<code>vowels_so_far = vowels_so_far + 1</code>) is handled by the call to <code>len</code>.</p>
+<h3 id="implementing-max">Implementing <code>max</code></h3>
+<p>Now let’s consider implementing another built-in aggregation function: <code>max</code>. We’ll require that the input be non-empty, as we cannot compute the maximum element of an empty collection. This allows us to set the initial value of our accumulator based on the input.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> my_max(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Return the maximum value of the numbers in numbers.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">    Preconditions:</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">        - numbers != []</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">    &gt;&gt;&gt; my_max([10, 20])</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">    20</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">    &gt;&gt;&gt; my_max([-5, -4])</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">    -4</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a>    <span class="co"># ACCUMULATOR max_so_far: keep track of the maximum value</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="co"># of the elements in numbers seen so far in the loop.</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>    max_so_far <span class="op">=</span> numbers[<span class="dv">0</span>]</span>
+<span id="cb6-15"><a href="#cb6-15"></a></span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb6-17"><a href="#cb6-17"></a>        <span class="cf">if</span> number <span class="op">&gt;</span> max_so_far:</span>
+<span id="cb6-18"><a href="#cb6-18"></a>            max_so_far <span class="op">=</span> number</span>
+<span id="cb6-19"><a href="#cb6-19"></a></span>
+<span id="cb6-20"><a href="#cb6-20"></a>    <span class="cf">return</span> max_so_far</span></code></pre></div>
+<p>Because we can <em>assume</em> that the precondition holds when implementing <code>my_max</code>, we can access <code>numbers[0]</code> to set the initial value of <code>max_so_far</code> without worrying about getting an <code>IndexError</code>. In the loop, the accumulator <code>max_so_far</code> is updated only when a larger number is encountered (<code>if number &gt; max_so_far</code>). Note that here, the term <em>accumulator</em> diverges from its normal English meaning. At any point during the loop, <code>max_so_far</code> is assigned to a single list element, not some “accumulation” of all list elements see so far. Instead, <code>max_so_far</code> represents the <em>maximum of the elements seen so far</em>, and so what is being accumulated is a set of facts: “the elements seen so far all <code>&lt;= max_so_far</code>”.</p>
+<h3 id="existential-search">Existential search</h3>
+<p>In <a href="../03-logic/02-predicate-logic.html">3.2 Predicate Logic</a>, we saw how to use <code>any</code> to check whether there exists a string in a collection that starts with the letter <code>'D'</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> starts_with(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return whether one of the given strings starts with the character char.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    Precondition:</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">        - all({s != &#39;&#39; for s in strings})</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">        - len(char) == 1</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    &gt;&gt;&gt; starts_with([&#39;Hello&#39;, &#39;Goodbye&#39;, &#39;David&#39;, &#39;Dario&#39;], &#39;D&#39;)</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">    True</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">    &gt;&gt;&gt; starts_with([&#39;Hello&#39;, &#39;Goodbye&#39;, &#39;David&#39;, &#39;Dario&#39;], &#39;A&#39;)</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">    False</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a>    <span class="cf">return</span> <span class="bu">any</span>({s[<span class="dv">0</span>] <span class="op">==</span> char <span class="cf">for</span> s <span class="kw">in</span> words})</span></code></pre></div>
+<p>Our next goal is to implement this function <em>without</em> using the <code>any</code> function, replacing it for loops and if statements. If we take a look at the argument to <code>any</code> above, we see some pretty big hints on how to do this:</p>
+<ol type="1">
+<li>The syntax <code>for s in words</code> can be used to create a for loop.</li>
+<li>The expression <code>s[0] == char</code> can be used as a condition for an if statement.</li>
+</ol>
+<p>Let’s give it a shot using our existing accumulator pattern. Because the result of the function is a <code>bool</code>, our accumulator will also be a <code>bool</code>. Its initial value will be <code>False</code>, which is the correct return value when <code>strings</code> is empty.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> starts_with_v2(words: <span class="bu">list</span>[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co"># ACCUMULATOR starts_with_so_far: keep track of whether</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="co"># any of the words seen by the loop so far starts with char.</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a>    starts_with_so_far <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a></span>
+<span id="cb8-7"><a href="#cb8-7"></a>    <span class="cf">for</span> s <span class="kw">in</span> words:</span>
+<span id="cb8-8"><a href="#cb8-8"></a>        ...</span>
+<span id="cb8-9"><a href="#cb8-9"></a></span>
+<span id="cb8-10"><a href="#cb8-10"></a>    <span class="cf">return</span> starts_with_so_far</span></code></pre></div>
+<p>How do we update the accumulator? We set it to <code>True</code> when the current string <code>s</code> starts with <code>char</code>, which is exactly the condition from the comprehension.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> starts_with_v2(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    <span class="co"># ACCUMULATOR starts_with_so_far: keep track of whether</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>    <span class="co"># any of the strings seen by the loop so far starts with char.</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    starts_with_so_far <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a>    <span class="cf">for</span> s <span class="kw">in</span> strings:</span>
+<span id="cb9-8"><a href="#cb9-8"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> char:</span>
+<span id="cb9-9"><a href="#cb9-9"></a>            starts_with_so_far <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a></span>
+<span id="cb9-11"><a href="#cb9-11"></a>    <span class="cf">return</span> starts_with_so_far</span></code></pre></div>
+<p>Here is a loop accumulation table for <code>starts_with(['Hello', 'Goodbye', 'David', 'Mario'], 'D')</code>. The third iteration assigns <code>starts_with_so_far</code> to <code>True</code>, while in the other iterations nothing occurs.</p>
+<div class="reference-table">
+<table style="width:93%;">
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 27%" />
+<col style="width: 48%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Iteration</th>
+<th>Loop variable <code>s</code></th>
+<th>Accumulator <code>starts_with_so_far</code></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td></td>
+<td><code>False</code></td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td><code>'Hello'</code></td>
+<td><code>False</code></td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td><code>'Goodbye'</code></td>
+<td><code>False</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td><code>'David'</code></td>
+<td><code>True</code></td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td><code>'Mario'</code></td>
+<td><code>True</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="early-returns">Early returns</h3>
+<p>The function <code>starts_with_v2</code> is correct and fits our accumulator pattern well. But you might have noticed that it performs unnecessary work because it must loop through every element of the collection before returning a result. Why is this unnecessary? Because we are interested only in whether <em>there exists</em> a string that starts with the given letter! As soon as the condition <code>s[0] == char</code> evaluates to <code>True</code>, we know that the answer is <em>Yes</em> without checking any of the remaining strings.</p>
+<p>So the question is, how do we take advantage of this observation to make our code more efficient? We can use a return statement inside the body of the loop. Let’s revisit how we described the execution of a return statement in Chapter 2 (new emphasis in <strong>bold</strong>):</p>
+<blockquote>
+<p>When a return statement is executed, the following happens:</p>
+</blockquote>
+<blockquote>
+<ol type="1">
+<li>The <code>&lt;expression&gt;</code> is evaluated, producing a value.</li>
+<li>That value is then returned to wherever the function was called. <strong>No more code in the function body is executed after this point.</strong>"</li>
+</ol>
+</blockquote>
+<p>In all our functions so far, we have written return statements only at the end of our function bodies or branches of an if statement. This should make sense based on the behaviour described above: any code after a return statement will not execute!</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="cf">return</span> <span class="dv">5</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>x <span class="op">=</span> <span class="dv">10</span>  <span class="co"># This statement doesn&#39;t execute!</span></span></code></pre></div>
+<p>But we can combine return statements with if statements to conditionally stop executing any more code in the function body. This is called <em>short-circuiting</em> or <em>early returning</em>.</p>
+<p>So our first attempt at making a more efficient <code>starts_with</code> is to use an early return inside the if branch:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">def</span> starts_with_v3(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>    <span class="cf">for</span> s <span class="kw">in</span> strings:</span>
+<span id="cb11-4"><a href="#cb11-4"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> char:</span>
+<span id="cb11-5"><a href="#cb11-5"></a>            <span class="cf">return</span> <span class="va">True</span></span></code></pre></div>
+<!-- TODO: Add control flow diagram of `starts_with_v3`, showing that there is a path from the for loop to no return statement (or a path from the for loop to the default return statement: return None)-->
+<p>This for loop is strange: it seems we no longer have an accumulator variable! This is actually fairly common for functions that return booleans. Rather than accumulating a <code>True</code>/<code>False</code> value, it is often possible to directly return the literals <code>True</code> or <code>False</code>.</p>
+<p>The <code>starts_with_v3</code> implementation does successfully return <code>True</code> on our first doctest example during the <em>third</em> loop iteration (when <code>s = 'David'</code>), skipping the fourth iteration. However, this implementation will fail the second doctest example (when there are no strings that start with the given character in the collection). We have not explicitly stated what to return when <em>none</em> of the strings in <code>words</code> starts with <code>char</code>. Actually, we have <em>violated our own type contract</em> because the function will implicitly return <code>None</code> in this scenario.</p>
+<p>To fix it, we need to specify what to return if the loop stops without retuning early—this occurs only when there are no strings that start with the given character, and so we return <code>False</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> starts_with_v4(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a>    <span class="cf">for</span> s <span class="kw">in</span> strings:</span>
+<span id="cb12-4"><a href="#cb12-4"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> char:</span>
+<span id="cb12-5"><a href="#cb12-5"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a></span>
+<span id="cb12-7"><a href="#cb12-7"></a>    <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<!-- TODO: Add control flow diagram of `starts_with_v4`.-->
+<h3 id="one-common-error">One common error</h3>
+<p>When working with early returns inside loops, students often have a tendency to write symmetric if-else branches, like the following:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> starts_with_v5(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a>    <span class="cf">for</span> s <span class="kw">in</span> strings:</span>
+<span id="cb13-4"><a href="#cb13-4"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">==</span> char:</span>
+<span id="cb13-5"><a href="#cb13-5"></a>            <span class="cf">return</span> <span class="va">True</span></span>
+<span id="cb13-6"><a href="#cb13-6"></a>        <span class="cf">else</span>:</span>
+<span id="cb13-7"><a href="#cb13-7"></a>            <span class="cf">return</span> <span class="va">False</span></span></code></pre></div>
+<p>Unfortunately, while we emphasized symmetry earlier when writing functions with if statements, here symmetry is <em>not</em> desirable! With both the if and else branches containing an early return, the loop will only ever perform one iteration. That is, <code>starts_with_v5</code> makes a decision about whether to return <code>True</code> or <code>False</code> just by examining the first string in the collection, regardless of what the other strings are. So if we consider <code>starts_with_v5(['Hello', 'Goodbye', 'David', 'Mario'], 'D')</code>, the only string to be visited in the loop is <code>'Hello'</code>, and <code>False</code> would be returned!</p>
+<p>The lesson here is that existential searches are fundamentally asymmetric: your function can return <code>True</code> early as soon as it has found an element of the collection meeting the desired criterion, but to return <code>False</code> it must check <em>every</em> element of the collection.</p>
+<!-- TODO: Add control flow diagram of `starts_with_v5`, showing that there is no way to loop.-->
+<h3 id="universal-search">Universal search</h3>
+<p>Now let’s consider a dual problem to the previous one: given a collection of strings and a character, return whether <em>all</em> strings in the collect start with that letter. If we use the comprehension version of <code>starts_with</code>, this change is as simple as swapping the <code>any</code> for <code>all</code>:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">def</span> all_start_with(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb14-2"><a href="#cb14-2"></a>    <span class="co">&quot;&quot;&quot;Return whether all of the given strings starts with the character char.</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">    Precondition:</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">        - all({s != &#39;&#39; for s in strings})</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">        - len(char) == 1</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a></span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">    &gt;&gt;&gt; all_starts_with([&#39;Hello&#39;, &#39;Goodbye&#39;, &#39;David&#39;, &#39;Dario&#39;], &#39;D&#39;)</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">    False</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">    &gt;&gt;&gt; all_starts_with([&#39;Drip&#39;, &#39;Drop&#39;, &#39;Dangle&#39;], &#39;D&#39;)</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">    True</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a>    <span class="cf">return</span> <span class="bu">all</span>({s[<span class="dv">0</span>] <span class="op">==</span> char <span class="cf">for</span> s <span class="kw">in</span> strings})</span></code></pre></div>
+<p>We can also use the accumulator pattern from <code>starts_with_v2</code> to check every string. Now, our accumulator starts with the default value of <code>True</code>, and changes to <code>False</code> when the loop encounters a string that does <em>not</em> start with the given letter.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Such a string acts as a <em>counterexample</em> to the statement “every string starts with the given character”.</span></p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">def</span> all_starts_with_v2(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb15-2"><a href="#cb15-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a>    <span class="co"># ACCUMULATOR starts_with_so_far: keep track of whether</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>    <span class="co"># all of the strings seen by the loop so far starts with char.</span></span>
+<span id="cb15-5"><a href="#cb15-5"></a>    starts_with_so_far <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb15-6"><a href="#cb15-6"></a></span>
+<span id="cb15-7"><a href="#cb15-7"></a>    <span class="cf">for</span> s <span class="kw">in</span> strings:</span>
+<span id="cb15-8"><a href="#cb15-8"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">!=</span> char:</span>
+<span id="cb15-9"><a href="#cb15-9"></a>            starts_with_so_far <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb15-10"><a href="#cb15-10"></a></span>
+<span id="cb15-11"><a href="#cb15-11"></a>    <span class="cf">return</span> starts_with_so_far</span></code></pre></div>
+<p>And as before, we can also write this function using an early return, since we can return <code>False</code> as soon as a counterexample is found:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">def</span> all_starts_with_v3(strings: Iterable[<span class="bu">str</span>], char: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb16-2"><a href="#cb16-2"></a>    <span class="co">&quot;&quot;&quot;...&quot;&quot;&quot;</span></span>
+<span id="cb16-3"><a href="#cb16-3"></a>    <span class="cf">for</span> s <span class="kw">in</span> words:</span>
+<span id="cb16-4"><a href="#cb16-4"></a>        <span class="cf">if</span> s[<span class="dv">0</span>] <span class="op">!=</span> char:</span>
+<span id="cb16-5"><a href="#cb16-5"></a>            <span class="cf">return</span> <span class="va">False</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a></span>
+<span id="cb16-7"><a href="#cb16-7"></a>    <span class="cf">return</span> <span class="va">True</span></span></code></pre></div>
+<p>Note that this code is very similar to <code>starts_with_v4</code>, except the condition has been negated and the <code>True</code> and <code>False</code> swapped. Existential and universal search are very closely related, and this is borne out by the similarities in these two functions. However, this also illustrates the fact that loops are more complex than using built-in functions and comprehensions: before, we could just swap <code>any</code> for <code>all</code>, but with loops we have to change a few different areas of the code to make this change.</p>
+</section>
+<!--
+
+We've seen short-circuiting before.
+For example, when performing an `and` operation and the left-hand value evaluates to `False`, there is no need to test the right-hand value.
+Similarly, the built-in functions `any` and `all` don't need to test all the values in a collection.
+For example, as soon as the condition given to `any` evaluates to `True` for some element in the collection, the remaining elements do not need to be tested.
+Let's look at how to implement our own, simplified versions of `any` and `all` using for loops, if statements, and return statements.
+
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>2.1 Python’s Built-In Functions</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">2.1 Python’s Built-In Functions</h1>
+</header>
+<section>
+<p>In the previous chapter, we began our study of programming in Python by studying three main ingredients: literals, operators, and variables. We can express complex computations using just these forms of Python code, but as the tasks we want to perform grow more complex, so too does the code we need to write. In this chapter, we’ll learn about using <em>functions</em> in Python to organize our code into useful logical blocks that can be worked on separately and reused again and again in our programs.</p>
+<h2 id="review-functions-in-mathematics">Review: Functions in mathematics</h2>
+<p>Before looking at functions in Python, we’ll first review some of the mathematical definitions related to functions from the <a href="https://q.utoronto.ca/courses/160038/pages/sets-and-functions-review">First-Year CS Summer Prep</a>.</p>
+<p>Let <span class="math inline">\(A\)</span> and <span class="math inline">\(B\)</span> be sets. A <strong>function</strong> <span class="math inline">\(f : A \to B\)</span> is a mapping from elements in <span class="math inline">\(A\)</span> to elements in <span class="math inline">\(B\)</span>. <span class="math inline">\(A\)</span> is called the <strong>domain</strong> of the function, and <span class="math inline">\(B\)</span> is called the <strong>codomain</strong> of the function.</p>
+<p>Functions can have more than one input. For sets <span class="math inline">\(A_1, A_2, \dots, A_k\)</span> and <span class="math inline">\(B\)</span>, a <span class="math inline">\(k\)</span>-ary function <span class="math inline">\(f: A_1 \times A_2 \times \dots \times A_k \to B\)</span> is a function that takes <span class="math inline">\(k\)</span> arguments, where for each <span class="math inline">\(i\)</span> between <span class="math inline">\(1\)</span> and <span class="math inline">\(k\)</span>, the <span class="math inline">\(i\)</span>-th argument of <span class="math inline">\(f\)</span> must be an element of <span class="math inline">\(A_i\)</span>, and where <span class="math inline">\(f\)</span> returns an element of <span class="math inline">\(B\)</span>. We have common English terms for small values of <span class="math inline">\(k\)</span>: unary, binary, and ternary functions take one, two, and three inputs, respectively. For example, the addition operator <span class="math inline">\(+ : \R \times \R \to \R\)</span> is a <em>binary</em> function that takes two real numbers and returns their sum. For readability, we usually write this function as <span class="math inline">\(x+y\)</span> instead of <span class="math inline">\(+(x,y)\)</span>.</p>
+<h2 id="pythons-built-in-functions-in-python">Python’s built-in functions in Python</h2>
+<p>We’ve seen that Python has many operators, like <code>+</code> that can be used on various data types. These operators are actually functions represented by symbols (e.g., addition through the <code>+</code> symbol). But there aren’t enough symbols to represent every function we could ever want. So Python also defines several functions that we can use to perform additional operations; these functions are called <strong>built-in functions</strong>, as they are made automatically available to us anywhere in a Python program. For example, the Python function <code>abs</code> takes a single numeric input and returns its absolute value. But how do we actually use it?</p>
+<p>A Python expression that uses a function to operate on a given input is called a <strong>function call</strong>, and has the same syntax as mathematics: <code>&lt;function_name&gt;(&lt;argument&gt;, &lt;argument&gt;, ...)</code>. For example, here are two examples of a function call expressions that call <code>abs</code>:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">abs</span>(<span class="op">-</span><span class="dv">10</span>)  <span class="co"># Returns the absolute value of -10.</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="dv">10</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">abs</span>(<span class="dv">100</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="dv">100</span></span></code></pre></div>
+<p>Function calls are central to programming, and come with some new terminology that we’ll introduce now and use throughout the next year.</p>
+<ul>
+<li>In a function call expression, the input expressions are called <strong>arguments</strong> to the function call. <em>Example</em>: in the expression <code>abs(-10)</code>, the <code>-10</code> is the argument of the function call.</li>
+<li>When we evaluate a function call, we say that the arguments are <strong>passed</strong> to the function. <em>Example</em>: in <code>abs(-10)</code>, we say that <code>-10</code> is passed to <code>abs</code>.</li>
+<li>When the function call produces a value, we say that the function call <strong>returns</strong> a value, and refer to this value as the <strong>return value</strong> of the function call expression. <em>Example</em>: the return value of <code>abs(-10)</code> is <code>10</code>.</li>
+</ul>
+<p>In your mathematical studies so far, you’ve mainly studied <em>unary numeric</em> functions, i.e., functions that take in just one numeric argument and return another number.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Examples include the sin and log functions.</span> In programming, however, it is very common to work with functions that operate on a wide variety of data types, and a wide number of arguments. Here are a few examples of built-in functions that go beyond taking a single numeric argument:</p>
+<ul>
+<li><p>The <code>len</code> function takes a string or collection data type (e.g., <code>set</code>, <code>list</code>) and returns the size of its input.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> While we defined “size” of these data types back in Section 1.1, we didn’t cover them in Python in the last chapter because we were waiting to get to functions.</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>({<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>})</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="dv">3</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>(<span class="st">&#39;&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="dv">0</span></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>([<span class="st">&#39;a&#39;</span>, <span class="st">&#39;b&#39;</span>, <span class="st">&#39;c&#39;</span>, <span class="st">&#39;d&#39;</span>, <span class="st">&#39;e&#39;</span>])</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="dv">5</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">len</span>({<span class="st">&#39;David&#39;</span>: <span class="dv">100</span>, <span class="st">&#39;Mario&#39;</span>: <span class="dv">0</span>})</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="dv">2</span></span></code></pre></div></li>
+<li><p>The <code>sum</code> function takes a collection of numbers (e.g., a <code>set</code> or <code>list</code> whose elements are all numbers) and returns the sum of the numbers.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">sum</span>({<span class="dv">10</span>, <span class="dv">20</span>, <span class="dv">30</span>})</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="dv">60</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">sum</span>([<span class="op">-</span><span class="fl">4.5</span>, <span class="op">-</span><span class="dv">10</span>, <span class="dv">2</span>, <span class="dv">0</span>])</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">-</span><span class="fl">12.5</span></span></code></pre></div></li>
+<li><p>The <code>sorted</code> function takes a collection and returns a <code>list</code> that contains the same elements as the input collection, sorted in ascending order.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">sorted</span>([<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">20</span>, <span class="op">-</span><span class="dv">4</span>])</span>
+<span id="cb4-2"><a href="#cb4-2"></a>[<span class="op">-</span><span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">20</span>]</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">sorted</span>({<span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">20</span>, <span class="op">-</span><span class="dv">4</span>})  <span class="co"># Works with sets, too!</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>[<span class="op">-</span><span class="dv">4</span>, <span class="dv">3</span>, <span class="dv">10</span>, <span class="dv">20</span>]</span></code></pre></div></li>
+<li><p>The <code>max</code> function is a bit special, because there are two ways it can be used. When it is called with two or more inputs, those inputs must be numeric, and in this case <code>max</code> returns the largest one.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">max</span>(<span class="dv">2</span>, <span class="dv">3</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="dv">3</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">max</span>(<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">7</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="dv">10</span></span></code></pre></div>
+<p>But <code>max</code> can also be called with just a single argument, a non-empty collection of numbers. In this case, <code>max</code> returns the largest number in the collection.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">max</span>({<span class="dv">2</span>, <span class="dv">3</span>})</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="dv">3</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">max</span>([<span class="op">-</span><span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">3</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">7</span>])</span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="dv">10</span></span></code></pre></div></li>
+<li><p>The <code>range</code> function we saw in the last chapter takes in two integers <code>start</code> and <code>stop</code> and returns a value representing a range of consecutive numbers between <code>start</code> and <code>stop - 1</code>, inclusive. For example, <code>range(5, 10)</code> represents the sequence of numbers <code>5</code>, <code>6</code>, <code>7</code>, <code>8</code>, <code>9</code>. If <code>start &gt;= end</code>, then <code>range(start, end)</code> represents an <em>empty</em> sequence.</p></li>
+</ul>
+<h3 id="one-special-function-type">One special function: <code>type</code></h3>
+<p>The last built-in function we’ll cover in this section is <code>type</code>, which takes <em>any</em> Python value and returns its type. Let’s check it out:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> The term <code>class</code> that you see returned here is the name Python uses to refer to mean “data type”. More on this later.</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(<span class="dv">3</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;int&#39;</span><span class="op">&gt;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(<span class="fl">3.0</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;float&#39;</span><span class="op">&gt;</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(<span class="st">&#39;David&#39;</span>)</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;str&#39;</span><span class="op">&gt;</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>])</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;list&#39;</span><span class="op">&gt;</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>({<span class="st">&#39;a&#39;</span>: <span class="dv">1</span>, <span class="st">&#39;b&#39;</span>: <span class="dv">2</span>})</span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;dict&#39;</span><span class="op">&gt;</span></span></code></pre></div>
+<p>If you’re ever unsure about the type of a particular value or variable, you can always call <code>type</code> on it to check!</p>
+<h3 id="nested-function-calls">Nested function calls</h3>
+<p>Just like other Python expressions, you can write function calls within each other, or mix them with other kinds of expressions.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">max</span>(<span class="bu">abs</span>(<span class="op">-</span><span class="dv">100</span>), <span class="dv">15</span>, <span class="dv">3</span> <span class="op">*</span> <span class="dv">20</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="dv">100</span></span></code></pre></div>
+<p>However, just as we saw with deeply nested arithmetic expressions earlier, too much nesting can make Python expressions difficult to read and understand, and so it is a good practice to break down a complex series of function calls into intermediate steps using variables:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> v1 <span class="op">=</span> <span class="bu">abs</span>(<span class="op">-</span><span class="dv">100</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">&gt;&gt;&gt;</span> v2 <span class="op">=</span> <span class="dv">15</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="op">&gt;&gt;&gt;</span> v3 <span class="op">=</span> <span class="dv">3</span> <span class="op">*</span> <span class="dv">20</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="op">&gt;&gt;&gt;&gt;</span> <span class="bu">max</span>(v1, v2, v3)</span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="dv">100</span></span></code></pre></div>
+<h2 id="methods-functions-belonging-to-data-types">Methods: functions belonging to data types</h2>
+<p>The built-in functions we’ve studied so far all have one interesting property in common: they can all be given arguments of at least two different data types: for example, <code>abs</code> works with both <code>int</code> and <code>float</code>, <code>len</code> and <code>sorted</code> work with <code>set</code> <code>list</code> (and others), and <code>type</code> works with values of absolutely any data type. In fact, this is true for almost all built-in functions in Python, as part of the design of the language itself.</p>
+<p>However, Python’s data types also support operations that are specific that that particular data type: for example, there are many operations we can perform on strings that a specific to textual data, and that wouldn’t make sense for other data types.</p>
+<p>Python comes with many functions that perform these operations, but handles them a bit differently than the built-in functions we’ve seen so far. A function that is defined as part of a data type is called a <strong>method</strong>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> The terms <em>function</em> and <em>method</em> are sometimes blurred in programming, particularly from language to language, but for us these terms have precise and distinct meanings!</span> All methods are functions, but not all functions are methods. For example, the built-in functions we looked at above are all <em>not</em> methods. We refer to functions that are not methods as <strong>top-level functions</strong>. We’ll see later how we define functions and methods in Python, but for now let’s look at a few examples of methods.</p>
+<p>One <code>str</code> method in Python is called <code>lower</code>, and has the effect of taking a string like <code>'David'</code> and returning a new string with all uppercase letters turned into lowercase: <code>'david'</code>. To call this method, we refer to it by first specifying the name of the data type it belongs to (<code>str</code>), followed by a period (<code>.</code>) and then the name of the method.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.lower(<span class="st">&#39;David&#39;</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">&#39;david&#39;</span></span></code></pre></div>
+<p>Here are a few other examples of methods for different data types, just to give you a sense of the kinds of operations that are allowed.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">str</span>.split(<span class="st">&#39;David wuz hear&#39;</span>)           <span class="co"># str.split splits a string into words</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>[<span class="st">&#39;David&#39;</span>, <span class="st">&#39;wuz&#39;</span>, <span class="st">&#39;hear&#39;</span>]</span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">set</span>.union({<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>}, {<span class="dv">2</span>, <span class="dv">10</span>, <span class="dv">20</span>})     <span class="co"># set.union performs the set union operation</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a>{<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">20</span>, <span class="dv">10</span>}</span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">list</span>.count([<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">4</span>, <span class="dv">2</span>], <span class="dv">2</span>)  <span class="co"># list.count counts the number of times a value appears in a list</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="dv">3</span>                                         <span class="co"># (remember, a list can have duplicates!)</span></span></code></pre></div>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Functions (<a href="https://youtu.be/gbyIl_NFOaQ">Part 1</a>, <a href="https://youtu.be/gH7R03lh5PM">Part 2</a>, <a href="https://youtu.be/DvbCym5XHAs">Part 3</a>)</li>
+<li><a href="../A-python-builtins/02-builtins.md">Appendix A.1 Python Built-In Function Reference</a></li>
+<li><a href="../A-python-builtins/02-types.md">Appendix A.2 Python Built-In Data Types Reference</a> (includes descriptions of methods)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

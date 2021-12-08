@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>6.2 Proofs with Number Theory</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">6.2 Proofs with Number Theory</h1>
+</header>
+<section>
+<p>In Chapter 3, we studied how to express statements precisely using the language of predicate logic. But just as English enables us to make both true and false claims, the language of predicate logic allows for the expression of both true and false sentences. In this chapter, we will turn our attention to analyzing and communicating the truth or falsehood of these statements. You will develop the skills required to answer the following questions:</p>
+<ul>
+<li>How can you figure out if a given statement is True or False?</li>
+<li>If you know a statement is True, how can you convince others that it is True? How can you do the same if you know the statement is False instead?</li>
+<li>If someone gives you an explanation of why a statement is True, how do you know whether to believe them or not?</li>
+</ul>
+<p>These questions draw a distinction between the internal and external components of mathematical reasoning. When given a new statement, you’ll first need to figure out for yourself whether it is true (internal), and then be able to express your thought process to others (external). But even though we make a separation, these two processes are certainly connected: it is only after convincing yourself that a statement is true that you should then try to convince others. And often in the process of formalizing your intuition for others, you notice an error or gap in your reasoning that causes you to revisit your intuition—or make you question whether the statement is actually true!</p>
+<p>A <strong>mathematical proof</strong> is how we communicate ideas about the truth or falsehood of a statement to others. There are many different philosophical ideas about what constitutes a proof, but what they all have in common is that a proof is a mode of <em>communication</em>, from the person creating the proof to the person digesting it. In this course, we will focus on reading and creating our own written mathematical proofs, which is the standard proof medium in computer science.</p>
+<p>As with all forms of communication, the style and content of a proof varies depending on the audience. In this course, the audience for all of our proofs will be an average computer science student (and not your TA or instructor). As we will discuss, your audience determines how formal a proof should be (here, quite formal), and what background knowledge you can assume is understood without explanation (here, not much).</p>
+<p>However, there is even variation in the typical computer science student with experience in this area, so as much as possible in this course, we will introduce <em>new mathematical domains</em> to serve as the objects of study in our proofs.</p>
+<p>This approach has three very nice benefits: first, by building domains from the ground up, we can specify absolutely the common definitions and properties that everyone may assume and use freely in proofs; second, these domains are the theoretical foundation of many areas of computer science, and learning about them here will serve you well in many future courses; and third, learning about new domains will help develop the skill of <em>reading about a new mathematical context and understanding it</em>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">In other words, you won’t just learn about new domains; you’ll learn <em>how</em> to learn about new domains!</span> The definitions and axioms of a new domain communicate the foundation upon which we build new proofs—in order to prove things, we need to understand the objects that we’re talking about first.</p>
+<h2 id="first-examples">First examples</h2>
+<p>We’re going to start out our exploration of proofs by studying a few simple statements. Our first foray into domain exploration will be into number theory, which you can think of as taking a type of entity with which we are quite familiar, and formalizing definitions and pushing the boundaries of what we actually know about these <em>numbers</em> that we use every day.</p>
+<p>You may find our first few examples a bit on the easy side, which is fine. We are using them not so much for their ability to generate mathematical insight, but rather to model both the <em>thinking</em> and the <em>writing</em> that would go into approaching a problem.</p>
+<p>Each example in this section is divided into three or four parts:</p>
+<ol type="1">
+<li>The statement that we want to prove or disprove. Sometimes, we’ll specify whether to prove or disprove it, and other times deciding whether the statement is true or false is part of the exercise.</li>
+<li>A translation of the statement into predicate logic. This step often provides insight into the <em>logical structure</em> of the statement that we are considering, which in turn informs the structure and techniques that we will use in our proofs.</li>
+<li>A discussion to try to gain some intuition about why the statement is true. You’ll tend to see that these are written very informally, as if we are talking to a friend on a whiteboard. The discussion usually will reveal the mathematical insight that forms the content of a proof. <strong>This is often the hardest part of developing a proof, so please don’t skip these sections!</strong></li>
+<li>A formal proof. This is meant to be a standalone piece of writing, the “final product” of our earlier work. Depending on the depth of the discussion, the formal proof might end up being almost mechanical – a matter of formalizing our intuition.</li>
+</ol>
+<p>With this in mind, let’s dive right in!</p>
+<div class="example">
+<p>Prove that <span class="math inline">\(23 \mid 115\)</span>.</p>
+<div class="translation">
+<p>We will <em>expand</em> the definition of divisibility to rewrite this statement in terms of simpler operations: <span class="math display">\[\exists k \in \Z,~ 115 = 23k.\]</span></p>
+</div>
+<div class="discussion">
+<p>We just need to divide 115 by 23, right?</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(k = 5\)</span>.</p>
+<p>Then <span class="math inline">\(115 = 23 \cdot 5 = 23 \cdot k\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> We typically signal the end of a proof by writing a black square ◼ in the bottom-right corner.</span></p>
+</div>
+</div>
+<p>We can draw from this example a more general technique for structuring our existence proofs. A statement of the form <span class="math inline">\(\exists x \in S,~P(x)\)</span> is True when at least one element of <span class="math inline">\(S\)</span> satisfies <span class="math inline">\(P\)</span> (hence our use of <code>any</code> in Python). The easiest way to convince someone that this is True is to actually find the concrete element that satisfies <span class="math inline">\(P\)</span>, and then show that it does.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> Of course, this is <em>not</em> the only proof technique used for existence proofs. You’ll study more sophisticated ways of doing such proofs in future courses.</span> This is so natural a strategy that it should not be surprising that there is a “standard proof format” when dealing with such statements.</p>
+<div class="framed">
+<p><strong>A typical proof of an existential.</strong></p>
+<p>Given statement to prove: <span class="math inline">\(\exists x \in S,~P(x)\)</span>.</p>
+<div class="proof">
+<p>Let <span class="math inline">\(x = \_\_\_\_\_\_\_\)</span>.</p>
+<p>[Proof that <span class="math inline">\(P(\_\_\_\_\_\_\_)\)</span> is True.]</p>
+</div>
+</div>
+<p>Note that the two blanks represent the same element of <span class="math inline">\(S\)</span>, which <em>you</em> get to choose as a prover. Thus existence proofs usually come down to <em>finding</em> a correct element of the domain which satisfy the required properties.</p>
+<p>Here is another example which uses the same idea, but with two existentially-quantified variables.</p>
+<div class="example">
+<p>Prove that there exists an integer that divides 104.</p>
+<div class="translation">
+<p>There is the key phrase “there exists” right in the problem statement, so we could write <span class="math inline">\(\exists a \in \Z,~a \mid 104\)</span>. We can once again expand the definition of divisibility to write:<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote">We use the abbreviated form for two quantifications of the same type.</span> <span class="math display">\[\exists a, k \in \Z,~104 = ak.\]</span></p>
+</div>
+<div class="discussion">
+<p>Basically, we need to pick a pair of divisors of 104. Since this is an existential proof and we get to pick both <span class="math inline">\(a\)</span> and <span class="math inline">\(k\)</span>, any pair of divisors will work.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(a = -2\)</span> and let <span class="math inline">\(k = -52\)</span>.</p>
+<p>Then <span class="math inline">\(104 = ak\)</span>.</p>
+</div>
+</div>
+<p>The previous example is the first one that had multiple quantifiers. In our proof, we had to give explicit values for both <span class="math inline">\(a\)</span> and <span class="math inline">\(k\)</span> to show that the statement held. Just as how a <em>sentence</em> in predicate logic must have all its variables quantified, a <em>mathematical proof</em> must introduce all variables contained in the sentence being proven.</p>
+<h3 id="alternating-quantifiers-revisited">Alternating quantifiers, revisited</h3>
+<p>In the Chapter 3, we saw how changing the order of an existential and universal quantifier changed the meaning of a statement. Now, we’ll study how the order of quantifiers changes how we can introduce variables in a proof.</p>
+<div class="example">
+<p>Prove that all integers are divisible by <span class="math inline">\(1\)</span>.</p>
+<div class="translation">
+<p>The statement contains a universal quantification: <span class="math inline">\(\forall n \in \Z,~1 \mid n\)</span>. We can unpack the definition of divisibility to <span class="math display">\[\forall n \in \Z,~\exists k \in \Z,~n = 1 \cdot k.\]</span></p>
+</div>
+<div class="discussion">
+<p>The final equation in the fully-expanded form of the statement is straightforward, and is valid when <span class="math inline">\(k\)</span> equals <span class="math inline">\(n\)</span>. But how should I introduce these variables? Answer: <em>in the same order they are quantified in the statement.</em></p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(n \in \Z\)</span>. Let <span class="math inline">\(k = n\)</span>.</p>
+<p>Then <span class="math inline">\(n = 1 \cdot n = 1 \cdot k\)</span>.</p>
+</div>
+</div>
+<p>This proof is quite short, but introduces a few new elements. First, it introduced a variable <span class="math inline">\(n\)</span> that could represent any real number. Unlike the previous existence proofs, when we introduced this variable <span class="math inline">\(n\)</span> we did not specify a concrete value like <span class="math inline">\(10\)</span>, but rather said that <span class="math inline">\(n\)</span> was an arbitrary real number by writing ``Let <span class="math inline">\(n \in \Z\)</span>.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">You might notice that we use the same word “let” to introduce both existentially- and universally-quantified variables. However, you should always be able to tell how the variable is quantified based on whether it is given a concrete value or an “arbitrary” value in the proof.</span></p>
+<div class="framed">
+<p><strong>A typical proof of a universal.</strong></p>
+<p>Given statement to prove: <span class="math inline">\(\forall x \in S,~P(x)\)</span>.</p>
+<div class="proof">
+<p>Let <span class="math inline">\(x \in S\)</span>. (That is, let <span class="math inline">\(x\)</span> be an arbitrary element of <span class="math inline">\(S\)</span>.)</p>
+<p>[Proof that <span class="math inline">\(P(x)\)</span> is True].</p>
+</div>
+</div>
+<p>The other interesting element of this proof was that it contained an existentially-quantified variable <span class="math inline">\(k\)</span> after the <span class="math inline">\(\forall n \in \Z\)</span>. We used an extremely important tool at our disposal when it comes to proofs with multiple quantifiers: <strong>any existentially-quantified variable can be assigned a value that depends on the variables defined before it.</strong></p>
+<p>In our proof, we first defined <span class="math inline">\(n\)</span> to be an arbitrary integer. Immediately after this, we wanted to show that for this <span class="math inline">\(n\)</span>, <span class="math inline">\(\exists k \in \Z,~ n = 1 \cdot k\)</span>. And to prove this, we needed a value for <span class="math inline">\(k\)</span>—a “let” statement. Because we define <span class="math inline">\(k\)</span> after having defined <span class="math inline">\(n\)</span>, we can use <span class="math inline">\(n\)</span> in the definition of <span class="math inline">\(k\)</span> and say “Let <span class="math inline">\(k = n\)</span>.” It may be helpful to think about the analogous process in programming. We first initialize a variable <span class="math inline">\(n\)</span>, and then define a new variable <span class="math inline">\(k\)</span> that is assigned the value of <span class="math inline">\(n\)</span>.</p>
+<p>Even though this may seem obvious, one important thing to note is that the <em>order of variables in the statement determines the order in which the variables must be introduced in the proof</em>, and hence which variables can depend on which other variables. For example, consider the following erroneous “proof.”</p>
+<div class="example">
+<p>(Wrong!) Prove that <span class="math inline">\(\exists k \in \Z,~\forall n \in \Z,~n = 1 \cdot k.\)</span></p>
+<div class="proof">
+<p>Let <span class="math inline">\(k = n\)</span>. Let <span class="math inline">\(n \in \Z\)</span>.</p>
+<p>Then <span class="math inline">\(n = 1 \cdot k\)</span>.</p>
+</div>
+</div>
+<p>This proof may look very similar to the previous one, but it contains one crucial difference. The very first sentence, “Let <span class="math inline">\(k = n\)</span>,” is invalid: at that point, <span class="math inline">\(n\)</span> has not yet been defined!<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> This is analagous to a <code>NameError</code> in Python.</span> This is the result of having switched around the order of the quantifiers, which forces <span class="math inline">\(k\)</span> to be defined independently of whatever <span class="math inline">\(n\)</span> is chosen.</p>
+<p>Note: don’t assume that just because <em>one</em> proof is invalid, that <em>all</em> proofs of this statement are invalid! We cannot conclude that this statement is False just because we found one proof that didn’t work.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">A meta way of looking at this: a statement is True when <em>there exists</em> a correct proof of it.</span> That said, this statement is indeed False, and we’ll see later on in this chapter how to prove that a statement is False instead of True.</p>
+<h2 id="proofs-involving-implications">Proofs involving implications</h2>
+<p>Let’s look at one new example.</p>
+<div class="example">
+<p>Prove that for all integers <span class="math inline">\(x\)</span>, if <span class="math inline">\(x\)</span> divides <span class="math inline">\((x + 5)\)</span>, then <span class="math inline">\(x\)</span> also divides <span class="math inline">\(5\)</span>.</p>
+<div class="translation">
+<p>There is both a universal quantification and implication in this statement:<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">As we noted back in Chapter 3, the “universal + implication” form is the most common form of statement we encounter.</span> <span class="math display">\[\forall x \in \Z,~ x \mid (x + 5) \Rightarrow x \mid 5.\]</span> When we unpack the definition of divisibility, we need to be careful about how the quantifiers are grouped: <span class="math display">\[\forall x \in \Z,~ \big( \exists k_1 \in \Z,~ x + 5 = k_1x \big) \Rightarrow \big( \exists k_2 \in \Z,~ 5 = k_2x \big).\]</span></p>
+</div>
+<div class="discussion">
+<p>I need to prove that if <span class="math inline">\(x\)</span> divides <span class="math inline">\(x + 5\)</span>, then it also divides 5. To prove this, I’m going to <em>assume</em> that <span class="math inline">\(x\)</span> divides <span class="math inline">\(x + 5\)</span>, and I need to <em>prove</em> that <span class="math inline">\(x\)</span> divides 5.</p>
+<p>Since <span class="math inline">\(x\)</span> is divisible by <span class="math inline">\(x\)</span>, I should be able to subtract it from <span class="math inline">\(x + 5\)</span> and keep the result a multiple of <span class="math inline">\(x\)</span>. Can I prove that using the definition of divisibility? I basically need to “turn” the equation <span class="math inline">\(x + 5 = k_1x\)</span> into the equation <span class="math inline">\(5 = k_2x\)</span>.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(x\)</span> be an arbitrary integer. <em>Assume</em> that <span class="math inline">\(x \mid (x + 5)\)</span>, i.e., that there exists <span class="math inline">\(k_1 \in \Z\)</span> such that <span class="math inline">\(x + 5 = k_1x\)</span>. We want to prove that there exists <span class="math inline">\(k_2 \in \Z\)</span> such that <span class="math inline">\(5 = k_2x\)</span>.</p>
+<p>Let <span class="math inline">\(k_2 = k_1 - 1\)</span>.</p>
+<p>Then we can calculate: <span class="math display">\[\begin{align*}
+k_2x &amp;= (k_1 - 1)x \\
+&amp;= k_1 x - x \\
+&amp;= (x + 5) - x \tag{we assumed $x + 5 = k_1 x$}\\
+&amp;= 5
+\end{align*}\]</span></p>
+</div>
+</div>
+<p>Whew, that was a bit longer than the proofs we’ve already done. There were a lot of new elements that we introduced here, so let’s break them down:</p>
+<ul>
+<li><p>After introducing <span class="math inline">\(x\)</span>, we wanted to prove the <em>implication</em> <span class="math inline">\(x \mid (x + 5) \Rightarrow x \mid 5\)</span>. To prove an implication, we needed to assume that the hypothesis was True, and then prove that the conclusion is also True. In our proof, we wrote “<strong>Assume</strong> <span class="math inline">\(x \mid (x + 5)\)</span>.”</p>
+<p>This is <em>not</em> a claim that <span class="math inline">\(x \mid (x + 5)\)</span> is True; rather, it is a way to consider what would happen <em>if</em> <span class="math inline">\(x \mid (x + 5)\)</span> were True. The goal for the rest of the proof was to prove that <span class="math inline">\(x \mid 5\)</span>.</p>
+<p>This proof structure is common when proving an implication:</p>
+<div class="framed">
+<p><strong>A typical proof of an implication (direct).</strong></p>
+<p>Given statement to prove: <span class="math inline">\(p \Rightarrow q\)</span>.</p>
+<div class="proof">
+<p>Assume <span class="math inline">\(p\)</span>.</p>
+<p>[Proof that <span class="math inline">\(q\)</span> is True.]</p>
+</div>
+</div></li>
+<li><p>When we assumed that <span class="math inline">\(x \mid (x + 5)\)</span>, what this really did was introduce a new variable <span class="math inline">\(k_1 \in \Z\)</span> from the definition of divisibility. This might seem a little odd, but take a moment to think about what this means in English. We assumed that <span class="math inline">\(x\)</span> divides <span class="math inline">\(x + 5\)</span>, which (by definition) is the same as assuming that there exists an integer <span class="math inline">\(k_1\)</span> such that <span class="math inline">\(x + 5 = k_1x\)</span>. Given that such a number exists, we can give it a name and refer to it in the rest of our proof.<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote">In other words, we introduced a variable into the proof through an <em>assumption</em> we made.</span></p></li>
+</ul>
+<h3 id="generalizing-our-example">Generalizing our example</h3>
+<p>One of the most important meta-techniques in mathematical proof is that of <strong>generalization</strong>: taking a true statement (and a proof of the statement), and then replacing a concrete value in the statement with a universally quantified variable. For example, consider the statement from the previous example, <span class="math inline">\(\forall x \in \Z,~ x \mid (x + 5) \Rightarrow x \mid 5\)</span>. It doesn’t seem like the “<span class="math inline">\(5\)</span>” serves any special purpose; it is highly likely that it could be replaced by another number like <span class="math inline">\(165\)</span>, and the statement would still hold.<label for="sn-9" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-9" class="margin-toggle"/><span class="sidenote">Concretely, consider the statement <span class="math inline">\(\forall x \in \Z,~ x \mid (x + 165) \Rightarrow x \mid 165\)</span>, which is at least as plausible as the original statement with <span class="math inline">\(5\)</span>’s.</span></p>
+<p>But rather than replace the <span class="math inline">\(5\)</span> with another concrete number and then re-proving the statement, we will instead replace it with a universally-quantified variable, and prove the corresponding statement. This way, we will know that in fact we could replace the <span class="math inline">\(5\)</span> with <em>any</em> integer and the statement would still hold.</p>
+<div class="example">
+<p>Prove that for all <span class="math inline">\(d \in \Z\)</span>, and for all <span class="math inline">\(x \in \Z\)</span>, if <span class="math inline">\(x\)</span> divides <span class="math inline">\((x + d)\)</span>, then <span class="math inline">\(x\)</span> also divides <span class="math inline">\(d\)</span>.</p>
+<div class="translation">
+<p>This has basically the same translation as last time, except now we have an extra variable: <span class="math display">\[\forall d,x \in \Z,~ \big( \exists k_1 \in \Z,~ x + d = k_1x \big) \Rightarrow \big( \exists k_2 \in \Z,~ d = k_2x \big).\]</span></p>
+</div>
+<div class="discussion">
+<p>I should be able to use the same set of calculations as last time.</p>
+</div>
+<div class="proof">
+<p>Let <span class="math inline">\(d\)</span> and <span class="math inline">\(x\)</span> be arbitrary integers. <em>Assume</em> that <span class="math inline">\(x \mid (x + d)\)</span>, i.e., there exists <span class="math inline">\(k_1 \in \Z\)</span> such that <span class="math inline">\(x + d = k_1x\)</span>. We want to prove that there exists <span class="math inline">\(k_2 \in \Z\)</span> such that <span class="math inline">\(d = k_2x\)</span>.</p>
+<p>Let <span class="math inline">\(k_2 = k_1 - 1\)</span>.</p>
+<p>Then we can calculate: <span class="math display">\[\begin{align*}
+  k_2x &amp;= (k_1 - 1)x \\
+  &amp;= k_1 x - x \\
+  &amp;= (x + d) - x \\
+  &amp;= d
+\end{align*}\]</span></p>
+</div>
+</div>
+<p>This proof is basically the same as the previous one: we have simply swapped out all of the <span class="math inline">\(5\)</span>’s with <span class="math inline">\(d\)</span>’s. We say that the proof <em>did not depend on the value <span class="math inline">\(5\)</span></em>, meaning there was no place that we used some special property of <span class="math inline">\(5\)</span>, where we could have used a generic integer instead. We can also say that the original statement and proof <em>generalize</em> to this second version.</p>
+<p>Why does generalization matter? By generalizing the previous statement from being about the number <span class="math inline">\(5\)</span> to an arbitrary integer, we have essentially gone from one statement being true to an infinite number of statements being true. The more general the statement, the more useful it becomes. We care about exponent laws like <span class="math inline">\(a^b \cdot a^c = a^{b + c}\)</span> precisely because they apply to every possible number; regardless of what our concrete calculation is, we know we can use this law in our calculations.</p>
+<!-- ## False statements and disproofs
+
+Suppose we have a friend who is trying to convince us that a certain
+statement $X$ is false. If they tell you that statement $X$ is false
+because they tried really hard to come up with a proof of it and failed,
+you might believe them, or you might wonder if maybe they just missed a
+crucial idea leading to a correct proof.^[Maybe they skipped all their CSC110 classes.] An absence of proof is not
+enough to convince us that the statement is false.
+
+Instead, we must see a
+**disproof**, which is simply a proof that the *negation* of the
+statement is true.^[In other words, if we can prove that $\NOT X$ is true, then $X$ must be false.] For this section, we’ll be using the simplification
+rules from the first chapter to make negations of statements easier to
+work with.
+
+Here are two examples: the first one is quite simple, and is used to
+introduce the basic idea. The second is more subtle, and really requires
+good understanding of how we manipulate a statement to get a simple form
+for its negation.
+
+<div class="example">
+Disprove the following statement: every natural number divides 360.
+
+<div class="translation">
+This statement can be written as $\forall n \in \N,~n \mid 360$.
+However, we want to prove that it is false, so we really need to study
+its negation.
+\begin{align*}
+\NOT \big(\forall n \in \N,~n \mid 360 \big) \\
+\exists n \in \N,~ n \NDIV 360
+\end{align*}
+</div>
+<div class="discussion">
+The original statement is obviously not true: the number 7 doesn’t
+divide 360, for instance. Is that a proof? We wrote the negation of the
+statement in symbolic form above, and if we translate it back into
+English, we get "there exists a natural number which does not divide
+360." So, yes. That’s enough for a proof.
+</div>
+<div class="proof">
+Let $n = 7$.
+
+Then $n \NDIV 360$, since $\frac{360}{7}$ is not an integer.
+</div>
+</div>
+
+When we want disprove a universally-quantified statement ("every element
+of $S$ satisfies predicate $P$"), the negation of that statement becomes
+an existentially-quantified one ("there exists an element of $S$ that
+doesn’t satisfy predicate $P$"). Since proofs of existential
+quantification involve just finding one value, the disproof of the
+original statement involves finding such a value which causes the
+predicate to be false (or alternatively, causes the negation of the
+predicate to be true). We call this value a **counterexample** for the
+original statement. In the previous example, we would say that 7 is a counterexample of the given statement.
+
+<div framed>
+**A typical disproof of a universal (counterexample).**
+
+Given statement to *disprove*: $\forall x \in S,~P(x)$.
+
+<div class="proof">
+We prove the negation, $\exists x \in S,~\NOT P(x)$.
+Let $x=$ `_______`.
+
+[Proof that $\NOT P$(`_______`) is True.]
+</div>
+</div>
+
+Now let's look at at a more complex disproof.
+
+<div class="example">
+Disprove the following claim: for all natural numbers $a$ and $b$, there
+exists a natural number $c$ which is less than $a + b$, and greater than
+both $a$ and $b$, such that $c$ is divisible by $a$ or by $b$.
+
+<div class="translation">
+The original statement can be translated as follows. We’ve underlined
+the four different propositions which are joined with **AND** operators to make
+them stand out.
+$$\forall a, b \in \N,~\exists c \in \N,~
+\underline{c < a + b} \AND
+\underline{c > a} \AND
+\underline{c > b} \AND
+\underline{(a \mid c \OR b \mid c)}.$$
+
+We’ll derive the negation step by step, though once you get comfortable
+with the negation rules, you’ll be able to handle even complex formulas
+like this one quite quickly.
+\begin{align*}
+\NOT \Big(
+  \forall a, b \in \N,~\exists c \in \N,~
+  \underline{c < a + b} \AND
+  \underline{c > a} \AND
+  \underline{c > b} \AND
+  \underline{(a \mid c \OR b \mid c)} \Big) \\
+\exists a, b \in \N,~ \NOT \Big(
+  \exists c \in \N,~
+  \underline{c < a + b} \AND
+  \underline{c > a} \AND
+  \underline{c > b} \AND
+  \underline{(a \mid c \OR b \mid c)} \Big) \\
+\exists a, b \in \N,~ \forall c \in \N,~
+  \NOT \Big(
+  \underline{c < a + b} \AND
+  \underline{c > a} \AND
+  \underline{c > b} \AND
+  \underline{(a \mid c \OR b \mid c)} \Big) \\
+\exists a, b \in \N,~ \forall c \in \N,~
+  \underline{c \geq a + b} \OR
+  \underline{c \leq a} \OR
+  \underline{c \leq b} \OR
+  \underline{\Big(\NOT (a \mid c \OR b \mid c) \Big)} \\
+\exists a, b \in \N,~ \forall c \in \N,~
+  \underline{c \geq a + b} \OR
+  \underline{c \leq a} \OR
+  \underline{c \leq b} \OR
+  \underline{(a \NDIV c \AND b \NDIV c)}\end{align*}
+</div>
+<div class="discussion">
+That symbolic negation involved quite a bit of work. Let’s make sure we
+can translate the final result back into English: there exist natural
+numbers $a$ and $b$ such that for all natural numbers $c$,
+$c \geq a + b$ or $c \leq a$ or $c \leq b$ or neither $a$ nor $b$ divide
+$c$. Hopefully this example illustrates the power of predicate logic: by
+first translating the original statement into symbolic logic, we were
+able to obtain a negation by applying some standard manipulation rules
+and then translating the resulting statement back into English. For a
+statement as complex as this one, it is usually easier to do this than
+to try to intuit what the English negation of the original is, at
+least when you’re first starting out.
+
+Okay, so how do we prove the negation? The existential quantifier tells
+us we get to pick $a$ and $b$. Let’s think simple: what if $a$ and $b$
+are both 2? Then $a + b = 4$. If $c \geq 4$, the first clause in the OR
+is satisfied, and if $c \leq 2$, the second and third clauses are
+satisfied. So we only need to worry about when $c$ is 3, because in this
+case the only clause that could possibly be satisfied is the last one,
+$a \NDIV c \AND b \NDIV c$. Luckily, $a$ and $b$ are both 2, and 2
+doesn’t divide 3, so it seems like we’re good in this case as well.
+
+It was particularly helpful that we chose such small values for $a$ and
+$b$, so that there weren’t a lot of numbers in between them and their
+sum to care about. As you do your own proofs of existentially-quantified
+statements, remember that you have the power to pick values for these
+variables!
+</div>
+<div class="proof">
+Let $a = 2$ and $b = 2$, and let $c \in \N$. We now need to prove that
+$$c \geq a + b \OR c \leq a \OR c \leq b \OR (a \NDIV c \AND b \NDIV c).$$
+
+Substituting in the values for $a$ and $b$, this gets simplified to:
+\begin{align*}
+c \geq 4 \OR c \leq 2 \OR 2 \NDIV c \tag{$*$}
+\end{align*}
+
+To prove an OR, we only need one of the three parts to be true, and
+different ones can be true for different values of $c$.
+
+However, precisely which part is true depends on the value of $c$. For
+example, we can’t say that for an *arbitrary* value of $c$, that
+$c \geq 4$. So we’ll split up the remainder of the proof into three
+cases for the values for $c$: numbers $\geq 4$, numbers $\leq 2$, and
+the single value 3.
+
+**Case 1**. We will *assume* that $c \geq 4$, and prove the
+statement $(*)$ is true.
+
+In this case, the first part of the OR in $(*)$ is true (this is exactly what we've assumed).
+
+**Case 2**. We will *assume* that $c \leq 2$, and prove the
+statement $(*)$ is true.
+
+In this case, the second part of the OR in $(*)$ is true (this is exactly what we've assumed).
+
+**Case 3**. We will *assume* that $c = 3$, and prove the statement
+$(*)$ is true.
+
+This case is the trickiest, because unlike the others, our assumption
+that $c = 3$ is not verbatim one of the parts of $(*)$. However, we note
+that $2 \NDIV 3$, and so the third part of the OR is satisfied.
+
+Since in all possible cases statement $(*)$ is true, we conclude that
+this statement is always true.
+</div>
+</div>
+
+## Proof by cases
+
+The previous proof illustrated a new proof technique known as **proof by
+cases**. Remember that for a universal proof, we typically let a
+variable be an arbitrary element of the domain, and then make an
+argument in the proof body to prove our goal statement. However, even
+when the goal statement is true for all elements of the domain, it isn’t
+always easy to construct a single argument that works for all of those elements!
+Sometimes, different arguments are required for different elements.
+In this case, we divide the domain into different parts, and
+then write a separate argument for each part.
+
+A bit more formally, we pick a set of unary predicates $P_1$, $P_2$, …,
+$P_k$ (for some positive integer $k$), such that for every element $x$
+in the domain, $x$ satisfies at least one of the predicates (we say that
+these predicates are *exhaustive*).
+You should think of these predicates as describing how we divide up the domain;
+in the previous example, the predicates were:
+$$P_1(c): c \leq 2, \qquad P_2(c): c \geq 4, \qquad P_3(c): c = 3.$$
+
+Then, we divide the proof body into cases, where in each case we
+*assume* that one of the predicates is True, and use that assumption to construct a
+proof that specifically works under that assumption.^[
+  Recall that there's an equivalence between predicates and sets.
+  Another way of looking at a proof by cases is that we divide the domain into subsets $S_1, S_2, \dots S_k$, and then prove the desired statement separately for each of these subsets.
+]
+
+<div framed>
+**A typical proof by cases.**
+
+Given statement to prove: $\forall x \in S, P(x).$
+Pick a set of exhaustive predicates $P_1, \dots, P_k$ of $S$.
+
+<div class="proof">
+Let $x \in S$.
+We will use a proof by cases.
+
+**Case 1**. *Assume* $P_1(x)$ is True.
+
+[Proof that $P(x)$ is True, assuming $P_1(x)$.]
+
+**Case 2**. *Assume* $P_2(x)$ is True.
+
+[Proof that $P(x)$ is True, assuming $P_2(x)$.]
+
+$\vdots$
+
+**Case $k$**. *Assume* $P_k(x)$ is True.
+
+[Proof that $P(x)$ is True, assuming $P_k(x)$.]
+</div>
+</div>
+
+Proof by cases is a very versatile proof technique, since it allows the
+combining of simpler proofs together to form a whole proof. Often it is
+easier to prove a property about some (or even most) elements of the
+domain than it is to prove that same property about all the elements.
+But do keep in mind that if you can find a *simple* proof which works
+for all elements of the domain, that’s generally preferable than
+combining multiple proofs together in a proof by cases.
+
+To see one natural use of proof by cases in number theory, we introduce the following theorem, which formalizes our intuitions about another familiar term: remainders.
+
+<div theorem id="theorem:quotient_remainder">
+(Quotient-Remainder Theorem)
+For all $n \in \Z$ and $d \in \Z$, if $d \neq 0$ then
+there exist $q, r \in \Z$ such that $n = qd + r$ and $0 \leq r < |d|$.
+Moreover, these $q$ and $r$ are *unique* (they are determined entirely by the values of $n$ and $d$).
+</div>
+
+<div definition data-terms="quotient,remainder">
+Let $n, d, q, r$ be the variables in the previous theorem.
+We say that $q$ and $r$ are the **quotient** and **remainder**, respectively, when $n$ is divided by $d$.
+</div>
+
+The reason this theorem is powerful is that it tells us that for any non-zero divisor $d \in \Z$, we can separate all possible integers into $d$ different groups, corresponding to their possible remainders (between $0$ and $|d|-1$) when divided by $d$.
+Let's see this how to use this fact to perform a proof by cases.
+
+<div class="example">
+Prove that for all integers $x$, $2 \mid x^2 + 3x$.
+
+<div class="translation">
+Using the divisibility predicate: $\forall x \in \Z,~ 2 \mid x^2 + 3x$.
+Or expanding the definition of divisibility:
+$\forall x \in \Z,~ \exists k \in \Z,~ x^2 + 3x = 2k$.
+</div>
+
+<div class="discussion">
+We want to "factor out a $2$" from the expression $x^2 + 3x$, but this only works if $x$ is even.
+If $x$ is odd, though, then both $x^2$ and $3x$ will be odd, and adding two odd numbers together produces an even number.
+
+But how do we "know" that every number has to be either even or odd?
+And how can we formalize the algebraic operations of "factoring out a $2$" or "adding two odd numbers together"?
+This is where the Quotient-Remainder Theorem comes in.
+</div>
+
+<div class="proof">
+Let $x \in \Z$.
+By the Quotient-Remainder Theorem, we know that when $x$ is divided by $2$, the two possible remainders are $0$ and $1$.
+We will divide up the proof into two cases based on these remainders.
+
+**Case 1**: assume the remainder when $x$ is divided by $2$ is $0$.
+That is, we assume there exists $q \in \Z$ such that $x = 2q + 0$.
+Let $k = 2q^2 + 3q$. We will show that $x^2 + 3x = 2k$.
+
+We have:
+\begin{align*}
+x^2 + 3x &= (2q)^2 + 3(2q) \\
+&= 4q^2 + 6q \\
+&= 2(2q^2 + 3q) \\
+&= 2k
+\end{align*}
+
+**Case 2**: assume the remainder when $x$ is divided by 2 is $1$.
+That is, we assume there exists $q \in \Z$ such that $x = 2q + 1$.
+Let $k = 2q^2 + 5q + 2$. We will show that $x^2 + 3x = 2k$.
+
+We have:
+\begin{align*}
+x^2 + 3x &= (2q+1)^2 + 3(2q+1) \\
+&= 4q^2 + 4q + 1 + 6q + 3 \\
+&= 2(2q^2 + 5q + 2) \\
+&= 2k
+\end{align*}
+</div>
+</div> -->
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

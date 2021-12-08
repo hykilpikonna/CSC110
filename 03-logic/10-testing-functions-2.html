@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.10 Testing Functions II: hypothesis</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.10 Testing Functions II: <code>hypothesis</code></h1>
+</header>
+<section>
+<p>When we introduced if statements in <a href="04-if-statements.html">Section 3.4</a>, we discussed how unit tests could be used to perform <em>white box testing</em>, where the goal is to “cover” all possible execution paths with unit tests. Unit tests really excel in this scenario because we can determine what the inputs of a function should be to reach a particular branch.</p>
+<p>But choosing unit test inputs also imposes challenges on the programmer writing those tests. How do we know we have “enough” inputs? What properties of the inputs should we consider? For example, if our function takes a <code>list[int]</code>, how long should our input lists be, should they contain duplicates, and what should the values inside the list be? For each choice of answers to these questions, we then need to choose a specific input and calculate the expected output to write a unit test.</p>
+<p>In this section, we introduce a different form of testing called <em>property-based testing</em>, using the Python module <code>hypothesis</code>. The main advantage of property-based testing with <code>hypothesis</code> is that we can write one test case that calls the function being tested <em>multiple inputs</em> that the <code>hypothesis</code> library chooses for us automatically. Property-based tests are not intended to replace unit tests—both have their role in testing and both are important.</p>
+<h2 id="property-based-testing">Property-based testing</h2>
+<p>The kinds of tests we’ve discussed so far involve defining <em>input-output pairs</em>: for each test, we write a specific input to the function we’re testing, and then use <code>assert</code> statements to verify the correctness of the corresponding output. These tests have the advantage that writing any one individual test is usually straightforward, but the disadvantage that choosing and implementing test cases can be challenging and time-consuming.</p>
+<p>There is another way of constructing tests that we will explore here: <em>property-based testing</em>, in which a single test typically consists of a large set of possible inputs that is generated in a programmatic way. Such tests have the advantage that it is usually straightforward to cover a broad range of inputs in a short amount of code; but it isn’t always easy to specify exactly what the corresponding outputs should be. If we were to write code to compute the correct answer, how would we know that <em>that</em> code is correct?</p>
+<p>So instead, property-based tests use <code>assert</code> statements to check for <em>properties</em> that the function being tested should satisfy. In the simplest case, these are properties that every output of the function should satisfy, regardless of what the input was. For example:</p>
+<ul>
+<li>The <em>type</em> of the output: “the function <code>str</code> should always return a string.”</li>
+<li><em>Allowed values</em> of the output: “the function <code>len</code> should always return an integer that is greater than or equal to zero.”</li>
+<li><em>Relationships</em> between the input and output: “the function <code>max(x, y)</code> should return something that is greater than or equal to both <code>x</code> and <code>y</code>.”</li>
+<li><em>Relationships</em> between two (or more) input-output pairs: "for any two lists of numbers <code>nums1</code> and <code>nums2</code>, we know that <code>sum(nums1 + nums2) == sum(nums1) + sum(nums2)</code>.</li>
+</ul>
+<p>These properties may seem a little strange, because they do not capture precisely what each function does; for example, <code>str</code> should not just return any string, but a string that represents its input. This is the trade-off that comes with property-based testing: in exchange for being able to run our code on a much larger range of inputs, we write tests which are imprecise characterizations of the function’s inputs. The challenge, then, with property-based testing is to come up with good properties that narrow down as much as possible the behaviour of the function being tested.</p>
+<h2 id="using-hypothesis">Using <code>hypothesis</code></h2>
+<p>As a first example, let’s consider our familiar <code>is_even</code> function, which we define in a file called <code>my_functions.py</code>:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">You can follow along in this section by creating your own files!</span></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Suppose we&#39;ve saved this in my_functions.py</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">def</span> is_even(value: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb1-4"><a href="#cb1-4"></a>    <span class="co">&quot;&quot;&quot;Return whether value is divisible by 2.</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &gt;&gt;&gt; is_even(2)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    True</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    &gt;&gt;&gt; is_even(17)</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">    False</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>    <span class="cf">return</span> value <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span></span></code></pre></div>
+<p>Rather than choosing specific inputs to test <code>is_even</code> on, we’re going to test the following two <em>properties</em>:</p>
+<ul>
+<li><code>is_even</code> always returns <code>True</code> when given an <code>int</code> of the form <code>2 * x</code> (where <code>x</code> is an <code>int</code>)</li>
+<li><code>is_even</code> always returns <code>False</code> when given an <code>int</code> of the form <code>2 * x + 1</code> (where <code>x</code> is an <code>int</code>)</li>
+</ul>
+<p>One of the benefits of our previous study of predicate logic is that we can express both of these properties clearly and unambiguously using symbolic notation:</p>
+<p><span class="math display">\[\begin{align*}
+\forall x \in \Z,~ \text{is_even}(2x) \\
+\forall x \in \Z,~ \lnot \text{is_even}(2x + 1)
+\end{align*}\]</span></p>
+<p>Now let’s see how to express these properties as test cases using <code>hypothesis</code>. First, we create a new file called <code>test_my_functions.py</code>, and include the following “test” function:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Make sure that <code>my_functions.py</code> and <code>test_my_functions.py</code> are in the same directory.</span></p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even</span>
+<span id="cb2-3"><a href="#cb2-3"></a></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">def</span> test_is_even_2x(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-6"><a href="#cb2-6"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns True when given a number of the form 2*x.&quot;&quot;&quot;</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a>    <span class="cf">assert</span> is_even(<span class="dv">2</span> <span class="op">*</span> x)</span></code></pre></div>
+<p>Note that unlike previous tests we’ve written, we have not chosen a specific input value for <code>is_even</code>! Instead, our test function <code>test_is_even_2x</code> takes an an integer for <code>x</code>, and calls <code>is_even</code> on <code>2 * x</code>. This is a more general form of test because now <code>x</code> could be any integer.</p>
+<p>So now the question is, how do we actually call <code>test_is_even_2x</code> on many different integer values?<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote"> You could run this file in the Python console and call it manually on different arguments, but there must be a better way!</span> This is where <code>hypothesis</code> comes in. In order to generate a range of inputs, the <code>hypothesis</code> module offers a set of <em>strategies</em> that we can use. These strategies are able to generate several values of a specific type of input. For example, to generate <code>int</code> data types, we can use the <code>integers</code> strategy. To start, we add these two lines to the top of our test file:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="im">from</span> hypothesis <span class="im">import</span> given                <span class="co"># NEW</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="im">from</span> hypothesis.strategies <span class="im">import</span> integers  <span class="co"># NEW</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="kw">def</span> test_is_even_2x(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-9"><a href="#cb3-9"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns True when given a number of the form 2*x.&quot;&quot;&quot;</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>    <span class="cf">assert</span> is_even(<span class="dv">2</span> <span class="op">*</span> x)</span></code></pre></div>
+<p>Just importing <code>given</code> and <code>integers</code> isn’t enough, of course. We need to somehow “attach” them to our test function so that <code>hypothesis</code> knows to generate integer inputs for the test. To do so, we use a new piece of Python syntax called a <strong>decorator</strong>, which is specified by using the <code>@</code> symbol with an expression in the line immediately before a function definition. Here is the use of a decorator in action:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="im">from</span> hypothesis <span class="im">import</span> given</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="im">from</span> hypothesis.strategies <span class="im">import</span> integers</span>
+<span id="cb4-4"><a href="#cb4-4"></a></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="at">@given</span>(x<span class="op">=</span>integers())  <span class="co"># NEW</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">def</span> test_is_even_2x(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-10"><a href="#cb4-10"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns True when given a number of the form 2*x.&quot;&quot;&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a>    <span class="cf">assert</span> is_even(<span class="dv">2</span> <span class="op">*</span> x)</span></code></pre></div>
+<p>The line <code>@given(x=integers())</code> is a bit tricky, so let’s unpack it. First, <code>integers</code> is a <code>hypothesis</code> function that returns a special data type called a <strong>strategy</strong>, which is what <code>hypothesis</code> uses to generate a range of possible inputs. In this case, calling <code>integers()</code> returns a strategy that simply generates <code>int</code>s.</p>
+<p>Second, <code>given</code> is a <code>hypothesis</code> function that takes in arguments in the form <code>&lt;param&gt;=&lt;strategy&gt;</code>, which acts as a mapping for the test parameter name to a strategy that <code>hypothesis</code> should use for generating arguments for that parameter.</p>
+<p>We say that the line <code>@given(x=integers())</code> <em>decorates</em> the test function, so that when we run the test function, <code>hypothesis</code> will call the test several times, using <code>int</code> values for <code>x</code> as specified by the strategy <code>integers()</code>. Essentially, <code>@given</code> helps automate the process of “run the test on different <code>int</code> values” for us!</p>
+<p>And finally, To actually run the test, we use <code>pytest</code>, just like before:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="im">from</span> hypothesis <span class="im">import</span> given</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="im">from</span> hypothesis.strategies <span class="im">import</span> integers</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even</span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="at">@given</span>(x<span class="op">=</span>integers())</span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="kw">def</span> test_is_even_2x(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb5-10"><a href="#cb5-10"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns True when given a number of the form 2*x.&quot;&quot;&quot;</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a>    <span class="cf">assert</span> is_even(<span class="dv">2</span> <span class="op">*</span> x)</span>
+<span id="cb5-12"><a href="#cb5-12"></a></span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb5-15"><a href="#cb5-15"></a>    <span class="im">import</span> pytest</span>
+<span id="cb5-16"><a href="#cb5-16"></a>    pytest.main([<span class="st">&#39;test_my_functions.py&#39;</span>, <span class="st">&#39;-v&#39;</span>])</span></code></pre></div>
+<h3 id="testing-odd-values">Testing odd values</h3>
+<p>Just like with unit tests, we can write multiple property-based tests in the same file and have <code>pytest</code> run each of them. Here is our final version of <code>test_my_functions.py</code> for this example, which adds a second test for numbers of the form <span class="math inline">\(2x + 1\)</span>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="im">from</span> hypothesis <span class="im">import</span> given</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="im">from</span> hypothesis.strategies <span class="im">import</span> integers</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="at">@given</span>(x<span class="op">=</span>integers())</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="kw">def</span> test_is_even_2x(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-10"><a href="#cb6-10"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns True when given a number of the form 2*x.&quot;&quot;&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="cf">assert</span> is_even(<span class="dv">2</span> <span class="op">*</span> x)</span>
+<span id="cb6-12"><a href="#cb6-12"></a></span>
+<span id="cb6-13"><a href="#cb6-13"></a></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="at">@given</span>(x<span class="op">=</span>integers())</span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="kw">def</span> test_is_even_2x_plus_1(x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-16"><a href="#cb6-16"></a>    <span class="co">&quot;&quot;&quot;Test that is_even returns False when given a number of the form 2*x + 1.&quot;&quot;&quot;</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a>    <span class="cf">assert</span> <span class="kw">not</span> is_even(<span class="dv">2</span> <span class="op">*</span> x <span class="op">+</span> <span class="dv">1</span>)</span>
+<span id="cb6-18"><a href="#cb6-18"></a></span>
+<span id="cb6-19"><a href="#cb6-19"></a></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb6-21"><a href="#cb6-21"></a>    <span class="im">import</span> pytest</span>
+<span id="cb6-22"><a href="#cb6-22"></a>    pytest.main([<span class="st">&#39;test_my_functions.py&#39;</span>, <span class="st">&#39;-v&#39;</span>])</span></code></pre></div>
+<!--
+
+We would also expect `is_even` to evaluate to `False` whenever an odd number is passed as an argument.
+But how can we turn the number generated by the `integers` strategy into an odd number?
+We could use a similar mathematical trick (e.g., multiply by two and add one), but instead we will use this opportunity to introduce a new hypothesis feature: `hypothesis.assume`.
+With `assume`, we can communicate to `hypothesis` that the value generated by a strategy should not be tested:
+
+
+```python
+# Note the change: we also import assume
+from hypothesis import given, assume
+from hypothesis.strategies import integers
+
+from my_functions import is_even
+
+@given(integers())
+def test_is_even_on_odd_number(value: int):
+    assume(value % 2 == 1)
+    assert is_even(value) == False
+```
+
+If we did not include `assume(value % 2 == 1)`, then the `integers` strategy may produce an even number, causing our assertion to fail even for a correct implementation of `is_even`.
+However, by including the `assume` statement, we ensure that `hypothesis` skips the assertion when `value` is even (in other words, we assume that `value` is odd). -->
+<h2 id="using-hypothesis-with-collections">Using <code>hypothesis</code> with collections</h2>
+<p>Now let’s consider a more complicated example, this time involving lists of integers. Let’s add the following function to <code>my_functions.py</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># In my_functions.py</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="kw">def</span> num_evens(nums: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="co">&quot;&quot;&quot;Return the number of even elements in nums.&quot;&quot;&quot;</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a>    <span class="cf">return</span> <span class="bu">len</span>([n <span class="cf">for</span> n <span class="kw">in</span> nums <span class="cf">if</span> is_even(n)])</span></code></pre></div>
+<p>Let’s look at one example of a property-based test for <code>num_evens</code>. For practice, we’ll express this property in predicate logic first. Let <span class="math inline">\(\mathcal{L}_{int}\)</span> be the set of lists of integers. The property we’ll express is:</p>
+<p><span class="math display">\[
+\forall \text{nums} \in \mathcal{L}_{\text{int}},~ \forall x \in \Z,~ \text{num_evens}(\text{nums} + [2x]) = \text{num_evens}(\text{nums}) + 1
+\]</span></p>
+<p>Translated into English: for any list of integers <span class="math inline">\(nums\)</span> and any integer <span class="math inline">\(x\)</span>, the number of even elements of <code>nums + [2 * x]</code> is one more than the number of even elements of <code>nums</code>.</p>
+<p>We can start using the same idea as our <code>is_even</code> example, by writing the test function in <code>test_my_functions.py</code>.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># In test_my_functions.py</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">def</span> test_num_evens_one_more_even(nums: <span class="bu">list</span>[<span class="bu">int</span>], x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb8-3"><a href="#cb8-3"></a>    <span class="co">&quot;&quot;&quot;Test num_evens when you add one more even element.&quot;&quot;&quot;</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>    <span class="cf">assert</span> num_evens(nums <span class="op">+</span> [<span class="dv">2</span> <span class="op">*</span> x]) <span class="op">==</span> num_evens(nums) <span class="op">+</span> <span class="dv">1</span></span></code></pre></div>
+<p>Now we need to use <code>@given</code> again to tell <code>hypothesis</code> to generate inputs for this test function. Because this function takes two arguments, we know that we’ll need a decorator expression of the form</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="at">@given</span>(nums<span class="op">=</span>..., x<span class="op">=</span>...)</span></code></pre></div>
+<p>We can reuse the same <code>integers()</code> strategy for <code>x</code>, but what about <code>nums</code>? Not surprisingly, we can import the <code>lists</code> function from <code>hypothesis.strategies</code> to create strategies for generating lists! The <code>lists</code> function takes in a single argument, which is a strategy for generating the elements of the list. In our example, we can use <code>lists(integers())</code> to return a strategy for generating lists of integers.</p>
+<p>Here is our full test file (with the <code>is_even</code> tests omitted):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="co"># In file test_my_functions.py</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="im">from</span> hypothesis <span class="im">import</span> given</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="im">from</span> hypothesis.strategies <span class="im">import</span> integers, lists  <span class="co"># NEW lists import</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="im">from</span> my_functions <span class="im">import</span> is_even, num_evens</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a></span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="at">@given</span>(nums<span class="op">=</span>lists(integers()), x<span class="op">=</span>integers())  <span class="co"># NEW given call</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="kw">def</span> test_num_evens_one_more_even(nums: <span class="bu">list</span>[<span class="bu">int</span>], x: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb10-10"><a href="#cb10-10"></a>    <span class="co">&quot;&quot;&quot;Test num_evens when you add one more even element.&quot;&quot;&quot;</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a>    <span class="cf">assert</span> num_evens(nums <span class="op">+</span> [<span class="dv">2</span> <span class="op">*</span> x]) <span class="op">==</span> num_evens(nums) <span class="op">+</span> <span class="dv">1</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a></span>
+<span id="cb10-13"><a href="#cb10-13"></a></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="cf">if</span> <span class="va">__name__</span> <span class="op">==</span> <span class="st">&#39;__main__&#39;</span>:</span>
+<span id="cb10-15"><a href="#cb10-15"></a>    <span class="im">import</span> pytest</span>
+<span id="cb10-16"><a href="#cb10-16"></a>    pytest.main([<span class="st">&#39;test_my_functions.py&#39;</span>, <span class="st">&#39;-v&#39;</span>])</span></code></pre></div>
+<h3 id="choosing-enough-properties">Choosing “enough” properties</h3>
+<p>The property test expressed in <code>test_num_evens_one_more_even</code> is pretty neat, but it by itself is not sufficient to verify the correctness of the <code>num_evens</code> function. For example, this property would also hold true if <code>num_evens</code> simply returned the length of the list, rather than the number of even elements.</p>
+<p>This is drawback with property-based tests: even though we can now check some property for very many inputs automatically, a single property alone does not guarantee that a function is correct. The ideal goal of property-based testing, then, is <em>choosing properties to verify</em>, so that if all of the properties are verified, then the function must be correct. This sounds too good to be true, and it often is—as functions get more complex, it is challenging or even impossible to find such a set of properties.</p>
+<p>But for <code>num_evens</code>, a relatively simple function, it is actually possible to <em>formally prove</em> the following statement, which tells us exactly which properties we need to check.</p>
+<div class="framed fullwidth">
+<p><strong>Theorem (correctness for <code>num_evens</code>).</strong> An implementation for <code>num_evens</code> is correct (i.e., returns the number of even elements for any list of numbers) <em>if and only if</em> it satisfies all three of the following:</p>
+<ol type="1">
+<li><span class="math inline">\(\text{num_evens}(\text{[]}) = 0\)</span></li>
+<li><span class="math inline">\(\forall \text{nums} \in \mathcal{L}_{\text{int}},~ \forall x \in \Z,~ \text{num_evens}(\text{nums} + [2x]) = \text{num_evens}(\text{nums}) + 1\)</span></li>
+<li><span class="math inline">\(\forall \text{nums} \in \mathcal{L}_{\text{int}},~ \forall x \in \Z,~ \text{num_evens}(\text{nums} + [2x + 1]) = \text{num_evens}(\text{nums})\)</span></li>
+</ol>
+</div>
+<p>Proving such a statement is beyond the scope of this chapter, but if you’re curious it is closely related to the proof technique of <em>induction</em>, which we will cover formally later this year. But the actual statement is pretty amazing: it tells us that with just one unit test (for <code>nums = []</code>) and two property tests, we can be certain that our <code>num_evens</code> function is correct!</p>
+<!--
+Let us consider a more complicated example, this time involving sets rather than integers.
+Let A and B be two arbitrary sets, and define for any set X, n(X) = "the number of elements in X".
+From this we can recall the following property:
+
+$n(A \cup B) = n(A) + n(B) - n(A \cap B)$.
+
+Let's add two functions to our `my_functions.py` file:
+
+```python
+def union(set1: set, set2: set) -> set:
+    """Return a new set that is the union of set1 and set2.
+
+    >>> union({1, 2, 3}, set())
+    {1, 2, 3}
+    >>> union({4, 5, 6}, {4, 5, 6})
+    {4, 5, 6}
+    """
+    union_set = set1
+    for item in set2:
+        if item not in union_set:
+            union_set.add(item)
+    return union_set
+
+def intersection(set1: set, set2: set) -> set:
+    """Return a new set that is the intersection of set1 and set2.
+
+    >>> intersection(set(), {7, 8, 9})
+    set()
+    >>> intersection({1, 2, 3, 'four'}, {2, 3, 4, 'four'})
+    {2, 3, 'four'}
+    """
+    intersection_set = set()
+    for item in set1:
+        if item in set2:
+            intersection_set.add(item)
+    return intersection_set
+```
+
+Next, we will import these functions and test the earlier property by generating sets with hypothesis.
+The elements in the sets don't actually matter, so without loss of generality we will use integers in the sets:
+
+```python
+from hypothesis import given
+# Note the change: we also import sets
+from hypothesis.strategies import integers, sets
+
+from my_functions import union, intersection
+
+@given(sets(integers()), sets(integers()))
+def test_intersection_formula(A: set, B: set):
+    assert len(union(A, B)) == len(A) + len(B) - len(intersection(A, B))
+```
+
+Note that our `@given` decorator has two arguments matching the two arguments of `test_intersection_formula`.
+Also notice that the `sets` strategy takes an argument itself.
+In this case, we have used `sets(integers())` to indicate that we want a set of integers for both `A` and `B`.
+The assertion will test to see that our property holds for all each `A` and `B`.
+Because we are using the `@given` decorator, the `hypothesis` module will test many different sets of integers to ensure that the property holds.
+
+The `hypothesis` module has many strategies that can be used to generate different types of data.
+See the appendix for more information. -->
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>7.6 Application: Securing Online Communications</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">7.6 Application: Securing Online Communications</h1>
+</header>
+<section>
+<p>Cryptography is central to all kinds of computing and online communication in today’s modern world. Modern security practices inform every stage of how we interact online, from the Wifi networks we connect to, to how data is transmitted back and forth between our computer and a server halfway around the world, and even how data is encrypted for storage on those servers. Every time we visit a website, watch a video on our phone, or post a photo or tweet, we are relying on modern cryptography to keep our communications private.</p>
+<p>In this section, we will tie together our study of cryptography by looking at one specific link in the chain of Internet communication. While doing so, we will explore some of the real-world design decisions and trade-offs that go into implementing a secure communication protocol used by billions of people around the world.</p>
+<h2 id="https-and-the-transport-layer-security-protocol">HTTPS and the Transport Layer Security protocol</h2>
+<p>Whether you are browsing a website on your computer or on your phone, you can probably see a little padlock icon next to the website’s URL. Here’s what happens when you click on it:</p>
+<div style="text-align: center">
+<p><img src="images/https_browser.png" alt="Browser image showing HTTPS icon" /><br />
+</p>
+</div>
+<p>This icon is our web browser’s way of telling us that the the data being sent from the server (<code>www.teach.cs.toronto.edu</code> in our above picture) has been encrypted using a communication protocol called <em>HTTPS</em>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> We won’t define the term “protocol” formally in this course, but you can think of it as an algorithm where the steps are split among two (or more) parties, rather than just a single computer. For example, the Diffie-Hellman key exchange is more commonly referred to as a <em>protocol</em> rather than an algorithm.</span> This protocol consists of two parts:</p>
+<ul>
+<li><strong>HTTP (Hypertext Transfer Protocol)</strong>, which governs the format of the data being exchanged between your computer and the server.</li>
+<li><strong>TLS (Transport Layer Security)</strong>, which governs how the data formatted by HTTP is encrypted during the communication process.</li>
+</ul>
+<p>On its own, HTTP allows your computer to communicate with servers around the world. But when combined with TLS, those communications are secure and cannot be “snooped” by an eavesdropper (at least not easily!).</p>
+<p>An analogy here might be helpful. Suppose you’re living in pre-Internet times, and writing a book (or set of course notes!), and want to send a draft to your publisher through mail. <em>HTTP</em> corresponds to the format in which you deliver the book: perhaps chapter by chapter, with a table of contents in front and appendices or an index at the end. <em>TLS</em> corresponds to how you encrypt the contents of what you send in this format. For example, you might apply a Caesar cipher to shift every character in your book or you might enclose each chapter in a separate locked briefcase for which only you and your publisher know the combination. Of course, TLS is much more sophisticated than either of the example “security” approaches. For the rest of this section, we’ll study how TLS uses the concepts we’ve learned across this chapter to encrypt your online communications.</p>
+<h2 id="tls-an-overview-simplified">TLS: An overview (simplified)</h2>
+<p>For our description of the TLS protocol, we’ll use the term <em>client</em> to refer to your computer and <em>server</em> to refer to the website you are communicating with. TLS starts off with the client initiating a request to the server (e.g., when you type in a URL into your web browser and press “Enter”). The following happens:</p>
+<ol type="1">
+<li>When the client initiates the request, the server sends a “proof of identity” that the client has connected with the intended server, which the client verifies. <em>This communication is not encrypted.</em></li>
+<li>Then, the client and server perform the <a href="03-key-exchange.html">Diffie-Hellman key exchange algorithm</a> to establish a shared secret key.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> A new secret key is chosen every time you visit a given website. This provides <em>forward secrecy</em>, which means that if an attacker records your communication with a server across multiple sessions, but is only able to discover what your key for a single session, they can only decrypt your communication for that session rather than all your past sessions.</span> <em>This communication is not encrypted either.</em></li>
+<li>All remaining communication (e.g., the actual website data!) is encrypted using an agreed-upon symmetric-key cryptosystem, like a <a href="02-one-time-pad.html#stream-ciphers">stream cipher</a>.</li>
+</ol>
+<p>That’s it! While the protocol seems straightforward, there are a few real-world details that we’ll look at. Let us investigate two questions:</p>
+<ol type="1">
+<li>Why is symmetric-key encryption (rather than public-key encryption) used to encrypt the communication in step 3?</li>
+<li>Given that the first two steps of of TLS are unencrypted, how can the client be sure it is actually communicating with the intended server the whole time?</li>
+</ol>
+<h2 id="why-symmetric-key-encryption">Why symmetric-key encryption?</h2>
+<p>Our first example of symmetric encryption, Caesar’s cipher, shows just how old the idea is. Public-key encryption is, relatively, much more modern and does not require that the two communicating parties share a secret key. But modern doesn’t always mean better—TLS relies on symmetric-key encryption because public-key cryptosystems, like RSA, are significantly <em>slower</em> than their symmetric-key counterparts. While RSA relies on modular exponentiation as the key encryption and decryption steps, modern symmetric-key cryptosystems use faster operations<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Typically these operations act on swapping or combining individual bytes in computer memory.</span> to encrypt and decrypt data.</p>
+<p>When computers became household commodities, performance was king. Here, performance is a broad term that typically refers to how quickly a computer can do something. For example: how long does it take to encrypt the frame of a video, send it over a wireless connection, and decrypt that frame on your phone? Consider that your phone is likely streaming at least 30 frames per second in order for you to enjoy a video of reasonable quality. It’s also increasingly likely that, today, the frame of video is high-definition, which requires even more data to be encrypted and decrypted. While security and privacy is king in today’s world, performance cannot be forgotten.</p>
+<h2 id="who-am-i-connected-to">Who am I connected to?</h2>
+<p>The first two steps of the TLS protocol are “setup” steps for the actual communication of data between the client and server. While a symmetric cryptosystem is used to encrypt the communicated data, these setup steps are unencrypted, and raise a natural question: how do we know we are communicating with the right server?</p>
+<p>For example, when we visit <code>www.google.com</code>, and our computer performs the TLS protocol with a distant server, how do we know our computer is connecting to a real Google server, and not some fake server that’s simply pretending to be Google? The consequences of establishing a connection with such a “fake Google” server are severe: that server might give us manipulated or fake search results, save our login information, or store text, images, and videos we upload to Google Drive or YouTube. Even if we encrypt all of this data in Step 3 of TLS, that encryption does not protect us from a malicious fake server posing as an honest one.</p>
+<p>In order to avoid such a dangerous situation, we need some way to verify that the server (e.g., Google) we intended to speak with is actually who they say they are. Herein lies one of the main benefits of public-key cryptosystems. Every public-key cryptosystem, including RSA, can implement two additional algorithms to:</p>
+<ol type="1">
+<li>Sign message using the private key</li>
+<li>Verify a signature using the public key</li>
+</ol>
+<p>These algorithms allow a server to <em>sign every message it sends</em> with is private key, and then have the client <em>verify</em> each message signature using the server’s public key. We call these <strong>digital signatures</strong>, and they help us identify exactly who we are speaking with. We won’t go into the specifics of the algorithms here, but the process for the RSA cryptosystem is similar to what we’ve outlined in this chapter (i.e., they exploit modular arithmetic). Alice can add her signature, which is a function of her private key, to a message. Bob can verify that Alice is the sender with Alice’s public key.</p>
+<p>Digital signatures are used in each of the first two steps in the TLS protocol, which is what we’ll look at next.</p>
+<h3 id="establishing-identity-digital-certificates">Establishing identity: digital certificates</h3>
+<p>In the first step of TLS, we said that the server sends the client a “proof of identity”. To make that more precise, the data the server sends in this step is called a <strong>digital certificate</strong>, which has identifying information for the server, including its domain (e.g., <code>www.google.com</code>), its organization name (e.g., “Google LLC”), and its <em>public key</em>.</p>
+<p>But how do we know this digital certificate is the “real” one? The certificate also includes the digital signature of a <em>certificate authority</em>, which is an organization whose purpose is to issue digital certificates to website domains and verify the identities of the operators of each of those domains.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> The largest of these worldwide are IdenTrust and DigiCert, though a recent non-profit called <em>Let’s Encrypt</em> launched in 2016.</span> So when the client “verifies” the digital certificate provided by the server, what’s actually happening is that the client is verifying the digital signature provided by the certificate authority, using the certificate authority’s public key.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> You might ask: how does the client know the certificate authority’s public key? It turns out that web browsers come <em>pre-installed</em> with the public keys of many certificate authorities!</span></p>
+<h3 id="maintaining-identity-during-diffie-hellman">Maintaining identity during Diffie-Hellman</h3>
+<p>After Step 1 of TLS, the client is confident that it has connected with the right server. But we aren’t in the clear yet—because the Diffie-Hellman algorithm is performed unencrypted, there is still the danger that an attacker might wait for Step 1 to complete and then intercept the messages for Diffie-Hellman in Step 2. Thus the attacker tricking the client into sharing a secret key with the attacker instead of the intended server.</p>
+<p>The server’s digital certificate doesn’t help here! Instead, the server <em>signs all messages</em> it sends during the Diffie-Hellman algorithm, so that at every step the client can verify that the message came from the intended server. Of course, this relies on the client knowing the server’s public key, which it gets from the digital certificate in the previous step!</p>
+<p>It is this <em>digital signature</em> from the server that allows the client to consistently verify that it is communicating with the server, and that the messages haven’t been tampered with. At the end of Step 2, the client and server have a shared secret key, and can now communicate safely using symmetric-key encryption.</p>
+<!-- ### Key Management
+
+Symmetric encryption only needs one key, but public-key cryptosystems requires both a public and private key (for each person who wants to receive messages).
+With public-key cryptosystems, there must be some mechanism to actually *find* public keys.
+Typically, public keys are found as *digital certificates* that identify a particular server and organization.
+When you connect to the University of Toronto's WiFi for the first time, your computer discovered and validated a certificate.^[
+    On older operating systems, this may need to be [done manually](https://onesearch.library.utoronto.ca/ic-faq/36617).
+]
+The details of [key management](https://en.wikipedia.org/wiki/Key_management) is beyond the scope of this course, but it is an important necessity in the world of public-key cryptosystems. -->
+<h2 id="ineffectiveness-of-cryptography">(In)effectiveness of Cryptography</h2>
+<p>We’ve mentioned that Diffie-Hellman and RSA are secure because it is very difficult to extract the private part of the data from what is being publicly communicated. But what if it wasn’t that difficult? Remember that both RSA and Diffie-Hellman rely on very large prime numbers. But, as we saw in Chapter 6, generating these prime numbers is costly. And it turns out that, unfortunately, many servers use the same group of prime numbers.</p>
+<p>Recall that Diffie-Hellman relies on the discrete logarithm problem being difficult to solve. But some steps of the algorithm can be precomputed for a specific group of prime numbers. In 2015, <a href="https://dl.acm.org/doi/abs/10.1145/2810103.2813707">a team of academics</a> discovered that 82% of servers used the same 512-bit group of prime numbers. The team proposed the Logjam attack, which exploited this vulnerability and compromised communications. They also extrapolated that Logjam applied to the 1024-bit case. Today, 2048-bit keys are used to avoid the Logjam attack—for example, Google <a href="https://www.computing.co.uk/news/2285984/google-updates-ssl-certificates-to-2048bit-encryption">announced in 2013</a> that it switched from 1024- to 2048-bit keys.</p>
+<p>The Logjam attack is not an isolated incident. Security protocols are constantly being revised, leading to important updates for web browsers, email clients, servers, etc. Earlier versions of the TLS protocol (1.0 and 1.1) are <a href="https://arstechnica.com/gadgets/2018/10/browser-vendors-unite-to-end-support-for-20-year-old-tls-1-0/">deprecated as of March 2020</a>, which means that “secure” communication must use more recent versions of the protocol. Nor are attacks limited to cryptography. The security and privacy of our data can be attacked at multiple points, and attackers are not limited to exploiting weaknesses when we communicate data. The fields of computer security and data privacy are becoming one of the most important problems to solve as laws and policies slowly catch up to a world where a person’s private information is used as a common commodity sold and exchanged by corporations.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

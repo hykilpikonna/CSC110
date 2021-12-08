@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>8.6 Analyzing Built-In Data Type Operations</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">8.6 Analyzing Built-In Data Type Operations</h1>
+</header>
+<section>
+<p>So far in our study of running time, we have looked at algorithms that use only primitive numeric data types or loops/comprehensions over collections. In this section, we’re going to study the running time of operations on built-in collection data types (e.g., lists, sets, dictionaries), and the custom data classes that we create. Because a single instance of these compound data types can be very large (e.g., a list of one trillion elements!), the natural question we will ask is, “what operations will take longer when called on very large data structures?” We’ll also study <em>why</em> this is the case for Python lists by studying how they are stored in computer memory. For the other compound data types, however, their implementations are more complex and so we’ll only touch on them in this course.</p>
+<h2 id="timing-operations">Timing operations</h2>
+<p>Python provides a module (called <code>timeit</code>) that can tell us how long Python code takes to execute on our machine. Here’s an example showing how to import the module and use it:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="im">from</span> timeit <span class="im">import</span> timeit</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;5 + 15&#39;</span>, number<span class="op">=</span><span class="dv">1000</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="fl">1.9799976143985987e-05</span></span></code></pre></div>
+<p>The call to <code>timeit</code> will perform the operation <code>5 + 15</code> (which we passed in as a string) one thousand times. The function returned the total time elapsed, in seconds, to perform all thousand operations. The return value in the notes is specific to one machine—try the code on your own machine to see how you compare!</p>
+<p>Next, let’s create two lists with different lengths for comparison: 1,000 and 1,000,000:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> lst_1k <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">10</span> <span class="op">**</span> <span class="dv">3</span>))</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> lst_1m <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">10</span> <span class="op">**</span> <span class="dv">6</span>))</span></code></pre></div>
+<p>We know that there are several operations available to lists. For example, we can search the list using the <code>in</code> operator. Or we could lookup an element at a specific index in the list. Or we could mutate the list by inserting or deleting. Let’s compare the time it takes to access the first element of the list:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;lst_1k[0]&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fl">5.80001506023109e-06</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;lst_1m[0]&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fl">5.599984433501959e-06</span></span></code></pre></div>
+<p>The length of the list does not seem to impact the time it takes to retrieve an element from this specific index. Let’s compare the time it takes to insert a new element at the front of the list:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.insert(lst_1k, 0, -1)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="fl">0.00014379998901858926</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.insert(lst_1m, 0, -1)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="fl">0.1726928999996744</span></span></code></pre></div>
+<p>There is a clear difference in time (by several orders of magnitude) between searching a list with one-thousand elements versus one-million elements.</p>
+<p>Indeed, every list operation has its own implementation whose running time we can analyze, using the same techniques we studied earlier in this chapter. But in order to fully understand why these implementations work the way they do, we need to dive deeper into how Python lists really work.</p>
+<h2 id="how-python-lists-are-stored-in-memory">How Python lists are stored in memory</h2>
+<p>Recall that a Python <code>list</code> object represents an ordered sequence of other objects, which we call its elements. When we studied the object-based memory model in Chapter 5, we drew diagrams like this to represent a <code>list</code>:</p>
+<div class="fullwidth">
+<p><img src="images/list_memory_model.png" alt="Memory model diagram of a list" /><br />
+</p>
+</div>
+<p>Our memory-model diagrams are an abstraction. In reality, all data used by a program are stored in blocks of computer memory, which are labeled by numbers called <em>memory addresses</em>, so that the program can keep track of where each piece of data is stored.</p>
+<p>Here is the key idea for how the Python interpreter stores lists in memory. For every Python <code>list</code> object, the references to its elements are stored in a <em>contiguous</em> block of memory. For example, here is how we could picture the same list as in the previous diagram, now stored in blocks of computer memory:</p>
+<div class="text-align: center">
+<p><img src="./images/list_memory_layout.png" style="width:70.0%" alt="Diagram of a list in memory" /><br />
+</p>
+</div>
+<p>As before, our list stores four integers. In memory, the four consecutive blocks 400–403 store references to the actual integer values. Of course, even this diagram is a simplification of what’s actually going on in computer memory, but it illustrates the main point: the references to each list elements are always stored consecutively. This type of list implementation is used by the Python interpreter and many other programming languages, and is called an <strong>array-based list implementation</strong>.</p>
+<h3 id="fast-list-indexing">Fast list indexing</h3>
+<p>The primary reason Python uses an array-based list implementation is that it makes list indexing fast. Because the list element references are stored in consecutive memory locations, accessing the <em>i</em>-th element can be done with simple arithmetic: take the memory address where the list starts, and then increase it by <em>i</em> blocks to obtain the the location of the <em>i</em>-th element reference.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Think about it like this: suppose you’re walking down a hallway with numbered rooms on just one side and room numbers going up by one. If you see that the first room number is 11, and you’re looking for room 15, you can be confident that it is the fifth room down the hall.</span> More precisely, this means that list indexing is a <em>constant-time</em> operation: its running time does not depend on the size of the list or the index <em>i</em> being accessed. So even with a very long list or a very large index, we expect list indexing to take the same amount of time (and e very fast!).</p>
+<p>This is true for both evaluating a list indexing expression or assigning to a list index, e.g. <code>lst[1] = 100</code>. In the latter case, the Python interpreter takes constant time to calculate the memory address where the <code>lst[1]</code> reference is stored and modify it to refer to a new object.</p>
+<h3 id="mutating-contiguous-memory">Mutating contiguous memory</h3>
+<p>Array-based lists have constant time indexing, but as we’ll see again and again in our study of data types, fast operations almost always come at the cost of slow ones. In order for Python to be able to calculate the address of an arbitrary list index, these references must always be stores in a contiguous block of memory; there can’t be any “gaps”.</p>
+<p>Maintaining this contiguity has implications for how insertion and deletion in a Python list works. When a list element to be deleted, all items after it have to be moved back one memory block to fill the gap.</p>
+<div class="text-align: center">
+<p><img src="images/list_memory_animation_deletion.gif" style="width:70.0%" alt="Animation of deletion in the middle of a list" /><br />
+</p>
+</div>
+<p>Similarly, when a list element is inserted somewhere in the list, all items after it moved forward one block.</p>
+<div class="text-align: center">
+<p><img src="images/list_memory_animation_insertion.gif" style="width:70.0%" alt="Animation of insertion in the middle of the list" /><br />
+</p>
+</div>
+<p>In general, suppose we have a list <code>lst</code> of length <span class="math inline">\(n\)</span> and we wish to remove the element at index <span class="math inline">\(i\)</span> in the list, where <span class="math inline">\(0 \leq i &lt; n\)</span>. Then <span class="math inline">\(n - i - 1\)</span> elements must be moved, and the number of “basic operations” this requires is <span class="math inline">\(\Theta(n - i)\)</span>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Here we’re counting moving the contents of one memory block to another as a basic operation.</span> Similarly, if we want to insert an element into a list of length <span class="math inline">\(n\)</span> at index <span class="math inline">\(i\)</span>, <span class="math inline">\(n - i\)</span> elements must be moved, and so the running time of this operation is <span class="math inline">\(\Theta(n - i)\)</span>.</p>
+<p>At the extremes, this means that inserting/deleting at the front of a Python list (<span class="math inline">\(i = 0\)</span>) takes <span class="math inline">\(\Theta(n)\)</span> time, i.e., proportional to the length of list; on the other hand, inserting/deleting at the back of a Python list (<span class="math inline">\(i = n - 1\)</span>) is a constant-time operation. We can see evidence of this in the following <code>timeit</code> comparisons:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.append(lst_1k, 123)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="fl">1.0400000064691994e-05</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.append(lst_1m, 123)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="fl">1.3099999932819628e-05</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.insert(lst_1k, 0, 123)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fl">4.520000015872938e-05</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;list.insert(lst_1m, 0, 123)&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="fl">0.011574500000051557</span></span></code></pre></div>
+<div class="center reference-table">
+<table>
+<caption>Summary of list operation asymptotic running times (<span class="math inline">\(n\)</span> is the list size)</caption>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Running time (<span class="math inline">\(n\)</span> = <code>len(lst)</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>List indexing (<code>lst[i]</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="even">
+<td>List index assignment (<code>lst[i]</code> = …)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="odd">
+<td>List insertion at end (<code>list.append(lst, ...)</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="even">
+<td>List deletion at end (<code>list.pop(lst)</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="odd">
+<td>List insertion at index (<code>list.insert(lst, i, ...)</code>)</td>
+<td><span class="math inline">\(\Theta(n - i)\)</span></td>
+</tr>
+<tr class="even">
+<td>List deletion at index (<code>list.pop(lst, i)</code>)</td>
+<td><span class="math inline">\(\Theta(n - i)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="when-space-runs-out">When space runs out</h3>
+<p>Finally, we should point out one subtle assumption we’ve just made in our analysis of list insertion: that there will always be free memory blocks at the end of the list for the list to expand into. In practice, this is almost always true, and so for the purposes of this course we’ll stick with this assumption. But in <em>CSC263/265 (Data Structures and Analysis)</em>, you’ll learn about how programming languages handle array-based list implementations to take into account whether there is “free space” or not, and how these operations still provide the running times we’ve presented in this section.</p>
+<h2 id="running-time-analysis-with-list-operations">Running-time analysis with list operations</h2>
+<p>Now that we’ve learned about the running time of basic list operations, let’s see how to apply this knowledge to analysing the running time of algorithms that use these operations. We’ll look at two different examples.</p>
+<div class="example">
+<p>Analyse the running time of the following function.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> squares(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Return a list containing the squares of the given numbers.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    squares_so_far <span class="op">=</span> []</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb6-6"><a href="#cb6-6"></a>        <span class="bu">list</span>.append(squares_so_far, number <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="cf">return</span> squares_so_far</span></code></pre></div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list (i.e., <code>numbers</code>).<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Note the similarities between this analysis and our analysis of <code>sum_so_far</code> in <a href="04-basic-algorithm-analysis.html">Section 8.4</a>.</span></p>
+<p>This function body consists of three statements (with the middle statement, the for loop, itself containing more statements). To analyse the total running time of the function, we need to count each statement separately:</p>
+<ul>
+<li>The assignment statement <code>squares_so_far = 0</code> counts as 1 step, as its running time does not depend on the length of <code>numbers</code>.</li>
+<li>The for loop:
+<ul>
+<li>Takes <span class="math inline">\(n\)</span> iterations</li>
+<li>Inside the loop body, we call <code>list.append(squares_so_far, number ** 2)</code>. Based on our discussion of the previous section, this call to <code>list.append</code> takes <em>constant time</em> (<span class="math inline">\(\Theta(1)\)</span> steps), and so the entire loop body counts as 1 step.</li>
+<li>This means the for loop takes <span class="math inline">\(n \cdot 1 = n\)</span> steps total.</li>
+</ul></li>
+<li>The return statement counts as 1 step: it, too, has running time that does not depend on the length of <code>numbers</code>.</li>
+</ul>
+<p>The total running time is the sum of these three parts: <span class="math inline">\(1 + n + 1 = n + 2\)</span>, which is <span class="math inline">\(\Theta(n)\)</span>.</p>
+</div>
+</div>
+<p>In our above analysis, we had to take into account the running of calling <code>list.append</code>, but this quantity did not depend on the length of the input list. Our second example will look very similar to the first, but now we use a different <code>list</code> method that results in a dramatic difference in running time:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> squares_reversed(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">list</span>[<span class="bu">int</span>]:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return a list containing the squares of the given numbers, in reverse order.&quot;&quot;&quot;</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a>    squares_so_far <span class="op">=</span> []</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb7-6"><a href="#cb7-6"></a>        <span class="co"># Now, insert number ** 2 at the START of squares_so_far</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a>        <span class="bu">list</span>.insert(squares_so_far, <span class="dv">0</span>, number <span class="op">**</span> <span class="dv">2</span>)</span>
+<span id="cb7-8"><a href="#cb7-8"></a></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">return</span> squares_so_far</span></code></pre></div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list (i.e., <code>numbers</code>).</p>
+<p>This function body consists of three statements (with the middle statement, the for loop, itself containing more statements). To analyse the total running time of the function, we need to count each statement separately:</p>
+<ul>
+<li>The assignment statement <code>squares_so_far = 0</code> counts as 1 step, as its running time does not depend on the length of <code>numbers</code>.</li>
+<li>The for loop:
+<ul>
+<li><p>Takes <span class="math inline">\(n\)</span> iterations</p></li>
+<li><p>Inside the loop body, we call <code>list.insert(squares_so_far, 0, n ** 2)</code>. As we discussed above, inserting at the front of a Python list causes all of its current elements to be shifted over, taking time proportional to the size of the list. Therefore this call takes <span class="math inline">\(\Theta(k)\)</span> time, where <span class="math inline">\(k\)</span> is the current length of <code>squares_so_far</code>.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> We can’t use <span class="math inline">\(n\)</span> here, because <span class="math inline">\(n\)</span> already refers to the length of <code>numbers</code>!</span></p>
+<p>For the purpose of our analysis, we count a function call with <span class="math inline">\(\Theta(k)\)</span> running time as taking <span class="math inline">\(k\)</span> steps, i.e., ignoring the “eventually” and “constant factors” part of the definition of Theta. And so we say that the loop body takes <span class="math inline">\(k\)</span> steps.</p></li>
+<li><p>In order to calculate the total running time of the loop, we need to add the running times of every iteration. We know that <code>squares_so_far</code> starts as empty, and then increases in length by <code>1</code> at each iteration. So then <span class="math inline">\(k\)</span> (the current length of <code>squares_so_far</code>) takes on the values <span class="math inline">\(0, 1, 2, \dots, n - 1\)</span>, and we can calculate the total running time of the for loop using a summation:</p>
+<p><span class="math display">\[\sum_{k=0}^{n-1} k = \frac{(n-1)n}{2}\]</span></p></li>
+</ul></li>
+<li>The return statement counts as 1 step: it, too, has running time that does not depend on the length of <code>numbers</code>.</li>
+</ul>
+<p>The total running time is the sum of these three parts: <span class="math inline">\(1 + \frac{(n-1)n}{2} + 1 = \frac{(n-1)n}{2} + 2\)</span>, which is <span class="math inline">\(\Theta(n^2)\)</span>.</p>
+</div>
+<p>To summarize, this single line of code change (from <code>list.append</code> to <code>list.insert</code> at index 0) causes the running time to change dramatically, from <span class="math inline">\(\Theta(n)\)</span> to <span class="math inline">\(\Theta(n^2)\)</span>. When calling functions and performing operations on data types, we must always be conscious of which functions/operations we’re using and their running times. It is easy to skim over a function call because it takes up so little visual space, but that one call might make the difference between running times of <span class="math inline">\(\Theta(n)\)</span>, <span class="math inline">\(\Theta(n^2)\)</span>, or even <span class="math inline">\(\Theta(2^n)\)</span>!<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Lastly, you might be curious how we could speed up <code>squares_reversed</code>. It turns out that Python has a built-in method <code>list.reverse</code> that mutates a list by reversing it, and this method has a <span class="math inline">\(\Theta(n)\)</span> running time. So we could accumulate the squares by using <code>list.append</code>, and then call <code>list.reverse</code> on the final result.</span></p>
+<h2 id="sets-and-dictionaries">Sets and dictionaries</h2>
+<p>It turns out that how Python implements sets and dictionaries is very similar, and so we’ll discuss them together in this section. Both of them are implemented using a more primitive data structure called a <em>hash table</em>, which you’ll also learn about in CSC263/265. The benefit of using hash tables is that they allow <em>constant-time lookup, insertion, and removal</em> of elements (for a set) and key-value pairs (for a dictionary)!<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote"> This is actually a simplification of how hash tables are implemented. So while we’ll treat all these operations as constant-time in this course, this relies on some technical assumptions which hold in most, but not all, cases.</span></p>
+<p>But of course, there is a catch. The trade-off of how Python uses hash tables is the elements of a set and the keys of a dictionary cannot be mutable data types, a restriction we discussed earlier in the course. This can be inconvenient, but in general is seen as a small price to pay for the speed of their operations.</p>
+<p>So if you only care about set operations like “element of”, it is more efficient to use a <code>set</code> than a <code>list</code>:<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote"> You’ll notice that we haven’t formally discussed the running time of the list <code>in</code> operation in this section. We’ll study it in the next section.</span></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> lst1M <span class="op">=</span> <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">10</span> <span class="op">**</span> <span class="dv">6</span>))</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="op">&gt;&gt;&gt;</span> set1M <span class="op">=</span> <span class="bu">set</span>(<span class="bu">range</span>(<span class="dv">10</span> <span class="op">**</span> <span class="dv">6</span>))</span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;5000000 in lst1M&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="fl">0.16024739999556914</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="op">&gt;&gt;&gt;</span> timeit(<span class="st">&#39;5000000 in set1M&#39;</span>, number<span class="op">=</span><span class="dv">10</span>, <span class="bu">globals</span><span class="op">=</span><span class="bu">globals</span>())</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="fl">4.6000059228390455e-06</span></span></code></pre></div>
+<h2 id="data-classes">Data classes</h2>
+<p>It turns out that data classes (and in fact all Python data types) store their instance attributes using a dictionary that maps attribute names to their corresponding values. This means that data classes benefit from the constant-time dictionary operations that we discussed above.</p>
+<p>Explicitly, the two operations that we can perform on a data class instance are looking up an attribute value (e.g., <code>david.age</code>) and mutating the instance by assigning to an attribute (e.g., <code>david.age = 99</code>). Both of these operations take constant time, independent of how many instance attributes the data class has or what values are stored for those attributes.</p>
+<div class="center reference-table">
+<table>
+<caption>Summary of set, dictionary, and data class operations</caption>
+<thead>
+<tr class="header">
+<th>Operation</th>
+<th>Running time</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Set/dict Search (<code>in</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="even">
+<td><code>set.add</code>/<code>set.remove</code></td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Dictionary key lookup (<code>d[k]</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="even">
+<td>Dictionary key assignment (<code>d[k] = ...</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Data class attribute access (<code>obj.attr</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+<tr class="even">
+<td>Data class attribute assignment (<code>obj.attr = ...</code>)</td>
+<td><span class="math inline">\(\Theta(1)\)</span></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="aggregation-functions">Aggregation functions</h2>
+<p>Finally, we’ll briefly discuss a few built-in aggregation functions we’ve seen so far in this course.</p>
+<p><code>sum</code>, <code>max</code>, <code>min</code> have a <em>linear</em> running time (<span class="math inline">\(\Theta(n)\)</span>), proportional to the size of the input collection. This should be fairly intuitive, as each element of the collection must be processed in order to calculate each of these values.</p>
+<p><code>len</code> is a bit surprising: it has a <em>constant</em> running time (<span class="math inline">\(\Theta(1)\)</span>), independent of the size of the input collection. In order words, the Python interpreter does <em>not</em> need to process each element of a collection when calculating the collection’s size! Instead, each of these collection data types stores a special attribute referring to the size of that collection. And as we discussed for data classes, accessing attributes takes constant time.<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote"> There is one technical difference between data class attributes and these collection “size” attributes: we can’t access the latter directly in Python code using dot notation, only through calling <code>len</code> on the collection. This is a result of how the Python language implements these built-in collection data types.</span></p>
+<p><code>any</code> and <code>all</code> are a bit different. Intuitively, they may need to check ever element of their input collection, just like <code>sum</code> or <code>max</code>, but they can also <em>short-circuit</em> (stopping before checking every element), just like the logical <code>or</code> and <code>and</code> operators. This means their running time isn’t a fixed function of the input size, but rather a possible range of values, depending on whether this short-circuiting happens or not. We’ll discuss how to formally analyse the running time of such functions in the next section.</p>
+</section>
+<!--
+### Searching Contiguous Memory
+
+While contiguous memory helps us find elements at a specific *index*, it does not help with searching elements for a specific *value*.
+The value being searched for could be at any index (address).
+The typical algorithm to approach a search is a *linear search*:
+start at the very first index and check if the value has been found.
+If not, check the next index and repeat as necessary.
+We can see that this will take O(n) time, hence why the `in` operator took more time with `lst1M` than `lst1K`.
+
+-->
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>9.2 Defining Our Own Data Types, Part 3</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">9.2 Defining Our Own Data Types, Part 3</h1>
+</header>
+<section>
+<p>All the way back in <a href="../04-complex-data/02-data-classes-1.html">Chapter 4</a>, we learned how to create our own simple data types in Python using the <code>@dataclass</code> decorator. While data classes are very useful, they are just one particular form of classes in Python. The <code>@dataclass</code> decorator takes our data class declaration—its <em>public interface</em>—and automatically creates an implementation of class. This makes it very simple to set up data classes, at the cost of flexibility of implementation.</p>
+<p>In this section, we’ll learn about how to create a Python data type from scratch, without the automatic implementation that <code>@dataclass</code> provides. In future sections, we’ll apply what we’ve learned to defining new Python data types to solve various computational problems.</p>
+<h2 id="what-if-we-just-remove-the-dataclass">What if we just remove the <code>@dataclass</code>?</h2>
+<p>To start with, recall the <code>Person</code> data class example we used when we first introduced data classes:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="at">@dataclass</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.&quot;&quot;&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a>    age: <span class="bu">int</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a>    address: <span class="bu">str</span></span></code></pre></div>
+<p>We were able to use this data class to create and display an instance of the class and access its attributes:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person(<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Liu&#39;</span>, <span class="dv">100</span>, <span class="st">&#39;40 St. George Street&#39;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> david</span>
+<span id="cb2-3"><a href="#cb2-3"></a>Person(given_name<span class="op">=</span><span class="st">&#39;David&#39;</span>, family_name<span class="op">=</span><span class="st">&#39;Liu&#39;</span>, age<span class="op">=</span><span class="dv">100</span>, address<span class="op">=</span><span class="st">&#39;40 St. George Street&#39;</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="op">&gt;&gt;&gt;</span> david.given_name</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co">&#39;David&#39;</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="op">&gt;&gt;&gt;</span> david.family_name</span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">&#39;Liu&#39;</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="op">&gt;&gt;&gt;</span> david.age</span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="dv">100</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="op">&gt;&gt;&gt;</span> david.address</span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">&#39;40 St. George Street&#39;</span></span></code></pre></div>
+<p>Now let’s see what happens if we remove the <code>@dataclass</code> decorator from our class definition. This is indeed valid Python syntax, but with perhaps an unexpected consequence.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="co"># @dataclass (We&#39;ve commented out this line)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">class</span> Person:</span>
+<span id="cb3-3"><a href="#cb3-3"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.&quot;&quot;&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>    age: <span class="bu">int</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    address: <span class="bu">str</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person(<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Liu&#39;</span>, <span class="dv">100</span>, <span class="st">&#39;40 St. George Street&#39;</span>)</span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="pp">TypeError</span>: Person() takes no arguments</span></code></pre></div>
+<p>Okay, something went wrong. Even though our class declaration still contains attribute names and type annotations, we cannot call <code>Person</code> and pass in values for those attributes. According to the error message, <code>Person() takes no arguments</code>. So what happens when we try to create an instance of <code>Person</code> and pass in zero arguments?</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person()</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">type</span>(david)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="op">&lt;</span><span class="kw">class</span> <span class="st">&#39;Person&#39;</span><span class="op">&gt;</span></span></code></pre></div>
+<p>We successfully created an instance of the <code>Person</code> class. But what happens when we try to access the instance attributes?</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> david.given_name</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="pp">AttributeError</span>: <span class="st">&#39;Person&#39;</span> <span class="bu">object</span> has no attribute <span class="st">&#39;given_name&#39;</span></span></code></pre></div>
+<p>This should make sense: by just calling <code>Person()</code> with no arguments, we haven’t specified values for any of the instance attributes, so we shouldn’t expect to see a value when we access <code>david.given_name</code>.</p>
+<h2 id="defining-an-initializer">Defining an initializer</h2>
+<p>When we execute the statement <code>david = Person()</code>, all we have in memory is this:</p>
+<p><img src="images/empty-person.png" alt="An empty instance of Person" /><br />
+</p>
+<p>A <code>Person</code> object has been created, but it has no attributes. To fix this (without using <code>@dataclass</code>), we need to define a new method for <code>Person</code> called the <strong>initializer</strong>. The initializer method of a class is called when an instance of the class is created in Python. As its name suggests, the purpose of this method it to initialize all of the instance attributes for the new object. To distinguish it from regular functions, Python always uses the name <code>__init__</code> for the initializer method.</p>
+<p>When we use the <code>@dataclass</code> decorator, the Python interpreter automatically creates an initializer method for the class. So let’s start by seeing what this “automatic” code for the initializer looks like.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">class</span> Person:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.&quot;&quot;&quot;</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a>    age: <span class="bu">int</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a>    address: <span class="bu">str</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, given_name: <span class="bu">str</span>, family_name: <span class="bu">str</span>, age: <span class="bu">int</span>, address: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="co">&quot;&quot;&quot;Initialize a new Person object.&quot;&quot;&quot;</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a>        <span class="va">self</span>.given_name <span class="op">=</span> given_name</span>
+<span id="cb6-11"><a href="#cb6-11"></a>        <span class="va">self</span>.family_name <span class="op">=</span> family_name</span>
+<span id="cb6-12"><a href="#cb6-12"></a>        <span class="va">self</span>.age <span class="op">=</span> age</span>
+<span id="cb6-13"><a href="#cb6-13"></a>        <span class="va">self</span>.address <span class="op">=</span> address</span></code></pre></div>
+<p>Since all methods are functions, it should not surprise you to learn that we define methods using the same keyword (<code>def</code>) as other functions. However, there are two key differences between this method definition and all top-level function definitions we’ve studied so far. The first is that this method definition is <em>indented</em> so that it is inside the body of the <code>class Person</code> definition. This is how we signal that the function being defined is a method for the <code>Person</code> class.</p>
+<p>The second difference is the presence of the parameter <code>self</code>. Every initializer has a first parameter that refers to the instance that has just been created and is to be initialized. By convention, we always call it <code>self</code>. This is such a strong Python convention that most code checkers will complain if you don’t follow it.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> This name is the reason we refer to attributes as <code>self.&lt;attr&gt;</code> in class representation invariants.</span> In fact, this convention is so strong that we also typically omit the type annotation for <code>self</code>. We could have written <code>self: Person</code>, but because the type of <code>self</code> should <em>always</em> be the class that the initializer belongs to, this is considered redundant in Python!</p>
+<p>To understand how <code>self</code> works, let’s examine how we use the initializer:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> david <span class="op">=</span> Person(<span class="st">&#39;David&#39;</span>, <span class="st">&#39;Liu&#39;</span>, <span class="dv">100</span>, <span class="st">&#39;40 St. George Street&#39;</span>)</span></code></pre></div>
+<p>Notice that we never mention the initializer <code>__init__</code> by name; it is called automatically, and the values in parentheses are passed to it. Also notice that we pass four values to the initializer, even though it has five parameters. We never have to pass a value for <code>self</code>; Python automatically sets it to the instance that is to be initialized. So this is what is happening in memory at the beginning of the initializer:</p>
+<p><img src="images/person-initializer-start.png" alt="Memory at the start of Person.__init__" /><br />
+</p>
+<p>The initializer’s job is to create and initialize the instance attributes. To do this, we use one assignment statement per instance attribute. This uses the same dot notation syntax that we saw in Chapter 5 for assigning to instance attributes: <code>self.given_name = given_name</code>, for example. Note that <code>given_name</code> and <code>self.given_name</code> are two different expressions! <code>given_name</code> is a <em>parameter</em> of the initialize, while <code>self.given_name</code> is an <em>instance attribute</em>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> Some other programming languages like Java allow you to refer to instance attributes without using dot notation. In Python, however, dot notation is <em>mandatory</em> for accessing and assigning to instance attributes.</span> We can illustrate this distinction by showing the state of memory after all attributes have been initialized, immediately before the initializer returns:</p>
+<p><img src="images/person-initializer-end.png" alt="Memory at the end of Person.__init__" /><br />
+</p>
+<h3 id="what-really-happens-when-we-create-a-new-object">What really happens when we create a new object</h3>
+<p>You may have noticed that the initializer return type is <code>None</code>, and that the body of the function does not actually return anything. This is a bit strange, since when we evaluate <code>david = Person('David', 'Liu', 100, '40 St. George Street')</code>, a <code>Person</code> object is definitely returned from the function call and assigned to the variable <code>david</code>.</p>
+<p><img src="images/person-initializer-after-return.png" alt="Memory after Person.__init__ returns" /><br />
+</p>
+<p>What’s going on? It turns out that calling <code>Person</code> doesn’t just cause <code>__init__</code> to be called. It actually does three things:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Of course, this is true not just for our <code>Person</code> class, but in fact <em>every</em> class in Python.</span></p>
+<ol type="1">
+<li>Create a new <code>Person</code> object behind the scenes.</li>
+<li>Call <code>__init__</code> with the new object passed to the parameter <code>self</code>, along with the other arguments.</li>
+<li>Return the new object. This step is where the object is returned, not directly from the call to <code>__init__</code> in Step 2.</li>
+</ol>
+<p>So in fact, <code>__init__</code> is a <em>helper function</em> in the object creation process. Its task is only to initialize attributes for an object; Python handles both creating the object beforehand, and returning the new object after <code>__init__</code> has been called.</p>
+<h2 id="methods-as-part-of-a-data-type-interface">Methods as part of a data type interface</h2>
+<p>It is certainly possible to accomplish everything that we would ever want to do with our <code>Person</code> class by writing top-level functions, and this is the approach we’ve taken with data classes up to this point. An alternate and commonly-used approach is to define <em>methods</em> for a data type, which become part of the interface of that data type. Remember that methods are just functions that belong to a data type—but this “belonging to” is not just an abstract relationship, but creates concrete consequences for how the Python interpreter handles them. When we define a data class and top-level functions, the interface of a data class itself only consists of its attributes; we have to remember to import those functions separately in order to use them. When we define a class with methods, those methods are <em>always</em> bundled with the class, and so any instance of the class can use those methods, without needing to import them separately.</p>
+<p>We have seen one example of a method definition already: the initializer, <code>__init__</code>. More generally, any function that operates on an instance of a class can be converted into a method by doing the following:</p>
+<ul>
+<li>Indent the function so that it is part of the class body, underneath the innstance attributes.</li>
+<li>Ensure that the first parameter of the function is an instance of the class, and name this parameter <code>self</code>.</li>
+</ul>
+<p>For example, suppose we had the following function to increase a person’s age:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> increase_age(person: Person, years: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Add the given number of years to the given person&#39;s age.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">    &gt;&gt;&gt; david = Person(&#39;David&#39;, &#39;Liu&#39;, 100, &#39;40 St. George Street&#39;)</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">    &gt;&gt;&gt; increase_age(david, 10)</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">    &gt;&gt;&gt; david.age</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">    110</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    person.age <span class="op">=</span> person.age <span class="op">+</span> years</span></code></pre></div>
+<p>We can turn <code>increase_age</code> into a <code>Person</code> method as follows:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">class</span> Person:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;A custom data type that represents data for a person.&quot;&quot;&quot;</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a>    given_name: <span class="bu">str</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>    family_name: <span class="bu">str</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>    age: <span class="bu">int</span></span>
+<span id="cb9-6"><a href="#cb9-6"></a>    address: <span class="bu">str</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, given_name: <span class="bu">str</span>, family_name: <span class="bu">str</span>, age: <span class="bu">int</span>, address: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb9-9"><a href="#cb9-9"></a>        <span class="co">&quot;&quot;&quot;Initialize a new Person object.&quot;&quot;&quot;</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a>        <span class="va">self</span>.given_name <span class="op">=</span> given_name</span>
+<span id="cb9-11"><a href="#cb9-11"></a>        <span class="va">self</span>.family_name <span class="op">=</span> family_name</span>
+<span id="cb9-12"><a href="#cb9-12"></a>        <span class="va">self</span>.age <span class="op">=</span> age</span>
+<span id="cb9-13"><a href="#cb9-13"></a>        <span class="va">self</span>.address <span class="op">=</span> address</span>
+<span id="cb9-14"><a href="#cb9-14"></a></span>
+<span id="cb9-15"><a href="#cb9-15"></a>    <span class="kw">def</span> increase_age(<span class="va">self</span>, years: <span class="bu">int</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb9-16"><a href="#cb9-16"></a>        <span class="co">&quot;&quot;&quot;Add the given number of years to this person&#39;s age.</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">        &gt;&gt;&gt; david = Person(&#39;David&#39;, &#39;Liu&#39;, 100, &#39;40 St. George Street&#39;)</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">        &gt;&gt;&gt; Person.increase_age(david, 10)</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">        &gt;&gt;&gt; david.age</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">        110</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a>        <span class="va">self</span>.age <span class="op">=</span> <span class="va">self</span>.age <span class="op">+</span> years</span></code></pre></div>
+<p>Notice that we now use parameter <code>self</code> (without a type annotation) to access instance attributes, just as we did in the initializer. In our function docstring, the phrase “the given person” changes to “this person”,<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> We typically use the word “this” in a method docstring to refer to the object instance that <code>self</code> refers to. In fact, some other programming languages also use <code>this</code> instead of <code>self</code> as a variable or keyword to refer to this object in code.</span> and our doctest example changes the call to <code>increase_age</code> to <code>Person.increase_age</code>.</p>
+<h3 id="shortcut-syntax-for-method-calls">Shortcut syntax for method calls</h3>
+<p>Now that we are starting to define our own custom classes and methods, we are ready to see a shorthand for calling methods in Python. Let’s take a look at the method call from our doctest above:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a><span class="op">&gt;&gt;&gt;</span> Person.increase_age(david, <span class="dv">10</span>)</span></code></pre></div>
+<p>This uses dot notation to access the <code>increase_age</code> method of the <code>Person</code> class, calling it with the two arguments <code>david</code> and <code>10</code>, which get assigned to parameters <code>self</code> and <code>years</code>, respectively.</p>
+<p>The alternate form for calling the <code>increase_age</code> method is to use dot notation <em>with the <code>Person</code> instance directly</em>:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a><span class="op">&gt;&gt;&gt;</span> david.increase_age(<span class="dv">10</span>)</span></code></pre></div>
+<p>When we call <code>david.increase_age(10)</code>, the Python interpreter does the following:</p>
+<ol type="1">
+<li>It looks up the class of <code>david</code>, which is <code>Person</code>.</li>
+<li>It looks up the <code>increase_age</code> method of the <code>Person</code> class.</li>
+<li>It calls <code>Person.increase_age</code> on <code>david</code> and <code>10</code>. In other words, the interpreter <em>automatically</em> passes the value to the left of the dot (in this case, the object <code>david</code> refers to) as the method’s first parameter <code>self</code>.</li>
+</ol>
+<p>This works not just for our custom class <code>Person</code>, but all built-in data types as well. For example, <code>list.append(lst, 10)</code> can be written as <code>lst.append(10)</code>, and <code>str.lower(s)</code> as simply <code>s.lower()</code>. More generally, a method call of the form <code>obj.method(x1, x2, ..., xn)</code> is equivalent to <code>type(obj).method(obj, x1, x2, ..., xn)</code>.</p>
+<p>Though we’ve been using the more explicit “class dot notation” style (<code>Person.increase_age</code>) so far in this course, we’ll switch over to the “object dot notation” style (<code>david.increase_age</code>) starting in this chapter, as this is the much more common style in Python programming. There are two primary reasons why the latter style is standard:</p>
+<ol type="1">
+<li><p>It matches other languages with an <em>object-oriented</em> style of programming, where the object being operated own is of central importance. Because we read from left to right, every time we use dot notation with the instance object on the left, we are reminded that it is an object we are working with, whether we are accessing a piece of data bundled with that object or performing an operation on that object.</p>
+<p>We read <code>david.age</code> as “access <code>david</code>’s age” and <code>david.increase_age(10)</code> as “increase <code>david</code>’s age by 10”. In both cases, <code>david</code> is the most important object in the code expression.</p></li>
+<li><p>Only the “object dot notation” style of method call supports <em>inheritance</em>, which is a technical feature of classes that we’ll discuss in the next chapter.</p></li>
+</ol>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

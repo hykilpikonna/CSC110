@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>2.3 Local Variables and Function Scope</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">2.3 Local Variables and Function Scope</h1>
+</header>
+<section>
+<p>One of the key purposes of functions is to separate different computations in a program, so that we don’t have to worry about them all at once. When we write our code in separate functions, we can focus on working with just a single function, and ignore the rest of the code in other functions.</p>
+<p>One way in which Python support this way of designing programs is through separating the variables in each functions so that <em>a function call can only access its own variables, but not variables defined within other functions</em>. In this section, we’ll explore how this works, learning more about how Python keep track of function calls and variables.</p>
+<h2 id="example-1-introducing-local-variable-scope">Example 1: introducing local variable scope</h2>
+<p>Consider the example from the previous section:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> square(x: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return x squared.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    &gt;&gt;&gt; square(3.0)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    9.0</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &gt;&gt;&gt; square(2.5)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    6.25</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span></span></code></pre></div>
+<p>The parameter <code>x</code> is a <em>variable</em> that is assigned a value based on when the function was called. Because this variable is only useful inside the function body, Python does not allow it to be accessible from outside the body. We say that <code>x</code> is a <strong>local variable</strong> of <code>square</code> because it is limited to the function body. Here is another way to put it, using an important new definition. The <strong>scope</strong> of a variable is the places in the code where that variable can be accessed. A <em>local variable</em> of a function is a variable whose scope is the body of that function.</p>
+<p>Let’s illustrate by first creating a variable in the Python console, and then calling <code>square</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> n <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> square(n <span class="op">+</span> <span class="fl">3.5</span>)</span></code></pre></div>
+<p>We know that when <code>square</code> is called, its argument expression <code>n + 3.5</code> is evaluated first, producing the value <code>13.5</code>, which is then assigned to the parameter <code>x</code>. Now let’s consider what the memory model looks like when the <code>return</code> statement is evaluated. A naive diagram would simply show the two variables <code>n</code> and <code>x</code> and their corresponding values:<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> We do not show <code>result</code> because it hasn’t been assigned a value yet; this only happens <em>after</em> <code>square</code> returns.</span></p>
+<div class="memory-model-values">
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n</code></td>
+<td><code>10.0</code></td>
+</tr>
+<tr class="even">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>But this is very misleading! In our memory model diagrams, we group the variables together based on whether they are introduced in the Python console or inside a function:</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code> (console)</caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><code>square</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We use the name <code>__main__</code> to label the table for variables defined in the Python console.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> This is a special name in Python—more on this later.</span> Inside the body of <code>square</code>, the <em>only</em> variable that can be used is <code>x</code>, and the outside in the Python console, the <em>only</em> variable that can be used is <code>n</code>. This may seem a tricky at first, but these memory model diagrams are a good way to visualize what’s going on. At the point that the body of square is evaluated, only the “<code>square</code>” table in the memory model is active:</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><mark><strong><code>square</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>But after <code>square</code> returns and we’re back to the Python console, the “<code>square</code>” table is no longer accessible, and only the <code>__main__</code> table is active:</p>
+<div class="memory-model-values">
+<table>
+<caption><mark><strong><code>__main__</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n</code></td>
+<td><code>10.0</code></td>
+</tr>
+<tr class="even">
+<td><code>result</code></td>
+<td><code>182.25</code></td>
+</tr>
+</tbody>
+</table>
+<div class="memory-model-values-inactive">
+<table>
+<caption><code>square</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Trying to access variable <code>x</code> from the Python console results in an error:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> n <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> square(n <span class="op">+</span> <span class="fl">3.5</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="fl">182.25</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="op">&gt;&gt;&gt;</span> x</span>
+<span id="cb3-5"><a href="#cb3-5"></a>Traceback (most recent call last):</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  File <span class="st">&quot;&lt;stdin&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="pp">NameError</span>: name <span class="st">&#39;x&#39;</span> <span class="kw">is</span> <span class="kw">not</span> defined</span></code></pre></div>
+<h2 id="example-2-duplicate-variable-names">Example 2: duplicate variable names</h2>
+<p>The principle of “separate tables” in our memory model applies even when we use the same variable name in two different places. Suppose we modify our example above to use <code>x</code> instead of <code>n</code> in the Python console:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> square(x <span class="op">+</span> <span class="fl">3.5</span>)</span></code></pre></div>
+<p>Following the same reasoning as above, the argument expression <code>x + 3.5</code> is evaluated to produce <code>13.5</code>, which is then assigned to the parameter <code>x</code>. Does this modify the <code>x</code> variable in the Python console? No! They are different variables even though they share the same name.</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><code>square</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>We can confirm this after the function call is evaluated by checking the value of the original <code>x</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> x <span class="op">=</span> <span class="fl">10.0</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> square(x <span class="op">+</span> <span class="fl">3.5</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="op">&gt;&gt;&gt;</span> result</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="fl">182.25</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="op">&gt;&gt;&gt;</span> x</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="fl">10.0</span></span></code></pre></div>
+<p>Here is what our memory model looks like after <code>square</code> has returned:</p>
+<div class="memory-model-values">
+<table>
+<caption><mark><strong><code>__main__</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>10.0</code></td>
+</tr>
+<tr class="even">
+<td><code>result</code></td>
+<td><code>182.25</code></td>
+</tr>
+</tbody>
+</table>
+<div class="memory-model-values-inactive">
+<table>
+<caption><code>square</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>13.5</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<h2 id="example-3-not-accessing-another-functions-variables">Example 3: (not) accessing another function’s variables</h2>
+<p>Our last example in this section involves two functions, one of which calls the other:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> square(x: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co">&quot;&quot;&quot;Return x squared.</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">    &gt;&gt;&gt; square(3.0)</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">    9.0</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">    &gt;&gt;&gt; square(2.5)</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">    6.25</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a></span>
+<span id="cb6-11"><a href="#cb6-11"></a></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="kw">def</span> square_of_sum(numbers: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="co">&quot;&quot;&quot;Return the square of the sum of the given numbers.&quot;&quot;&quot;</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>    total <span class="op">=</span> <span class="bu">sum</span>(numbers)</span>
+<span id="cb6-15"><a href="#cb6-15"></a>    <span class="cf">return</span> square(total)</span></code></pre></div>
+<p>Let’s first call our new function <code>square_of_sum</code> in the Python console:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="op">&gt;&gt;&gt;</span> nums <span class="op">=</span> [<span class="fl">1.5</span>, <span class="fl">2.5</span>]</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> square_of_sum(nums)</span>
+<span id="cb7-3"><a href="#cb7-3"></a><span class="op">&gt;&gt;&gt;</span> result</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="fl">16.0</span></span></code></pre></div>
+<p>We can trace what happens at three points when we call <code>square_of_sum</code>:</p>
+<table class="fullwidth" style="border: 1px solid black;">
+<tr>
+<td>
+Right before <code>square_of_sum</code> is called (from console)
+</td>
+<td>
+Right before <code>square</code> is called (from <code>square_of_sum</code>)
+</td>
+<td>
+Right before <code>square</code> returns
+</td>
+</tr>
+<tr>
+<td>
+<div class="memory-model-values">
+<table>
+<caption><mark><strong><code>__main__</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nums</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+<td>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nums</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><mark><strong><code>square_of_sum</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>numbers</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+<tr class="even">
+<td><code>total</code></td>
+<td><code>4.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+<td>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nums</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><code>square_of_sum</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>numbers</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+<tr class="even">
+<td><code>total</code></td>
+<td><code>4.0</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><mark><strong><code>square</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>4.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</td>
+</tr>
+</table>
+<p>From these diagrams, we see how the list <code>[1.5, 2.5]</code> is passed from the console to <code>square_of_sum</code>, and how the number <code>4.0</code> is passed from <code>square_of_sum</code> to <code>square</code>.</p>
+<p>Now suppose we wanted to do something a bit silly: have <code>square</code> access <code>total</code> instead of <code>x</code>. We know from our memory model that these variables should be assigned the same value, so the program’s behaviour shouldn’t change, right?</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">def</span> square(x: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb8-2"><a href="#cb8-2"></a>    <span class="co">&quot;&quot;&quot;Return x squared.</span></span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="co">    &gt;&gt;&gt; square(3.0)</span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="co">    9.0</span></span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">    &gt;&gt;&gt; square(2.5)</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">    6.25</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>    <span class="cf">return</span> total <span class="op">**</span> <span class="dv">2</span>  <span class="co"># Now we&#39;re using total instead of x</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a></span>
+<span id="cb8-11"><a href="#cb8-11"></a></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="kw">def</span> square_of_sum(numbers: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb8-13"><a href="#cb8-13"></a>    <span class="co">&quot;&quot;&quot;Return the square of the sum of the given numbers.&quot;&quot;&quot;</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a>    total <span class="op">=</span> <span class="bu">sum</span>(numbers)</span>
+<span id="cb8-15"><a href="#cb8-15"></a>    <span class="cf">return</span> square(total)</span></code></pre></div>
+<p>Let’s see what happens when we try to call <code>square_of_sum</code> in the Python console now:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="op">&gt;&gt;&gt;</span> nums <span class="op">=</span> [<span class="fl">1.5</span>, <span class="fl">2.5</span>]</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="op">&gt;&gt;&gt;</span> square_of_sum(nums)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>Traceback (most recent call last):</span>
+<span id="cb9-4"><a href="#cb9-4"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">1</span>, <span class="kw">in</span> <span class="op">&lt;</span>module<span class="op">&gt;</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">15</span>, <span class="kw">in</span> square_of_sum</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  File <span class="st">&quot;&lt;input&gt;&quot;</span>, line <span class="dv">9</span>, <span class="kw">in</span> square</span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="pp">NameError</span>: name <span class="st">&#39;total&#39;</span> <span class="kw">is</span> <span class="kw">not</span> defined</span></code></pre></div>
+<p>An error occurs! Let’s take a look at the state of memory when <code>square</code> is called (this is the same as above):</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>nums</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><code>square_of_sum</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>numbers</code></td>
+<td><code>[1.5, 2.5]</code></td>
+</tr>
+<tr class="even">
+<td><code>total</code></td>
+<td><code>4.0</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><mark><strong><code>square</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>x</code></td>
+<td><code>4.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Well, there is indeed both a <code>total</code> variable and an <code>x</code> variable with the same value, <code>4.0</code>. So why are we getting this error? Python’s rule for local scope: <em>a local variable can only be accessed in the function body it is defined</em>. Here, the statement <code>return total ** 2</code> is in the body of <code>square</code>, but attempts to access the local variable of a different function (<code>square_of_sum</code>). When the Python interpreter attempts to retrive the value of <code>total</code>, it looks only in the scope of <code>square</code>, and doesn’t find <code>total</code>, resulting in a <code>NameError</code>.</p>
+<p>The somewhat non-intuitive point about this behaviour is that this happens <em>even when <code>square_of_sum</code> is still active</em>. In our example, <code>square</code> is called from within <code>square_of_sum</code>, and so the variable <code>total</code> <em>does</em> exist in Python’s memory—it just isn’t accessible. While this might seem like a limitation of the language, it’s actually a good thing: this prevents you from accidentally using a variable from a completely different function when working on a function.</p>
+<h2 id="summary">Summary</h2>
+<p>In this section, we learned about how Python handles <em>local variables</em>, by making them accessible only from within the function that they are defined. Though we hope this makes intuitive sense, some of the details and diagrams we presented here were fairly technical. We recommend coming back to this section in a few days and reviewing this material, perhaps by explaining in your own words what’s happening in each example. You can also practice drawing this style of memory model diagram for future code that you write.</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

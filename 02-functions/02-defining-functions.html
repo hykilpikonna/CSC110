@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>2.2 Defining Our Own Functions</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">2.2 Defining Our Own Functions</h1>
+</header>
+<section>
+<p>Python provides many built-in top-level functions and methods for us, but as we start writing more code, it is essential for us to be able to create our own functions specific to the problem we are solving. In this section, we’ll learn how to define our own top-level functions in Python.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> And later on, we’ll study how to define our own data types and methods as well.</span></p>
+<p>First, let’s recall how we define a function in mathematics. We first specify the function name, domain, and codomain: for example, <span class="math inline">\(f: \R \to \R\)</span>. Then, we write the function header and body, usually in a single line: for example, <span class="math inline">\(f(x) = x^2\)</span>. We do this so often in mathematics that we often take parts of this for granted, for example leaving out the domain/codomain specification, and usually choosing <span class="math inline">\(f\)</span> as the function name and <span class="math inline">\(x\)</span> as the parameter name. However, the functions we’ll implement in Python are much more diverse, and so it will be important to be explicit in every part of this process.</p>
+<h2 id="defining-a-python-function">Defining a Python function</h2>
+<p>Here is the complete definition of a “squaring” function in Python. Take a moment to read through the whole definition, and then continue reading to learn about this definition’s different parts.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> square(x: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="co">&quot;&quot;&quot;Return x squared.</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">    &gt;&gt;&gt; square(3.0)</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="co">    9.0</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">    &gt;&gt;&gt; square(2.5)</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">    6.25</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span></span></code></pre></div>
+<p>This function definition is the most complex form of Python code we’ve seen so far, so let’s break this down part by part.</p>
+<ol type="1">
+<li><p>The first line, <code>def square(x: float) -&gt; float:</code> is called the <strong>function header</strong>. Its purpose is to convey the following pieces of information:</p>
+<ul>
+<li>The function’s name (<code>square</code>).</li>
+<li>The number and type of arguments the function expects. A <strong>parameter</strong> is a variable in a function definition that refers to a argument when the function is called. In this example, the function has one parameter with name <code>x</code> and type <code>float</code>.</li>
+<li>The function’s <strong>return type</strong>, which is the type following the <code>-&gt;</code>, <code>float</code>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> In this example, the function’s parameter and return type are the same, but this won’t always be the case. </span></li>
+</ul>
+<p>The syntax for a function header for a unary function is:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python fullwidth"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> <span class="op">&lt;</span>function_name<span class="op">&gt;</span>(<span class="op">&lt;</span>parameter_name<span class="op">&gt;</span>: <span class="op">&lt;</span>parameter_type<span class="op">&gt;</span>) <span class="op">-&gt;</span> <span class="op">&lt;</span>return_type<span class="op">&gt;</span>:</span></code></pre></div>
+<p>Compared to our mathematical version, there are two main differences. First, we chose the name <code>square</code> rather than <code>f</code> as the function name; in Python, we will always pick descriptive names for our functions rather than relying on the conventional “<span class="math inline">\(f\)</span>”. And second, we use data types to specify the function domain and codomain: the code <code>x: float</code> specifies that the parameter <code>x</code> must be a <code>float</code> value, and the code <code>-&gt; float</code> specifies that this function always returns a <code>float</code> value.</p>
+<p>We can express this restriction in an analogous way to <span class="math inline">\(f: \R \to \R\)</span> by writing <code>float -&gt; float</code>; we call <code>float -&gt; float</code> the <strong>type contract</strong> of the <code>square</code> function.</p></li>
+<li><p>The next seven lines, which start and end with triple-quotes (<code>"""</code>), is called the <strong>function docstring</strong>. This is another way of writing a comment in Python: text that is meant to be read by humans, but not executed as Python code. The goal of the function docstring is to communicate what the function does.</p>
+<p>The first part of the docstring, <code>Return x squared.</code>, is an English description of the function. The second part might look a bit funny at first, since it seems like Python code:<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">Or more precisely, it looks like the Python console!</span></p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> square(<span class="fl">3.0</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="fl">9.0</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> square(<span class="fl">2.5</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fl">6.25</span></span></code></pre></div>
+<p>This part of the docstring shows example uses of the function, just like the examples we showed of built-in functions in the previous section. You can read the first example literally as “when you type <code>square(3.0)</code> into the Python console, <code>9.0</code> is returned” and the second as “when you type <code>square(2.5)</code> into the Python console, <code>6.25</code> is returned”. These examples are called <strong>doctest examples</strong>, for a reason we’ll see in a future section. While a English description may technically be enough to specify the function’s behaviour, doctest examples are invaluable for aiding understanding of the function behaviour (which is why we use them in teaching as well!).</p>
+<p>The function docstring is indented inside the function header, as a visual indicator that it is part of the overall function definition.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Unlike many other programming languages, this kind of indentation in Python is <strong>mandatory</strong> rather than merely recommended. Python’s designers felt strongly enough about indentation improving readability of Python programs that they put indentation requirements like this into the language itself.</span></p></li>
+<li><p>The final line, <code>return x ** 2</code>, is called the <strong>body</strong> of the function, and is the code that is executed when the function is called. Like the function docstring, the function body is also indented so that it is “inside” the function definition.</p>
+<p>This code uses another keyword, <code>return</code>, which signals a new kind of statement: the <strong>return statement</strong>, which has the form:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="cf">return</span> <span class="op">&lt;</span>expression<span class="op">&gt;</span></span></code></pre></div>
+<p>When a return statement is executed, the following happens:</p>
+<ol type="1">
+<li>The <code>&lt;expression&gt;</code> is evaluated, producing a value.</li>
+<li>That value is then returned to wherever the function was called. No more code in the function body is executed after this point.</li>
+</ol></li>
+</ol>
+<h2 id="what-happens-when-a-function-is-called">What happens when a function is called?</h2>
+<p>In the previous section, we called built-in functions, and took for granted that they worked properly, without worrying about how they work. Now that we’re able to define our own functions, we are ready to fully understand what happens when a function is called.</p>
+<p>As an example, suppose we’ve defined <code>square</code> as above, and then call it in the Python console:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="op">&gt;&gt;&gt;</span> square(<span class="fl">2.5</span>)</span></code></pre></div>
+<p>When we press Enter, the Python interpreter evaluates the function call by doing the following:</p>
+<ol type="1">
+<li>Evaluate the argument <code>2.5</code>, and then assign <code>2.5</code> to the function parameter <code>x</code>.</li>
+<li>Evaluate the body of the <code>square</code> function, by doing:
+<ol type="a">
+<li>First evaluate <code>x ** 2</code>, which is <code>6.25</code> (since <code>x</code> refers to the value <code>2.5</code>).</li>
+<li>Then stop executing the function body, and return the value <code>6.25</code> back to the Python console.</li>
+</ol></li>
+<li>The function call <code>square(2.5)</code> evaluates to <code>6.25</code>, and this is displayed on the screen.</li>
+</ol>
+<p>As we observed in the previous section, we can combine multiple function calls within a single expression. What happens when we call <code>square</code> twice in the same expression? For example:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="op">&gt;&gt;&gt;</span> square(<span class="fl">2.5</span>) <span class="op">+</span> square(<span class="op">-</span><span class="fl">1.0</span>)</span></code></pre></div>
+<p>We can step through this as well; notice how we’ve duplicated the text from before to illustrate the similarities between calling <code>square(2.5)</code> and <code>-square(-1.0)</code>.</p>
+<ol type="1">
+<li>Python evaluates the operands to <code>+</code> in left-to-right order, so evaluate <code>square(2.5)</code> first.
+<ol type="i">
+<li>Evaluate <code>2.5</code>, and then assign <code>2.5</code> to the function parameter <code>x</code>.</li>
+<li>Evaluate the body of the <code>square</code> function, by doing:
+<ol type="a">
+<li>First evaluate <code>x ** 2</code>, which is <code>6.25</code> (since <code>x</code> refers to <code>2.5</code>).</li>
+<li>Then stop executing the function body, and return the value <code>6.25</code> back to the Python console.</li>
+</ol></li>
+</ol></li>
+<li>Nothing is displayed yet! There’s still <code>square(-1.0)</code> to be evaluated.
+<ol type="i">
+<li>Evaluate <code>-1.0</code>, and then assign <code>-1.0</code> to the function parameter <code>x</code>.</li>
+<li>Evaluate the body of the <code>square</code> function, by doing:
+<ol type="a">
+<li>First evaluate <code>x ** 2</code>, which is <code>1.0</code> (since <code>x</code> refers to <code>-1.0</code>).</li>
+<li>Then stop executing the function body, and return the value <code>1.0</code> back to the Python console.</li>
+</ol></li>
+</ol></li>
+<li>Now the expression to evaluate has been simplified to <code>6.25 + 1.0</code>, which evaluates to <code>7.25</code>. This value is displayed on the screen.</li>
+</ol>
+<h2 id="defining-functions-in-files">Defining functions in files</h2>
+<p>While it is possible to define functions directly in the Python console, this isn’t a good approach: every time we restart the Python console, we lose all our previous definitions. So instead, we save functions in files so that we can reuse them across multiple sessions in the Python console (and in other files).</p>
+<p>For example, suppose we have the following file called <code>my_functions.py</code>:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> square(x: <span class="bu">float</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="co">&quot;&quot;&quot;Return x squared.</span></span>
+<span id="cb7-3"><a href="#cb7-3"></a></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="co">    &gt;&gt;&gt; square(3.0)</span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">    9.0</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">    &gt;&gt;&gt; square(2.5)</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co">    6.25</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a>    <span class="cf">return</span> x <span class="op">**</span> <span class="dv">2</span></span></code></pre></div>
+<p>In PyCharm, we can right-click and select “Run File in Python Console”. This will start the Python console and run our file, which then allows us to call our function <code>square</code> just like any built-in function:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1"></a><span class="op">&gt;&gt;&gt;</span> square(<span class="fl">3.0</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="fl">9.0</span></span></code></pre></div>
+<p><video src="videos/running_file_demo.webm" controls=""><a href="videos/running_file_demo.webm">Demo of running Python file in PyCharm</a></video><br />
+</p>
+<h2 id="defining-functions-with-multiple-parameters">Defining functions with multiple parameters</h2>
+<p>Let’s now look at a more complex example that will illustrate a function definition that takes in more than one parameter.</p>
+<p>Recall the <a href="../01-working-with-data/04-variables.html">distance formula from Section 1.4</a> to calculate the distance between two points <span class="math inline">\((x_1, y_1), (x_2, y_2)\)</span> in the Cartesian plane: <span class="math display">\[d = \sqrt{(x_1 - x_2)^2 + (y_1 - y_2)^2}\]</span></p>
+<p>We’ll now write a function in Python that calculates this formula. This function will take two inputs, where each input is a <code>tuple</code> of two <code>float</code>s, representing the <span class="math inline">\(x\)</span>- and <span class="math inline">\(y\)</span>-coordinates of each point. When we define a function with multiple parameters, we write the name and type of each parameter using the same format we saw earlier, with parameters separated by commas from each other. Here is the function header and docstring:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">def</span> calculate_distance(p1: <span class="bu">tuple</span>, p2: <span class="bu">tuple</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb9-2"><a href="#cb9-2"></a>    <span class="co">&quot;&quot;&quot;Return the distance between points p1 and p2.</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">    p1 and p2 are tuples of the form (x, y), where the x- and y-coordinates are points.</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">    &gt;&gt;&gt; calculate_distance((0, 0), (3.0, 4.0))</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">    5.0</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">    &quot;&quot;&quot;</span></span></code></pre></div>
+<p>In order to use the above formula, we need to extract the coordinates from each point. This is a good reminder of <code>tuple</code> indexing, and the fact that function bodies can consist of more than one statement.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote"> Remember: the function body’s statements are executed one at a time until a <code>return</code> statement is executed.</span></p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1"></a>    <span class="co"># The start of the body of calculate_distance</span></span>
+<span id="cb10-2"><a href="#cb10-2"></a>    x1 <span class="op">=</span> p1[<span class="dv">0</span>]</span>
+<span id="cb10-3"><a href="#cb10-3"></a>    y1 <span class="op">=</span> p1[<span class="dv">1</span>]</span>
+<span id="cb10-4"><a href="#cb10-4"></a>    x2 <span class="op">=</span> p2[<span class="dv">0</span>]</span>
+<span id="cb10-5"><a href="#cb10-5"></a>    y2 <span class="op">=</span> p2[<span class="dv">1</span>]</span></code></pre></div>
+<p>Now that we have the four coordinates, we can apply the above formula and return the result</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1"></a>    <span class="co"># Continuing the function body</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>    <span class="cf">return</span> ((x1 <span class="op">-</span> x2) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (y1 <span class="op">-</span> y2) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span></span></code></pre></div>
+<p>Putting this all together, we have:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">def</span> calculate_distance(p1: <span class="bu">tuple</span>, p2: <span class="bu">tuple</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb12-2"><a href="#cb12-2"></a>    <span class="co">&quot;&quot;&quot;Return the distance between points p1 and p2.</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">    p1 and p2 are tuples of the form (x, y), where the x- and y-coordinates are points.</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">    &gt;&gt;&gt; calculate_distance((0, 0), (3.0, 4.0))</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">    5.0</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a>    x1 <span class="op">=</span> p1[<span class="dv">0</span>]</span>
+<span id="cb12-10"><a href="#cb12-10"></a>    y1 <span class="op">=</span> p1[<span class="dv">1</span>]</span>
+<span id="cb12-11"><a href="#cb12-11"></a>    x2 <span class="op">=</span> p2[<span class="dv">0</span>]</span>
+<span id="cb12-12"><a href="#cb12-12"></a>    y2 <span class="op">=</span> p2[<span class="dv">1</span>]</span>
+<span id="cb12-13"><a href="#cb12-13"></a>    <span class="cf">return</span> ((x1 <span class="op">-</span> x2) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (y1 <span class="op">-</span> y2) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span></span></code></pre></div>
+<h2 id="function-reuse">Function reuse</h2>
+<p>Our above function body is perfectly correct, but you might notice that the <code>** 2</code> expressions exactly mimic the body of the first function we defined in this section: <code>square</code>. And so we can reuse the <code>square</code> function inside the body of <code>calculate_distance</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">def</span> calculate_distance(p1: <span class="bu">tuple</span>, p2: <span class="bu">tuple</span>) <span class="op">-&gt;</span> <span class="bu">float</span>:</span>
+<span id="cb13-2"><a href="#cb13-2"></a>    <span class="co">&quot;&quot;&quot;Return the distance between points p1 and p2.</span></span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a><span class="co">    p1 and p2 are tuples of the form (x, y), where the x- and y-coordinates are points.</span></span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co">    &gt;&gt;&gt; calculate_distance((0, 0), (3.0, 4.0))</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">    5.0</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a>    x1 <span class="op">=</span> p1[<span class="dv">0</span>]</span>
+<span id="cb13-10"><a href="#cb13-10"></a>    y1 <span class="op">=</span> p1[<span class="dv">1</span>]</span>
+<span id="cb13-11"><a href="#cb13-11"></a>    x2 <span class="op">=</span> p2[<span class="dv">0</span>]</span>
+<span id="cb13-12"><a href="#cb13-12"></a>    y2 <span class="op">=</span> p2[<span class="dv">1</span>]</span>
+<span id="cb13-13"><a href="#cb13-13"></a>    <span class="cf">return</span> (square(x1 <span class="op">-</span> x2) <span class="op">+</span> square(y1 <span class="op">-</span> y2)) <span class="op">**</span> <span class="fl">0.5</span></span></code></pre></div>
+<p>This example of function reuse is quite small, but as our programs grow larger, it will be essential to organize our code into different functions. We’ll explore this idea in more detail, and other principles of good function and program design, throughout this course.</p>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Defining Functions (<a href="https://www.youtube.com/watch?v=5xajzCaBWAs">Part 1</a>, <a href="https://www.youtube.com/watch?v=8V9SQtHo-Z0">Part 2</a>)</li>
+<li>CSC108 videos: Docstrings and Function <code>help</code> (<a href="https://www.youtube.com/watch?v=4LDodz_Bwx0">Video</a>)</li>
+<li>CSC108 videos: Function Reuse (<a href="https://www.youtube.com/watch?v=H2mKu9Vfyxs">Part 1</a>, <a href="https://www.youtube.com/watch?v=c9o7Q81TqW0">Part 2</a>, <a href="https://www.youtube.com/watch?v=WvwDSMZW_r8">Example</a>)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

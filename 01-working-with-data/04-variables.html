@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>1.4 Storing Data in Variables</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">1.4 Storing Data in Variables</h1>
+</header>
+<section>
+<p>So far, we’ve been writing expressions in the Python console using only literals and operators. But as the computations we want to perform get more complex, relying on just literals and operators is very cumbersome. We can write very complex nested expressions, but this makes our code very hard to understand.</p>
+<p>For example, suppose we’re given three points in the Cartesian plane <span class="math inline">\((1, 3)\)</span>, <span class="math inline">\((2, 5)\)</span>, <span class="math inline">\((10, -1)\)</span> that form a path, and we want to find the length of this path.</p>
+<p><img src="images/0104-diagram-v2.png" alt="Cartesian Plane Diagram" /><br />
+</p>
+<p>We’d like to use this formula for the distance <span class="math inline">\(d\)</span> between two points <span class="math inline">\((x_1, y_1)\)</span> and <span class="math inline">\((x_2, y_2)\)</span>:</p>
+<p><span class="math display">\[ d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}. \]</span></p>
+<p>We <em>could</em> write this as a single arithmetic expression and have Python evaluate it:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> ((<span class="dv">1</span> <span class="op">-</span> <span class="dv">2</span>) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">-</span> <span class="dv">5</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span> <span class="op">+</span> ((<span class="dv">2</span> <span class="op">-</span> <span class="dv">10</span>) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (<span class="dv">5</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="fl">12.23606797749979</span></span></code></pre></div>
+<p>But typing in this expression is quite error-prone, and hard to understand. Just like in mathematics, we can improve our code by breaking down this problem into intermediate steps. Python (like all other programming languages) gives us a ways to bind values to names, so that we can refer to those values later on in subsequent calculations.</p>
+<h2 id="variables">Variables</h2>
+<p>A <strong>variable</strong> is a piece of code that is a name that <em>refers</em> to a value. We create variables in Python using the syntax:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&lt;</span>variable<span class="op">&gt;</span> <span class="op">=</span> <span class="op">&lt;</span>expression<span class="op">&gt;</span></span></code></pre></div>
+<p>which is a form of Python code called an <strong>assignment statement</strong>. You might wonder why we use the term “statement” rather than “expression” for assignment. An <em>expression</em> is a piece of Python code that is evaluated to produce a value. When we execute an assignment statement, it doesn’t produce a value—it instead defines a variable.</p>
+<p>Python executes an assignment statement in two steps:</p>
+<ol type="1">
+<li>First, the expression on the right-hand side of the <code>=</code> is evaluated, producing a value.</li>
+<li>Second, that value is bound to the variable on the left-hand side.</li>
+</ol>
+<p>After the assignment statement is executed, the variable may be used to refer to the value. Here’s how we can use variables to simplify the calculation above:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> distance1 <span class="op">=</span> ((<span class="dv">1</span> <span class="op">-</span> <span class="dv">2</span>) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (<span class="dv">3</span> <span class="op">-</span> <span class="dv">5</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span>   <span class="co"># Distance between (1, 3) and (2, 5)</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> distance2 <span class="op">=</span> ((<span class="dv">2</span> <span class="op">-</span> <span class="dv">10</span>) <span class="op">**</span> <span class="dv">2</span> <span class="op">+</span> (<span class="dv">5</span> <span class="op">+</span> <span class="dv">1</span>) <span class="op">**</span> <span class="dv">2</span>) <span class="op">**</span> <span class="fl">0.5</span>  <span class="co"># Distance between (2, 5) and (10, -1)</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="op">&gt;&gt;&gt;</span> distance1  <span class="co"># A variable is an expression; evaluating it produces the value it refers to</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="fl">2.23606797749979</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="op">&gt;&gt;&gt;</span> distance2</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="fl">10.0</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="op">&gt;&gt;&gt;</span> distance1 <span class="op">+</span> distance2  <span class="co"># The total distance</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="fl">12.23606797749979</span></span></code></pre></div>
+<h2 id="choosing-good-variable-names">Choosing good variable names</h2>
+<p>Because variables are used to store intermediate values in computations, it is important to choose good variable names so that you can remember what the purpose of each variable is. This might not seem that important in our above example because there were only two variables, but as you start writing larger programs, you’ll have to grapple with dozens, if not hundreds, of variables, and choosing good names will be paramount.</p>
+<p>For now, we’ll introduce a few simple rules that you should follow when choosing variable names:</p>
+<ol type="1">
+<li><p>All variable names should use only lowercase letters, digits, and underscores. So <code>distance1</code>, not <code>Distance1</code>.</p></li>
+<li><p>When a variable name consists of multiple words, write each word in lowercase and separate them with an underscore.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> You aren’t allowed to use spaces in variable names.</span> For example, we might create a variable to refer to the total distance by doing</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="op">&gt;&gt;&gt;</span> total_distance <span class="op">=</span> distance1 <span class="op">+</span> distance2</span></code></pre></div>
+<p>We use the name <code>total_distance</code> rather than <code>totaldistance</code> or <code>totalDistance</code> (the latter is a naming style used in other programming languages, but not here).</p></li>
+<li><p>Avoid single-letter variable names and non-standard acronyms/abbreviations, outside of some mathematical contexts.</p>
+<p>For example, we might have used <code>d1</code> and <code>d2</code> instead of <code>distance1</code> and <code>distance2</code> because <code>d</code> is the variable we used for distance in our above formula. However, we should <em>not</em> use <code>td</code> instead of <code>total_distance</code>, because a second person wouldn’t immediately understand what <code>td</code> stands for.</p></li>
+</ol>
+<h2 id="the-value-based-python-memory-model">The value-based Python memory model</h2>
+<p>As our programs get larger, it is useful to have a principled way to keep track of the variables and data used by the programs. A <strong>memory model</strong> is a structured way of representing variables and data in a program.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote"> The term “memory” here refers to the computer memory used to actually store the data.</span> For the next few weeks, we’re going to use the <em>value-based Python memory model</em>, which simply uses a table to represent the associations between variables and their associated values. For example, the value-based memory model for our above example is the following:</p>
+<div class="memory-model-values">
+<table>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>distance1</code></td>
+<td><code>2.23606797749979</code></td>
+</tr>
+<tr class="even">
+<td><code>distance2</code></td>
+<td><code>10.0</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="references">References</h2>
+<ul>
+<li>CSC108 videos: Variable Assignment (<a href="https://www.youtube.com/watch?v=E6aJGrCTlTQ">Part 1</a>, <a href="https://www.youtube.com/watch?v=CPmVn_hQzBs">Part 2</a>, <a href="https://www.youtube.com/watch?v=SkWSVsvgxYE">Part 3</a>)</li>
+<li>CSC108 videos: Assignment Statement Visualizer (<a href="https://youtu.be/p-h8bDG8VPA">Part 1</a>)</li>
+</ul>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

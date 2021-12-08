@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>5.5 The Full Python Memory Model: Function Calls</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">5.5 The Full Python Memory Model: Function Calls</h1>
+</header>
+<section>
+<p>So far in this chapter, we have talked only about variables defined within the Python console. In <a href="../02-functions/03-function-scope.html">2.3 Local Variables and Function Scope</a>, we saw how to represent function scope in the value-based memory model using separate “tables of values” for each function call. In this section, we’ll see how to represent function scope in the full Python memory model so that we can capture exactly how function scope works and impacts the variables we use throughout the lifetime of our programs.</p>
+<h2 id="stack-frames">Stack frames</h2>
+<p>Suppose we define the following function, and then call it in the Python console:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> repeat(n: <span class="bu">int</span>, s: <span class="bu">str</span>) <span class="op">-&gt;</span> <span class="bu">str</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    message <span class="op">=</span> s <span class="op">*</span> n</span>
+<span id="cb1-3"><a href="#cb1-3"></a>    <span class="cf">return</span> message</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co"># In the Python console</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="op">&gt;&gt;&gt;</span> count <span class="op">=</span> <span class="dv">3</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="op">&gt;&gt;&gt;</span> word <span class="op">=</span> <span class="st">&#39;abc&#39;</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="op">&gt;&gt;&gt;</span> result <span class="op">=</span> repeat(count, word)</span></code></pre></div>
+<p>Consider what the state of memory is when <code>repeat(count, word)</code> is called, <em>immediately before</em> the <code>return message</code> statement executes. Let’s first recall how we would draw the <em>value-based</em> memory model for this point:</p>
+<div class="memory-model-values">
+<table>
+<caption><code>__main__</code></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>count</code></td>
+<td><code>3</code></td>
+</tr>
+<tr class="even">
+<td><code>word</code></td>
+<td><code>'abc'</code></td>
+</tr>
+</tbody>
+</table>
+<table>
+<caption><mark><strong><code>repeat</code></strong></mark></caption>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>n</code></td>
+<td><code>3</code></td>
+</tr>
+<tr class="even">
+<td><code>s</code></td>
+<td><code>'abc'</code></td>
+</tr>
+<tr class="odd">
+<td><code>message</code></td>
+<td><code>'abcabcabc'</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>This memory model shows two tables, showing the variables defined in the Python console (<code>count</code>, <code>word</code>), and the variables local to the function <code>repeat</code> (<code>n</code>, <code>s</code>, and <code>message</code>).</p>
+<p>Here is how we would translate this into a full Python memory model diagram:</p>
+<p><img src="images/call_stack_repeat.png" alt="Memory model diagram showing __main__ and repeat" /><br />
+</p>
+<p>As with the diagrams we saw in the previous sections of this chapter, our variables are on the left side of the diagram, and the objects on the right. The variables are separated into two separate boxes, one for the Python console and one for the function call for <code>repeat</code>. All variables, regardless of which box they’re in, store only ids that refer to objects on the right-hand side. Notice that <code>count</code> and <code>n</code> are aliases, as are <code>word</code> and <code>s</code>.</p>
+<p>Now that we have this full diagram, we’ll introduce a more formal piece of terminology. Each “box” on the left-hand side of our diagram represents a <strong>stack frame</strong> (or just <strong>frame</strong> for short), which is a special data type used by the Python interpreter to keep track of the functions that have been called in a program, and the variables defined within each function. We call the collection of stack frames the <strong>function call stack</strong>.</p>
+<p>Every time we call a function, the Python interpreter does the following:</p>
+<ol type="1">
+<li>Create a new stack frame and add it to the call stack.</li>
+<li>Evaluate the arguments in the function call, yielding the ids of objects (one per argument). Each of these ids is assigned to the corresponding parameter, as an entry in the new stack frame.</li>
+<li>Execute the body of the function.</li>
+<li>When a return statement is executed in the function body, the id of the returned object is saved and the stack frame for the function call is removed from the call stack.</li>
+</ol>
+<h2 id="argument-passing-and-aliasing">Argument passing and aliasing</h2>
+<p>What we often call “parameter passing” is a special form of variable assignment in the Python interpreter. In the example above, when we called <code>repeat(count, word)</code>, it is as if we wrote</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a>n <span class="op">=</span> count</span>
+<span id="cb2-2"><a href="#cb2-2"></a>s <span class="op">=</span> word</span></code></pre></div>
+<p>before executing the body of the function.</p>
+<p>This aliasing is what allows us to define functions that mutate their argument values, and have that effect persist after the function ends. Here is an example:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> emphasize(words: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    <span class="co">&quot;&quot;&quot;Add emphasis to the end of a list of words.&quot;&quot;&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>    new_words <span class="op">=</span> [<span class="st">&#39;believe&#39;</span>, <span class="st">&#39;me!&#39;</span>]</span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="bu">list</span>.extend(words, new_words)</span>
+<span id="cb3-5"><a href="#cb3-5"></a></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co"># In the Python console</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="op">&gt;&gt;&gt;</span> sentence <span class="op">=</span> [<span class="st">&#39;winter&#39;</span>, <span class="st">&#39;is&#39;</span>, <span class="st">&#39;coming&#39;</span>]</span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="op">&gt;&gt;&gt;</span> emphasize(sentence)</span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="op">&gt;&gt;&gt;</span> sentence</span>
+<span id="cb3-11"><a href="#cb3-11"></a>[<span class="st">&#39;winter&#39;</span>, <span class="st">&#39;is&#39;</span>, <span class="st">&#39;coming&#39;</span>, <span class="st">&#39;believe&#39;</span>, <span class="st">&#39;me!&#39;</span>]</span></code></pre></div>
+<p>When <code>emphasize(sentence)</code> is called in the Python console, this is the state of memory:</p>
+<div class="fullwidth">
+<p><img src="images/call_stack_mutation.png" alt="Memory model diagram for emphasize" /><br />
+</p>
+</div>
+<p>In this case, <code>words</code> and <code>sentence</code> are aliases, and so mutating <code>words</code> within the function causes a change to occur in <code>__main__</code> as well.</p>
+<p>On the other hand, consider what happens with this version of the function:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> emphasize_v2(words: <span class="bu">list</span>[<span class="bu">str</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="co">&quot;&quot;&quot;Add emphasis to the end of a list of words.&quot;&quot;&quot;</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>    new_words <span class="op">=</span> [<span class="st">&#39;believe&#39;</span>, <span class="st">&#39;me!&#39;</span>]</span>
+<span id="cb4-4"><a href="#cb4-4"></a>    words <span class="op">=</span> words <span class="op">+</span> new_words</span>
+<span id="cb4-5"><a href="#cb4-5"></a></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co"># In the Python console</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="op">&gt;&gt;&gt;</span> sentence <span class="op">=</span> [<span class="st">&#39;winter&#39;</span>, <span class="st">&#39;is&#39;</span>, <span class="st">&#39;coming&#39;</span>]</span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="op">&gt;&gt;&gt;</span> emphasize_v2(sentence)</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="op">&gt;&gt;&gt;</span> sentence</span>
+<span id="cb4-11"><a href="#cb4-11"></a>[<span class="st">&#39;winter&#39;</span>, <span class="st">&#39;is&#39;</span>, <span class="st">&#39;coming&#39;</span>]</span></code></pre></div>
+<p>After we call <code>emphasize_v2</code> in the Python console, the value of <code>sentence</code> is unchanged! To understand why, let’s look at two memory model diagrams. The first shows the state of memory immediately after <code>new_words = ['believe', 'me!']</code> is executed:</p>
+<div class="fullwidth">
+<p><img src="images/call_stack_reassignment1.png" alt="Diagram of emphasize_v2 after new_words = [‘believe’, ‘me!’]." /><br />
+</p>
+</div>
+<p>The next statement to execute is <code>words = words + new_words</code>. The key to understanding the next diagram is to recall <em>variable reassignment</em>: the right-hand side (<code>words + new_words</code>) is evaluated, and then the resulting object id is assigned to <code>words</code>. <em>List concatenation with <code>+</code> creates a new list object</em>.</p>
+<div class="fullwidth">
+<p><img src="images/call_stack_reassignment2.png" alt="Diagram of emphasize_v2 after words = words + new_words." /><br />
+</p>
+</div>
+<p>Notice that in this diagram, <code>words</code> and <code>sentence</code> are no longer aliases! Instead, <code>words</code> has been assigned to a new list object, but <code>sentence</code> has remained unchanged.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> Remember the rule of variable reassignment: an assignment statement <code>&lt;name&gt; = ...</code> only changes what object the variable <code>&lt;name&gt;</code> refers to, but never changes any other variables.</span> This illustrates the importance of keeping variable reassignment and object mutation as distinct concepts. Even though the bodies of <code>emphasize</code> and <code>emphasize_v2</code> look very similar, the end result is very different: <code>emphasize</code> mutates its argument object, while <code>emphasize_v2</code> actually leaves it unchanged!</p>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

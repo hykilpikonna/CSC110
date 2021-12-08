@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>8.4 Analyzing Algorithm Running Time</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">8.4 Analyzing Algorithm Running Time</h1>
+</header>
+<section>
+<p>Let us consider a very similar function to <code>print_integers</code> from the beginning of the chapter:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">def</span> print_items(lst: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb1-2"><a href="#cb1-2"></a>    <span class="cf">for</span> item <span class="kw">in</span> lst:</span>
+<span id="cb1-3"><a href="#cb1-3"></a>        <span class="bu">print</span>(item)</span></code></pre></div>
+<p>Here, <code>print_items</code> takes a list as input instead, and so <span class="math inline">\(n\)</span> is equivalent to <code>len(lst)</code>.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote"> For the remainder of this course, we will assume input size for a list is always its length, unless something else is specified.</span> How can we use our asymptotic notation to help us analyze the running time of this algorithm? Earlier, we said that the call to <code>print</code> took 1 “basic operation”, but is that true? The answer is, it doesn’t matter. By using asymptotic notation, we no longer need to worry about the constants involved, and so don’t need to worry about whether a single call to <code>print</code> counts as one or ten “basic operations”.</p>
+<p>Just as switching from measuring real time to counting “basic operations” allows us to ignore the computing environment in which the program runs, switching from an exact step count to asymptotic notation allows us to ignore machine- and programming language-dependent constants involved in the execution of the code. Having ignored all these external factors, our analysis will concentrate on how the <strong>size of the input</strong> influences the running time of a program, where we measure running time just using asymptotic notation, and not exact expressions.</p>
+<p><strong>Warning</strong>: the “size” of the input to a program can mean different things depending on the type of input, or even depending on the program itself. Whenever you perform a running time analysis, be sure to clearly state how you are measuring and representing input size.</p>
+<p>Because constants don’t matter, we will use a very coarse measure of “basic operation” to make our analysis as simple as possible. For our purposes, a basic operation (or step) is <strong>any block of code whose running time does not depend on the size of the input</strong>.<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">To belabour the point a little, this depends on how we define input size. For integers, we usually will assume they have a fixed size in memory (e.g., 32 bits), which is why arithmetic operations take constant time. But of course if we allow numbers to grow infinitely, this is no longer true, and performing arithmetic operations will no longer take constant time.</span></p>
+<p>This includes all primitive language operations like most assignment statements, arithmetic calculations, and list and string indexing. The one major statement type which does not fit in this category is a function call—the running time of such statements depends on how long that particular function takes to run. We’ll revisit this in more detail later.</p>
+<h2 id="the-runtime-function">The runtime function</h2>
+<p>The running time of <code>print_items</code> depends <em>only</em> on the size of the input list, and not the contents of the list. That is, we expect that <code>print_items</code> takes the same amount of time on every list of length <span class="math inline">\(100\)</span>. We can make this a little more clear by introducing one piece of notation that will come in handy for the rest of the chapter.</p>
+<div class="definition" data-terms="input sets">
+<p>Let <code>func</code> be an algorithm. For every <span class="math inline">\(n \in \N\)</span>, we define the set <span class="math inline">\(\cI_{func, n}\)</span> to be the set of allowed inputs to <code>func</code> of size <span class="math inline">\(n\)</span>.</p>
+</div>
+<p>For example, <span class="math inline">\(\cI_{print\_items, 100}\)</span> is simply the set of all lists of length 100. <span class="math inline">\(\cI_{print\_items, 0}\)</span> is the set containing just one input: the empty list.</p>
+<p>We can restate our observation about <code>print_items</code> in terms of these sets: for all <span class="math inline">\(n \in \N\)</span>, every element of <span class="math inline">\(\cI_{print\_items, n}\)</span> has the <em>same</em> runtime when passed to <code>print_items</code>.</p>
+<div class="definition" data-terms="runtime function">
+<p>Let <code>func</code> be an algorithm whose runtime depends <em>only</em> on its input size. We define the <strong>running time function of <code>func</code></strong> as <span class="math inline">\(RT_{func}: \N \to \R^{\geq 0}\)</span>, where <span class="math inline">\(RT_{func}(n)\)</span> is equal to the running time of <code>func</code> when given an input of size <span class="math inline">\(n\)</span>.</p>
+<p>The goal of a <em>running time analysis</em> for <code>func</code> is to find a function <span class="math inline">\(f\)</span> (typically a simple elementary function) such that <span class="math inline">\(RT_{func} \in \Theta(f)\)</span>.</p>
+</div>
+<p>Our first technique for performing this runtime analysis follows four steps:</p>
+<ol type="1">
+<li>Identify the blocks of code which can be counted as a single basic operation, because they don’t depend on the input size.</li>
+<li>Identify any loops in the code, which cause basic operations to repeat. You’ll need to figure out how many times those loops run, based on the size of the input. Be <em>exact</em> when counting loop iterations.</li>
+<li>Use your observations from the previous two steps to come up with an expression for the number of basic operations used in this algorithm—i.e., find an exact expression for <span class="math inline">\(RT_{func}(n)\)</span>.</li>
+<li>Use the properties of asymptotic notation to find an elementary function <span class="math inline">\(f\)</span> such that <span class="math inline">\(RT_{func} \in \Theta(f(n))\)</span>.</li>
+</ol>
+<p>Because Theta expressions depend only on the fastest-growing term in a sum, <em>and</em> ignores constants, we don’t even need an exact, “correct” expression for the number of basic operations. This allows us to be rough with our analysis, but still get the correct Theta expression.</p>
+<div class="example">
+<p>Consider the function <code>print_items</code>. We define input size to be the <em>number of items of the input list</em>. Perform a runtime analysis of <code>print_items</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">def</span> print_items(lst: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb2-2"><a href="#cb2-2"></a>    <span class="cf">for</span> item <span class="kw">in</span> lst:</span>
+<span id="cb2-3"><a href="#cb2-3"></a>        <span class="bu">print</span>(item)</span></code></pre></div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list <code>lst</code>.</p>
+<p>For this algorithm, each iteration of the loop can be counted as a single operation, because nothing in it (including the call to <code>print</code>) depends on the size of the input list.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">This is actually a little subtle. If we consider the size of individual list elements, it could be the case that some take a much longer time to print than others (imagine printing a string of one-thousand characters vs. the number <span class="math inline">\(5\)</span>). But by defining input size purely as the number of items, we are implicitly ignoring the size of the individual items. The running time of a call to <code>print</code> does <em>not</em> depend on the length of the input list.</span></p>
+<p>So the running time depends on the number of loop iterations. Since this is a for loop over the <code>lst</code> argument.</p>
+<p>Thus the total number of basic operations performed is <span class="math inline">\(n\)</span>, and so the running time is <span class="math inline">\(RT_{print\_items}(n) = n\)</span>, which is <span class="math inline">\(\Theta(n)\)</span>.</p>
+</div>
+</div>
+<p>Here is a second example, which has a similar structure to our first example, but also features slightly more code, using the familiar loop accumulator pattern.</p>
+<div class="example">
+<p>Analyse the running time of the following function.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">def</span> my_sum(numbers: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="bu">int</span>:</span>
+<span id="cb3-2"><a href="#cb3-2"></a>    sum_so_far <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>    <span class="cf">for</span> number <span class="kw">in</span> numbers:</span>
+<span id="cb3-5"><a href="#cb3-5"></a>        sum_so_far <span class="op">=</span> sum_so_far <span class="op">+</span> number</span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>    <span class="cf">return</span> sum_so_far</span></code></pre></div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list (i.e., <code>numbers</code>).</p>
+<p>This function body consists of three statements (with the middle statement, the for loop, itself containing more statements). To analyse the total running time of the function, we need to count each statement separately:</p>
+<ul>
+<li>The assignment statement <code>sum_so_far = 0</code> counts as 1 step, as its running time does not depend on the length of <code>numbers</code>.</li>
+<li>The for loop takes <span class="math inline">\(n\)</span> steps: it has <span class="math inline">\(n\)</span> iterations, and each iteration takes 1 step.<label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> Remember that we’re treating all arithmetic operations as constant time here.</span></li>
+<li>The return statement counts as 1 step: it, too, has running time that does not depend on the length of <code>numbers</code>.</li>
+</ul>
+<p>The total running time is the sum of these three parts: <span class="math inline">\(1 + n + 1 = n + 2\)</span>, which is <span class="math inline">\(\Theta(n)\)</span>.</p>
+</div>
+</div>
+<h2 id="nested-loops">Nested loops</h2>
+<p>It is quite possible to have nested loops in a function body, and analyze the running time in the same fashion. The simplest method of tackling such functions is to count the number of repeated basic operations in a loop starting with the <em>innermost</em> loop and working your way out.</p>
+<div class="example">
+<p>Consider the following function.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">def</span> print_sums(lst: <span class="bu">list</span>) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb4-2"><a href="#cb4-2"></a>    <span class="cf">for</span> item1 <span class="kw">in</span> lst:</span>
+<span id="cb4-3"><a href="#cb4-3"></a>        <span class="cf">for</span> item2 <span class="kw">in</span> lst:</span>
+<span id="cb4-4"><a href="#cb4-4"></a>            <span class="bu">print</span>(item1 <span class="op">+</span> item2)</span></code></pre></div>
+<p>Perform a runtime analysis of <code>print_sums</code>.</p>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of <code>lst</code>.</p>
+<p>The inner loop (<code>for item2 in lst</code>) runs <span class="math inline">\(n\)</span> times (once per item in <code>lst</code>), and each iteration is just a single basic operation.</p>
+<p>But the entire inner loop is itself repeated, since it is inside another loop. The outer loop runs <span class="math inline">\(n\)</span> times as well, and each of its iterations takes <span class="math inline">\(n\)</span> operations.</p>
+<p>So then the total number of basic operations is <span class="math display">\[\begin{align*}
+RT_{print\_sums}(n)
+&amp;= \text{steps for the inner loop} \times \text{number of times inner loop is repeated} \\
+&amp;= n \times n \\
+&amp;= n^2
+\end{align*}\]</span></p>
+<p>So the running time of this algorithm is <span class="math inline">\(\Theta(n^2)\)</span>.</p>
+</div>
+</div>
+<p>Students often make the mistake, however, that the number of nested loops should always be the exponent of <span class="math inline">\(n\)</span> in the Big-O expression.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">E.g., two levels of nested loops always becomes <span class="math inline">\(\Theta(n^2)\)</span>.</span> However, things are not that simple, and in particular, not every loop takes <span class="math inline">\(n\)</span> iterations.</p>
+<div class="example">
+<p>Consider the following function:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">def</span> f(lst: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb5-2"><a href="#cb5-2"></a>    <span class="cf">for</span> item <span class="kw">in</span> lst:</span>
+<span id="cb5-3"><a href="#cb5-3"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="dv">10</span>):</span>
+<span id="cb5-4"><a href="#cb5-4"></a>            <span class="bu">print</span>(item <span class="op">+</span> i)</span></code></pre></div>
+<p>Perform a runtime analysis of this function.</p>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list <code>lst</code>. The inner loop repeats 10 times, and each iteration is again a single basic operation, for a total of 10 basic operations. The outer loop repeats <span class="math inline">\(n\)</span> times, and each iteration takes 10 steps, for a total of <span class="math inline">\(10n\)</span> steps. So the running time of this function is <span class="math inline">\(\Theta(n)\)</span>. (Even though it has a nested loop!)</p>
+<p><em>Alternative, more concise analysis</em>. The inner loop’s running time doesn’t depend on the number of items in the input list, so we can count it as a single basic operation.</p>
+<p>The outer loop runs <span class="math inline">\(n\)</span> times, and each iteration takes <span class="math inline">\(1\)</span> step, for a total of <span class="math inline">\(n\)</span> steps, which is <span class="math inline">\(\Theta(n)\)</span>.</p>
+</div>
+</div>
+<p>When we are analyzing the running time of two blocks of code executed in sequence (one after the other), we add together their individual running times. The sum theorems are particularly helpful here, as it tells us that we can simply compute Theta expressions for the blocks individually, and then combine them just by taking the fastest-growing one. Because Theta expressions are a simplification of exact mathematical function expressions, taking this approach is often easier and faster than trying to count an exact number steps for the entire function.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">E.g., <span class="math inline">\(\Theta(n^2)\)</span> is simpler than <span class="math inline">\(10n^2 + 0.001n + 165\)</span>.</span></p>
+<div class="example">
+<p>Analyze the running time of the following function, which is a combination of two previous functions.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">def</span> combined(lst: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb6-2"><a href="#cb6-2"></a>    <span class="co"># Loop 1</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a>    <span class="cf">for</span> item <span class="kw">in</span> lst:</span>
+<span id="cb6-4"><a href="#cb6-4"></a>        <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>):</span>
+<span id="cb6-5"><a href="#cb6-5"></a>            <span class="bu">print</span>(item <span class="op">+</span> i)</span>
+<span id="cb6-6"><a href="#cb6-6"></a></span>
+<span id="cb6-7"><a href="#cb6-7"></a>    <span class="co"># Loop 2</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a>    <span class="cf">for</span> item1 <span class="kw">in</span> lst:</span>
+<span id="cb6-9"><a href="#cb6-9"></a>        <span class="cf">for</span> item2 <span class="kw">in</span> lst:</span>
+<span id="cb6-10"><a href="#cb6-10"></a>            <span class="bu">print</span>(item1 <span class="op">+</span> item2)</span></code></pre></div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of <code>lst</code>. We have already seen that the first loop runs in time <span class="math inline">\(\Theta(n)\)</span>, while the second loop runs in time <span class="math inline">\(\Theta(n^2)\)</span>.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">By “runs in time <span class="math inline">\(\Theta(n)\)</span>,” we mean that the number of basic operations of the second loop is a function <span class="math inline">\(f(n) \in \Theta(n)\)</span>.</span></p>
+<p>By the <em>Sum of Functions</em> theorem from the previous section, we can conclude that <code>combined</code> runs in time <span class="math inline">\(\Theta(n^2)\)</span>. (Since <span class="math inline">\(n \in \cO(n^2)\)</span>.)</p>
+</div>
+</div>
+<h3 id="loop-iterations-with-changing-costs">Loop iterations with changing costs</h3>
+<p>Now let’s look at one last example in this section, which is a function that prints out the sum of all distinct pairs of integers from a given list.</p>
+<div class="example">
+<p>Analyze the running time of the following function</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">def</span> all_pairs(lst: <span class="bu">list</span>[<span class="bu">int</span>]) <span class="op">-&gt;</span> <span class="va">None</span>:</span>
+<span id="cb7-2"><a href="#cb7-2"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, <span class="bu">len</span>(lst)):</span>
+<span id="cb7-3"><a href="#cb7-3"></a>        <span class="cf">for</span> j <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">0</span>, i):</span>
+<span id="cb7-4"><a href="#cb7-4"></a>            <span class="bu">print</span>(lst[i] <span class="op">+</span> lst[j])</span></code></pre></div>
+<div class="discussion">
+<p>Like previous examples, this function has a nested loop. However, unlike those examples, here the inner loop’s running time depends on the current value of <code>i</code>, i.e., which iteration of the outer loop we’re on.</p>
+<p>This means we cannot take the previous approach of calculating the cost of the inner loop, and multiplying it by the number of iterations of the outer loop; this only works if the cost of each outer loop iteration is the same.</p>
+<p>So instead, we need to manually add up the cost of each iteration of the outer loop, which depends on the number of iterations of the inner loop. More specifically, since <span class="math inline">\(j\)</span> goes from <span class="math inline">\(0\)</span> to <span class="math inline">\(i-1\)</span>, the number of iterations of the inner loop is <span class="math inline">\(i\)</span>, and each iteration of the inner loop counts as one basic operation.</p>
+<p>Let’s see how to do this in a formal analysis.</p>
+</div>
+<div class="analysis">
+<p>Let <span class="math inline">\(n\)</span> be the length of the input list.</p>
+<p>We start by analysing the running time of the inner loop for a <em>fixed</em> iteration of the outer loop, and a fixed value of <span class="math inline">\(i\)</span>.</p>
+<ul>
+<li>The inner loop iterates <span class="math inline">\(i\)</span> times (for <span class="math inline">\(j\)</span> going from 0 to <span class="math inline">\(i - 1\)</span>), and each iteration takes one step (constant time).<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">Here, list indexing is counted as constant time—we’ll explore this more a bit later this chapter.</span> Therefore the cost of the inner loop is <span class="math inline">\(i\)</span> steps, for one iteration of the outer loop.</li>
+</ul>
+<p>Now, the outer loop iterates <span class="math inline">\(n\)</span> times for <span class="math inline">\(i\)</span> going from 0 to <span class="math inline">\(n - 1\)</span>. But here the cost of each iteration is not constant. Instead, the cost of iteration <span class="math inline">\(i\)</span> is <span class="math inline">\(i\)</span> steps, and so the total cost of the outer loop is:</p>
+<p><span class="math display">\[\sum_{i=0}^{n-1} i = \frac{n(n - 1)}{2}\]</span></p>
+<p>Here we used the summation formula for the sum of the first <span class="math inline">\(n\)</span> natural numbers, which is reviewed in <a href="../C-math-reference/01-summations-products.html">Appendix C.1</a>.</p>
+<p>And so the total number of steps taken by <code>all_pairs</code> is <span class="math inline">\(\frac{n(n - 1)}{2}\)</span>, which is <span class="math inline">\(\Theta(n^2)\)</span>.<label for="sn-8" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-8" class="margin-toggle"/><span class="sidenote"> Note that we can write <span class="math inline">\(\frac{n(n - 1)}{2} = \frac{1}{2} n^2 - \frac{1}{2} n\)</span>.</span></p>
+</div>
+</div>
+</section>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>

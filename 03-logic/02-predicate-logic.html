@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>3.2 Predicate Logic</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+    code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+    code span.at { color: #7d9029; } /* Attribute */
+    code span.bn { color: #40a070; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+    code span.ch { color: #4070a0; } /* Char */
+    code span.cn { color: #880000; } /* Constant */
+    code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+    code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+    code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+    code span.dt { color: #902000; } /* DataType */
+    code span.dv { color: #40a070; } /* DecVal */
+    code span.er { color: #ff0000; font-weight: bold; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #40a070; } /* Float */
+    code span.fu { color: #06287e; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+    code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+    code span.op { color: #666666; } /* Operator */
+    code span.ot { color: #007020; } /* Other */
+    code span.pp { color: #bc7a00; } /* Preprocessor */
+    code span.sc { color: #4070a0; } /* SpecialChar */
+    code span.ss { color: #bb6688; } /* SpecialString */
+    code span.st { color: #4070a0; } /* String */
+    code span.va { color: #19177c; } /* Variable */
+    code span.vs { color: #4070a0; } /* VerbatimString */
+    code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+  </style>
+  <link rel="stylesheet" href="../tufte.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js" type="text/javascript"></script>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<div style="display:none">
+\(
+\newcommand{\NOT}{\neg}
+\newcommand{\AND}{\wedge}
+\newcommand{\OR}{\vee}
+\newcommand{\XOR}{\oplus}
+\newcommand{\IMP}{\Rightarrow}
+\newcommand{\IFF}{\Leftrightarrow}
+\newcommand{\TRUE}{\text{True}\xspace}
+\newcommand{\FALSE}{\text{False}\xspace}
+\newcommand{\IN}{\,{\in}\,}
+\newcommand{\NOTIN}{\,{\notin}\,}
+\newcommand{\TO}{\rightarrow}
+\newcommand{\DIV}{\mid}
+\newcommand{\NDIV}{\nmid}
+\newcommand{\MOD}[1]{\pmod{#1}}
+\newcommand{\MODS}[1]{\ (\text{mod}\ #1)}
+\newcommand{\N}{\mathbb N}
+\newcommand{\Z}{\mathbb Z}
+\newcommand{\Q}{\mathbb Q}
+\newcommand{\R}{\mathbb R}
+\newcommand{\C}{\mathbb C}
+\newcommand{\cA}{\mathcal A}
+\newcommand{\cB}{\mathcal B}
+\newcommand{\cC}{\mathcal C}
+\newcommand{\cD}{\mathcal D}
+\newcommand{\cE}{\mathcal E}
+\newcommand{\cF}{\mathcal F}
+\newcommand{\cG}{\mathcal G}
+\newcommand{\cH}{\mathcal H}
+\newcommand{\cI}{\mathcal I}
+\newcommand{\cJ}{\mathcal J}
+\newcommand{\cL}{\mathcal L}
+\newcommand{\cK}{\mathcal K}
+\newcommand{\cN}{\mathcal N}
+\newcommand{\cO}{\mathcal O}
+\newcommand{\cP}{\mathcal P}
+\newcommand{\cQ}{\mathcal Q}
+\newcommand{\cS}{\mathcal S}
+\newcommand{\cT}{\mathcal T}
+\newcommand{\cV}{\mathcal V}
+\newcommand{\cW}{\mathcal W}
+\newcommand{\cZ}{\mathcal Z}
+\newcommand{\emp}{\emptyset}
+\newcommand{\bs}{\backslash}
+\newcommand{\floor}[1]{\left \lfloor #1 \right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil #1 \right \rceil}
+\newcommand{\abs}[1]{\left | #1 \right |}
+\newcommand{\xspace}{}
+\newcommand{\proofheader}[1]{\underline{\textbf{#1}}}
+\)
+</div>
+<header id="title-block-header">
+<h1 class="title">3.2 Predicate Logic</h1>
+</header>
+<section>
+<p>While propositional logic is a good starting point, most interesting statements in mathematics contain variables over domains larger than simply <span class="math inline">\(\{\TRUE, \FALSE\}\)</span>. For example, the statement “<span class="math inline">\(x\)</span> is a power of 2” is not a proposition because its truth value depends on the value of <span class="math inline">\(x\)</span>. It is only after we <em>substitute</em> a value for <span class="math inline">\(x\)</span> that we may determine whether the resulting statement is True or False. For example, if <span class="math inline">\(x = 8\)</span>, then the statement becomes “8 is a power of 2”, which is True. But if <span class="math inline">\(x = 7\)</span>, then the statement becomes “7 is a power of 2”, which is False.</p>
+<p>A statement whose truth value depends on one or more variables from any set is a <strong>predicate</strong>: a function whose codomain is <span class="math inline">\(\{\TRUE, \FALSE\}\)</span>. We typically use uppercase letters starting from <span class="math inline">\(P\)</span> to represent predicates, differentiating them from propositional variables. For example, if <span class="math inline">\(P(x)\)</span> is defined to be the statement “<span class="math inline">\(x\)</span> is a power of <span class="math inline">\(2\)</span>”, then <span class="math inline">\(P(8)\)</span> is True and <span class="math inline">\(P(7)\)</span> is False. Thus a predicate is like a proposition except that it contains one or more variables; when we substitute particular values for the variables, we obtain a proposition.</p>
+<p>As with all functions, predicates can depend on more than one variable. For example, if we define the predicate <span class="math inline">\(Q(x,y)\)</span> to mean “<span class="math inline">\(x^2 = y\)</span>,” then <span class="math inline">\(Q(5,25)\)</span> is True since <span class="math inline">\(5^2 = 25\)</span>, but <span class="math inline">\(Q(5,24)\)</span> is False.<label for="sn-0" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-0" class="margin-toggle"/><span class="sidenote">Just as how common arithmetic operators like <span class="math inline">\(+\)</span> are really binary functions, the common comparison operators like <span class="math inline">\(=\)</span> and <span class="math inline">\(&lt;\)</span> are <em>binary predicates</em>, taking two numbers and returning True or False.</span></p>
+<p>We usually define a predicate by giving the statement that involves the variables, e.g., “<span class="math inline">\(P(x)\)</span> is the statement ‘<span class="math inline">\(x\)</span> is a power of 2.’” However, there is another component which is crucial to the definition of a predicate: the domain that each of the predicate’s variable(s) belong to. You must always give the domain of a predicate as part of its definition. So we would complete the definition of <span class="math inline">\(P(x)\)</span> as follows:</p>
+<p><span class="math display">\[P(x): \text{``$x$ is a power of 2,&#39;&#39; where $x \in \N$.}\]</span></p>
+<h2 id="quantification-of-variables">Quantification of variables</h2>
+<p>Unlike propositional formulas, a predicate by itself does not have a truth value: as we discussed earlier, “<span class="math inline">\(x\)</span> is a power of 2” is neither True nor False, since we don’t know the value of <span class="math inline">\(x\)</span>. We have seen one way to obtain a truth value in substituting a concrete element of the predicate’s domain for its input, e.g., setting <span class="math inline">\(x = 8\)</span> in the statement “<span class="math inline">\(x\)</span> is a power of 2,” which is now True.</p>
+<p>However, we often don’t care about whether a specific value satisfies a predicate, but rather some aggregation of the predicate’s truth values over <em>all</em> elements of its domain. For example, the statement “every real number <span class="math inline">\(x\)</span> satisfies the inequality <span class="math inline">\(x^2 - 2x + 1 \geq 0\)</span>” doesn’t make a claim about a specific real number like 5 or <span class="math inline">\(\pi\)</span>, but rather <em>all possible</em> values of <span class="math inline">\(x\)</span>!</p>
+<p>There are two types of “truth value aggregation” we want to express; each type is represented by a <strong>quantifier</strong> that modifies a predicate by specifying how a certain variable should be interpreted.</p>
+<h3 id="existential-quantifier">Existential quantifier</h3>
+<div class="definition" data-terms="existential quantifier">
+<p>The <strong>existential quantifier</strong> is written as <span class="math inline">\(\exists\)</span>, and represents the concept of “<em>there exists</em> an element in the domain that satisfies the given predicate.”</p>
+</div>
+<div class="example">
+<p>For example, the statement <span class="math inline">\(\exists x \in \N,~ x \geq 0\)</span> can be translated as “there exists a natural number <span class="math inline">\(x\)</span> that is greater than or equal to zero.” This statement is True since (for example) when <span class="math inline">\(x=1\)</span>, we know that <span class="math inline">\(x \geq 0\)</span>.</p>
+<p>Note that there are many more natural numbers that are greater than or equal to <span class="math inline">\(0\)</span>. The existential quantifier says only that there has to be <em>at least one</em> element of the domain satisfying the predicate, but it doesn’t say exactly how many elements do so.</p>
+</div>
+<p>One should think of <span class="math inline">\(\exists x \in S\)</span> as an abbreviation for a big <strong>OR</strong> that runs through all possible values for <span class="math inline">\(x\)</span> from the domain <span class="math inline">\(S\)</span>. For the previous example, we can expand it by substituting all possible natural numbers for <span class="math inline">\(x\)</span>:<label for="sn-1" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-1" class="margin-toggle"/><span class="sidenote">In this case, the <strong>OR</strong> expression is technically infinite, since there are infinitely many natural numbers.</span> <span class="math display">\[(0 \geq 0) \lor (1 \geq 0) \lor (2 \geq 0) \lor (3 \geq 0) \lor \cdots\]</span></p>
+<h3 id="universal-quantifier">Universal quantifier</h3>
+<div class="definition" data-terms="universal quantifier">
+<p>The <strong>universal quantifier</strong> is written as <span class="math inline">\(\forall\)</span>, and represents the concept that “<em>every</em> element in the domain satisfies the given predicate.”</p>
+</div>
+<div class="example">
+<p>For example, the statement <span class="math inline">\(\forall x \in \N,~ x \geq 0\)</span> can be translated as “every natural number <span class="math inline">\(x\)</span> is greater than or equal to zero.” This statement is True since the smallest natural number is zero itself. However, the statement <span class="math inline">\(\forall x \in \N,~ x \geq 10\)</span> is False, since not every natural number is greater than or equal to 10.</p>
+</div>
+<p>One should think of <span class="math inline">\(\forall x \in S\)</span> as an abbreviation for a big <strong>AND</strong> that runs through all possible values of <span class="math inline">\(x\)</span> from <span class="math inline">\(S\)</span>. Thus, <span class="math inline">\(\forall x \in \N,~ x \geq 0\)</span> is the same as <span class="math display">\[(0 \geq 0) \land (1 \geq 0) \land (2 \geq 0) \land (3 \geq 0) \land \cdots\]</span></p>
+<div class="example">
+<p>Let us look at a simple example of these quantifiers. Suppose we define <span class="math inline">\(Loves(a,b)\)</span> to be a binary predicate that is <span class="math inline">\(\TRUE\)</span> whenever person <span class="math inline">\(a\)</span> loves person <span class="math inline">\(b\)</span>.</p>
+<!--
+<div class="marginfigure">
+\begin{tikzpicture}
+
+  % A
+  \node [left] at (0,0) {Ella};
+  \node [left] at (0,1) {Patrick};
+  \node [left] at (0,2) {Malena};
+  \node [left] at (0,3) {Breanna};
+
+  % B
+  \node [right] at (2,0) {Laura};
+  \node [right] at (2,1) {Stanley};
+  \node [right] at (2,2) {Thelonious};
+  \node [right] at (2,3) {Sophia};
+  % Ella
+  \draw [red, ultra thick, ->] (0,0) -- (2,0); % Ella loves Laura
+  \draw [red, ultra thick, ->] (0,0) -- (2,1); % Ella loves Stanley
+  % Patrick
+  \draw [green, ultra thick, ->] (0,1) -- (2,1); % Patrick loves Stanley
+  % Malena
+  \draw [blue, ultra thick, ->] (0,2) -- (2,0); % Malena loves Laura
+  \draw [blue, ultra thick, ->] (0,2) -- (2,1); % Malena loves Stanley
+  \draw [blue, ultra thick, ->] (0,2) -- (2,2); % Malena loves Thelonious
+  % Breanna
+  \draw [black, ultra thick, ->] (0,3) -- (2,1); % Breanna loves Stanley
+  \draw [black, ultra thick, ->] (0,3) -- (2,2); % Breanna loves Thelonious
+\end{tikzpicture}
+
+</div> -->
+<p>For example, the diagram below defines the relation “Loves” for two collections of people: <span class="math inline">\(A\)</span> = {Ella, Patrick, Malena, Breanna}, and <span class="math inline">\(B\)</span> = {Laura, Stanley, Thelonious, Sophia}. A line between two people indicates that the person on the left loves the person on the right.</p>
+<div style="text-align: center">
+<p><img src="images/loves.png" width="400" alt="Loves diagram" /><br />
+</p>
+</div>
+<p>Consider the following statements.</p>
+<ul>
+<li><span class="math inline">\(\exists a \in A,~Loves(a, \text{Thelonious})\)</span>, which means “there exists someone in <span class="math inline">\(A\)</span> who loves Thelonious.” This is True since Malena loves Thelonious.<label for="sn-2" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-2" class="margin-toggle"/><span class="sidenote">We could also have said here that Breanna loves Thelonious.</span></li>
+<li><span class="math inline">\(\exists a \in A,~Loves(a, \text{Sophia})\)</span>, which means “there exists someone in <span class="math inline">\(A\)</span> who loves Sophia.” This is False since no one loves Sophia.</li>
+<li><span class="math inline">\(\forall a \in A,~Loves(a, \text{Stanley})\)</span>, which means “every person in <span class="math inline">\(A\)</span> loves Stanley.” This is True, since all four people in <span class="math inline">\(A\)</span> love Stanley.</li>
+<li><span class="math inline">\(\forall a \in A,~Loves(a, \text{Thelonious})\)</span>, which means “every person in <span class="math inline">\(A\)</span> loves Thelonious.” This is False, since Ella does not love Thelonius.</li>
+</ul>
+</div>
+<h2 id="python-built-ins-any-and-all">Python built-ins: <code>any</code> and <code>all</code></h2>
+<p>In Python, the built-in function <code>any</code> allows us to represent logical statements using the existential quantifier. The function <code>any</code> takes a collection of boolean values and returns <code>True</code> when there exists a <code>True</code> value in the collection:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>([<span class="va">False</span>, <span class="va">False</span>, <span class="va">True</span>])</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="va">True</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>([])  <span class="co"># An empty collection has no True values!</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="va">False</span></span></code></pre></div>
+<p>This might not seem useful by itself, but remember that we can use comprehensions to transform one collection of data into another. For example, suppose are given a set of strings <span class="math inline">\(S\)</span> and wish to determine whether any of them start with the letter <code>'D'</code>. In predicate logic, we could write this as the statement <span class="math inline">\(\exists s \in S,~ s[0] = \text{‘D&#39;}\)</span>. And in Python, we could do the following:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1"></a><span class="op">&gt;&gt;&gt;</span> strings <span class="op">=</span> [<span class="st">&#39;Hello&#39;</span>, <span class="st">&#39;Goodbye&#39;</span>, <span class="st">&#39;David&#39;</span>]</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">any</span>([s[<span class="dv">0</span>] <span class="op">==</span> <span class="st">&#39;D&#39;</span> <span class="cf">for</span> s <span class="kw">in</span> strings])</span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="va">True</span></span></code></pre></div>
+<p>This example serves to highlight several elegant parallels between our mathematical statement and equivalent Python expression:</p>
+<ul>
+<li><span class="math inline">\(\exists\)</span> corresponds to calling the <code>any</code> function</li>
+<li><span class="math inline">\(s \in S\)</span> corresponds to <code>for s in strings</code><label for="sn-3" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-3" class="margin-toggle"/><span class="sidenote"> The naming conventions are a bit different, however: in mathematics, we tend to represent collections using capital letters, whereas in Python all variables are lower-case words.</span></li>
+<li><span class="math inline">\(s[0] = \text{‘D&#39;}\)</span> corresponds to <code>s[0] == 'D'</code></li>
+</ul>
+<p>Similar to <code>any</code>, Python includes another built-in function <code>all</code> that can be used as a universal quantifier. The <code>all</code> function is given a collection of values and evaluates to <code>True</code> when every element has the value <code>True</code>. For example, if we wanted to express <span class="math inline">\(\forall s \in S,~ s[0] = \text{‘D&#39;}\)</span> in Python, we could write:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1"></a><span class="op">&gt;&gt;&gt;</span> strings <span class="op">=</span> [<span class="st">&#39;Hello&#39;</span>, <span class="st">&#39;Goodbye&#39;</span>, <span class="st">&#39;David&#39;</span>]</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="op">&gt;&gt;&gt;</span> <span class="bu">all</span>([s[<span class="dv">0</span>] <span class="op">==</span> <span class="st">&#39;D&#39;</span> <span class="cf">for</span> s <span class="kw">in</span> strings])</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="va">False</span></span></code></pre></div>
+<p>Of course, Python is more limited than mathematics because there are limits on the size of the collections, and so we cannot easily express existential statement quantified over infinite domains like <span class="math inline">\(\N\)</span> or <span class="math inline">\(\R\)</span>. We’ll discuss this in more detail in a later section.</p>
+<h2 id="writing-sentences-in-predicate-logic">Writing sentences in predicate logic</h2>
+<p>Now that we have introduced the existential and universal quantifiers, we have a complete set of tools needed to represent all statements we’ll see in this course. A general formula in predicate logic is built up using the existential and universal quantifiers, the propositional operators <span class="math inline">\(\lnot\)</span>, <span class="math inline">\(\land\)</span>, <span class="math inline">\(\lor\)</span>, <span class="math inline">\(\Rightarrow\)</span>, and <span class="math inline">\(\Leftrightarrow\)</span>, and arbitrary predicates. To ensure that the formula has a fixed truth value, we will require every variable in the formula to be quantified.<label for="sn-4" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-4" class="margin-toggle"/><span class="sidenote">Other texts will often refer to quantified variables as <em>bound variables</em>, and unquantified variables as <em>free variables</em>.</span> We call a formula with no unquantified variables a <strong>sentence</strong>. So for example, the formula <span class="math display">\[\forall x \in \N,~ x^2 &gt; y\]</span> is not a sentence: even though <span class="math inline">\(x\)</span> is quantified, <span class="math inline">\(y\)</span> is not, and so we cannot determine the truth value of this formula. If we quantify <span class="math inline">\(y\)</span> as well, we get a sentence: <span class="math display">\[\forall x, y \in \N,~ x^2 &gt; y.\]</span></p>
+<p>However, don’t confuse a formula being a sentence with a formula being True! As we’ll see repeatedly throughout the course, it is quite possible to express both True and False sentences, and part of our job will be to determine whether a given sentence is True or False, and to prove it.</p>
+<h3 id="commas-avoid-them">Commas: avoid them!</h3>
+<p>Here is a common question from students who are first learning symbolic logic: “does the comma mean ‘and’ or ‘then’?” As we discussed at the start of the course, we study to predicate logic to provide us with an unambiguous way of representing ideas. The English language is filled with ambiguities that can make it hard to express even relatively simple ideas, much less the complex definitions and concepts used in many fields of computer science. We have seen one example of this ambiguity in the English word “or,” which can be inclusive or exlusive, and often requires additional words of clarification to make precise. In everyday communication, these ambiguous aspects of the English language contribute to its richness of expression. But in a technical context, ambiguity is undesirable: it is much more useful to limit the possible meanings to make them unambiguous and precise.</p>
+<p>There is another, more insidious example of ambiguity with which you are probably more familiar: the <em>comma</em>, a tiny, easily-glazed-over symbol that people often infuse with different meanings. Consider the following statements:</p>
+<ol type="1">
+<li>If it rains tomorrow, I’ll be sad.</li>
+<li>David is cool, Toniann is cool.</li>
+</ol>
+<p>Our intuitions tell us very different things about what the commas mean in each case. In the first, the comma means <em>then</em>, separating the hypothesis and conclusion of an implication. But in the second, the comma is used to mean <em>and</em>, the implicit joining of two separate sentences.<label for="sn-5" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-5" class="margin-toggle"/><span class="sidenote">Grammar-savvy folks will recognize this as a <em>comma splice</em>, which is often frowned upon but informs our reading nonetheless.</span> The fact that we are all fluent in English means that our prior intuition hides the ambiguity in this symbol, but it is quite obvious when we put this into the more unfamiliar context of predicate logic, as in the formula: <span class="math display">\[P(x), Q(x)\]</span></p>
+<p>This, of course, is where the confusion lies, and is the origin of the question posed at the beginning of this section. Because of this ambiguity, <strong>never use the comma to connect propositions</strong>. We already have a rich enough set of symbols—including <span class="math inline">\(\land\)</span> and <span class="math inline">\(\Rightarrow\)</span>—that we do not need another one that is ambiguous and adds nothing new!</p>
+<p>That said, keep in mind that commas do have two valid uses in predicate formulas:</p>
+<ul>
+<li>immediately after a variable quantification, or separating two variables with the same quantification</li>
+<li>separating arguments to a predicate</li>
+</ul>
+<p>You can see both of these usages illustrated below, but please do remember that these are the <em>only</em> valid places for the comma within symbolic notation! <span class="math display">\[\forall x, y \in \N,~ \forall z \in \R,~ P(x, y) \Rightarrow Q(x, y, z)\]</span></p>
+<h2 id="manipulating-negation">Manipulating negation</h2>
+<p>We have already seen some equivalences among logical formulas, such as the equivalence of <span class="math inline">\(p \Rightarrow q\)</span> and <span class="math inline">\(\lnot p \lor q\)</span>. While there are many such equivalences, the only other major type that is important for this course are the ones used to simplify negated formulas. Taking the negation of a statement is extremely common, because often when we are trying to decide if a statement is True, it is useful to know exactly what its negation means and decide whether the negation is more plausible than the original.</p>
+<p>Given any formula, we can state its negation simply by preceding it by a <span class="math inline">\(\lnot\)</span> symbol: <span class="math display">\[\lnot \big( \forall x \in \N,~ \exists y \in \N,~ x \geq 5 \lor x^2 - y \geq 30  \big).\]</span> However, such a statement is rather hard to understand if you try to transliterate each part separately: “Not for every natural number <span class="math inline">\(x\)</span>, there exists a natural number <span class="math inline">\(y\)</span>, such that <span class="math inline">\(x\)</span> is greater than or equal to <span class="math inline">\(5\)</span> or <span class="math inline">\(x^2 - y\)</span> is greater than or equal to 30.”</p>
+<p>Instead, given a formula using negations, we apply some <em>simplification rules</em> to “push” the negation symbol to the right, closer the to individual predicates. Each simplification rule shows how to “move the negation inside” by one step, giving a pair of equivalent formulas, one with the negation applied to one of the logical operator or quantifiers, and one where the negation is applied to inner subexpressions.</p>
+<ul>
+<li><span class="math inline">\(\lnot (\lnot p)\)</span> becomes <span class="math inline">\(p\)</span>.</li>
+<li><span class="math inline">\(\lnot (p \lor q)\)</span> becomes <span class="math inline">\((\lnot p) \land (\lnot q)\)</span>.<label for="sn-6" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-6" class="margin-toggle"/><span class="sidenote">The negation rules for AND and OR are known as <em>deMorgan’s laws</em>.</span></li>
+<li><span class="math inline">\(\lnot (p \land q)\)</span> becomes <span class="math inline">\((\lnot p) \lor (\lnot q)\)</span>.</li>
+<li><span class="math inline">\(\lnot (p \Rightarrow q)\)</span> becomes <span class="math inline">\(p \land (\lnot q)\)</span>.<label for="sn-7" class="margin-toggle sidenote-number"></label><input type="checkbox" id="sn-7" class="margin-toggle"/><span class="sidenote">Since <span class="math inline">\(p \Rightarrow q\)</span> is equivalent to <span class="math inline">\(\lnot p \lor q\)</span>.</span></li>
+<li><span class="math inline">\(\lnot (p \Leftrightarrow q)\)</span> becomes <span class="math inline">\((p \land (\lnot q)) \lor ((\lnot p) \land q))\)</span>.</li>
+<li><span class="math inline">\(\lnot (\exists x \in S,~ P(x))\)</span> becomes <span class="math inline">\(\forall x \in S,~ \lnot P(x)\)</span>.</li>
+<li><span class="math inline">\(\lnot (\forall x \in S,~ P(x))\)</span> becomes <span class="math inline">\(\exists x \in S,~ \lnot P(x)\)</span>.</li>
+</ul>
+<p>It is usually easy to remember the simplification rules for <span class="math inline">\(\land\)</span>, <span class="math inline">\(\lor\)</span>, <span class="math inline">\(\forall\)</span>, and <span class="math inline">\(\exists\)</span>, since you simply “flip” them when moving the negation inside. The intuition for the negation of <span class="math inline">\(p \Rightarrow q\)</span> is that there is only one case where this is False: when <span class="math inline">\(p\)</span> has occurred but <span class="math inline">\(q\)</span> does not. The intuition for the negation of <span class="math inline">\(p \Leftrightarrow q\)</span> is to remember that <span class="math inline">\(\Leftrightarrow\)</span> can be replaced with “have the same truth value,” so the negation is “have different truth values.”</p>
+<p>What about the quantifiers? Consider a statement of the form <span class="math inline">\(\lnot (\exists x \in S,~ P(x))\)</span>, which says “there does not exist an element <span class="math inline">\(x\)</span> of <span class="math inline">\(S\)</span> that satisfies <span class="math inline">\(P\)</span>.” The only way this could be true is for every element of <span class="math inline">\(S\)</span> to <em>not</em> satisfy <span class="math inline">\(P\)</span>: “every element <span class="math inline">\(x\)</span> of <span class="math inline">\(S\)</span> does not satisfy <span class="math inline">\(P\)</span>.” A similar line of reasoning applies to <span class="math inline">\(\lnot (\forall x \in S,~ P(x))\)</span>.</p>
+<footer>
+<a href="https://www.teach.cs.toronto.edu/~csc110y/fall/notes/">CSC110 Course Notes Home</a>
+</footer>
+</body>
+</html>
