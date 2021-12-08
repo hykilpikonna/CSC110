@@ -1,0 +1,158 @@
+% Copyright and Usage Information
+% ===============================
+
+% This file is provided solely for the personal and private use of students
+% taking CSC110 at the University of Toronto St. George campus. All forms of
+% distribution of this code, whether as given or with any changes, are
+% expressly prohibited. For more information on copyright for CSC110 materials,
+% please consult our Course Syllabus.
+
+% This file is Copyright (c) 2021 Mario Badr and Tom Fairgrieve.
+\documentclass{article}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+
+\usepackage[margin=1in]{geometry}
+
+\title{CSC110 Fall 2021: Term Test 2\\
+       Question 2 (Analyzing Algorithm Running Time)}
+\author{TODO: INSERT YOUR NAME HERE}
+\date{Wednesday December 8, 2021}
+
+% Some useful LaTeX commands. You are free to use these or not, and also add your own.
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\cO}{\mathcal{O}}
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+\newcommand{\C}{\texttt}
+
+\begin{document}
+\maketitle
+
+\subsection*{Question 2, Part 1}
+
+\noindent
+We define the function $g: \N \to \R^{\geq 0}$ as $g(n) = 7n(n-1)^2$.
+Consider the following statement:
+
+\[
+g(n) \in \cO(n^4)
+\]
+
+\begin{enumerate}
+
+\item[(a)]
+Rewrite the statement $g(n) \in \cO(n^4)$ by expanding the definition of Big-O.
+
+\bigskip
+
+\textbf{Solution}:
+
+$\exists c, n_0 \in \R^+ \text{ s.t. } \forall n \in \N, n \ge n_0 \Rightarrow 7n(n-1)^2 \le c \cdot n^4$
+
+\item[(b)]
+Write the \emph{negation} of the statement from (a), using negation rules to simplify the statement as much as possible.
+
+\bigskip
+
+\textbf{Solution}:
+
+$\forall c, n_0 \in \R^+, \exists n \in \N \text{ s.t. } n \ge n_0 \land 7n(n-1)^2 > c \cdot n^4$
+
+\item[(c)]
+Which of statements (a) and (b) is true? Provide a complete proof that justifies your choice.
+
+In your proof, you may not use any properties or theorems about Big-O/Omega/Theta.  Work from the expanded statement from (a) or (b).
+
+\bigskip
+
+\textbf{Solution}:
+
+I think statement (a) is true.
+
+\begin{proof}
+Want to show: $\exists c, n_0 \in \R^+ \text{ s.t. } \forall n \in \N, n \ge n_0 \Rightarrow 7n(n-1)^2 \le c \cdot n^4$ \\
+Prove using Induction. \\
+Take $c = 7, n_0 = 1$ \\
+Let $n$ be an arbitrary natural number such that $n \ge (n_0 = 1)$ \\
+What we want to prove becomes: $\forall n \in \N, n \ge 1 \Rightarrow 7n(n-1)^2 \le 7n^4$ \\
+\\
+Since $n \ge 1$, \\
+Multiply both sides by $n^2$, we get $n^3 \ge n^2$ \\
+From this, we also know that $(n - 1)^2 \le n^3$ \\
+Also, since $n \ge 1$, \\
+Multiply the inequality by $-2$, we get $-2n \le -2$ \\
+Adding $1$ to both sides, we get $-2n + 1 \le -1$ \\
+Putting the two inequalities together, we have $n^2 - 2n + 1 \le n^3 - 1 \le n^3$ \\ 
+Factoring the polynomial on the left, we have $(n - 1)^2 \le n^3$ \\
+Multiply both sides by $7n$, we get $7n(n - 1)^2 \le 7n^4$\\
+Which is what we want to prove.
+
+\end{proof}
+
+\end{enumerate}
+
+\subsection*{Question 2, Part 2}
+
+\noindent
+Consider the function below.
+
+\begin{verbatim}
+def f(nums: list[int]) -> list[int]:           # Line 1
+    n = len(nums)                              # Line 2
+    i = 1                                      # Line 3
+    new_list = []                              # Line 4
+    while i < n:                               # Line 5
+        if nums[i] % 2 == 0:                   # Line 6
+            list.append(new_list, i)           # Line 7
+        else:                                  # Line 8
+            new_list = [i * j for j in nums]   # Line 9
+        i = i * 3                              # Line 10
+    return new_list                            # Line 11
+\end{verbatim}
+
+\begin{enumerate}
+
+\item[(a)]
+Perform an \emph{upper bound analysis} on the worst-case running time of \texttt{f}.
+The Big-O expression that you conclude should be \emph{tight}, meaning that the worst-case running time should be Theta of this expression, but you are not required to show that here.
+
+\textbf{To simplify your analysis}, you may omit all floors and ceilings in your calculations (if applicable).
+Use ``at most'' or $\leq$ to be explicit about where a step count expression is an upper bound.
+
+\textbf{Solution}:
+
+Let $n$ be the length of the input list \C{nums}
+
+There is one loop in the function which loops through \C{nums} with $i$ increasing exponentially, which will run $\ceil{log_3(n)}$ times. Inside the loop, if then number is even, it takes $\cO(1)$ to append the item at the end of \C{new\_list}. If the number is odd, it sets \C{new\_list} to a list comprehension which iterates through all number in \C{nums}, performing an $\cO(1)$ multiplication every iteration, which takes exactly $n$ steps, which is a larger running time than if the number is even. Therefore, the inside of the loop will take at most $n$ steps, if all numbers \C{nums[i]} iterated are odd.
+
+Since there are only constant-time operations outside the loop, the worst-case running time would be $\ceil{log_3(n)}$ iterations multiplied by at most $n$ steps per iteration, which is $n\ceil{log_3(n)}$ steps. 
+
+Since $n\ceil{log_3(n)} \in \cO(n\ceil{log_3(n)})$, we can conclude that $WC_{f}(n) \in \cO(n\ceil{log_3(n)})$
+
+\item[(b)]
+Perform a \emph{lower bound analysis} on the worst-case running time of \texttt{f}.
+The Omega expression you find should match your Big-O expression from part (a).
+
+\textbf{Hint}: you don't need to try to find an ``exact maximum running-time'' input. \emph{Any} input family whose running time is Omega of (``at least'') the bound you found in part (a) will yield a correct analysis for this part.
+
+\textbf{Solution}:
+
+Let $n$ be the length of the input list \C{nums}, let \C{nums} be the list of length $n$ which every number is 1.
+
+In this case, the if statement inside the loop always runs line 9 that takes $n$ steps, and then the $i = i * 3$ statement, which is 1 step, which is a total of $n + 1$ steps. The loop still iterates $\ceil{log_3(n)}$ times. Since there are only constant-time operations outside the loop, the total number of steps for this input is $(n + 1)\ceil{log_3(n)} + c$ which $c \in \N$ is a constant, which is $WC_{f}(n) \in \Omega(n\ceil{log_3(n)})$
+
+\end{enumerate}
+
+\begin{center}
+    \textbf{SUBMIT THIS FILE AND THE GENERATED PDF q2.pdf FOR GRADING}
+\end{center}
+\end{document}
