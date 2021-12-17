@@ -101,7 +101,7 @@ def filter_menu(menu: dict[str, list[MenuItem]]) -> dict[str, list[MenuItem]]:
 
 
 if __name__ == '__main__':
-    tg_token = os.environ['tg-token']
+    tg_token = os.environ['tg_token']
     updater = Updater(token=tg_token, use_context=True)
     dispatcher: Dispatcher = updater.dispatcher
 
