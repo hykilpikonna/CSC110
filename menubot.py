@@ -1,12 +1,16 @@
 import base64
+import json
 import os
 import re
+import threading
+import time
 import traceback
 from dataclasses import dataclass
 from typing import Dict
 
 import json5
 import requests
+import schedule as schedule
 import telegram
 from bs4 import BeautifulSoup
 from tabulate import tabulate
@@ -101,12 +105,29 @@ if __name__ == '__main__':
     updater = Updater(token=tg_token, use_context=True)
     dispatcher: Dispatcher = updater.dispatcher
 
+    # Database
+    database: list[tuple[int, list[str]]]
+    if os.path.isfile('./menu_bot_database.json'):
+        with open('./menu_bot_database.json', 'r', encoding='utf-8') as f:
+            database = json.load(f)
+    else:
+        database = []
+
+    def save_db():
+        with open('./menu_bot_database.json', 'w', encoding='utf-8') as f:
+            json.dump(database, f)
+        schedule.clear()
+        for d in database:
+            def func():
+                menu_helper(d[0], d[1])
+            schedule.every().day.at('07:00').do(func)
+
     def r(u: Update, msg: str, md=True):
         updater.bot.sendMessage(chat_id=u.effective_chat.id, text=msg,
                                 parse_mode='Markdown' if md else None)
 
     def start(u: Update, c: CallbackContext):
-        r(u, 'Test')
+        r(u, 'Hi, start with /halls')
 
     def error(u: Update, c: CallbackContext):
         traceback.print_exc()
@@ -160,18 +181,51 @@ if __name__ == '__main__':
         hall, menu, m = get_menu_with_name(hall, menu)
         r(u, '*Available Menus:* \n' + '\n'.join(m.keys()) + '\n\nNext: /menu <hall> <menu> <cats>')
 
+    def menu_helper(chat_id: int, args: list[str]):
+        hall, menu = args[:2]
+        cats = args[2:]
+        hall, menu, m = get_menu_cats(hall, menu, cats)
+        msg = f"*Today's Menu for {menu}:* \n" + \
+              '\n'.join(f"\n*{n}:* \n" + '\n'.join(
+                  f"{i + 1}. {m[n][i].name} - ${m[n][i].price}" for i in range(len(m[n])))
+                        for n in m)
+
+        updater.bot.sendMessage(chat_id=chat_id, text=msg, parse_mode='Markdown')
+
     def menu(u: Update, c: CallbackContext):
         if len(c.args) < 2:
             r(u, 'Usage: /menu <hall> <menu> <categories>')
             return
-        hall, menu = c.args[:2]
-        cats = c.args[2:]
-        hall, menu, m = get_menu_cats(hall, menu, cats)
-        r(u, f"*Today's Menu for {menu}:* \n" +
-             '\n'.join(f"\n*{n}:* \n" + '\n'.join(
-                 f"{i + 1}. {m[n][i].name} - ${m[n][i].price}" for i in range(len(m[n])))
-                       for n in m))
+        menu_helper(u.effective_chat.id, c.args)
 
+    def channel_update(u: Update, c: CallbackContext):
+        if u.channel_post is None or u.channel_post.text is None:
+            return
+        args = u.channel_post.text.split()
+        cmd = args[0]
+        args = args[1:]
+        id = u.effective_chat.id
+
+        if cmd == '/config':
+            database.append((id, args))
+            save_db()
+            menu_helper(id, args)
+            r(u, 'Scheduled every day at 7:00.')
+        elif cmd == '/clear':
+            to_remove = [d for d in database if d[0] == id]
+            [database.remove(d) for d in to_remove]
+            save_db()
+        elif cmd == '/debug':
+            r(u, json.dumps(database))
+
+    # Scheduler thread
+    def thread_func():
+        while True:
+            schedule.run_pending()
+            time.sleep(2)
+    threading.Thread(target=thread_func).start()
+
+    # Commands
     dispatcher.add_error_handler(error)
     dispatcher.add_handler(CommandHandler('start', start))
     dispatcher.add_handler(CommandHandler('halls', dining_halls))
@@ -179,7 +233,7 @@ if __name__ == '__main__':
     dispatcher.add_handler(CommandHandler('categories', categories))
     dispatcher.add_handler(CommandHandler('cats', categories))
     dispatcher.add_handler(CommandHandler('menu', menu))
-    dispatcher.add_handler(MessageHandler(Filters.update, start))
+    dispatcher.add_handler(MessageHandler(Filters.update, channel_update))
     updater.start_polling()
     #
     # menu = filter_menu(get_menu('f1343803-84f6-4b4f-bbfd-a374ed6bd00e')[1])
