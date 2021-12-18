@@ -7,24 +7,37 @@ import time
 import traceback
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict
 
 import json5
 import requests
 import schedule as schedule
-import telegram
 from bs4 import BeautifulSoup
-from tabulate import tabulate
 from telegram import Update
 from telegram.ext import Updater, CallbackContext, Dispatcher, CommandHandler, MessageHandler, \
     Filters
+
+
+@dataclass
+class MenuItem:
+    name: str
+    serving_size: str
+    price: float
+    calories: int
+
+
+# menu_id_map[menu name] = menu id
+MenuIdMap = dict[str, str]
+# dining_halls[hall name][menu name] = menu id
+DiningHalls = dict[str, MenuIdMap]
+RawMenu = list[list[str]]
+Menu = dict[str, list[MenuItem]]
 
 
 def report(msg: str) -> None:
     print(msg)
 
 
-def get_dining_halls() -> dict[str, dict[str, str]]:
+def get_dining_halls() -> DiningHalls:
     r: str = requests.get('https://fso.ueat.utoronto.ca/FSO/ServiceMenuReport/Today').text
     m: list[str] = re.findall(r"ASPx\.createControl\(MVCxClientMenu,'mnuUnits','',.*", r)
 
@@ -40,7 +53,7 @@ def get_dining_halls() -> dict[str, dict[str, str]]:
     items_json = re.findall(r"(?<={'items':).*(?=})", data)[0]
     items = json5.loads(items_json)[0]['items']
 
-    dining_halls: dict[str, dict[str, str]] = {}
+    dining_halls: DiningHalls = {}
 
     # Get dining hall names
     for i in items:
@@ -57,15 +70,7 @@ def get_dining_halls() -> dict[str, dict[str, str]]:
     return dining_halls
 
 
-@dataclass
-class MenuItem:
-    name: str
-    serving_size: str
-    price: float
-    calories: int
-
-
-def get_menu(id: str) -> tuple[list[list[str]], dict[str, list[MenuItem]]]:
+def get_menu(id: str) -> tuple[RawMenu, Menu]:
     r = requests.post(f" https://fso.ueat.utoronto.ca/FSO/ServiceMenuReport/GetReport/{id}").text
     s = BeautifulSoup(r, 'html.parser')
 
@@ -87,8 +92,8 @@ def get_menu(id: str) -> tuple[list[list[str]], dict[str, list[MenuItem]]]:
     return d, data
 
 
-def filter_menu(menu: dict[str, list[MenuItem]]) -> dict[str, list[MenuItem]]:
-    menu: dict[str, list[MenuItem]] = \
+def filter_menu(menu: Menu) -> Menu:
+    menu: Menu = \
         {m: [i for i in menu[m] if i.price != -1] for m in menu}
 
     for m in menu:
@@ -148,15 +153,15 @@ if __name__ == '__main__':
         halls = get_dining_halls()
         r(u, '*Available Dining Halls:* \n' + '\n'.join(halls.keys()) + '\n\nNext: /menus <hall>')
 
-    def get_hall_with_name(hall: str):
+    def get_hall_with_name(hall: str) -> tuple[str, MenuIdMap]:
         hall = hall.lower()
         halls = get_dining_halls()
-        h = [halls[h] for h in halls if h.lower().startswith(hall)]
+        h = [h for h in halls if h.lower().startswith(hall)]
         if len(h) == 0:
             raise AssertionError(f'No dining hall {hall} found.')
-        return h, h[0]
+        return h[0], halls[h[0]]
 
-    def get_menu_with_name(hall: str, menu: str):
+    def get_menu_with_name(hall: str, menu: str) -> tuple[str, str, Menu]:
         menu = menu.lower()
         hall, h = get_hall_with_name(hall)
         m = [m for m in h if m.lower().startswith(menu)]
@@ -164,7 +169,7 @@ if __name__ == '__main__':
             raise AssertionError(f'No menu {menu} found in {hall}.')
         return hall, m[0], get_menu(h[m[0]])[1]
 
-    def get_menu_cats(hall: str, menu: str, cats: list[str]):
+    def get_menu_cats(hall: str, menu: str, cats: list[str]) -> tuple[str, str, Menu]:
         hall, menu, m = get_menu_with_name(hall, menu)
         m = filter_menu(m)
         copy_cats = cats.copy()
@@ -197,6 +202,8 @@ if __name__ == '__main__':
         hall, menu = args[:2]
         cats = args[2:]
         hall, menu, m = get_menu_cats(hall, menu, cats)
+        for n in m:
+            m[n].sort(key=lambda x: -x.price)
         msg = f"*Today's Menu for {menu}:* \n" + \
               '\n'.join(f"\n*{n}:* \n" + '\n'.join(
                   f"{i + 1}. {m[n][i].name} - ${m[n][i].price}" for i in range(len(m[n])))
