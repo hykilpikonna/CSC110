@@ -6,6 +6,7 @@ import threading
 import time
 import traceback
 from dataclasses import dataclass
+from pathlib import Path
 from typing import Dict
 
 import json5
@@ -101,20 +102,29 @@ def filter_menu(menu: dict[str, list[MenuItem]]) -> dict[str, list[MenuItem]]:
 
 
 if __name__ == '__main__':
-    tg_token = os.environ['tg_token']
+    # Find telegram token
+    path = Path(os.path.abspath(__file__))
+    db_path = path.joinpath('menu_bot_database.json')
+    if 'tg_token' in os.environ:
+        tg_token = os.environ['tg_token']
+    else:
+        with open(path.joinpath('menu_bot_token.txt'), 'r', encoding='utf-8') as f:
+            tg_token = f.read().strip()
+
+    # Telegram login
     updater = Updater(token=tg_token, use_context=True)
     dispatcher: Dispatcher = updater.dispatcher
 
     # Database
     database: list[tuple[int, list[str]]]
-    if os.path.isfile('./menu_bot_database.json'):
-        with open('./menu_bot_database.json', 'r', encoding='utf-8') as f:
+    if os.path.isfile(db_path):
+        with open(db_path, 'r', encoding='utf-8') as f:
             database = json.load(f)
     else:
         database = []
 
     def save_db():
-        with open('./menu_bot_database.json', 'w', encoding='utf-8') as f:
+        with open(db_path, 'w', encoding='utf-8') as f:
             json.dump(database, f)
         schedule.clear()
         for d in database:
