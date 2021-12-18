@@ -116,13 +116,6 @@ if __name__ == '__main__':
     dispatcher: Dispatcher = updater.dispatcher
 
     # Database
-    database: list[tuple[int, list[str]]]
-    if os.path.isfile(db_path):
-        with open(db_path, 'r', encoding='utf-8') as f:
-            database = json.load(f)
-    else:
-        database = []
-
     def save_db():
         with open(db_path, 'w', encoding='utf-8') as f:
             json.dump(database, f)
@@ -131,6 +124,14 @@ if __name__ == '__main__':
             def func():
                 menu_helper(d[0], d[1])
             schedule.every().day.at('07:00').do(func)
+
+    database: list[tuple[int, list[str]]]
+    if os.path.isfile(db_path):
+        with open(db_path, 'r', encoding='utf-8') as f:
+            database = json.load(f)
+            save_db()
+    else:
+        database = []
 
     def r(u: Update, msg: str, md=True):
         updater.bot.sendMessage(chat_id=u.effective_chat.id, text=msg,
@@ -192,6 +193,7 @@ if __name__ == '__main__':
         r(u, '*Available Menus:* \n' + '\n'.join(m.keys()) + '\n\nNext: /menu <hall> <menu> <cats>')
 
     def menu_helper(chat_id: int, args: list[str]):
+        print('Menu helper called.', chat_id, args)
         hall, menu = args[:2]
         cats = args[2:]
         hall, menu, m = get_menu_cats(hall, menu, cats)
