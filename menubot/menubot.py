@@ -103,7 +103,7 @@ def filter_menu(menu: dict[str, list[MenuItem]]) -> dict[str, list[MenuItem]]:
 
 if __name__ == '__main__':
     # Find telegram token
-    path = Path(os.path.abspath(__file__))
+    path = Path(os.path.abspath(__file__)).parent
     db_path = path.joinpath('menu_bot_database.json')
     if 'tg_token' in os.environ:
         tg_token = os.environ['tg_token']

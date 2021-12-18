@@ -126,3 +126,4 @@ dmypy.json
 *.synctex.gz
 
 notes/
+menubot/menu_bot_token.txt
