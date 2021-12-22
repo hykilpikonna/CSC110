@@ -14,7 +14,7 @@ def parse_name(name: str) -> Tuple[datetime, str]:
 
 if __name__ == '__main__':
     # List files
-    files = list(os.listdir('./'))
+    files = list(os.listdir('../'))
     files.sort()
 
     # Filter files that starts with GMT
