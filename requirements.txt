@@ -1,18 +1,18 @@
 # CSC110Y1F: Python libraries we'll be using this semester.
 
 # Testing and code checking
-hypothesis~=6.31.6
+hypothesis~=6.36.1
 pytest~=6.2.5
 python-ta
 
-requests~=2.26.0
+requests~=2.27.1
 
 json5~=0.9.6
 schedule~=1.1.0
 beautifulsoup4~=4.10.0
 future~=0.18.2
 Pillow~=8.4.0
-numpy~=1.21.4
+numpy~=1.22.2
 matplotlib~=3.5.1
 tweepy~=4.4.0
 
